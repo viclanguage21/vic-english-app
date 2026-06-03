@@ -439,8 +439,8 @@
         <div class="feedback-modal-title" id="feedback-modal-title">Deixe seu comentário</div>
         <textarea id="feedback-textarea" placeholder="Escreva aqui..."></textarea>
         <div class="feedback-modal-actions">
-          <button class="btn-primary" id="btn-send-feedback" style="flex:1">Enviar</button>
-          <button class="btn-back-sm" id="btn-close-feedback">Cancelar</button>
+          <button class="feedback-cancel-btn" id="btn-close-feedback">✕ Cancelar</button>
+          <button class="feedback-send-btn" id="btn-send-feedback">✓ Enviar</button>
         </div>
       </div>
     </div>
@@ -1053,24 +1053,52 @@
     <div id="writing-exercise" style="display:none">
       <div class="writing-card">
         <div class="writing-level-badge" id="writing-level-badge"></div>
-        <div class="writing-title"       id="writing-title"></div>
-        <div class="writing-prompt"      id="writing-prompt"></div>
-        <div class="writing-example-toggle" id="writing-example-toggle">💡 Ver exemplo</div>
-        <div class="writing-example"     id="writing-example" style="display:none"></div>
-        <div class="writing-tips"        id="writing-tips"></div>
+        <div class="writing-title" id="writing-title"></div>
+        <div class="writing-prompt" id="writing-prompt"></div>
+
+        <!-- Tips — always visible -->
+        <div class="writing-tips-box" id="writing-tips-box">
+          <div class="writing-tips-title">💡 Dicas para construir seu texto</div>
+          <div id="writing-tips"></div>
+        </div>
+
+        <!-- Example — always open -->
+        <div class="writing-example-open">
+          <div class="writing-example-label">📝 Exemplo completo</div>
+          <div class="writing-example" id="writing-example"></div>
+        </div>
       </div>
 
+      <!-- PT→EN Auto-translate -->
+      <div class="writing-translate-box">
+        <div class="writing-translate-label">🇧🇷 Escreva em português para traduzir automaticamente</div>
+        <textarea class="writing-textarea writing-textarea-pt" id="writing-textarea-pt"
+          placeholder="Digite em português aqui... a tradução aparece abaixo automaticamente"></textarea>
+        <div class="writing-auto-translate" id="writing-auto-translate">
+          <div class="wat-label">🔄 Tradução automática</div>
+          <div class="wat-text" id="wat-text">—</div>
+          <button class="wat-use-btn" id="btn-use-translation">↓ Usar esta tradução</button>
+        </div>
+      </div>
+
+      <!-- EN writing area -->
+      <div class="writing-en-label">✍️ Escreva em inglês</div>
       <textarea class="writing-textarea" id="writing-textarea"
         placeholder="Escreva seu texto em inglês aqui..."></textarea>
 
-      <!-- Corrected version appears here right after checking -->
+      <!-- Speak button -->
+      <div class="writing-speak-row">
+        <span class="writing-charcount" id="writing-charcount">0 palavras</span>
+        <button class="writing-speak-btn" id="btn-speak-writing" title="Ouvir seu texto">🔊 Ouvir</button>
+      </div>
+
+      <!-- Corrected version inline -->
       <div class="writing-correction-inline" id="writing-correction-inline" style="display:none">
         <div class="wci-label">✅ Versão corrigida:</div>
         <div class="wci-text" id="wci-text"></div>
       </div>
 
       <div class="writing-actions">
-        <span class="writing-charcount" id="writing-charcount">0 palavras</span>
         <button class="btn-primary writing-check-btn" id="btn-check-writing">
           🤖 Corrigir com IA
         </button>

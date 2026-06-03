@@ -2182,12 +2182,13 @@ function startWritingTopic(index){
   document.getElementById("writing-title").textContent=`${t.icon} ${t.title}`;
   document.getElementById("writing-prompt").textContent=t.ptPrompt;
   document.getElementById("writing-example").textContent=t.example;
-  document.getElementById("writing-example").style.display="none";
-  document.getElementById("writing-example-toggle").textContent="💡 Ver exemplo";
+  // example — always open
+  const exEl=document.getElementById("writing-example");
+  if(exEl){ exEl.textContent=t.example; exEl.style.display="block"; }
 
   // tips
   const tipsEl=document.getElementById("writing-tips");
-  tipsEl.innerHTML=t.tips.map(tip=>`<div class="writing-tip">💡 ${tip}</div>`).join("");
+  if(tipsEl) tipsEl.innerHTML=t.tips.map(tip=>`<div class="writing-tip">✅ ${tip}</div>`).join("");
 
   // textarea
   const ta=document.getElementById("writing-textarea");
@@ -2430,6 +2431,42 @@ function init(){
   document.getElementById("btn-back-writing-ex")?.addEventListener("click",openWriting);
   document.getElementById("btn-next-writing")?.addEventListener("click",()=>startWritingTopic(writingTopicIndex+1));
   document.getElementById("btn-check-writing")?.addEventListener("click",checkWriting);
+
+  // Speak writing text
+  document.getElementById("btn-speak-writing")?.addEventListener("click",()=>{
+    const text=document.getElementById("writing-textarea").value.trim();
+    if(!text){showXpToast("✍️ Escreva algo primeiro!");return;}
+    SoundFX.speakEN(text,0.85);
+  });
+
+  // Auto-translate PT→EN
+  let translateTimer=null;
+  document.getElementById("writing-textarea-pt")?.addEventListener("input",()=>{
+    clearTimeout(translateTimer);
+    const text=document.getElementById("writing-textarea-pt").value.trim();
+    const watText=document.getElementById("wat-text");
+    if(!text){if(watText)watText.textContent="—";return;}
+    if(watText) watText.textContent="🔄 Traduzindo...";
+    translateTimer=setTimeout(async()=>{
+      try{
+        const res=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=pt|en`);
+        const data=await res.json();
+        const translation=data.responseData?.translatedText||"—";
+        if(watText) watText.textContent=translation;
+      }catch(e){if(watText)watText.textContent="Erro na tradução.";}
+    },600);
+  });
+
+  // Use translation button
+  document.getElementById("btn-use-translation")?.addEventListener("click",()=>{
+    const translated=document.getElementById("wat-text")?.textContent;
+    const ta=document.getElementById("writing-textarea");
+    if(translated&&translated!=="—"&&translated!=="🔄 Traduzindo..."&&ta){
+      ta.value=translated;
+      const words=translated.trim().split(/\s+/).filter(w=>w).length;
+      document.getElementById("writing-charcount").textContent=`${words} palavra${words!==1?"s":""}`;
+    }
+  });
   document.getElementById("writing-example-toggle")?.addEventListener("click",()=>{
     const ex=document.getElementById("writing-example");
     const tog=document.getElementById("writing-example-toggle");

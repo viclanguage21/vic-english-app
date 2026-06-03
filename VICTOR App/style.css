@@ -3723,3 +3723,117 @@ body.light-mode .dlg-card * { color: inherit; }
 .fai-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 13px; font-weight: 700; color: #fff !important; }
 .fai-type { font-size: 10px; color: var(--ink-muted) !important; background: rgba(255,255,255,0.07); padding: 2px 8px; border-radius: 999px; }
 .fai-text { font-size: 13px; color: var(--ink-soft) !important; margin-top: 4px; }
+
+/* ══ FEEDBACK BUTTONS — green/red same size ═════════════ */
+.feedback-modal-actions {
+  display: flex; gap: 10px;
+}
+.feedback-cancel-btn, .feedback-send-btn {
+  flex: 1; padding: 13px;
+  border: none; border-radius: 10px;
+  font-family: var(--font); font-size: 15px; font-weight: 800;
+  cursor: pointer; transition: var(--t);
+}
+.feedback-cancel-btn {
+  background: rgba(239,68,68,0.15);
+  border: 1px solid rgba(239,68,68,0.3);
+  color: #fca5a5 !important;
+}
+.feedback-cancel-btn:hover { background: #ef4444; color: #fff !important; }
+.feedback-send-btn {
+  background: rgba(34,197,94,0.15);
+  border: 1px solid rgba(34,197,94,0.3);
+  color: #4ade80 !important;
+}
+.feedback-send-btn:hover { background: #22c55e; color: #fff !important; }
+
+/* ══ WRITING IMPROVEMENTS ═══════════════════════════════ */
+.writing-tips-box {
+  background: rgba(124,58,237,0.08);
+  border: 1px solid rgba(124,58,237,0.2);
+  border-radius: var(--r); padding: 12px 14px; margin-bottom: 12px;
+}
+.writing-tips-title {
+  font-size: 12px; font-weight: 800;
+  color: var(--p-light) !important;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+}
+.writing-tip {
+  font-size: 13px; color: var(--ink-soft) !important;
+  padding: 3px 0; line-height: 1.5;
+}
+.writing-example-open {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--rim2); border-left: 3px solid var(--p-bright);
+  border-radius: var(--r); padding: 12px 14px;
+}
+.writing-example-label {
+  font-size: 11px; font-weight: 800; color: var(--p-light) !important;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+}
+.writing-example {
+  font-size: 13px; color: var(--ink-soft) !important;
+  line-height: 1.7; white-space: pre-wrap; font-style: italic;
+}
+
+/* PT→EN Auto translate box */
+.writing-translate-box {
+  margin-bottom: 14px;
+}
+.writing-translate-label {
+  font-size: 12px; font-weight: 700; color: var(--ink-muted) !important;
+  margin-bottom: 6px;
+}
+.writing-textarea-pt {
+  min-height: 80px !important;
+  border-color: rgba(34,197,94,0.2) !important;
+}
+.writing-textarea-pt:focus { border-color: #22c55e !important; box-shadow: 0 0 0 3px rgba(34,197,94,0.1) !important; }
+.writing-auto-translate {
+  background: rgba(34,197,94,0.06);
+  border: 1px solid rgba(34,197,94,0.2);
+  border-radius: var(--r); padding: 10px 12px; margin-top: 6px;
+}
+.wat-label {
+  font-size: 10px; font-weight: 800; color: #4ade80 !important;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
+}
+.wat-text {
+  font-size: 14px; color: #fff !important; font-weight: 600;
+  line-height: 1.5; margin-bottom: 8px; min-height: 20px;
+}
+.wat-use-btn {
+  padding: 6px 14px; background: rgba(34,197,94,0.15);
+  border: 1px solid rgba(34,197,94,0.3); border-radius: 999px;
+  color: #4ade80 !important; font-family: var(--font);
+  font-size: 12px; font-weight: 700; cursor: pointer; transition: var(--t);
+}
+.wat-use-btn:hover { background: #22c55e; color: #fff !important; }
+
+/* EN label */
+.writing-en-label {
+  font-size: 12px; font-weight: 700; color: var(--ink-muted) !important;
+  margin-bottom: 6px; margin-top: 4px;
+}
+
+/* Speak row */
+.writing-speak-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 8px 0 10px;
+}
+.writing-speak-btn {
+  padding: 8px 16px; background: var(--p-dim);
+  border: 1px solid var(--rim2); border-radius: 999px;
+  color: var(--p-light) !important; font-family: var(--font);
+  font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--t);
+}
+.writing-speak-btn:hover { background: var(--p); color: #fff !important; }
+.writing-speak-btn:active { transform: scale(0.95); }
+
+/* Mobile fit */
+@media (max-width: 480px) {
+  .writing-check-btn { width: 100% !important; padding: 14px !important; font-size: 15px !important; }
+  .auth-logo-img { width: 200px !important; height: 200px !important; }
+  .dash-header { padding: 8px 12px !important; }
+  .dash-logo-img { width: 48px !important; height: 48px !important; }
+}
