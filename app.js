@@ -848,9 +848,9 @@ function renderDashboard(){
   const adminBtn=document.getElementById("btn-admin-float");
   if(adminBtn) adminBtn.style.display=currentUser?.uid===OWNER_UID?"flex":"none";
   // username handled by fitUserName above
-  document.getElementById("dash-xp").textContent=xp;
-  document.getElementById("dash-level").textContent=level;
-  document.getElementById("dash-streak").textContent=userData.streak||0;
+  const elXP=document.getElementById("dash-xp"); if(elXP) elXP.textContent=xp;
+  const elLv=document.getElementById("dash-level"); if(elLv) elLv.textContent=level;
+  const elSt=document.getElementById("dash-streak"); if(elSt) elSt.textContent=userData.streak||0;
 
   // Next badge inline below XP bar
   const earned2=userData.badges||[];
@@ -871,8 +871,8 @@ function renderDashboard(){
   const xpInLevel=xp%(level*100)||xp%100;
   const xpForLevel=level*100;
   const pct=Math.min(Math.round((xpInLevel/xpForLevel)*100),100);
-  document.getElementById("dash-xp-bar").style.width=`${pct}%`;
-  document.getElementById("dash-xp-next").textContent=`${xpForLevel-xpInLevel} XP para o próximo nível`;
+  const xpBar=document.getElementById("dash-xp-bar"); if(xpBar) xpBar.style.width=`${pct}%`;
+  const xpNext=document.getElementById("dash-xp-next"); if(xpNext) xpNext.textContent=`${xpForLevel-xpInLevel} XP para o próximo nível`;
 
   // Show next badge milestone on bar
   const earned=userData.badges||[];

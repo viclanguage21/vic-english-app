@@ -5683,3 +5683,45 @@ body.light-mode .notif-freq-select { background: #1e0a50 !important; color: #fff
   filter: none !important;
   box-shadow: 0 8px 40px rgba(0,0,0,0.4) !important;
 }
+
+/* ══ LOGIN — new logo big rounded ══════════════════════ */
+.auth-logo-img {
+  width: 92vw !important;
+  max-width: 440px !important;
+  height: auto !important;
+  border-radius: 20px !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.5) !important;
+  margin-bottom: 16px !important;
+}
+
+/* ══ POWERED BY — colorful ══════════════════════════════ */
+.auth-powered-colored {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  text-decoration: none !important;
+  background: rgba(255,255,255,0.07) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  border-radius: 999px !important;
+  padding: 8px 18px !important;
+  margin-top: 8px !important;
+  transition: var(--t) !important;
+}
+.auth-powered-colored:hover { background: rgba(255,255,255,0.12) !important; }
+.auth-lamp-colored { width: 32px !important; height: 32px !important; object-fit: contain !important; }
+.auth-powered-text { display: flex; flex-direction: column; }
+.auth-powered-by {
+  font-size: 9px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+  color: rgba(255,255,255,0.5) !important;
+  font-weight: 700 !important;
+}
+.auth-powered-name {
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  color: #f0d070 !important;
+  text-shadow: 0 0 12px rgba(240,208,112,0.5) !important;
+}
