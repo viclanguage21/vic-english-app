@@ -41,26 +41,94 @@ const cleanEnunciado = t   => stripEmoji(t||"");
 // Shuffle array (Fisher-Yates)
 function shuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 
+const LEVEL_TIPS = {
+  1: [
+    "Próximo passo: complete exercícios de vocabulário para construir sua base.",
+    "Chegou a hora de explorar seu primeiro segmento. Escolha o do seu trabalho!",
+    "Dica: leia as frases em voz alta — ajuda muito na fixação.",
+    "Vamos treinar vocabulário? Cada palavra nova abre uma porta.",
+  ],
+  2: [
+    "Próximo passo: pratique os diálogos do seu segmento para ganhar fluência.",
+    "Chegou a hora de treinar Listening — ouça as frases e tente entender sem tradução.",
+    "Experimente os exercícios de Speaking para melhorar sua pronúncia.",
+    "Vamos treinar tradução? Conecta PT e EN de forma natural.",
+    "Dica: repetição é tudo. Refaça as missões que errou.",
+  ],
+  3: [
+    "Próximo passo: foque em pronúncia — use o microfone nos exercícios.",
+    "Chegou a hora de explorar um novo segmento profissional.",
+    "Vamos treinar Writing? Escrever em inglês fixa o vocabulário 3x mais rápido.",
+    "Experimente os exercícios de Speaking com situações reais do seu trabalho.",
+    "Dica: pratique os diálogos completos — é o mais próximo da realidade.",
+  ],
+  4: [
+    "Próximo passo: domine um novo segmento profissional.",
+    "Chegou a hora de testar seus limites — tente as missões mais avançadas.",
+    "Vamos treinar os Phrasal Verbs? São essenciais para soar fluente.",
+    "Experimente o Grammar Core — consolida tudo que você já aprendeu.",
+  ],
+};
+function getRandomTip(level){
+  const tips = LEVEL_TIPS[Math.min(level,4)] || LEVEL_TIPS[4];
+  return tips[Math.floor(Math.random()*tips.length)];
+}
 function levelInfo(xp){
   const l=calcLevel(xp);
-  if(l<=2) return {label:"Iniciante 🌱",    msg:"Você está dando os primeiros passos!"};
-  if(l<=5) return {label:"Básico 📘",        msg:"Você já consegue se comunicar no básico!"};
-  if(l<=9) return {label:"Intermediário ⭐", msg:"Pronto para comunicação operacional!"};
-  return         {label:"Avançado 🏆",       msg:"Nível profissional alcançado!"};
+  if(l<=2) return {label:"Iniciante 🌱", msg:getRandomTip(1)};
+  if(l<=5) return {label:"Básico 📘",    msg:getRandomTip(2)};
+  if(l<=9) return {label:"Intermediário ⭐", msg:getRandomTip(3)};
+  return         {label:"Avançado 🏆",   msg:getRandomTip(4)};
 }
 
+let _lastView = null;
 function showView(id){
   const next=document.getElementById(id);
   if(!next) return;
 
-  // Hide ALL views immediately
-  document.querySelectorAll(".view").forEach(v=>{
-    v.classList.remove("active","view-entering","view-leaving");
+  const current=document.querySelector(".view.active");
+  if(current===next) return;
+
+  // Determine direction
+  const views=["view-auth","view-dashboard","view-phases","view-missions-list","view-mission","view-complete","view-flashcards","view-memory-free","view-truefalse","view-dialogue","view-writing","view-profile","view-upgrade","view-admin","view-diagnosis","view-leveltest"];
+  const ci=views.indexOf(current?.id||"");
+  const ni=views.indexOf(id);
+  const dir=ni>=ci?1:-1; // 1=forward (slide left), -1=back (slide right)
+
+  // Hide current with slide out
+  if(current){
+    current.style.transition="transform 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.38s ease";
+    current.style.transform=`translateX(${dir*-100}%)`;
+    current.style.opacity="0";
+    current.style.pointerEvents="none";
+    setTimeout(()=>{
+      current.classList.remove("active");
+      current.style.transform="";
+      current.style.opacity="";
+      current.style.transition="";
+      current.style.pointerEvents="";
+    },380);
+  }
+
+  // Show next with slide in
+  next.style.transform=`translateX(${dir*100}%)`;
+  next.style.opacity="0";
+  next.style.transition="none";
+  next.classList.add("active");
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      next.style.transition="transform 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.38s ease";
+      next.style.transform="translateX(0)";
+      next.style.opacity="1";
+      setTimeout(()=>{
+        next.style.transform="";
+        next.style.opacity="";
+        next.style.transition="";
+      },390);
+    });
   });
 
-  // Show next with animation
-  next.classList.add("active","view-entering");
-  setTimeout(()=>next.classList.remove("view-entering"),320);
+  _lastView=current?.id||null;
   window.scrollTo(0,0);
 }
 
@@ -98,6 +166,8 @@ async function updateStreak(){
 }
 
 // ── GREETING ──────────────────────────────────────────────────────────────────
+const GREETINGS = ["Hello","Hi","Hey","Hi there","What's up","How's it going","How are you","Good to see you","Welcome back","Great to have you here"];
+
 function buildGreeting(name){
   const h=new Date().getHours();
   const timeEN=h<12?"Good morning":h<18?"Good afternoon":"Good evening";
@@ -112,7 +182,8 @@ function buildGreeting(name){
   ];
   const mot=mots[Math.floor(Math.random()*mots.length)];
   const el=id=>document.getElementById(id);
-  if(el("greeting-hi"))  el("greeting-hi").textContent=`Hello, ${name}! 👋`;
+  const greet=GREETINGS[Math.floor(Math.random()*GREETINGS.length)];
+  if(el("greeting-hi"))  el("greeting-hi").textContent=`${greet}, ${name}! 👋`;
   if(el("greeting-time-en")) el("greeting-time-en").textContent=`${timeEN} — ${mot.en}`;
   if(el("greeting-time-pt")) el("greeting-time-pt").textContent=`${timePT} — ${mot.pt}`;
   if(el("greeting-motivational")) el("greeting-motivational").style.display="none";
@@ -124,7 +195,8 @@ function buildDate(){
   const suffix=day===1||day===21||day===31?"st":day===2||day===22?"nd":day===3||day===23?"rd":"th";
   const weekday=d.toLocaleDateString("en-US",{weekday:"long"});
   const month=d.toLocaleDateString("en-US",{month:"long"});
-  document.getElementById("dash-date").textContent=`${weekday}, ${month} ${day}${suffix}`;
+  const el=document.getElementById("dash-date");
+  if(el) el.innerHTML=`<div class="dash-date-weekday">${weekday}</div><div class="dash-date-day">${month} ${day}${suffix}</div>`;
 }
 
 // ── DAILY MISSIONS ─────────────────────────────────────────────────────────────
@@ -194,7 +266,13 @@ function renderDailyMissions(){
     const div=document.createElement("div");
     div.className=`daily-mission-item${done?" completed":""}`;
     div.innerHTML=`<span class="dmi-icon">${dm.icon}</span><div class="dmi-text"><div class="dmi-title">${dm.en}</div><div class="dmi-sub">${dm.pt}</div><div class="dmi-bar-wrap"><div class="dmi-bar" style="width:${pct}%"></div></div><div class="dmi-count">${current}/${dm.target}</div></div><span class="dmi-xp">${done?"✅":"+"+dm.xp+" XP"}</span>`;
-    div.addEventListener("click",()=>openSegmentPhases(dm.segmentId));
+    div.addEventListener("click",()=>{
+      if(done) return; // already completed
+      // Go to the segment phases so person can choose mission
+      currentSegmentId=dm.segmentId||"maritimo";
+      if(dm.phaseId) currentPhaseId=dm.phaseId;
+      openSegmentPhases(dm.segmentId||"maritimo");
+    });
     container.appendChild(div);
   });
   const overall=Math.round((totalDone/totalTarget)*100);
@@ -215,38 +293,72 @@ async function handleRegister(){
   try{await registerUser(email,pw,name);}
   catch(e){showAuthError(translateErr(e.code));btn.disabled=false;btn.textContent="Criar Conta";}
 }
+const LOADING_QUOTES=[
+  {en:"Your next job opportunity is waiting for you.",pt:"Sua próxima oportunidade de emprego está te aguardando."},
+  {en:"Your future self will thank you for this.",pt:"Seu eu do futuro vai te agradecer por isso."},
+  {en:"Every word you learn is a door that opens.",pt:"Cada palavra que você aprende é uma porta que se abre."},
+  {en:"The only source of knowledge is experience. — Einstein",pt:"A única fonte de conhecimento é a experiência. — Einstein"},
+  {en:"Imagination is more important than knowledge. — Einstein",pt:"Imaginação é mais importante que conhecimento. — Einstein"},
+  {en:"All our dreams can come true, if we have the courage. — Walt Disney",pt:"Todos os nossos sonhos podem se tornar realidade, se tivermos coragem. — Disney"},
+  {en:"It is our choices that show what we truly are. — Dumbledore",pt:"São nossas escolhas que revelam o que realmente somos. — Dumbledore"},
+  {en:"Happiness can be found even in the darkest of times. — Dumbledore",pt:"A felicidade pode ser encontrada mesmo nos momentos mais sombrios. — Dumbledore"},
+  {en:"Do or do not. There is no try. — Yoda",pt:"Fazer ou não fazer. Tentar não existe. — Yoda"},
+  {en:"To infinity and beyond! — Buzz Lightyear",pt:"Para o infinito e além! — Buzz Lightyear"},
+  {en:"With great power comes great responsibility. — Uncle Ben",pt:"Com grandes poderes vêm grandes responsabilidades. — Tio Ben"},
+  {en:"May the Force be with you. — Star Wars",pt:"Que a Força esteja com você. — Star Wars"},
+  {en:"Why so serious? — The Joker",pt:"Por que tão sério? — O Coringa"},
+  {en:"English is not just a language. It's your competitive advantage.",pt:"Inglês não é só um idioma. É sua vantagem competitiva."},
+  {en:"In Santos, the world passes through the port. Speak their language.",pt:"Em Santos, o mundo passa pelo porto. Fale a língua deles."},
+  {en:"Fluency is not a destination. It's a daily habit.",pt:"Fluência não é um destino. É um hábito diário."},
+  {en:"The secret of change: focus all energy on building the new. — Socrates",pt:"O segredo da mudança: foque toda energia em construir o novo. — Sócrates"},
+  {en:"Just keep swimming. — Dory",pt:"Continue nadando. — Dory"},
+  {en:"You don't need to be great to start, but you need to start to be great.",pt:"Você não precisa ser ótimo para começar, mas precisa começar para ser ótimo."},
+];
+
+let _loadingShownAt=0;
 function showAuthLoading(msg){
-  const phrases=[
-    {en:"Your English journey starts now! 🚀",pt:"Sua jornada no inglês começa agora!"},
-    {en:"Loading your superpowers... 💪",pt:"Carregando seus superpoderes..."},
-    {en:"Almost there! Good things take time ⭐",pt:"Quase lá! Coisas boas levam tempo"},
-    {en:"Warming up the neurons... 🧠",pt:"Aquecendo os neurônios..."},
-    {en:"Your future self speaks English fluently 🌍",pt:"Seu eu do futuro fala inglês fluente"},
-    {en:"Did you know? Practice beats talent 🎯",pt:"Sabia? Prática vence talento"},
-  ];
-  const p=phrases[Math.floor(Math.random()*phrases.length)];
+  const rawQ=LOADING_QUOTES[Math.floor(Math.random()*LOADING_QUOTES.length)];
+  const q=typeof rawQ==="string"?{en:rawQ,pt:""}:rawQ;
   const el=document.getElementById("auth-loading");
-  const txt=el?.querySelector(".auth-loading-text");
-  const sub=el?.querySelector(".auth-loading-sub");
-  if(el) el.style.display="flex";
-  if(txt) txt.textContent=msg||p.en;
-  if(sub) sub.textContent=p.pt;
+  if(!el) return;
+  el.style.display="flex";
+  _loadingShownAt=Date.now();
+  const txt=el.querySelector(".auth-loading-text");
+  const sub=el.querySelector(".auth-loading-sub");
+  const quote=el.querySelector(".auth-loading-quote");
+  const quotePT=el.querySelector(".auth-loading-quote-pt");
+  if(txt) txt.textContent=msg||"Carregando VIC English...";
+  if(sub) sub.textContent="";
+  if(quote) quote.textContent=`"${q.en}"`;
+  if(quotePT) quotePT.textContent=q.pt;
 }
 function hideAuthLoading(){
   const el=document.getElementById("auth-loading");
-  if(el) el.style.display="none";
+  if(!el) return;
+  // Ensure loading shows for at least 3 seconds
+  const elapsed=Date.now()-_loadingShownAt;
+  const delay=Math.max(0, 4500-elapsed);
+  setTimeout(()=>{ el.style.display="none"; }, delay);
 }
 
 async function handleLogin(){
   const email=document.getElementById("login-email").value.trim();
   const pw=document.getElementById("login-password").value;
+  const remember=document.getElementById("remember-me")?.checked!==false;
   const btn=document.getElementById("btn-login");
   if(!email||!pw) return showAuthError("Preencha email e senha.");
   const reset=()=>{btn.disabled=false;btn.textContent="Entrar";hideAuthLoading();};
   btn.disabled=true; btn.textContent="Entrando...";
-  showAuthLoading("Vamos te ajudar a melhorar seu inglês! 🚀");
-  const timeout=setTimeout(()=>{hideAuthLoading();reset();showAuthError("Tente novamente.");},5000);
-  try{await loginUser(email,pw);clearTimeout(timeout);}
+  showAuthLoading("Preparando tua jornada no inglês! 🚀");
+  const timeout=setTimeout(()=>{hideAuthLoading();reset();showAuthError("Tente novamente.");},8000);
+  try{
+    // Set persistence based on remember-me
+    const {browserLocalPersistence, browserSessionPersistence, setPersistence} = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
+    await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
+    await loginUser(email,pw);
+    localStorage.setItem("vic_last_email",email);
+    clearTimeout(timeout);
+  }
   catch(e){clearTimeout(timeout);hideAuthLoading();showAuthError(translateErr(e.code));reset();}
 }
 async function handleGoogle(){
@@ -504,16 +616,164 @@ async function loadDashboard(user){
   }
 }
 
+const PRO_MESSAGES=[
+  {title:"🚀 Acelere seu inglês",        sub:"Só R$ 15/mês — menos que um café por dia!"},
+  {title:"💼 Para sua carreira",         sub:"Todo conteúdo profissional por apenas R$ 15"},
+  {title:"⭐ Plano PRO — R$ 15/mês",     sub:"Acesso total. Cancela quando quiser."},
+  {title:"🔓 Desbloqueie tudo agora",    sub:"Menos que 1 aula particular. Vale muito mais!"},
+  {title:"🌍 Inglês sem limites",        sub:"R$ 15/mês — menos de R$ 0,50 por dia 🤯"},
+  {title:"📈 Invista na sua carreira",   sub:"Por só R$ 15 você acessa tudo. Faz sentido!"},
+];
+let _proBannerIdx=0;
+
+function rotatProBanner(){
+  const t=document.getElementById("pro-banner-title");
+  const s=document.getElementById("pro-banner-sub");
+  if(!t||!s) return;
+  const msg=PRO_MESSAGES[_proBannerIdx%PRO_MESSAGES.length];
+  t.textContent=msg.title; s.textContent=msg.sub;
+  _proBannerIdx++;
+}
+
+function fitUserName(name){
+  const el=document.getElementById("dash-username");
+  if(!el) return;
+  el.textContent=name;
+  el.style.fontSize=name.length>14?"12px":name.length>10?"13px":"15px";
+}
+
+const CURIOSITIES=[
+  // False friends
+  "🇧🇷 'Actually' não significa 'atualmente' — significa 'na verdade'. Um dos erros mais comuns dos brasileiros!",
+  "🇧🇷 'Library' não é livraria — é biblioteca! Livraria em inglês é 'bookstore'.",
+  "🇧🇷 'Parents' não são parentes — são seus pais! Parentes são 'relatives'.",
+  "🇧🇷 'Push' não é puxar — é empurrar! E 'pull' é puxar. Olha nas portas!",
+  // Homophones
+  "👂 'There', 'their' e 'they're' soam idênticos — mas significam: lá / deles / eles são.",
+  "👂 'To', 'too' e 'two' soam igual — preposição, também, e o número 2.",
+  "👂 'Hear' e 'here' soam iguais — ouvir e aqui. Preste atenção no contexto!",
+  "👂 'Read' no presente soa /riid/ — no passado, /rɛd/. Mesma escrita, sons diferentes!",
+  // Origem germânica
+  "🏰 O inglês é uma língua germânica — veio dos Anglos e Saxões que invadiram a Grã-Bretanha no séc. V.",
+  "🌲 Palavras do dia a dia como 'water', 'house', 'father', 'mother' vêm do germânico antigo.",
+  "⚔️ Após a conquista normanda (1066), o inglês absorveu o francês — por isso tem tantas palavras latinas também.",
+  "🌳 O inglês está na mesma família linguística do alemão e do holandês — irmãos linguísticos!",
+  "📜 O inglês antigo (Old English) de 1.000 anos atrás é tão diferente que parece outro idioma.",
+  // Tipo de língua
+  "🔤 O inglês é uma língua analítica — usa poucas terminações verbais. 'I go, you go, he goes' — quase igual!",
+  "💡 Diferente do português, o inglês não tem gênero gramatical. 'The car', 'the house' — sempre 'the'!",
+  "📝 O inglês é mais direto que o português — vai logo ao verbo: 'I love you' vs 'Eu te amo' (mesma ordem).",
+  "🌍 O inglês tem o maior vocabulário do mundo — mais que o dobro do português!",
+  // Curiosidades gerais
+  "📖 Shakespeare inventou +1.700 palavras: 'lonely', 'bedroom', 'generous', 'obscene', 'crítica'...",
+  "🌐 O inglês é língua oficial de 67 países — mais do que qualquer outro idioma no mundo.",
+  "🔤 'Set' é a palavra com mais significados em inglês: 430+ definições no dicionário.",
+  "💬 'I' é a única letra que é uma palavra completa em inglês — e sempre escrita maiúscula!",
+  "🧠 Aprender inglês muda o cérebro — aumenta a massa cinzenta nas áreas de memória e atenção.",
+  "🌊 'Tsunami' é japonês, 'jungle' é hindi, 'coffee' é árabe — o inglês absorve palavras do mundo todo!",
+  "📅 'Monday' = Moon's day, 'Sunday' = Sun's day, 'Saturday' = Saturn's day. Dias da semana são mitologia!",
+  "🎯 Estudar 15 minutos por dia é mais eficiente que 2 horas uma vez por semana. Consistência é tudo!",
+  "🔡 'Rhythm' é uma das poucas palavras inglesas sem vogal — e ainda tem 2 sílabas!",
+  "🏆 Com apenas 3.000 palavras, você entende 95% dos textos em inglês do dia a dia.",
+  // Phrasal verbs
+  "🔥 'Give up' = desistir. 'Give in' = ceder. 'Give out' = distribuir. Uma palavra, três significados!",
+  "💡 'Look up' = pesquisar/olhar pra cima. 'Look out' = cuidado! 'Look after' = cuidar de.",
+  "⚡ 'Turn on' liga. 'Turn off' desliga. 'Turn up' aparece do nada. 'Turn down' recusa.",
+  "🎯 'Pick up' pode ser: buscar alguém, aprender algo novo, ou atender o telefone.",
+  "🚀 'Run out of' = ficar sem. 'Run into' = encontrar por acaso. 'Run away' = fugir.",
+  "🧠 Phrasal verbs são dois verbos que formam um novo significado — diferente do português!",
+  "🌊 'Go on' = continuar. 'Go off' = explodir/tocar. 'Go over' = revisar. 'Go through' = passar por.",
+  "🎭 'Put off' = adiar. 'Put up with' = tolerar. 'Put on' = vestir. 'Put out' = apagar.",
+];
+
+let _curiosityIdx=0, _curiosityTimer=null;
+function startCuriosityTicker(){
+  const el=document.getElementById("curiosity-ticker-text"); if(!el) return;
+  clearInterval(_curiosityTimer);
+  const show=()=>{
+    el.style.animation="none";
+    el.offsetHeight;
+    el.style.animation="tickerFade 0.8s ease";
+    el.textContent=CURIOSITIES[_curiosityIdx%CURIOSITIES.length];
+    _curiosityIdx++;
+  };
+  show();
+  _curiosityTimer=setInterval(show,20000); // 20 seconds — time to read
+}
+
+function initContactFloat(){
+  const cfBtn=document.getElementById("btn-contact-float");
+  const cfMenu=document.getElementById("contact-float-menu");
+  if(!cfBtn||!cfMenu) return;
+  cfBtn.addEventListener("click",e=>{
+    e.stopPropagation();
+    const open=cfMenu.style.display!=="none";
+    cfMenu.style.display=open?"none":"flex";
+    cfBtn.textContent=open?"💬":"✕";
+  });
+  document.addEventListener("click",e=>{
+    if(!cfBtn.contains(e.target)&&!cfMenu.contains(e.target)){
+      cfMenu.style.display="none"; cfBtn.textContent="💬";
+    }
+  });
+  document.getElementById("cfm-share-btn")?.addEventListener("click",()=>{
+    shareApp(); cfMenu.style.display="none"; cfBtn.textContent="💬";
+  });
+}
+
+function shareApp(){
+  const url="https://vicenglish.netlify.app";
+  if(navigator.share){navigator.share({title:"VIC English",text:"Aprenda inglês profissional!",url});}
+  else{navigator.clipboard.writeText(url).then(()=>showXpToast("🔗 Link copiado!"));}
+}
+
 function renderDashboard(){
   const xp=userData.xp||0, lv=levelInfo(xp), level=calcLevel(xp);
   buildDate(); buildGreeting(userData.name||"Aluno");
+  fitUserName(userData.name||"Aluno");
+  rotatProBanner();
+  // Rotate pro banner every 5 seconds
+  clearInterval(window._proBannerTimer);
+  window._proBannerTimer=setInterval(rotatProBanner,5000);
   renderDailyMissions();
-  document.getElementById("dash-username").textContent=userData.name||"";
+  // Show admin float button if owner
+  const adminBtn=document.getElementById("btn-admin-float");
+  if(adminBtn) adminBtn.style.display=currentUser?.uid===OWNER_UID?"flex":"none";
+  // username handled by fitUserName above
   document.getElementById("dash-xp").textContent=xp;
   document.getElementById("dash-level").textContent=level;
   document.getElementById("dash-streak").textContent=userData.streak||0;
-  document.getElementById("dash-xp-bar").style.width=`${xp%100}%`;
-  document.getElementById("dash-xp-next").textContent=`${level*100} XP`;
+
+  // Next badge inline below XP bar
+  const earned2=userData.badges||[];
+  const nextBadge2=BADGES.find(b=>!earned2.includes(b.id));
+  const nbiEl=document.getElementById("next-badge-inline");
+  nbiEl?.addEventListener("click",()=>{ vibrate(30); openProfile(); setTimeout(()=>document.getElementById("profile-badges-grid")?.scrollIntoView({behavior:"smooth"}),400); });
+  if(nbiEl&&nextBadge2){
+    nbiEl.style.display="flex";
+    document.getElementById("nbi-icon").textContent=nextBadge2.icon;
+    document.getElementById("nbi-name").textContent=nextBadge2.name;
+    const s2=getBadgeStats();
+    let p2="";
+    if(nextBadge2.id==="streak5") p2=`${Math.min(s2.answerStreak,5)}/5`;
+    else if(nextBadge2.id==="xp250") p2=`${Math.min(s2.xp,250)}/250 XP`;
+    document.getElementById("nbi-prog").textContent=p2;
+  } else if(nbiEl) nbiEl.style.display="none";
+
+  const xpInLevel=xp%(level*100)||xp%100;
+  const xpForLevel=level*100;
+  const pct=Math.min(Math.round((xpInLevel/xpForLevel)*100),100);
+  document.getElementById("dash-xp-bar").style.width=`${pct}%`;
+  document.getElementById("dash-xp-next").textContent=`${xpForLevel-xpInLevel} XP para o próximo nível`;
+
+  // Show next badge milestone on bar
+  const earned=userData.badges||[];
+  const nextBadge=BADGES.find(b=>!earned.includes(b.id));
+  const milestoneEl=document.getElementById("dash-milestone-marker");
+  if(milestoneEl&&nextBadge){
+    milestoneEl.textContent=nextBadge.icon;
+    milestoneEl.title=`Próxima conquista: ${nextBadge.name}`;
+  }
   const lvEl=document.getElementById("greeting-level");
   if(lvEl) lvEl.textContent=`${lv.label} — ${lv.msg}`;
 
@@ -626,6 +886,7 @@ function renderMission(){
   if(!phrase){ console.error("No phrase found",currentSegmentId,currentPhaseId,currentMissionId,currentPhraseIndex); return; }
 
   exerciseAnswered=false; memSelected=null; memMatched=0; wordOrderPlaced=[]; matchSelected=null; matchCorrect=0;
+  showLockedNextBtn(); // show locked next button
 
   document.getElementById("mission-name").textContent        =stripEmoji(mission?.name||"");
   document.getElementById("phrase-counter").textContent      =`${currentPhraseIndex+1}/${total}`;
@@ -914,8 +1175,10 @@ async function startRecording(){
       document.getElementById("recording-status").textContent="✅ Pronto! Ouça sua voz.";
       const transcript=document.getElementById("transcript-box")?.textContent?.trim();
       const phrase=getPhrase();
-      if(transcript&&phrase?.en){const result=avaliarResposta(transcript,SoundFX._clean(phrase.en));setTimeout(()=>showScoreResult(result.score),600);}
-      else document.getElementById("score-panel").style.display="flex";
+      if(transcript&&phrase?.en){
+        const result=avaliarResposta(transcript,SoundFX._clean(phrase.en));
+        setTimeout(()=>showScoreResult(result.score, transcript),600);
+      } else document.getElementById("score-panel").style.display="flex";
     };
     mediaRecorder.start(100); isRecording=true;
     document.getElementById("btn-record").style.display="none";
@@ -929,12 +1192,30 @@ function resetRecorder(){if(recognition){try{recognition.stop();}catch(e){}recog
 
 // ── SCORE ─────────────────────────────────────────────────────────────────────
 async function submitScore(score){document.getElementById("score-panel").style.display="none";showScoreResult(score);}
-function showScoreResult(score){
+function showScoreResult(score, spokenText){
   document.getElementById("score-panel").style.display="none";
   const fb=document.getElementById("pronunciation-feedback");
-  if(score===10){fb.className="pronunciation-feedback good";fb.innerHTML=`<span class="pf-emoji">🌟</span><div class="pf-text">Perfect!</div><div class="pf-sub">+10 XP</div>`;SoundFX.correct();}
-  else if(score===5){fb.className="pronunciation-feedback almost";fb.innerHTML=`<span class="pf-emoji">👍</span><div class="pf-text">Almost!</div><div class="pf-sub">+5 XP</div>`;SoundFX.almost();}
-  else{fb.className="pronunciation-feedback tryagain";fb.innerHTML=`<span class="pf-emoji">💪</span><div class="pf-text">Try again!</div><div class="pf-sub">Ouça e repita.</div>`;SoundFX.wrong();}
+  const phrase=getPhrase();
+  let analysis=null;
+  if(spokenText&&phrase?.en){
+    analysis=analyzePronunciation(spokenText, SoundFX._clean(phrase.en));
+  }
+
+  if(score===10||analysis?.pct>=90){
+    fb.className="pronunciation-feedback good";
+    fb.innerHTML=`<span class="pf-emoji">🌟</span><div class="pf-text">Perfect!</div><div class="pf-sub">+10 XP</div>`;
+    SoundFX.correct(); score=10;
+  }else if(score===5||analysis?.pct>=70){
+    const wf=analysis?.wordFeedback?.join(" • ")||"";
+    fb.className="pronunciation-feedback almost";
+    fb.innerHTML=`<span class="pf-emoji">👍</span><div class="pf-text">Almost! ${analysis?.pct||""}%</div><div class="pf-sub">${wf||"+5 XP"}</div>`;
+    SoundFX.almost(); score=5;
+  }else{
+    const wf=analysis?.wordFeedback?.join(" • ")||"Ouça e repita.";
+    fb.className="pronunciation-feedback tryagain";
+    fb.innerHTML=`<span class="pf-emoji">💪</span><div class="pf-text">Try again! ${analysis?.pct?analysis.pct+"%":""}</div><div class="pf-sub">${wf}</div>`;
+    SoundFX.wrong(); score=0;
+  }
   fb.style.display="block";
   showNextBtn('btn-next-exercise', score);
 }
@@ -943,6 +1224,7 @@ async function autoAdvance(score){
   const xpGain=10; const newXp=(userData.xp||0)+xpGain;
   userData.xp=newXp; showXpToast(`+${xpGain} XP`);
   trackDailyXP(xpGain);
+  trackAnswer(score>=5);
   await updateDailyProgress("exercise");
   if(score===10) await updateDailyProgress("perfect");
   if(currentSegmentId==="maritimo") await updateDailyProgress("maritime");
@@ -955,15 +1237,42 @@ async function autoAdvance(score){
   } else await completeMission(newXp);
 }
 
-function showNextBtn(btnId, score){
-  // Hide all next buttons first
-  document.querySelectorAll(".btn-next-exercise").forEach(b=>{b.classList.remove("visible"); b.onclick=null;});
-  const btn=document.getElementById(btnId);
-  if(!btn) { autoAdvance(score); return; }
-  btn.classList.add("visible");
-  btn.textContent="Próximo →";
-  btn.onclick=()=>{ btn.classList.remove("visible"); btn.onclick=null; autoAdvance(score); };
+function updateNavButtons(nextUnlocked, score){
+  // NEXT — all buttons with class btn-next-exercise
+  document.querySelectorAll(".btn-next-exercise").forEach(btn=>{
+    btn.style.display="block";
+    if(nextUnlocked){
+      btn.classList.add("visible");
+      btn.textContent="Próximo →";
+      btn.onclick=()=>{ vibrate(30); autoAdvance(score); };
+    } else {
+      btn.classList.remove("visible");
+      btn.textContent="Responda para avançar →";
+      btn.onclick=null;
+    }
+  });
+
+  // PREV — always show if not first exercise
+  const prevBtn=document.getElementById("btn-prev-exercise");
+  if(prevBtn){
+    if(currentPhraseIndex>0){
+      prevBtn.style.display="flex";
+      prevBtn.textContent="← Anterior";
+      prevBtn.onclick=()=>{ vibrate(20); currentPhraseIndex=Math.max(0,currentPhraseIndex-1); renderMission(); };
+    } else {
+      prevBtn.style.display="none";
+    }
+  }
 }
+
+function showNextBtn(btnId, score){
+  updateNavButtons(true, score);
+}
+
+function showLockedNextBtn(){
+  updateNavButtons(false, 0);
+}
+
 
 async function nextPhrase(){ await autoAdvance(10); }
 
@@ -976,6 +1285,7 @@ async function completeMission(xp){
   await saveProgress(currentUser.uid,{xp:xp??userData.xp,completedMissions:completed,currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:0}});
   userData.completedMissions=completed;
   SoundFX.complete();
+  if(completed.length===1) showNotifBanner();
   const lv=levelInfo(xp??userData.xp);
   document.getElementById("complete-mission-name").textContent=stripEmoji(mission?.name||"");
   document.getElementById("complete-xp").textContent=xp??userData.xp;
@@ -989,6 +1299,50 @@ async function completeMission(xp){
   if(nextMission){nextBtn.style.display="block";nextBtn.textContent=`Próxima: ${stripEmoji(nextMission.name)} →`;nextBtn.onclick=()=>enterMission(currentSegmentId,currentPhaseId,nextMission.id);}
   else nextBtn.style.display="none";
   showView("view-complete");
+  // Show feedback popup after 2s on every 3rd mission
+  if(completed.length % 7 === 0){
+    setTimeout(()=>showPostMissionFeedback(), 1800);
+  }
+}
+
+function showPostMissionFeedback(){
+  document.getElementById("post-mission-modal")?.remove();
+  const modal=document.createElement("div");
+  modal.id="post-mission-modal";
+  modal.className="post-mission-modal";
+  modal.innerHTML=`
+    <div class="pmm-card">
+      <button class="pmm-close" onclick="document.getElementById('post-mission-modal').remove()">✕</button>
+      <div class="pmm-title">Você está gostando? 😊</div>
+      <div class="feedback-stars pmm-stars" id="pmm-stars">
+        <span class="feedback-star" data-v="1">⭐</span>
+        <span class="feedback-star" data-v="2">⭐</span>
+        <span class="feedback-star" data-v="3">⭐</span>
+        <span class="feedback-star" data-v="4">⭐</span>
+        <span class="feedback-star" data-v="5">⭐</span>
+      </div>
+      <div class="pmm-actions">
+        <button class="pmm-btn pmm-like" onclick="saveFeedback({type:'like'});showXpToast('👍 Obrigado!');document.getElementById('post-mission-modal').remove()">👍 Gostei</button>
+        <button class="pmm-btn pmm-comment" onclick="document.getElementById('post-mission-modal').remove();openFeedbackModal('💬 Comentário','comment')">💬 Comentar</button>
+        <button class="pmm-btn pmm-bug" onclick="document.getElementById('post-mission-modal').remove();openFeedbackModal('🐛 Reportar bug','bug')">🐛 Bug</button>
+      </div>
+      <div class="pmm-share-title">Compartilhe seu progresso!</div>
+      <div class="pmm-share-row">
+        <a href="https://wa.me/?text=${encodeURIComponent('Estou aprendendo inglês com o VIC English App! 🚀 app.viclanguage.com.br')}" target="_blank" class="pmm-share-btn pmm-wa">📱</a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://vicenglish.netlify.app')}" target="_blank" class="pmm-share-btn pmm-fb">👥</a>
+        <a href="https://www.instagram.com/" target="_blank" class="pmm-share-btn pmm-ig">📸</a>
+        <button class="pmm-share-btn pmm-copy" onclick="navigator.clipboard.writeText('https://vicenglish.netlify.app').then(()=>showXpToast('🔗 Link copiado!'))">🔗</button>
+      </div>
+    </div>`;
+  // Wire stars
+  modal.querySelectorAll(".feedback-star").forEach(star=>{
+    star.addEventListener("click",()=>{
+      const v=parseInt(star.dataset.v);
+      modal.querySelectorAll(".feedback-star").forEach((s,i)=>s.classList.toggle("active",i<v));
+      saveFeedback({type:"rating",value:v});
+    });
+  });
+  document.body.appendChild(modal);
 }
 
 function showXpToast(msg){const t=document.getElementById("xp-toast");if(!t)return;t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2500);}
@@ -1214,6 +1568,9 @@ function renderTFQuestion(){
   document.getElementById("tf-progress-bar").style.width=`${Math.round((tfIndex/tfItems.length)*100)}%`;
   document.getElementById("tf-category-tag").textContent=tfCategory.name;
   document.getElementById("tf-statement").textContent=q.statement;
+  // Show PT translation if available
+  const ptEl=document.getElementById("tf-pt-translation");
+  if(ptEl) ptEl.textContent=q.pt||"";
   document.getElementById("tf-feedback").style.display="none";
   // enable + reset buttons
   const tBtn=document.getElementById("tf-true"), fBtn=document.getElementById("tf-false");
@@ -1259,15 +1616,67 @@ function openDialogue(){
   document.getElementById("dlg-selector").style.display="block";
   document.getElementById("dlg-board").style.display="none";
   document.getElementById("dlg-result").style.display="none";
+  renderDialogueSegments();
+  showView("view-dialogue");
+}
+
+function renderDialogueSegments(){
   const list=document.getElementById("dlg-scenario-list"); list.innerHTML="";
+
+  // Group scenarios by segment
+  const groups={};
   VICTOR_DATA.dialogueScenarios.forEach(sc=>{
+    const seg=sc.segment||"Geral";
+    if(!groups[seg]) groups[seg]=[];
+    groups[seg].push(sc);
+  });
+
+  // Find segment icon
+  const segIcon=name=>{
+    const s=VICTOR_DATA.segments.find(s=>name.toLowerCase().includes(s.name.toLowerCase().split(" ")[0].toLowerCase()));
+    return s?.icon||"💬";
+  };
+
+  Object.entries(groups).forEach(([segName, scenarios])=>{
     const div=document.createElement("div"); div.className="phase-card unlocked";
-    div.innerHTML=`<div class="phase-left"><div class="phase-num">${sc.name}</div><div class="phase-sub">${sc.description}</div></div><div class="phase-right">→</div>`;
+    div.innerHTML=`
+      <div class="phase-left">
+        <div class="phase-num">${segIcon(segName)} ${segName}</div>
+        <div class="phase-sub">${scenarios.length} cenário${scenarios.length>1?"s":""} disponíve${scenarios.length>1?"is":"l"}</div>
+      </div>
+      <div class="phase-right">→</div>`;
+    div.addEventListener("click",()=>renderDialogueScenarios(segName, scenarios));
+    list.appendChild(div);
+  });
+}
+
+function renderDialogueScenarios(segName, scenarios){
+  const list=document.getElementById("dlg-scenario-list"); list.innerHTML="";
+
+  // Back button
+  const back=document.createElement("button");
+  back.className="btn-back-sm"; back.textContent="← Segmentos";
+  back.addEventListener("click",renderDialogueSegments);
+  list.appendChild(back);
+
+  const title=document.createElement("div");
+  title.className="section-label"; title.style.margin="12px 0 8px";
+  title.textContent=segName;
+  list.appendChild(title);
+
+  scenarios.forEach(sc=>{
+    const div=document.createElement("div"); div.className="phase-card unlocked";
+    div.innerHTML=`
+      <div class="phase-left">
+        <div class="phase-num">${sc.name}</div>
+        <div class="phase-sub">${sc.description}</div>
+      </div>
+      <div class="phase-right">→</div>`;
     div.addEventListener("click",()=>startDialogue(sc.id));
     list.appendChild(div);
   });
-  showView("view-dialogue");
 }
+
 function startDialogue(scenarioId){
   dlgScenario=VICTOR_DATA.dialogueScenarios.find(s=>s.id===scenarioId); if(!dlgScenario) return;
   dlgIndex=0; dlgScore=0;
@@ -1277,6 +1686,43 @@ function startDialogue(scenarioId){
   document.getElementById("dlg-chat").innerHTML="";
   renderDlgLine();
 }
+// ── DIALOGUE HELPERS ─────────────────────────────────────────────────────────
+async function translateWord(word, el){
+  try{
+    const clean=(word||"").replace(/[^a-zA-ZÀ-ú\s]/g,"").trim();
+    if(!clean||clean.length<2) return;
+    const res=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(clean)}&langpair=en|pt`);
+    const data=await res.json();
+    const tr=data.responseData?.translatedText;
+    if(tr&&tr.toLowerCase()!==clean.toLowerCase()){
+      // Remove any existing tooltip
+      el.querySelectorAll(".word-tooltip").forEach(t=>t.remove());
+      const tip=document.createElement("span");
+      tip.className="word-tooltip"; tip.textContent=tr;
+      el.style.position="relative";
+      el.appendChild(tip);
+      setTimeout(()=>tip.remove(),2500);
+    }
+  }catch(e){}
+}
+
+function makeClickableText(text){
+  return (text||"").split(/(\s+)/).map(part=>{
+    if(/^\s+$/.test(part)) return part;
+    const word=part.replace(/[.,!?;:[\]]/g,"");
+    return `<span class="dlg-word" data-word="${word}">${part}</span>`;
+  }).join("");
+}
+
+function wireWordClicks(container){
+  container.querySelectorAll(".dlg-word").forEach(w=>{
+    w.addEventListener("click",e=>{
+      e.stopPropagation();
+      translateWord(w.dataset.word, w);
+    });
+  });
+}
+
 function renderDlgLine(){
   const line=dlgScenario.lines[dlgIndex];
   const total=dlgScenario.lines.length;
@@ -1286,35 +1732,49 @@ function renderDlgLine(){
   document.getElementById("dlg-feedback").style.display="none";
 
   if(!line.blank){
-    addChatBubble(line.role,line.text);
-    // speak with delay so user can read
-    setTimeout(()=>SoundFX.speakEN(stripEmoji(line.text)),300);
+    addChatBubble(line.role, line.text);
+    // Auto-speak immediately
+    setTimeout(()=>SoundFX.speakEN(stripEmoji(line.text)), 200);
     document.getElementById("dlg-role").textContent="";
-    document.getElementById("dlg-line").textContent="";
+    document.getElementById("dlg-line").innerHTML="";
     document.getElementById("dlg-options").innerHTML="";
     document.getElementById("dlg-card").style.opacity="0.5";
-    // wait for speech to finish before advancing
     const words=line.text.split(" ").length;
-    const delay=Math.max(2000, words*350);
+    const delay=Math.max(2200, words*380);
     setTimeout(()=>{
       dlgIndex++;
       document.getElementById("dlg-card").style.opacity="1";
       if(dlgIndex<dlgScenario.lines.length) renderDlgLine();
       else showDlgResult();
-    },delay+300);
+    }, delay);
     return;
   }
 
   document.getElementById("dlg-card").style.opacity="1";
   document.getElementById("dlg-role").textContent=line.role+":";
-  // show line with ___ for blank
-  document.getElementById("dlg-line").textContent=line.text;
+  document.getElementById("dlg-line").innerHTML=makeClickableText(line.text);
   document.getElementById("dlg-sound").onclick=()=>SoundFX.speakEN(stripEmoji(line.text.replace("___",line.options[line.correct])));
 
-  // RANDOMIZE options
+  // Wire word clicks for translation
+  const dlgLineEl=document.getElementById("dlg-line");
+  if(dlgLineEl) wireWordClicks(dlgLineEl);
+
+  // PT translation of the full line
+  const ptBox=document.getElementById("dlg-line-pt");
+  if(ptBox){
+    ptBox.textContent="";
+    const fullEN=line.text.replace("___","___");
+    fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(fullEN.replace("___","..."))}&langpair=en|pt`)
+      .then(r=>r.json()).then(d=>{
+        if(d.responseData?.translatedText) ptBox.textContent=d.responseData.translatedText;
+      }).catch(()=>{});
+    // Also show PT speak button
+    const ptSpeak=document.getElementById("dlg-sound-pt");
+    if(ptSpeak) ptSpeak.onclick=()=>{if(ptBox.textContent) SoundFX.speakPT(ptBox.textContent);};
+  }
+
   const indices=shuffle([...Array(line.options.length).keys()]);
   const newCorrect=indices.indexOf(line.correct);
-
   const wrap=document.getElementById("dlg-options"); wrap.innerHTML="";
   indices.forEach((origIdx,newIdx)=>{
     const opt=line.options[origIdx];
@@ -1322,26 +1782,62 @@ function renderDlgLine(){
     btn.addEventListener("click",()=>{
       const correct=newIdx===newCorrect;
       if(correct){dlgScore+=10;SoundFX.correct();}else SoundFX.wrong();
-      wrap.querySelectorAll(".dlg-option").forEach((b,j)=>{b.disabled=true;if(j===newCorrect)b.classList.add("correct");else if(j===newIdx&&!correct)b.classList.add("wrong");});
+      wrap.querySelectorAll(".dlg-option").forEach((b,j)=>{
+        b.disabled=true;
+        if(j===newCorrect) b.classList.add("correct");
+        else if(j===newIdx&&!correct) b.classList.add("wrong");
+      });
       const fullText=line.text.replace("___",`[${line.options[line.correct]}]`);
       addChatBubble(line.role,fullText,correct);
+      // Auto-speak the completed sentence
+      SoundFX.speakEN(stripEmoji(fullText.replace(/\[|\]/g,"")));
       const fb=document.getElementById("dlg-feedback");
       fb.className=`dlg-feedback ${correct?"correct":"wrong"}`;
-      fb.innerHTML=correct?`✅ Correto! +10 pts`:`✅ Correto: <strong>${line.options[line.correct]}</strong>`;
+      fb.innerHTML=correct?`✅ Correto! +10 pts`:`✅ Era: <strong>${line.options[line.correct]}</strong>`;
       fb.style.display="block";
-      SoundFX.speakEN(stripEmoji(fullText.replace(/\[|\]/g,"")));
-      setTimeout(()=>{dlgIndex++;if(dlgIndex<dlgScenario.lines.length)renderDlgLine();else showDlgResult();},1800);
+      setTimeout(()=>{dlgIndex++;if(dlgIndex<dlgScenario.lines.length)renderDlgLine();else showDlgResult();},2000);
     });
     wrap.appendChild(btn);
   });
 }
+
 function addChatBubble(role,text,correct=null){
   const chat=document.getElementById("dlg-chat");
-  const staffRoles=["Receptionist","Officer","Waiter","Guide","Manager"];
+  const staffRoles=["Staff","Agent","Waiter","Guide","Manager","Concierge","Inspector","Control","Supervisor","Officer","OutgoingOp","IncomingOp"];
   const isStaff=staffRoles.includes(role);
   const div=document.createElement("div");
   div.className=`dlg-bubble ${isStaff?"bubble-right":"bubble-left"}${correct===false?" bubble-wrong":""}`;
-  div.innerHTML=`<span class="dlg-bubble-role">${role}</span><span class="dlg-bubble-text">${text}</span>`;
+
+  // Make words clickable in bubbles too
+  const clickableText=text.split(/(\s+)/).map(part=>{
+    if(/\s/.test(part)) return part;
+    const word=part.replace(/[.,!?;:[\]]/g,"");
+    return `<span class="dlg-word" data-word="${word}">${part}</span>`;
+  }).join("");
+
+  div.innerHTML=`<span class="dlg-bubble-role">${role}</span><span class="dlg-bubble-text">${clickableText}</span>`;
+
+  // Wire word clicks
+  div.querySelectorAll(".dlg-word").forEach(w=>{
+    w.addEventListener("click",async e=>{
+      e.stopPropagation();
+      const word=w.dataset.word;
+      if(!word||word.length<2) return;
+      try{
+        const res=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|pt`);
+        const data=await res.json();
+        const tr=data.responseData?.translatedText;
+        if(tr&&tr.toLowerCase()!==word.toLowerCase()){
+          const tip=document.createElement("span");
+          tip.className="word-tooltip"; tip.textContent=tr;
+          w.style.position="relative";
+          w.appendChild(tip);
+          setTimeout(()=>tip.remove(),2500);
+        }
+      }catch(e){}
+    });
+  });
+
   chat.appendChild(div);
   chat.scrollTop=chat.scrollHeight;
 }
@@ -1813,8 +2309,159 @@ async function openUserModal(uid){
 function generatePDF(u){
   const lv=calcLevel(u.xp||0), lvInfo_=levelInfo(u.xp||0), completed=u.completedMissions||[];
   const date=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
-  const html=`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"/><title>Relatório — ${u.name||"Aluno"}</title><style>body{font-family:'Segoe UI',sans-serif;background:#fff;color:#1a1a2e;padding:40px;max-width:700px;margin:0 auto}.header{border-bottom:3px solid #c9a849;padding-bottom:16px;margin-bottom:24px}.header h1{font-size:28px;font-weight:900;color:#1a0d2e;margin:0}.header p{font-size:13px;color:#6b7a90;margin:2px 0 0}.badge{display:inline-block;background:#1a0d2e;color:#e4b45c;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:700;margin-bottom:24px}h2{font-size:18px;color:#1a0d2e;border-bottom:1px solid #e4d5b0;padding-bottom:6px;margin:24px 0 12px}.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}.stat{background:#f7f3ed;border-radius:10px;padding:14px;text-align:center}.stat span{display:block;font-size:24px;font-weight:900;color:#c9a849}.stat small{font-size:11px;color:#6b7a90;text-transform:uppercase;letter-spacing:0.5px}.info-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0ebe0;font-size:14px}.info-row strong{color:#1a1a2e}.missions-list{background:#f7f3ed;border-radius:10px;padding:16px;font-size:13px;color:#444;line-height:2}.footer{margin-top:40px;text-align:center;font-size:11px;color:#6b7a90;border-top:1px solid #e4d5b0;padding-top:16px}@media print{body{padding:20px}}</style></head><body><div class="header"><h1>VIC English</h1><p>Relatório de Desempenho do Aluno</p></div><div class="badge">Gerado em ${date}</div><h2>Identificação</h2><div class="info-row"><span>Nome</span><strong>${u.name||"Visitante"}</strong></div><div class="info-row"><span>Email</span><strong>${u.email||"—"}</strong></div><div class="info-row"><span>Plano</span><strong>${u.plan==="pro"?"Pro ⭐":"Free"}</strong></div><h2>Desempenho</h2><div class="stats-grid"><div class="stat"><span>${u.xp||0}</span><small>XP</small></div><div class="stat"><span>Nv ${lv}</span><small>Nível</small></div><div class="stat"><span>${u.streak||0}</span><small>Streak</small></div><div class="stat"><span>${completed.length}</span><small>Missões</small></div></div><div class="info-row"><span>Nível detectado</span><strong>${(u.detectedLevel||"—").toUpperCase()}</strong></div><div class="info-row"><span>Classificação</span><strong>${lvInfo_.label}</strong></div><h2>Missões (${completed.length})</h2><div class="missions-list">${completed.length?completed.map(m=>`✅ ${m.replace(/_/g," ")}`).join("<br>"):"Nenhuma missão concluída."}</div><div class="footer">VIC English — viclanguage.com.br</div></body></html>`;
-  const win=window.open("","_blank"); win.document.write(html); win.document.close(); setTimeout(()=>win.print(),500);
+  const xp=u.xp||0;
+
+  // Calculate skill percentages based on completed missions
+  const speaking   =Math.min(100,Math.round((completed.filter(m=>m.includes("pron")||m.includes("fluencia")).length*15)+((xp/800)*25)));
+  const writing    =Math.min(100,Math.round((u.writingXP||0)/2+(completed.filter(m=>m.includes("order")||m.includes("word_order")).length*5)));
+  const listening  =Math.min(100,Math.round((completed.filter(m=>m.includes("dlg")||m.includes("dialog")||m.includes("situac")).length*12)+10));
+  const reading    =Math.min(100,Math.round((completed.filter(m=>m.includes("vocab")||m.includes("mc")).length*6)+10));
+  const translating=Math.min(100,Math.round((completed.filter(m=>m.includes("translat")||m.includes("traducao")).length*15)+5));
+
+  const skillBar=(val,color)=>`<div style="background:#e8e0d0;border-radius:999px;height:10px;margin-top:4px"><div style="width:${val}%;background:${color};height:10px;border-radius:999px"></div></div>`;
+  const skillColor=(v)=>v>=70?"#22c55e":v>=40?"#f59e0b":"#ef4444";
+
+  // Segment progress
+  const segProgress=VICTOR_DATA.segments.filter(s=>s.available).map(seg=>{
+    const total=(seg.phases||[]).reduce((a,p)=>a+(p.missions||[]).length,0);
+    const done=completed.filter(m=>m.startsWith(seg.id+"_")).length;
+    const pct=total?Math.round((done/total)*100):0;
+    return {name:`${seg.icon} ${seg.name}`,done,total,pct};
+  }).filter(s=>s.done>0);
+
+  // Weakest skill
+  const skills=[{n:"Speaking",v:speaking},{n:"Writing",v:writing},{n:"Listening",v:listening},{n:"Reading",v:reading},{n:"Translating",v:translating}];
+  const weakest=skills.reduce((a,b)=>a.v<b.v?a:b);
+  const strongest=skills.reduce((a,b)=>a.v>b.v?a:b);
+
+  const html=`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"/><title>Relatório VIC English — ${u.name||"Aluno"}</title>
+<style>
+  *{box-sizing:border-box}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#fff;color:#1a1a2e;padding:40px;max-width:720px;margin:0 auto;font-size:14px}
+  .header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #c9a849;padding-bottom:16px;margin-bottom:24px}
+  .header-left h1{font-size:26px;font-weight:900;color:#1a0d2e;margin:0}
+  .header-left p{font-size:12px;color:#6b7a90;margin:2px 0 0}
+  .badge{background:#1a0d2e;color:#e4b45c;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:700}
+  h2{font-size:16px;font-weight:800;color:#1a0d2e;border-bottom:2px solid #e4d5b0;padding-bottom:6px;margin:28px 0 14px;text-transform:uppercase;letter-spacing:0.5px}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+  .stat{background:#f7f3ed;border-radius:10px;padding:14px;text-align:center;border:1px solid #e4d5b0}
+  .stat span{display:block;font-size:22px;font-weight:900;color:#c9a849}
+  .stat small{font-size:10px;color:#6b7a90;text-transform:uppercase;letter-spacing:0.5px}
+  .info-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f0ebe0;font-size:13px}
+  .info-row strong{color:#1a1a2e}
+  .skill-row{margin-bottom:14px}
+  .skill-header{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:3px}
+  .skill-pct{font-weight:800}
+  .highlight-box{background:#f7f3ed;border:1px solid #e4d5b0;border-radius:10px;padding:16px;margin-bottom:14px}
+  .highlight-box h3{font-size:13px;text-transform:uppercase;color:#6b7a90;letter-spacing:0.5px;margin:0 0 8px}
+  .highlight-box p{font-size:14px;font-weight:600;color:#1a0d2e;margin:0}
+  .seg-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0ebe0;font-size:13px}
+  .seg-bar{width:120px;background:#e8e0d0;border-radius:999px;height:8px}
+  .seg-fill{height:8px;border-radius:999px;background:#c9a849}
+  .recommendation{background:#fff8e1;border:1px solid #f0c844;border-radius:10px;padding:14px;margin-top:14px}
+  .recommendation h3{font-size:13px;color:#7a5c10;margin:0 0 6px}
+  .recommendation p{font-size:13px;color:#444;margin:4px 0}
+  .footer{margin-top:40px;text-align:center;font-size:11px;color:#6b7a90;border-top:1px solid #e4d5b0;padding-top:16px}
+  @media print{body{padding:20px}button{display:none}}
+</style></head><body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>VIC English</h1>
+    <p>Relatório Detalhado de Desempenho</p>
+  </div>
+  <span class="badge">📅 ${date}</span>
+</div>
+
+<h2>Identificação do Aluno</h2>
+<div class="info-row"><span>Nome</span><strong>${u.name||"Visitante"}</strong></div>
+<div class="info-row"><span>Email</span><strong>${u.email||"—"}</strong></div>
+<div class="info-row"><span>Plano</span><strong>${u.plan==="pro"?"Pro ⭐":"Free"}</strong></div>
+<div class="info-row"><span>Login</span><strong>${u.provider==="google"?"Google":u.provider==="anonymous"?"Anônimo":"Email"}</strong></div>
+
+<h2>Resumo de Desempenho</h2>
+<div class="stats-grid">
+  <div class="stat"><span>${xp}</span><small>XP Total</small></div>
+  <div class="stat"><span>Nv ${lv}</span><small>Nível</small></div>
+  <div class="stat"><span>${u.streak||0} 🔥</span><small>Streak</small></div>
+  <div class="stat"><span>${completed.length}</span><small>Missões</small></div>
+</div>
+<div class="info-row"><span>Nível detectado (teste)</span><strong>${(u.detectedLevel||"—").toUpperCase()}</strong></div>
+<div class="info-row"><span>Classificação geral</span><strong>${lvInfo_.label}</strong></div>
+<div class="info-row"><span>Objetivo declarado</span><strong>${u.diagnosisAnswers?.goal||"Não informado"}</strong></div>
+<div class="info-row"><span>Segmento principal</span><strong>${u.currentMission?.segmentId||"—"}</strong></div>
+
+<h2>Análise de Habilidades</h2>
+
+<div class="skill-row">
+  <div class="skill-header"><span>🗣️ Speaking (Conversação)</span><span class="skill-pct" style="color:${skillColor(speaking)}">${speaking}%</span></div>
+  ${skillBar(speaking,skillColor(speaking))}
+  <div style="font-size:11px;color:#6b7a90;margin-top:3px">Baseado em exercícios de pronúncia e diálogo</div>
+</div>
+
+<div class="skill-row">
+  <div class="skill-header"><span>✍️ Writing (Escrita)</span><span class="skill-pct" style="color:${skillColor(writing)}">${writing}%</span></div>
+  ${skillBar(writing,skillColor(writing))}
+  <div style="font-size:11px;color:#6b7a90;margin-top:3px">Baseado em exercícios de escrita e ordenação de frases</div>
+</div>
+
+<div class="skill-row">
+  <div class="skill-header"><span>👂 Listening (Compreensão)</span><span class="skill-pct" style="color:${skillColor(listening)}">${listening}%</span></div>
+  ${skillBar(listening,skillColor(listening))}
+  <div style="font-size:11px;color:#6b7a90;margin-top:3px">Baseado em exercícios de diálogo e situações reais</div>
+</div>
+
+<div class="skill-row">
+  <div class="skill-header"><span>📖 Reading (Leitura)</span><span class="skill-pct" style="color:${skillColor(reading)}">${reading}%</span></div>
+  ${skillBar(reading,skillColor(reading))}
+  <div style="font-size:11px;color:#6b7a90;margin-top:3px">Baseado em exercícios de vocabulário e múltipla escolha</div>
+</div>
+
+<div class="skill-row">
+  <div class="skill-header"><span>🔄 Translating (Tradução)</span><span class="skill-pct" style="color:${skillColor(translating)}">${translating}%</span></div>
+  ${skillBar(translating,skillColor(translating))}
+  <div style="font-size:11px;color:#6b7a90;margin-top:3px">Baseado em exercícios de tradução PT→EN</div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px">
+  <div class="highlight-box">
+    <h3>💪 Ponto Forte</h3>
+    <p>${strongest.n} — ${strongest.v}%</p>
+  </div>
+  <div class="highlight-box">
+    <h3>⚠️ Precisa Melhorar</h3>
+    <p>${weakest.n} — ${weakest.v}%</p>
+  </div>
+</div>
+
+${segProgress.length?`
+<h2>Progresso por Segmento</h2>
+${segProgress.map(s=>`
+<div class="seg-row">
+  <span>${s.name}</span>
+  <span style="font-size:12px;color:#6b7a90">${s.done}/${s.total} missões</span>
+  <div class="seg-bar"><div class="seg-fill" style="width:${s.pct}%"></div></div>
+  <span style="font-size:12px;font-weight:700;color:#c9a849">${s.pct}%</span>
+</div>`).join("")}`:""}
+
+<div class="recommendation">
+  <h3>📋 Recomendações do Professor</h3>
+  <p>• Foco principal: <strong>${weakest.n}</strong> — praticar mais ${weakest.n==="Speaking"?"pronúncia e diálogos":weakest.n==="Writing"?"exercícios de escrita e ordenação":weakest.n==="Listening"?"situações reais e diálogos":"exercícios de tradução e vocabulário"}</p>
+  <p>• Nível atual: <strong>${lvInfo_.label}</strong> — ${lvInfo_.msg}</p>
+  <p>• Streak atual: <strong>${u.streak||0} dia(s)</strong> — ${(u.streak||0)>=7?"Excelente consistência!":"Praticar diariamente para manter o progresso"}</p>
+</div>
+
+<div class="footer">
+  <strong>VIC English</strong> — Inglês Operacional Profissional<br>
+  viclanguage.com.br | Gerado em ${date}
+</div>
+
+<br><button onclick="window.print()" style="padding:12px 24px;background:#1a0d2e;color:#e4b45c;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-top:10px">🖨️ Imprimir / Salvar PDF</button>
+</body></html>`;
+
+  const win=window.open("","_blank");
+  win.document.write(html);
+  win.document.close();
 }
 
 // ── PROFILE & SETTINGS ────────────────────────────────────────────────────────
@@ -1839,6 +2486,8 @@ function openProfile(){
 
     renderSkillsAnalysis();
     renderCommitment();
+    renderBadges();
+    renderNextBadge();
     renderActivityCalendar();
     renderXPChart("week");
 
@@ -1858,6 +2507,29 @@ function openProfile(){
     showXpToast("❌ Erro ao abrir perfil");
   }
 }
+
+const SKILL_DETAILS_DATA = {
+  "🗣️ Speaking": {
+    desc:"Speaking é a habilidade de se comunicar verbalmente em inglês. É a mais valorizada em entrevistas, atendimento ao cliente e situações de trabalho reais.",
+    tips:"• Pratique os exercícios de Pronúncia em cada segmento\n• Ouça frases e repita em voz alta\n• Use o botão 🎤 para gravar sua voz\n• Quanto mais você falar, mais fluente fica",
+  },
+  "✍️ Writing": {
+    desc:"Writing é a habilidade de escrever em inglês com clareza e correção. Essencial para emails profissionais, relatórios e comunicação internacional.",
+    tips:"• Use a seção Writing & Translation\n• Peça correção da IA para seus textos\n• Escreva pelo menos 3 frases por dia\n• Leia as correções e entenda os erros",
+  },
+  "👂 Listening": {
+    desc:"Listening é a habilidade de entender inglês falado. Crucial para reuniões, atendimento telefônico e conversas com clientes e colegas estrangeiros.",
+    tips:"• Pratique todos os Diálogos de cada segmento\n• Ouça as frases com o botão 🔊 antes de responder\n• Tente entender sem olhar a tradução\n• Assista filmes ou séries em inglês com legenda",
+  },
+  "📖 Reading": {
+    desc:"Reading é a habilidade de ler e compreender textos em inglês. Fundamental para documentos, contratos, emails e instruções técnicas no trabalho.",
+    tips:"• Complete todos os exercícios de Vocabulário\n• Leia as frases em inglês antes de ver a tradução\n• Pratique os exercícios de Múltipla Escolha\n• Leia notícias ou artigos curtos em inglês",
+  },
+  "🔄 Translating": {
+    desc:"Translating é a habilidade de traduzir entre português e inglês com precisão e naturalidade. Essencial para agentes portuários, COMEX e atendimento internacional.",
+    tips:"• Faça todos os exercícios de Tradução PT→EN\n• Use a seção Writing para traduzir textos reais\n• Compare sua tradução com a versão corrigida\n• Pratique tradução de situações do seu trabalho",
+  },
+};
 
 function renderSkillsAnalysis(){
   const container=document.getElementById("profile-skills"); if(!container) return;
@@ -1879,19 +2551,21 @@ function renderSkillsAnalysis(){
     {name:"🔄 Translating", value:translating,tip:"Faça exercícios de tradução"},
   ];
 
+
+
   container.innerHTML=skills.map(s=>{
     const color=s.value>=70?"#22c55e":s.value>=40?"#f59e0b":"#ef4444";
     return `
-      <div class="skill-row">
-        <div class="skill-label-row">
+      <button class="settings-big-btn skill-big-btn" onclick="showSkillDetail('${s.name}', ${s.value})" style="margin-bottom:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;width:100%">
           <span class="skill-name">${s.name}</span>
-          <span class="skill-pct" style="color:${color}">${s.value}%</span>
+          <span class="skill-pct" style="color:${color};font-family:var(--mono);font-size:13px;font-weight:900">${s.value}%</span>
         </div>
-        <div class="skill-bar-bg">
+        <div class="skill-bar-bg" style="margin-top:8px;width:100%">
           <div class="skill-bar" style="width:${s.value}%;background:${color}"></div>
         </div>
-        ${s.value<50?`<div class="skill-tip">💡 ${s.tip}</div>`:""}
-      </div>
+        ${s.value<50?`<div class="skill-tip" style="margin-top:6px;font-size:11px;opacity:0.6;font-style:italic">💡 ${s.tip}</div>`:""}
+      </button>
     `;
   }).join("");
 }
@@ -1960,25 +2634,33 @@ function renderXPChart(period){
   const chart=document.getElementById("xp-chart"); if(!chart) return;
   const history=userData.xpHistory||{};
   const today=new Date();
-  let days=[];
+  let days=[], label="";
+
   if(period==="week"){
     for(let i=6;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);days.push(d.toISOString().slice(0,10));}
-  } else {
-    const year=today.getFullYear(), month=today.getMonth();
-    const daysInMonth=new Date(year,month+1,0).getDate();
-    for(let i=1;i<=daysInMonth;i++){days.push(`${year}-${String(month+1).padStart(2,"0")}-${String(i).padStart(2,"0")}`);}
+    label="Esta semana";
+  } else if(period==="week1"){
+    for(let i=13;i>=7;i--){const d=new Date(today);d.setDate(d.getDate()-i);days.push(d.toISOString().slice(0,10));}
+    label="Semana passada";
+  } else if(period==="week2"){
+    for(let i=20;i>=14;i--){const d=new Date(today);d.setDate(d.getDate()-i);days.push(d.toISOString().slice(0,10));}
+    label="2 semanas atrás";
   }
+
   const values=days.map(d=>history[d]||0);
   const maxVal=Math.max(...values,1);
+  const weekdays=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
   chart.innerHTML=`
     <div class="xp-bars">
       ${values.map((v,i)=>{
-        const h=Math.round((v/maxVal)*60)+4;
-        const label=period==="week"?new Date(days[i]).toLocaleDateString("pt-BR",{weekday:"short"}):new Date(days[i]).getDate();
+        const pct=Math.round((v/maxVal)*100);
+        const h=Math.max(4, Math.round((pct/100)*64));
+        const d=new Date(days[i]);
+        const lbl=weekdays[d.getDay()];
         return `<div class="xp-bar-wrap">
           <div class="xp-bar-val">${v||""}</div>
-          <div class="xp-bar" style="height:${h}px" title="${days[i]}: ${v} XP"></div>
-          <div class="xp-bar-label">${label}</div>
+          <div class="xp-bar" style="height:${h}px;max-height:64px" title="${days[i]}: ${v} XP"></div>
+          <div class="xp-bar-label">${lbl}</div>
         </div>`;
       }).join("")}
     </div>
@@ -1994,6 +2676,193 @@ async function trackDailyXP(amount){
   userData.xpHistory=history;
   await saveProgress(currentUser.uid,{xpHistory:history});
 }
+
+window.showSkillDetail=function(name, pct){
+  document.getElementById("skill-detail-modal")?.remove();
+  const color=pct>=70?"#22c55e":pct>=40?"#f59e0b":"#ef4444";
+  const icons={"🗣️ Speaking":"🗣️","✍️ Writing":"✍️","👂 Listening":"👂","📖 Reading":"📖","🔄 Translating":"🔄"};
+  const descs={
+    "🗣️ Speaking":"Speaking é a habilidade de se comunicar verbalmente. A mais valorizada em entrevistas, atendimento ao cliente e situações reais de trabalho.",
+    "✍️ Writing":"Writing é escrever em inglês com clareza. Essencial para emails profissionais, relatórios e comunicação internacional.",
+    "👂 Listening":"Listening é entender inglês falado. Crucial para reuniões, atendimento telefônico e conversas com clientes estrangeiros.",
+    "📖 Reading":"Reading é ler e compreender textos em inglês. Fundamental para documentos, contratos e emails técnicos de trabalho.",
+    "🔄 Translating":"Translating é traduzir entre PT e EN com precisão. Essencial para agentes portuários, COMEX e atendimento internacional."
+  };
+  const tipss={
+    "🗣️ Speaking":"• Pratique os exercícios de Pronúncia\n• Use o botão 🎤 para gravar sua voz\n• Repita as frases em voz alta\n• Ouça e imite a pronúncia americana",
+    "✍️ Writing":"• Use a seção Writing & Translation\n• Peça correção da IA\n• Escreva 3 frases por dia em inglês\n• Leia as correções e entenda os erros",
+    "👂 Listening":"• Pratique todos os Diálogos\n• Ouça o 🔊 antes de responder\n• Tente entender sem ver a tradução\n• Assista filmes com legenda em inglês",
+    "📖 Reading":"• Complete os exercícios de Vocabulário\n• Leia as frases antes de ver a tradução\n• Pratique Múltipla Escolha\n• Leia notícias curtas em inglês",
+    "🔄 Translating":"• Faça os exercícios de Tradução PT→EN\n• Use Writing para traduzir textos reais\n• Compare com a versão corrigida\n• Pratique frases do seu trabalho"
+  };
+  const modal=document.createElement("div");
+  modal.id="skill-detail-modal";
+  modal.className="skill-detail-modal";
+  modal.innerHTML=`
+    <div class="skill-detail-card">
+      <div class="sdk-icon">${icons[name]||"📊"}</div>
+      <div class="sdk-title">${name}</div>
+      <div class="sdk-pct" style="color:${color}">${pct}%</div>
+      <div class="sdk-desc">${descs[name]||""}</div>
+      <div class="sdk-tips" style="white-space:pre-line">${tipss[name]||""}</div>
+      <button class="sdk-close" onclick="document.getElementById('skill-detail-modal').remove()">Fechar</button>
+    </div>`;
+  modal.addEventListener("click",e=>{if(e.target===modal)modal.remove();});
+  document.body.appendChild(modal);
+};
+
+function renderBadges(){
+  const container=document.getElementById("profile-badges-grid"); if(!container) return;
+  const earned=userData?.badges||[];
+  const stats=getBadgeStats();
+  const cats={momento:"⚡ Momento",performance:"🔥 Performance",resiliencia:"⚔️ Resiliência",dominio:"🧠 Domínio",raro:"👑 Raros"};
+  let html="";
+  Object.entries(cats).forEach(([cat,catLabel])=>{
+    const catBadges=BADGES.filter(b=>b.cat===cat);
+    html+=`<div class="badge-cat-section"><div class="badge-cat-title">${catLabel}</div><div class="badges-row">`;
+    catBadges.forEach(b=>{
+      const isEarned=earned.includes(b.id);
+      let progress="";
+      if(!isEarned){
+        const s=stats;
+        if(b.id==="streak5"||b.id==="streak15"){const need=b.id==="streak5"?5:15;progress=`${Math.min(s.answerStreak,need)}/${need}`;}
+        else if(b.id==="xp250"||b.id==="xp1000"){const need=b.id==="xp250"?250:1000;progress=`${Math.min(s.xp,need)}/${need} XP`;}
+        else if(b.id==="daily7"){progress=`${Math.min(s.loginStreak,7)}/7 dias`;}
+        else if(b.id==="missions10"){progress=`${Math.min(s.missionsCompleted,10)}/10`;}
+      }
+      html+=`<div class="badge-item ${isEarned?"earned":"locked"}" onclick="showBadgeDetail('${b.id}')" style="cursor:pointer" title="${b.desc}">
+        <div class="badge-item-icon-wrap">
+          <span class="badge-item-icon ${isEarned?"":"badge-locked-icon"}">${b.icon}</span>
+          ${!isEarned?'<span class="badge-lock-overlay">🔒</span>':""}
+        </div>
+        <div class="badge-item-name">${b.name}</div>
+        ${progress&&!isEarned?`<div class="badge-item-progress">${progress}</div>`:""}
+      </div>`;
+    });
+    html+=`</div></div>`;
+  });
+  container.innerHTML=html;
+}
+
+window.showBadgeDetail=function(badgeId){
+  const b=BADGES.find(x=>x.id===badgeId); if(!b) return;
+  const earned=(userData?.badges||[]).includes(b.id);
+  const stats=getBadgeStats();
+
+  // Build progress text
+  let progressText="";
+  if(!earned){
+    if(b.id==="streak3"||b.id==="streak5"||b.id==="streak10"){
+      const need=b.id==="streak3"?3:b.id==="streak5"?5:10;
+      progressText=`Progresso: ${Math.min(stats.answerStreak,need)}/${need} acertos seguidos`;
+    } else if(b.id==="xp100"||b.id==="xp250"||b.id==="xp500"||b.id==="xp1000"){
+      const need=parseInt(b.id.replace("xp",""));
+      progressText=`Progresso: ${Math.min(stats.xp,need)}/${need} XP`;
+    } else if(b.id==="daily3"||b.id==="daily7"){
+      const need=b.id==="daily3"?3:7;
+      progressText=`Progresso: ${Math.min(stats.loginStreak,need)}/${need} dias seguidos`;
+    } else if(b.id==="missions3"||b.id==="missions5"||b.id==="missions10"){
+      const need=b.id==="missions3"?3:b.id==="missions5"?5:10;
+      progressText=`Progresso: ${Math.min(stats.missionsCompleted,need)}/${need} missões`;
+    }
+  }
+
+  document.getElementById("badge-detail-modal")?.remove();
+  const modal=document.createElement("div");
+  modal.id="badge-detail-modal";
+  modal.className="about-modal";
+  modal.innerHTML=`
+    <div class="about-card" style="text-align:center;padding:32px 24px">
+      <button class="about-close" onclick="document.getElementById('badge-detail-modal').remove()">✕</button>
+      <div style="font-size:64px;margin-bottom:12px;filter:${earned?"none":"grayscale(1) opacity(0.4)"}">${b.icon}</div>
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#c9933a !important;font-weight:800;margin-bottom:6px">${{momento:"⚡ Momento",performance:"🔥 Performance",resiliencia:"⚔️ Resiliência",dominio:"🧠 Domínio",raro:"👑 Raro"}[b.cat]||""}</div>
+      <div style="font-size:20px;font-weight:900;color:#fff !important;margin-bottom:8px">${b.name}</div>
+      <div style="font-size:14px;color:rgba(255,255,255,0.65) !important;line-height:1.6;margin-bottom:12px">${b.desc}</div>
+      ${earned
+        ? `<div style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:10px;color:#4ade80 !important;font-weight:800">✅ Conquistado! +${b.xp} XP</div>`
+        : `<div style="background:rgba(255,255,255,0.06);border:1px solid var(--rim2);border-radius:10px;padding:10px">
+            <div style="color:rgba(255,255,255,0.5) !important;font-size:12px;margin-bottom:4px">🔒 Como conquistar:</div>
+            <div style="color:#e4b45c !important;font-weight:700;font-size:13px">${b.desc}</div>
+            ${progressText?`<div style="color:var(--p-light) !important;font-size:12px;margin-top:6px;font-family:var(--mono)">${progressText}</div>`:""}
+            <div style="color:#c9933a !important;font-weight:800;margin-top:8px">+${b.xp} XP ao conquistar</div>
+          </div>`
+      }
+    </div>`;
+  modal.addEventListener("click",e=>{if(e.target===modal)modal.remove();});
+  document.body.appendChild(modal);
+  vibrate(20);
+};
+
+function renderNextBadge(){
+  const strip=document.getElementById("next-badge-strip"); if(!strip) return;
+  const earned=userData?.badges||[];
+  const stats=getBadgeStats();
+  // Find first unearned badge
+  const next=BADGES.find(b=>!earned.includes(b.id));
+  if(!next){ strip.style.display="none"; return; }
+  strip.style.display="flex";
+  document.getElementById("nbs-icon").textContent=next.icon;
+  document.getElementById("nbs-name").textContent=next.name;
+  // Show progress hint
+  let prog="";
+  if(next.id==="streak5"||next.id==="streak15"){const need=next.id==="streak5"?5:15;prog=`${Math.min(stats.answerStreak,need)}/${need}`;}
+  else if(next.id==="xp250"||next.id==="xp1000"){const need=next.id==="xp250"?250:1000;prog=`${Math.min(stats.xp,need)}/${need} XP`;}
+  else if(next.id==="daily7"){prog=`${Math.min(stats.loginStreak,7)}/7 dias`;}
+  else if(next.id==="missions10"){prog=`${Math.min(stats.missionsCompleted,10)}/10`;}
+  document.getElementById("nbs-progress").textContent=prog;
+}
+
+window.showServiceDetail=function(service){
+  const details={
+    app:{icon:"📱",title:"VIC English App",desc:"Treinamento digital de inglês profissional para times e profissionais individuais. Conteúdo focado na sua área de atuação — porto, hotelaria, saúde, transporte e muito mais.",cta:"Entre em contato para valores individuais e para empresas →",link:"https://wa.me/5511943644477?text=Olá! Quero saber mais sobre o VIC English App para minha empresa."},
+    incompany:{icon:"🏢",title:"Treinamento In-Company",desc:"Inglês corporativo desenvolvido sob medida para o setor da sua empresa. Trabalhamos com equipes portuárias, hoteleiras, de saúde, offshore e muito mais. Metodologia prática e imediata.",cta:"Agende um orçamento de treinamento →",link:"https://wa.me/5511943644477?text=Olá! Gostaria de um orçamento para treinamento in-company."},
+    aulas:{icon:"📚",title:"Aulas Personalizadas",desc:"Aulas individuais ou em grupo, online ou presencial em Santos/SP. Sem livros obrigatórios. Foco em aplicação real e imediata, com metodologia adaptada ao seu nível e objetivo.",cta:"Agende já a sua aula →",link:"https://wa.me/5511943644477?text=Olá! Quero agendar uma aula de inglês."},
+    traducao:{icon:"📄",title:"Tradução Profissional",desc:"Tradução de documentos, contratos, materiais corporativos, laudos técnicos e muito mais. Precisão, confidencialidade e entrega no prazo.",cta:"Envie seu documento para tradução →",link:"https://wa.me/5511943644477?text=Olá! Preciso de uma tradução profissional."},
+    interpretacao:{icon:"🎙️",title:"Interpretação ao Vivo",desc:"Interpretação simultânea e consecutiva para reuniões, eventos, audiências e conferências. Experiência em ambientes multiculturais nacionais e internacionais.",cta:"Marque sua sessão de interpretação →",link:"https://wa.me/5511943644477?text=Olá! Preciso de interpretação para um evento."},
+  };
+  const d=details[service]; if(!d) return;
+  document.getElementById("service-detail-modal")?.remove();
+  const modal=document.createElement("div");
+  modal.id="service-detail-modal";
+  modal.className="about-modal";
+  modal.innerHTML=`
+    <div class="about-card">
+      <button class="about-close" onclick="document.getElementById('service-detail-modal').remove()">✕</button>
+      <div style="font-size:40px;text-align:center;margin-bottom:8px">${d.icon}</div>
+      <div class="about-title">${d.title}</div>
+      <div class="about-body"><p>${d.desc}</p></div>
+      <a href="${d.link}" target="_blank" class="settings-big-btn" style="text-decoration:none;text-align:center;background:linear-gradient(135deg,#c9933a,#e4b45c);color:#1a0d2e !important;font-weight:900;display:block;margin-top:8px">
+        ${d.cta}
+      </a>
+    </div>`;
+  modal.addEventListener("click",e=>{if(e.target===modal)modal.remove();});
+  document.body.appendChild(modal);
+};
+
+window.showCommitmentTips=function(){
+  document.getElementById("commitment-tips-modal")?.remove();
+  const modal=document.createElement("div");
+  modal.id="commitment-tips-modal";
+  modal.className="about-modal";
+  modal.innerHTML=`
+    <div class="about-card">
+      <button class="about-close" onclick="document.getElementById('commitment-tips-modal').remove()">✕</button>
+      <div class="about-title">🎯 Como se comprometer mais?</div>
+      <div class="about-body">
+        <div class="about-services">
+          <div class="about-service">📅 <strong>Pratique todo dia</strong> — 15 minutos diários valem mais do que 2h por semana. Consistência é tudo!</div>
+          <div class="about-service">⏰ <strong>Crie um horário fixo</strong> — escolha um momento do dia só para o inglês. Antes do trabalho ou no intervalo.</div>
+          <div class="about-service">🎯 <strong>Complete as Daily Missions</strong> — elas foram criadas para manter você no ritmo sem sobrecarregar.</div>
+          <div class="about-service">🔥 <strong>Mantenha seu streak</strong> — cada dia conta. Não quebre a sequência — é motivação comprovada!</div>
+          <div class="about-service">🗣️ <strong>Use o microfone</strong> — pronunciar em voz alta acelera a fixação 3x mais que só ler.</div>
+          <div class="about-service">💬 <strong>Pratique os diálogos</strong> — simule situações reais do seu trabalho. Quanto mais próximo da realidade, melhor.</div>
+          <div class="about-service">📊 <strong>Veja seu progresso</strong> — olhe seu calendário de atividades. Cada quadradinho colorido é um dia vencido!</div>
+        </div>
+      </div>
+    </div>`;
+  modal.addEventListener("click",e=>{if(e.target===modal)modal.remove();});
+  document.body.appendChild(modal);
+};
 
 function renderCommitment(){
   const container=document.getElementById("commitment-card"); if(!container) return;
@@ -2021,7 +2890,7 @@ function renderCommitment(){
 // Settings actions
 function applyFontSize(size){
   fontSize=size;
-  document.body.classList.remove("font-small","font-medium","font-large");
+  document.body.classList.remove("font-xs","font-small","font-medium","font-large","font-xl");
   document.body.classList.add(`font-${size}`);
   document.querySelectorAll(".font-size-btn").forEach(b=>b.classList.toggle("active",b.dataset.size===size));
   localStorage.setItem("vic_fontSize",size);
@@ -2038,7 +2907,7 @@ function applySounds(enabled){
   localStorage.setItem("vic_sounds",enabled?"1":"0");
 }
 
-function shareApp(){
+function shareAppPanel(){
   const panel=document.getElementById("share-panel");
   if(!panel) return;
   const visible=panel.style.display!=="none";
@@ -2104,7 +2973,7 @@ function loadPreferences(){
 }
 
 // ── AVATAR SYSTEM ─────────────────────────────────────────────────────────────
-const AVATAR_EMOJIS=["😊","🦁","🐯","🦊","🐺","🦅","⚓","🚀","🌟","💪","🎯","🏆","🌊","🐋","🎓","👨‍✈️","👩‍✈️","🧑‍💼","👨‍🍳","👩‍🍳","🧑‍🔧","🌍","✈️","🛳️","🛢️","🏨","🍽️","🏖️","📖","✍️"];
+const AVATAR_EMOJIS=["😊","🦁","🐯","🦊","🐺","🦅","⚓","🚀","🌟","💪","🎯","🏆","🌊","🐋","🎓","👨‍✈️","👩‍✈️","🧑‍💼","👨‍🍳","👩‍🍳","🧑‍🔧","🌍","✈️","🛳️","🛢️","🏨","🍽️","🏖️","📖","✍️","🧠","🥸","👽","💩","👹","🐗","🐷","🐉","🦖","🕷️","🐜","🦧","😏","😎","🥳","🤓","🫶","🎨","⚽","🏅","🎮","🧿","🪄","🎰","🕹️","🪬","🎷","📚","💸","⌛","🧑‍🎓","🥶","🤑","🫠","🏹","🥞","🛸","🌚","🌞","🔥","💜","💚"];
 
 function openAvatarPicker(){
   const grid=document.getElementById("avatar-emoji-grid"); if(!grid) return;
@@ -2311,6 +3180,219 @@ Maximum 5 errors. Focus on most important ones. If no errors, use empty array.`
   }
 }
 
+// ── BADGE SYSTEM ──────────────────────────────────────────────────────────────
+
+const BADGES = [
+  // ⚡ MOMENTO — Day 1
+  {id:"first_mission",  cat:"momento",    icon:"🕷️", name:"With Great Power Comes Great Responsibility",        desc:"Completou sua primeira missão.",             condition:s=>s.missionsCompleted>=1,       xp:30},
+  {id:"first_perfect",  cat:"momento",    icon:"🪄", name:"Wingardium Leviosa!",         desc:"Primeira resposta perfeita.",                condition:s=>s.perfectAnswers>=1,          xp:20},
+  {id:"first_voice",    cat:"momento",    icon:"🎙️", name:"May the Force Be With You",   desc:"Usou o microfone pela primeira vez.",        condition:s=>s.voiceUsed>=1,               xp:25},
+
+  // 🔥 PERFORMANCE — Days 2-6 (gradual)
+  {id:"streak3",        cat:"performance",icon:"💪", name:"Super Soldier",               desc:"3 acertos seguidos — digno do soro do Rogers.",condition:s=>s.answerStreak>=3,          xp:30},
+  {id:"streak5",        cat:"performance",icon:"🔥", name:"I Volunteer as Tribute",      desc:"5 acertos seguidos — Katniss aprovaria.",    condition:s=>s.answerStreak>=5,            xp:50},
+  {id:"xp100",          cat:"performance",icon:"🌩️","name":"Thor's Hammer",             desc:"100 XP — só os dignos chegam aqui!",         condition:s=>s.xp>=100,                    xp:20},
+  {id:"missions3",      cat:"performance",icon:"🟢", name:"Hulk Smash!",                 desc:"3 missões — HULK INGLÊS!",                   condition:s=>s.missionsCompleted>=3,       xp:40},
+  {id:"streak10",       cat:"performance",icon:"⚡", name:"I Am Iron Man",               desc:"10 seguidos — Tony Stark aprova.",           condition:s=>s.answerStreak>=10,           xp:100},
+  {id:"xp250",          cat:"performance",icon:"💰", name:"Show Me The Money!",          desc:"250 XP — Jerry Maguire ficaria feliz.",      condition:s=>s.xp>=250,                    xp:30},
+
+  // ⚔️ RESILIÊNCIA — Days 7-14
+  {id:"daily3",         cat:"resiliencia",icon:"🛡️", name:"Avengers, Assemble!",         desc:"3 dias seguidos — o time está se formando.", condition:s=>s.loginStreak>=3,             xp:50},
+  {id:"missions5",      cat:"resiliencia",icon:"🌀", name:"I'll Be Back",                desc:"5 missões — The Terminator não desiste.",    condition:s=>s.missionsCompleted>=5,       xp:60},
+  {id:"daily7",         cat:"resiliencia",icon:"🌟", name:"Wakanda Forever",             desc:"7 dias seguidos — T'Challa ficaria orgulhoso!",condition:s=>s.loginStreak>=7,          xp:100},
+  {id:"missions10",     cat:"resiliencia",icon:"🏆", name:"One Ring to Rule Them All",   desc:"10 missões — digno do Monte Doom!",          condition:s=>s.missionsCompleted>=10,      xp:120},
+  {id:"xp500",          cat:"resiliencia",icon:"🔱", name:"King of the Seven Seas",      desc:"500 XP — Aquaman reconhece seu domínio.",    condition:s=>s.xp>=500,                    xp:60},
+
+  // 🧠 DOMÍNIO — Days 15+
+  {id:"maritime_dom",   cat:"dominio",    icon:"⚓", name:"The Name is Bond...",          desc:"Dominou o Marítimo — licença para navegar.", condition:s=>s.segmentsDone.includes("maritimo"),  xp:200},
+  {id:"comex_dom",      cat:"dominio",    icon:"🌍", name:"King of COMEX",               desc:"Dominou COMEX — o mundo é seu mercado.",     condition:s=>s.segmentsDone.includes("comex"),     xp:200},
+  {id:"xp1000",         cat:"dominio",    icon:"💎", name:"Infinity Gauntlet",           desc:"1000 XP — poder do universo nas mãos!",      condition:s=>s.xp>=1000,                   xp:150},
+  {id:"polyglot",       cat:"raro",       icon:"⭐", name:"The One",                     desc:"3+ segmentos — 'There is no spoon.' — Neo",  condition:s=>s.segmentsDone.length>=3,     xp:400},
+];
+
+// Session stats tracker (resets per session, persisted cumulatively in userData)
+let _sessionStats = {
+  answerStreak: 0,
+  totalAnswers: 0,
+  perfectAnswers: 0,
+  voiceUsed: 0,
+  retries: 0,
+};
+
+function getBadgeStats(){
+  const completed = userData?.completedMissions||[];
+  const segDone = VICTOR_DATA.segments.filter(seg=>{
+    const phases = seg.phases||[];
+    const total = phases.reduce((a,p)=>(p.missions||[]).length+a,0);
+    const done = completed.filter(m=>m.startsWith(seg.id+"_")).length;
+    return total>0 && done/total>=0.6;
+  }).map(s=>s.id);
+
+  return {
+    xp: userData?.xp||0,
+    loginStreak: userData?.streak||0,
+    missionsCompleted: completed.length,
+    totalAnswers: (userData?.totalAnswers||0)+_sessionStats.totalAnswers,
+    perfectAnswers: (userData?.perfectAnswers||0)+_sessionStats.perfectAnswers,
+    voiceUsed: userData?.voiceUsed||0,
+    retries: (userData?.retries||0)+_sessionStats.retries,
+    answerStreak: userData?.answerStreak||0,
+    segmentsDone: segDone,
+    writingCompleted: userData?.writingCompleted||0,
+    grammarCompleted: completed.filter(m=>m.startsWith("gramatica_")).length,
+  };
+}
+
+function checkBadges(){
+  const stats = getBadgeStats();
+  const earned = userData?.badges||[];
+  const newBadges = BADGES.filter(b => !earned.includes(b.id) && b.condition(stats));
+  if(!newBadges.length) return;
+
+  // Save to userData
+  const updated = [...earned, ...newBadges.map(b=>b.id)];
+  userData.badges = updated;
+  if(currentUser) saveProgress(currentUser.uid, {badges:updated});
+
+  // Show first new badge (queue others)
+  newBadges.forEach((b,i) => setTimeout(()=>showBadgeUnlock(b), i*2500));
+}
+
+function showBadgeUnlock(badge){
+  // Remove any existing overlay
+  document.getElementById("badge-overlay")?.remove();
+
+  const overlay = document.createElement("div");
+  overlay.id = "badge-overlay";
+  overlay.className = "badge-overlay";
+  overlay.innerHTML = `
+    <div class="badge-unlock-card">
+      <div class="badge-unlock-shimmer"></div>
+      <div class="badge-cat-label">${{momento:"⚡ Momento",performance:"🔥 Performance",resiliencia:"⚔️ Resiliência",dominio:"🧠 Domínio",raro:"👑 Raro"}[badge.cat]||""}</div>
+      <div class="badge-unlock-icon">${badge.icon}</div>
+      <div class="badge-unlock-name">${badge.name}</div>
+      <div class="badge-unlock-desc">${badge.desc}</div>
+      <div class="badge-unlock-xp">+${badge.xp} XP</div>
+      <button class="badge-unlock-btn" onclick="document.getElementById('badge-overlay').remove()">Incrível! 🚀</button>
+    </div>`;
+  document.body.appendChild(overlay);
+  SoundFX.complete();
+
+  // Award XP
+  userData.xp=(userData.xp||0)+badge.xp;
+  if(currentUser) saveProgress(currentUser.uid,{xp:userData.xp});
+  showXpToast(`${badge.icon} +${badge.xp} XP — ${badge.name}`);
+
+  // Auto close after 6 seconds
+  setTimeout(()=>overlay.remove(), 6000);
+}
+
+function trackAnswer(isCorrect, isVoice=false){
+  _sessionStats.totalAnswers++;
+  if(isCorrect){
+    _sessionStats.perfectAnswers++;
+    _sessionStats.answerStreak = (userData?.answerStreak||0)+1;
+    userData.answerStreak = _sessionStats.answerStreak;
+  } else {
+    _sessionStats.retries++;
+    userData.answerStreak = 0;
+  }
+  if(isVoice) _sessionStats.voiceUsed++;
+  // Save stats periodically
+  if(_sessionStats.totalAnswers%5===0&&currentUser){
+    saveProgress(currentUser.uid,{
+      totalAnswers:(userData.totalAnswers||0)+_sessionStats.totalAnswers,
+      perfectAnswers:(userData.perfectAnswers||0)+_sessionStats.perfectAnswers,
+      answerStreak:userData.answerStreak||0,
+    });
+  }
+  // Check for new badges
+  checkBadges();
+}
+
+// ── VIBRATION ──────────────────────────────────────────
+function vibrate(ms=30){
+  try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){}
+}
+
+// ── PUSH NOTIFICATIONS ─────────────────────────────────
+const NOTIF_MESSAGES = [
+  // Movie/character quotes + CTA
+  {title:"🕷️ \"With great power comes great responsibility.\"", body:"O poder do inglês te espera. Abre uma missão agora!"},
+  {title:"⚡ \"May the Force be with you.\"", body:"Que a força do inglês esteja com você. Um exercício hoje?"},
+  {title:"🪄 \"It is our choices that show what we truly are.\"", body:"Escolha praticar agora. Tem um badge esperando por você! 🏆"},
+  {title:"🦇 \"Why do we fall? So we can learn to pick ourselves up.\"", body:"Não importa onde parou — volta agora e sobe seu streak! 🔥"},
+  {title:"💡 \"Knowledge is power.\"", body:"E o inglês é a chave. Bora aprender algo novo hoje?"},
+  {title:"🧠 \"The mind is everything.\"", body:"Treine a sua. Uma missão agora e você sai na frente! 🎯"},
+  {title:"🌟 \"You become what you believe.\"", body:"Acredita que você fala inglês. Agora vem provar! 💪"},
+  {title:"🚀 \"This is your moment. Take it.\"", body:"Seu badge mais próximo está a poucos XP. Vai buscar!"},
+  {title:"👑 \"You were made for more.\"", body:"Mais do que você imagina. Abre o VIC English e prova! 🌍"},
+  {title:"🍋 \"If life gives you lemons, upgrade them to a business.\"", body:"Upgrada seu inglês primeiro. Missão rápida te espera!"},
+  {title:"✨ \"Messy progress is still progress.\"", body:"Não precisa ser perfeito. Só precisa aparecer. Bora!"},
+  {title:"💪 \"You survived Monday. You can do anything.\"", body:"Literalmente. Então faz um exercício. Fácil demais pra você!"},
+  {title:"😏 \"Look at you being consistent. Who are you?\"", body:"Aumente seu streak mais um dia. Você já está no ritmo! 🔥"},
+  {title:"🏅 \"Not bad for someone who almost quit.\"", body:"Você tá aqui. Isso já é vitória. Vem buscar mais um badge!"},
+  {title:"🎯 \"You came. You tried. You didn't quit.\"", body:"E isso é tudo. Mais uma missão e o streak continua!"},
+  {title:"👀 \"Still here? That's elite behavior.\"", body:"Comportamento de elite merece XP de elite. Vem pegar!"},
+  {title:"💥 From 'I can't' to 'watch me'", body:"Abre o app. Faz uma missão. Manda ver! 🚀"},
+  {title:"🔥 \"Power lies where men believe it lies.\"", body:"O poder do inglês tá onde você acreditar. Começa agora!"},
+  {title:"⏰ Ei, tá na hora!", body:"O mercado de trabalho não espera. Bora praticar inglês! 💼"},
+  {title:"🏆 Tem um badge esperando por você!", body:"Você tá pertinho. Abre o app e vai buscar! 🎯"},
+  {title:"🌍 O mercado te aguarda!", body:"Quem fala inglês se destaca. Você já está no caminho! 📈"},
+  {title:"⚡ Para de enrolar!", body:"15 minutinhos. Um exercício. Teu futuro agradece. Bora!"},
+  {title:"😴 Ei, seu streak tá dormindo...", body:"Não deixa ele morrer! Um exercício agora resolve tudo. 🔥"},
+  {title:"🎓 Profissionais bilíngues ganham até 50% mais.", body:"Você já tá investindo nisso. Mais um passo hoje?"},
+];
+
+
+async function requestNotificationPermission(){
+  if(!("Notification" in window)) return;
+  if(Notification.permission==="granted"){ scheduleNotifications(); return; }
+  if(Notification.permission!=="denied"){
+    const perm=await Notification.requestPermission();
+    if(perm==="granted") scheduleNotifications();
+  }
+}
+
+function scheduleNotifications(){
+  if(!("Notification" in window)||Notification.permission!=="granted") return;
+  if(localStorage.getItem("vic_notif_enabled")==="0") return;
+
+  const freq=parseInt(localStorage.getItem("vic_notif_freq")||"3");
+  const minHours=24/freq; // e.g. 3x/day = every 8h
+  const last=parseInt(localStorage.getItem("vic_last_notif")||"0");
+  const now=Date.now();
+  const hoursSinceLast=(now-last)/(3600*1000);
+
+  if(hoursSinceLast>=minHours){
+    const idx=Math.floor(Math.random()*NOTIF_MESSAGES.length);
+    const msg=NOTIF_MESSAGES[idx];
+    try{
+      new Notification(msg.title,{
+        body: msg.body,
+        icon: "new_logo_big.png",
+        badge: "vic_lamp.png",
+        tag: "vic-english-"+idx,
+        requireInteraction: false,
+      });
+      localStorage.setItem("vic_last_notif", String(now));
+    }catch(e){}
+  }
+  localStorage.setItem("vic_last_visit", String(now));
+}
+
+// Ask for notifications with friendly banner after first mission
+function showNotifBanner(){
+  if(!("Notification" in window)||Notification.permission!=="default") return;
+  if(localStorage.getItem("vic_notif_asked")) return;
+  localStorage.setItem("vic_notif_asked","1");
+  const banner=document.createElement("div");
+  banner.className="notif-banner";
+  banner.innerHTML=`<span style="font-size:22px">🔔</span><div style="flex:1"><div style="font-weight:800;color:#fff">Ativar lembretes?</div><div style="font-size:12px;opacity:0.6">Receba frases motivacionais de filmes + lembretes diários</div></div><button style="padding:8px 16px;background:var(--p);border:none;border-radius:999px;color:#fff;font-weight:800;cursor:pointer;font-family:var(--font)" onclick="requestNotificationPermission();this.closest('.notif-banner').remove()">Ativar</button><button style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:18px;padding:4px 8px" onclick="this.closest('.notif-banner').remove()">✕</button>`;
+  const daily=document.querySelector(".daily-block");
+  daily?.parentNode?.insertBefore(banner, daily);
+}
+
 // ── INIT ──────────────────────────────────────────────────────────────────────
 async function _handleAuth(user){
   console.log("_handleAuth called, user:", user?.uid||"null");
@@ -2344,6 +3426,11 @@ function init(){
   // auth buttons
   document.getElementById("tab-login").addEventListener("click",()=>switchTab("login"));
   document.getElementById("tab-register").addEventListener("click",()=>switchTab("register"));
+  // Restore last email
+  const lastEmail=localStorage.getItem("vic_last_email");
+  const emailIn=document.getElementById("login-email");
+  if(lastEmail&&emailIn) emailIn.value=lastEmail;
+
   document.getElementById("btn-login").addEventListener("click",handleLogin);
   document.getElementById("btn-register").addEventListener("click",handleRegister);
   document.getElementById("btn-google")?.addEventListener("click",handleGoogle);
@@ -2370,7 +3457,68 @@ function init(){
     });
   });
   document.getElementById("btn-load-feedbacks")?.addEventListener("click",loadAdminFeedbacks);
-  document.getElementById("btn-admin-refresh")?.addEventListener("click",refreshAdminUsers);
+  document.getElementById("btn-about-us")?.addEventListener("click",()=>{
+    document.getElementById("about-modal").style.display="flex";
+  });
+
+  // Admin float button for owner
+  const adminFloatBtn=document.getElementById("btn-admin-float");
+  if(adminFloatBtn&&currentUser?.uid===OWNER_UID){
+    adminFloatBtn.style.display="flex";
+    adminFloatBtn.onclick=()=>{ vibrate(30); showView("view-admin"); loadAdminPanel(); };
+  }
+
+  initContactFloat();
+  document.getElementById("btn-share-header")?.addEventListener("click",()=>{ vibrate(30); shareApp(); });
+  startCuriosityTicker();
+  requestNotificationPermission();
+  scheduleNotifications();
+
+  // Vibrate on all major buttons
+  document.addEventListener("click",e=>{
+    if(e.target.matches("button,a.settings-big-btn,.quick-btn,.phase-card,.segment-card,.daily-mission-item,.dlg-option,.tf-true,.tf-false,.btn-back,.fc-flip,.btn-start-now")){
+      vibrate(25);
+    }
+  });
+
+  document.getElementById("btn-send-contact")?.addEventListener("click",async()=>{
+    const text=document.getElementById("contact-form-text")?.value.trim();
+    if(!text) return;
+    await saveFeedback({type:"contact",text});
+    document.getElementById("contact-form-text").value="";
+    showXpToast("📨 Mensagem enviada! Obrigado.");
+  });
+  document.querySelectorAll("#profile-feedback-stars .feedback-star").forEach(s=>{
+    s.addEventListener("click",()=>{
+      const v=parseInt(s.dataset.v);
+      document.querySelectorAll("#profile-feedback-stars .feedback-star").forEach((st,i)=>st.classList.toggle("active",i<v));
+      saveFeedback({type:"rating",value:v});showXpToast("⭐ Obrigado!");
+    });
+  });
+  document.getElementById("btn-profile-like")?.addEventListener("click",()=>{saveFeedback({type:"like"});showXpToast("👍 Obrigado!");});
+  document.getElementById("btn-profile-comment")?.addEventListener("click",()=>openFeedbackModal("💬 Comentário","comment"));
+  document.getElementById("btn-profile-bug")?.addEventListener("click",()=>openFeedbackModal("🐛 Reportar bug","bug"));
+
+  document.getElementById("toggle-notif")?.addEventListener("change",e=>{
+    localStorage.setItem("vic_notif_enabled", e.target.checked?"1":"0");
+    const freqRow=document.getElementById("notif-freq-row");
+    if(freqRow) freqRow.style.display=e.target.checked?"flex":"none";
+    if(e.target.checked) requestNotificationPermission();
+  });
+  document.getElementById("notif-freq")?.addEventListener("change",e=>{
+    localStorage.setItem("vic_notif_freq", e.target.value);
+  });
+  // Restore notification settings
+  const notifEnabled=localStorage.getItem("vic_notif_enabled");
+  const notifToggle=document.getElementById("toggle-notif");
+  if(notifToggle&&notifEnabled==="0"){
+    notifToggle.checked=false;
+    const fr=document.getElementById("notif-freq-row");
+    if(fr) fr.style.display="none";
+  }
+  const notifFreq=localStorage.getItem("vic_notif_freq");
+  const notifFreqEl=document.getElementById("notif-freq");
+  if(notifFreqEl&&notifFreq) notifFreqEl.value=notifFreq;
   document.getElementById("btn-modal-close")?.addEventListener("click",()=>document.getElementById("admin-modal").style.display="none");
   document.getElementById("admin-search")?.addEventListener("input",e=>{adminSearchTerm=e.target.value;renderAdminUsers();});
   document.getElementById("btn-admin-preview")?.addEventListener("click",enterPreviewMode);
@@ -2406,11 +3554,12 @@ function init(){
   document.getElementById("btn-daily-complete-ok")?.addEventListener("click",()=>{
     document.getElementById("daily-complete-overlay").style.display="none";
   });
+  document.getElementById("btn-edit-name")?.addEventListener("click",()=>openEditModal("name","Novo nome",userData?.name||"","text"));
   document.getElementById("btn-edit-email")?.addEventListener("click",()=>openEditModal("email","Novo email",userData?.email||"","email"));
   document.getElementById("btn-edit-password")?.addEventListener("click",()=>openEditModal("password","Nova senha","","password"));
   document.getElementById("btn-save-edit")?.addEventListener("click",saveEdit);
   document.getElementById("btn-cancel-edit")?.addEventListener("click",()=>document.getElementById("profile-edit-modal").style.display="none");
-  document.getElementById("btn-share-app")?.addEventListener("click",shareApp);
+  document.getElementById("btn-share-app")?.addEventListener("click",shareAppPanel);
   document.getElementById("toggle-sounds")?.addEventListener("change",e=>applySounds(e.target.checked));
   document.getElementById("toggle-darkmode")?.addEventListener("change",e=>applyDarkMode(e.target.checked));
   document.querySelectorAll(".font-size-btn").forEach(btn=>btn.addEventListener("click",()=>applyFontSize(btn.dataset.size)));
@@ -2477,6 +3626,12 @@ function init(){
   document.getElementById("writing-textarea")?.addEventListener("input",()=>{
     const words=document.getElementById("writing-textarea").value.trim().split(/\s+/).filter(w=>w).length;
     document.getElementById("writing-charcount").textContent=`${words} palavra${words!==1?"s":""}`;
+  });
+  document.getElementById("btn-reload-dashboard")?.addEventListener("click",async()=>{
+    if(!currentUser) return;
+    showXpToast("🔄 Atualizando...");
+    userData=await getUserData(currentUser.uid);
+    if(userData){ renderDashboard(); showXpToast("✅ Atualizado!"); }
   });
   document.getElementById("btn-start-now")?.addEventListener("click",()=>openSegmentPhases(currentSegmentId));
   document.getElementById("btn-goto-flashcards")?.addEventListener("click",openFlashcards);

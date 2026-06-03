@@ -2759,3 +2759,273 @@ const _grammarSeg = VICTOR_DATA.segments.find(s=>s.id==="gramatica");
 if(_grammarSeg && _grammarSeg.phases) {
   _grammarSeg.phases.push(VICTOR_DATA._falseFriendsGrammarPhase);
 }
+
+// ══════════════════════════════════════════════════════
+// DIALOGUES — 3 per segment
+// ══════════════════════════════════════════════════════
+VICTOR_DATA.dialogueScenarios.push(
+
+  // ── MARÍTIMO — 3 diálogos ─────────────────────────
+  {
+    id:"maritime_checkin", name:"⚓ Chegada do Navio", segment:"Marítimo",
+    description:"Coordene a chegada de um navio ao porto de Santos.",
+    lines:[
+      {role:"Captain",   text:"Port of Santos, this is MV Atlantic Star. Requesting permission to enter.", blank:null},
+      {role:"Agent",     text:"MV Atlantic Star, permission ___. Proceed to berth seven.", blank:"granted", options:["granted","denied","pending","confirmed"], correct:0},
+      {role:"Captain",   text:"What is the expected waiting time?", blank:null},
+      {role:"Agent",     text:"Approximately ___ hours. Tug assistance will meet you at the anchorage.", blank:"three", options:["three","ten","twenty","zero"], correct:0},
+      {role:"Captain",   text:"Understood. What are the draft restrictions?", blank:null},
+      {role:"Agent",     text:"Maximum draft is ___ meters at this berth.", blank:"twelve", options:["twelve","five","twenty","eight"], correct:0},
+      {role:"Captain",   text:"Confirmed. Do we need customs clearance on arrival?", blank:null},
+      {role:"Agent",     text:"Yes, please have your ___ and cargo manifest ready.", blank:"documents", options:["documents","passport","money","keys"], correct:0},
+    ]
+  },
+  {
+    id:"maritime_cargo", name:"⚓ Problema de Carga", segment:"Marítimo",
+    description:"Resolva um problema com carga danificada no porto.",
+    lines:[
+      {role:"Inspector", text:"We have found damaged containers in bay three.", blank:null},
+      {role:"Agent",     text:"How many containers are ___?", blank:"affected", options:["affected","missing","full","empty"], correct:0},
+      {role:"Inspector", text:"At least fifteen. The cargo shows signs of water damage.", blank:null},
+      {role:"Agent",     text:"We need to ___ the cargo immediately and notify the consignee.", blank:"inspect", options:["inspect","move","sell","ignore"], correct:0},
+      {role:"Inspector", text:"Should we file an official report?", blank:null},
+      {role:"Agent",     text:"Yes. Please ___ all damage before we proceed.", blank:"document", options:["document","deny","hide","forget"], correct:0},
+      {role:"Inspector", text:"The shipper will want an explanation.", blank:null},
+      {role:"Agent",     text:"I will contact them and provide a full ___ report.", blank:"damage", options:["damage","weather","delay","customs"], correct:0},
+    ]
+  },
+  {
+    id:"maritime_weather", name:"⚓ Condições Climáticas", segment:"Marítimo",
+    description:"Comunique atrasos por causa do tempo.",
+    lines:[
+      {role:"Client",    text:"Hello, can you update me on the vessel status?", blank:null},
+      {role:"Agent",     text:"The vessel is ___ at anchorage due to bad weather conditions.", blank:"waiting", options:["waiting","docked","leaving","arriving"], correct:0},
+      {role:"Client",    text:"How long will the delay be?", blank:null},
+      {role:"Agent",     text:"We estimate a ___ of approximately twelve hours.", blank:"delay", options:["delay","stop","break","pause"], correct:0},
+      {role:"Client",    text:"Will this affect the cargo operations?", blank:null},
+      {role:"Agent",     text:"Yes, cargo ___ will begin once the vessel is safely alongside.", blank:"operations", options:["operations","sales","trips","flights"], correct:0},
+      {role:"Client",    text:"Please keep me informed of any changes.", blank:null},
+      {role:"Agent",     text:"Of course. We will ___ you as soon as the situation changes.", blank:"update", options:["update","ignore","call","email"], correct:0},
+    ]
+  },
+
+  // ── HOTELARIA — 3 diálogos ────────────────────────
+  {
+    id:"hotel_checkin_dlg", name:"🏨 Check-in", segment:"Hotelaria",
+    description:"Faça o check-in de um hóspede estrangeiro.",
+    lines:[
+      {role:"Guest",     text:"Good evening. I have a reservation under the name Johnson.", blank:null},
+      {role:"Staff",     text:"Welcome, Mr. Johnson. May I see your ___ please?", blank:"passport", options:["passport","money","luggage","phone"], correct:0},
+      {role:"Guest",     text:"Here you go. I requested a room with ocean view.", blank:null},
+      {role:"Staff",     text:"Yes, I can see that. You have a ___ room on the tenth floor.", blank:"deluxe", options:["deluxe","basic","small","shared"], correct:0},
+      {role:"Guest",     text:"Excellent. What time is breakfast served?", blank:null},
+      {role:"Staff",     text:"Breakfast is served from seven to ___ AM in the restaurant.", blank:"ten", options:["ten","two","six","midnight"], correct:0},
+      {role:"Guest",     text:"Is there parking available?", blank:null},
+      {role:"Staff",     text:"Yes, we have ___ parking in the basement. I will add it to your account.", blank:"complimentary", options:["complimentary","expensive","public","limited"], correct:0},
+    ]
+  },
+  {
+    id:"hotel_complaint_dlg", name:"🏨 Reclamação do Hóspede", segment:"Hotelaria",
+    description:"Resolva uma reclamação com profissionalismo.",
+    lines:[
+      {role:"Guest",     text:"Excuse me, there is a problem with my room.", blank:null},
+      {role:"Staff",     text:"I am sorry to hear that. What seems to be the ___?", blank:"problem", options:["problem","price","menu","view"], correct:0},
+      {role:"Guest",     text:"The air conditioning is not working and the room is very hot.", blank:null},
+      {role:"Staff",     text:"I sincerely ___ for the inconvenience. Let me send maintenance right away.", blank:"apologize", options:["apologize","charge","laugh","wait"], correct:0},
+      {role:"Guest",     text:"Also, the Wi-Fi password is not working.", blank:null},
+      {role:"Staff",     text:"The correct password is on your room card. Would you like me to ___ it for you?", blank:"reset", options:["reset","delete","ignore","sell"], correct:0},
+      {role:"Guest",     text:"Yes please. Can I get a room upgrade?", blank:null},
+      {role:"Staff",     text:"Absolutely. As compensation, I am ___ you to a suite at no extra charge.", blank:"upgrading", options:["upgrading","moving","charging","ignoring"], correct:0},
+    ]
+  },
+  {
+    id:"hotel_concierge_dlg", name:"🏨 Concierge", segment:"Hotelaria",
+    description:"Ajude um hóspede a conhecer Santos.",
+    lines:[
+      {role:"Guest",     text:"Excuse me, what can I visit here in Santos?", blank:null},
+      {role:"Concierge", text:"Santos has beautiful beaches and the famous ___ Garden.", blank:"Orchid", options:["Orchid","Rose","Cactus","Tropical"], correct:0},
+      {role:"Guest",     text:"How far is the beach from here?", blank:null},
+      {role:"Concierge", text:"It is just ___ minutes walking from the hotel.", blank:"five", options:["five","fifty","two hundred","zero"], correct:0},
+      {role:"Guest",     text:"Is there good seafood nearby?", blank:null},
+      {role:"Concierge", text:"Yes! I recommend the Fish Market on the ___ for fresh seafood.", blank:"waterfront", options:["waterfront","highway","airport","mall"], correct:0},
+      {role:"Guest",     text:"Perfect. Can you book a restaurant for tonight?", blank:null},
+      {role:"Concierge", text:"Of course. For what time and how many ___?", blank:"guests", options:["guests","dishes","waiters","tables"], correct:0},
+    ]
+  },
+
+  // ── RESTAURANTES — 3 diálogos ─────────────────────
+  {
+    id:"restaurant_order_dlg", name:"🍽️ Tomando o Pedido", segment:"Restaurantes",
+    description:"Anote o pedido de uma mesa estrangeira.",
+    lines:[
+      {role:"Waiter",    text:"Good evening! Welcome. Are you ready to ___?", blank:"order", options:["order","leave","pay","wait"], correct:0},
+      {role:"Customer",  text:"Yes. What do you recommend?", blank:null},
+      {role:"Waiter",    text:"The grilled fish is our ___ of the day. Very fresh.", blank:"special", options:["special","worst","cheapest","oldest"], correct:0},
+      {role:"Customer",  text:"I will have that. I am allergic to shellfish.", blank:null},
+      {role:"Waiter",    text:"No problem. I will inform the ___ immediately.", blank:"kitchen", options:["kitchen","manager","owner","cashier"], correct:0},
+      {role:"Customer",  text:"Can I also get a glass of white wine?", blank:null},
+      {role:"Waiter",    text:"Of course. Would you prefer a ___ or dry wine?", blank:"sweet", options:["sweet","hot","cold","salty"], correct:0},
+      {role:"Customer",  text:"Dry, please.", blank:null},
+    ]
+  },
+  {
+    id:"restaurant_bill_dlg", name:"🍽️ Fechando a Conta", segment:"Restaurantes",
+    description:"Feche a conta com o cliente.",
+    lines:[
+      {role:"Customer",  text:"Excuse me, could we have the bill please?", blank:null},
+      {role:"Waiter",    text:"Of course! Will you be ___ together or separately?", blank:"paying", options:["paying","eating","leaving","ordering"], correct:0},
+      {role:"Customer",  text:"Together please. Is the service charge included?", blank:null},
+      {role:"Waiter",    text:"Yes, a ___ percent service charge is already included.", blank:"ten", options:["ten","fifty","one","hundred"], correct:0},
+      {role:"Customer",  text:"Can I pay by credit card?", blank:null},
+      {role:"Waiter",    text:"Absolutely. We accept all major ___ cards.", blank:"credit", options:["credit","gift","library","student"], correct:0},
+      {role:"Customer",  text:"The food was excellent, thank you.", blank:null},
+      {role:"Waiter",    text:"Thank you so much! We hope to ___ you again soon.", blank:"see", options:["see","charge","cook","serve"], correct:0},
+    ]
+  },
+  {
+    id:"restaurant_complaint_dlg", name:"🍽️ Reclamação no Restaurante", segment:"Restaurantes",
+    description:"Resolva uma reclamação de forma profissional.",
+    lines:[
+      {role:"Customer",  text:"Excuse me, my steak is not cooked correctly.", blank:null},
+      {role:"Waiter",    text:"I am very sorry. How would you like it ___?", blank:"cooked", options:["cooked","served","cut","decorated"], correct:0},
+      {role:"Customer",  text:"I asked for medium but this is well done.", blank:null},
+      {role:"Waiter",    text:"I sincerely apologize. I will ___ it right away.", blank:"replace", options:["replace","charge","ignore","hide"], correct:0},
+      {role:"Customer",  text:"Thank you. We have also been waiting a long time.", blank:null},
+      {role:"Waiter",    text:"You are right. As ___ for the wait, dessert is on the house.", blank:"compensation", options:["compensation","punishment","payment","surprise"], correct:0},
+      {role:"Customer",  text:"That is very kind. Thank you.", blank:null},
+      {role:"Waiter",    text:"My pleasure. Again, I am sorry for the ___.", blank:"inconvenience", options:["inconvenience","food","prices","service"], correct:0},
+    ]
+  },
+
+  // ── OFFSHORE — 3 diálogos ─────────────────────────
+  {
+    id:"offshore_safety_dlg", name:"🛢️ Briefing de Segurança", segment:"Offshore",
+    description:"Conduza um briefing de segurança completo.",
+    lines:[
+      {role:"Supervisor",text:"Good morning team. Before we start, let's review today's safety ___.", blank:"procedures", options:["procedures","lunch","schedule","bonus"], correct:0},
+      {role:"Worker",    text:"What are the main hazards today?", blank:null},
+      {role:"Supervisor",text:"We have high wind conditions. All work above ___ meters is suspended.", blank:"ten", options:["ten","one","fifty","zero"], correct:0},
+      {role:"Worker",    text:"What about the permit to work?", blank:null},
+      {role:"Supervisor",text:"All permits must be signed before ___ any task.", blank:"starting", options:["starting","stopping","finishing","ignoring"], correct:0},
+      {role:"Worker",    text:"Where is the nearest muster station?", blank:null},
+      {role:"Supervisor",text:"Muster station B is on ___ deck, near the lifeboats.", blank:"upper", options:["upper","lower","main","deck"], correct:0},
+      {role:"Worker",    text:"Understood. We are ready.", blank:null},
+    ]
+  },
+  {
+    id:"offshore_emergency_dlg", name:"🛢️ Emergência na Plataforma", segment:"Offshore",
+    description:"Reaja a uma emergência offshore.",
+    lines:[
+      {role:"Worker",    text:"Control room, we have a gas leak on deck four!", blank:null},
+      {role:"Control",   text:"All personnel ___ to muster stations immediately!", blank:"proceed", options:["proceed","stay","continue","ignore"], correct:0},
+      {role:"Worker",    text:"Should we shut down the equipment?", blank:null},
+      {role:"Control",   text:"Yes, initiate emergency ___ procedure now.", blank:"shutdown", options:["shutdown","startup","maintenance","repair"], correct:0},
+      {role:"Worker",    text:"Understood. Should we call for helicopter evacuation?", blank:null},
+      {role:"Control",   text:"Stand by. We are ___ the situation. Do not evacuate yet.", blank:"assessing", options:["assessing","ignoring","enjoying","watching"], correct:0},
+      {role:"Worker",    text:"All personnel accounted for at muster station.", blank:null},
+      {role:"Control",   text:"Good. Maintain ___ until further notice.", blank:"position", options:["position","calm","silence","work"], correct:0},
+    ]
+  },
+  {
+    id:"offshore_handover_dlg", name:"🛢️ Passagem de Turno", segment:"Offshore",
+    description:"Faça a passagem de turno entre equipes.",
+    lines:[
+      {role:"OutgoingOp",text:"Good morning. Ready for the shift ___?", blank:"handover", options:["handover","party","break","meeting"], correct:0},
+      {role:"IncomingOp",text:"Yes. What is the current production status?", blank:null},
+      {role:"OutgoingOp",text:"We are at eighty percent capacity. Well ___ is operational.", blank:"three", options:["three","one","ten","zero"], correct:0},
+      {role:"IncomingOp",text:"Any safety issues to report?", blank:null},
+      {role:"OutgoingOp",text:"Yes, there is a ___ pressure alarm on the east pipeline.", blank:"low", options:["low","high","normal","perfect"], correct:0},
+      {role:"IncomingOp",text:"Has maintenance been notified?", blank:null},
+      {role:"OutgoingOp",text:"Yes, they are ___ the issue now.", blank:"investigating", options:["investigating","ignoring","fixing","hiding"], correct:0},
+      {role:"IncomingOp",text:"Understood. Have a good rest.", blank:null},
+    ]
+  },
+
+  // ── AEROPORTO — 3 diálogos ────────────────────────
+  {
+    id:"airport_checkin_dlg2", name:"✈️ Balcão de Check-in", segment:"Aeroporto",
+    description:"Faça o check-in de um passageiro.",
+    lines:[
+      {role:"Passenger", text:"Hi, I would like to check in for flight JJ 1234.", blank:null},
+      {role:"Staff",     text:"Good morning! May I have your passport and ___ please?", blank:"ticket", options:["ticket","luggage","money","phone"], correct:0},
+      {role:"Passenger", text:"Here you are. I have two bags to check.", blank:null},
+      {role:"Staff",     text:"Perfect. Do any of your bags ___ thirty kilos?", blank:"exceed", options:["exceed","weigh","carry","hold"], correct:0},
+      {role:"Passenger", text:"No, they are within the limit.", blank:null},
+      {role:"Staff",     text:"Great. Do you have a ___ preference? Window or aisle?", blank:"seat", options:["seat","meal","bag","class"], correct:0},
+      {role:"Passenger", text:"Window please.", blank:null},
+      {role:"Staff",     text:"Done. Your gate is ___ and boarding starts at 14:30.", blank:"B12", options:["B12","Z99","A1","X0"], correct:0},
+    ]
+  },
+  {
+    id:"airport_delay_dlg", name:"✈️ Voo Atrasado", segment:"Aeroporto",
+    description:"Lide com um voo atrasado.",
+    lines:[
+      {role:"Passenger", text:"Excuse me, my flight has been delayed. What is happening?", blank:null},
+      {role:"Staff",     text:"I understand your frustration. There is a ___ issue with the aircraft.", blank:"technical", options:["technical","weather","staff","fuel"], correct:0},
+      {role:"Passenger", text:"How long will the delay be?", blank:null},
+      {role:"Staff",     text:"We estimate approximately ___ hours.", blank:"two", options:["two","ten","zero","twenty"], correct:0},
+      {role:"Passenger", text:"I will miss my connecting flight.", blank:null},
+      {role:"Staff",     text:"We will ___ you on the next available connection.", blank:"rebook", options:["rebook","refund","cancel","ignore"], correct:0},
+      {role:"Passenger", text:"Will I receive any compensation?", blank:null},
+      {role:"Staff",     text:"Yes, we will provide meal ___ while you wait.", blank:"vouchers", options:["vouchers","tickets","money","gifts"], correct:0},
+    ]
+  },
+  {
+    id:"airport_customs_dlg", name:"✈️ Controle Aduaneiro", segment:"Aeroporto",
+    description:"Passe pelo controle aduaneiro em inglês.",
+    lines:[
+      {role:"Officer",   text:"Good afternoon. Passport please.", blank:null},
+      {role:"Traveler",  text:"Here you are.", blank:null},
+      {role:"Officer",   text:"What is the ___ of your visit?", blank:"purpose", options:["purpose","length","cost","type"], correct:0},
+      {role:"Traveler",  text:"Business. I am attending a conference.", blank:null},
+      {role:"Officer",   text:"How long will you be ___?", blank:"staying", options:["staying","working","flying","waiting"], correct:0},
+      {role:"Traveler",  text:"Five days.", blank:null},
+      {role:"Officer",   text:"Do you have anything to ___ at customs?", blank:"declare", options:["declare","hide","sell","show"], correct:0},
+      {role:"Traveler",  text:"No, nothing to declare.", blank:null},
+    ]
+  },
+
+  // ── CRUZEIROS — 3 diálogos ────────────────────────
+  {
+    id:"cruise_boarding_dlg", name:"🛳️ Embarque", segment:"Terminal de Cruzeiros",
+    description:"Receba passageiros no embarque.",
+    lines:[
+      {role:"Passenger", text:"Hello, we are here for the MSC Fantasia.", blank:null},
+      {role:"Staff",     text:"Welcome! May I see your ___ and cruise card?", blank:"passport", options:["passport","ticket","luggage","money"], correct:0},
+      {role:"Passenger", text:"Here. Is the ship ready for boarding?", blank:null},
+      {role:"Staff",     text:"Yes, boarding is now ___ through gate three.", blank:"open", options:["open","closed","delayed","cancelled"], correct:0},
+      {role:"Passenger", text:"Which deck is our cabin on?", blank:null},
+      {role:"Staff",     text:"Your cabin is on ___ deck, number 7245.", blank:"seven", options:["seven","one","twelve","zero"], correct:0},
+      {role:"Passenger", text:"What time does the ship depart?", blank:null},
+      {role:"Staff",     text:"We ___ at six PM. Please be on board by five thirty.", blank:"depart", options:["depart","arrive","dock","anchor"], correct:0},
+    ]
+  },
+  {
+    id:"cruise_excursion_dlg", name:"🛳️ Excursão em Santos", segment:"Terminal de Cruzeiros",
+    description:"Organize excursões para passageiros do cruzeiro.",
+    lines:[
+      {role:"Passenger", text:"What tours do you recommend in Santos?", blank:null},
+      {role:"Guide",     text:"We have three options: the ___ Garden, the port tour, and the beach walk.", blank:"Orchid", options:["Orchid","Rose","Cactus","Flower"], correct:0},
+      {role:"Passenger", text:"How long is the beach walk?", blank:null},
+      {role:"Guide",     text:"About ___ hours. The boardwalk is beautiful.", blank:"two", options:["two","ten","half","twenty"], correct:0},
+      {role:"Passenger", text:"Is the Pelé Museum worth visiting?", blank:null},
+      {role:"Guide",     text:"Absolutely! It tells the story of the greatest ___ player in history.", blank:"football", options:["football","tennis","swimming","golf"], correct:0},
+      {role:"Passenger", text:"What time must we be back on board?", blank:null},
+      {role:"Guide",     text:"The ship ___ at six PM. Be back by five fifteen.", blank:"departs", options:["departs","arrives","waits","docks"], correct:0},
+    ]
+  },
+  {
+    id:"cruise_complaint_dlg", name:"🛳️ Atendimento a Bordo", segment:"Terminal de Cruzeiros",
+    description:"Resolva problemas de passageiros.",
+    lines:[
+      {role:"Passenger", text:"Excuse me, our luggage has not arrived at our cabin.", blank:null},
+      {role:"Staff",     text:"I am sorry for the inconvenience. What is your cabin ___?", blank:"number", options:["number","color","size","floor"], correct:0},
+      {role:"Passenger", text:"Seven two four five.", blank:null},
+      {role:"Staff",     text:"I will ___ that immediately and send your luggage up.", blank:"check", options:["check","ignore","forget","delay"], correct:0},
+      {role:"Passenger", text:"Also, we have questions about tomorrow's port of call.", blank:null},
+      {role:"Staff",     text:"Of course. Tomorrow we arrive in Búzios at ___ AM.", blank:"eight", options:["eight","midnight","three","noon"], correct:0},
+      {role:"Passenger", text:"Is there a shore excursion available?", blank:null},
+      {role:"Staff",     text:"Yes, please visit the ___ Services desk on deck four.", blank:"Guest", options:["Guest","Captain","Chef","Medical"], correct:0},
+    ]
+  }
+);

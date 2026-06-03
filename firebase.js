@@ -1,4 +1,4 @@
-// firebase.js — VIC English v11
+// firebase.js — VIC English — reescrito do zero
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
@@ -11,6 +11,8 @@ import {
   signOut,
   onAuthStateChanged,
   updateProfile,
+  browserLocalPersistence,
+  setPersistence,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
   getFirestore,
@@ -26,7 +28,6 @@ import {
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ─── CONFIG ───────────────────────────────────────────────────────────────────
 const firebaseConfig = {
   apiKey: "AIzaSyD1wmTcVhOFiR8xY3jBDb-mJbd1mDRuCgU",
   authDomain: "victor-app-aef3c.firebaseapp.com",
@@ -36,88 +37,103 @@ const firebaseConfig = {
   appId: "1:313048271409:web:a01a5a25add0a5e7eee310",
 };
 
-const app = initializeApp(firebaseConfig);
+const app  = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db   = getFirestore(app);
-const googleProvider = new GoogleAuthProvider();
 
-// ─── OWNER UID — só você vê o dashboard do professor ─────────────────────────
-// Cole aqui o seu UID do Firebase (Authentication > seu usuário > User UID)
+// Keep user logged in permanently — even after closing the app
+setPersistence(auth, browserLocalPersistence).catch(()=>{});
+
 export const OWNER_UID = "BPj6R6IH5naAcW0SWcZglXL7pEy2";
 
-// ─── AUTH ─────────────────────────────────────────────────────────────────────
+const gProvider = new GoogleAuthProvider();
+
+// ── AUTH ──────────────────────────────────────────────
 export async function registerUser(email, password, name) {
-  const cred = await createUserWithEmailAndPassword(auth, email, password);
-  await updateProfile(cred.user, { displayName: name });
-  await _createUserDoc(cred.user.uid, { name, email, provider:"email" });
-  return cred.user;
+  const c = await createUserWithEmailAndPassword(auth, email, password);
+  await updateProfile(c.user, { displayName: name });
+  await createUserDoc(c.user.uid, { name, email, provider: "email" });
+  return c.user;
 }
 
 export async function loginUser(email, password) {
-  const cred = await signInWithEmailAndPassword(auth, email, password);
-  return cred.user;
+  const c = await signInWithEmailAndPassword(auth, email, password);
+  return c.user;
 }
 
 export async function loginWithGoogle() {
-  const cred = await signInWithPopup(auth, googleProvider);
-  const user = cred.user;
-  // create doc only if new user
-  const snap = await getDoc(doc(db, "users", user.uid));
+  const c = await signInWithPopup(auth, gProvider);
+  const snap = await getDoc(doc(db, "users", c.user.uid));
   if (!snap.exists()) {
-    await _createUserDoc(user.uid, {
-      name:     user.displayName || "Usuário Google",
-      email:    user.email || "",
+    await createUserDoc(c.user.uid, {
+      name: c.user.displayName || "Usuário",
+      email: c.user.email || "",
       provider: "google",
     });
   }
-  return user;
+  return c.user;
 }
 
 export async function loginAnonymous() {
-  const cred = await signInAnonymously(auth);
-  const snap = await getDoc(doc(db, "users", cred.user.uid));
+  const c = await signInAnonymously(auth);
+  const snap = await getDoc(doc(db, "users", c.user.uid));
   if (!snap.exists()) {
-    await _createUserDoc(cred.user.uid, {
-      name:     "Visitante",
-      email:    "",
-      provider: "anonymous",
-    });
+    await createUserDoc(c.user.uid, { name: "Visitante", email: "", provider: "anonymous" });
   }
-  return cred.user;
+  return c.user;
 }
 
-export async function logoutUser() { await signOut(auth); }
+export async function logoutUser() {
+  await signOut(auth);
+}
 
-export function onAuthChange(cb) { return onAuthStateChanged(auth, cb); }
+export function onAuthChange(callback) {
+  return onAuthStateChanged(auth, callback);
+}
 
-async function _createUserDoc(uid, extra) {
+// ── FIRESTORE ─────────────────────────────────────────
+async function createUserDoc(uid, extra) {
   await setDoc(doc(db, "users", uid), {
-    xp: 0, level: 1, streak: 0,
-    completedMissions: [],
-    currentMission: { segmentId:"maritimo", phaseId:"f1", missionId:"vocab_basico", phraseIndex:0 },
-    createdAt: serverTimestamp(),
-    lastSeen:  serverTimestamp(),
-    plan: "free",   // "free" | "pro"
+    xp: 0, streak: 0, completedMissions: [],
+    plan: "free", createdAt: serverTimestamp(),
+    lastSeen: serverTimestamp(),
+    currentMission: { segmentId: "maritimo", phaseId: "f1", missionId: "vocab_basico", phraseIndex: 0 },
     ...extra,
   });
 }
 
-// ─── FIRESTORE ────────────────────────────────────────────────────────────────
 export async function getUserData(uid) {
-  const snap = await getDoc(doc(db, "users", uid));
-  return snap.exists() ? { uid, ...snap.data() } : null;
+  try {
+    const snap = await getDoc(doc(db, "users", uid));
+    if (snap.exists()) return { uid, ...snap.data() };
+    return null;
+  } catch (e) {
+    console.error("getUserData error:", e);
+    return null;
+  }
 }
 
 export async function saveProgress(uid, updates) {
-  await updateDoc(doc(db, "users", uid), {
-    ...updates,
-    lastSeen: serverTimestamp(),
-  });
+  try {
+    await updateDoc(doc(db, "users", uid), {
+      ...updates,
+      lastSeen: serverTimestamp(),
+    });
+  } catch (e) {
+    // If doc doesn't exist, create it
+    try {
+      await setDoc(doc(db, "users", uid), {
+        ...updates,
+        lastSeen: serverTimestamp(),
+      }, { merge: true });
+    } catch (e2) {
+      console.error("saveProgress error:", e2);
+    }
+  }
 }
 
-// ─── ADMIN — só o dono usa ────────────────────────────────────────────────────
 export async function getAllUsers() {
-  const q = query(collection(db, "users"), orderBy("lastSeen","desc"), limit(200));
+  const q = query(collection(db, "users"), orderBy("lastSeen", "desc"), limit(200));
   const snap = await getDocs(q);
   return snap.docs.map(d => ({ uid: d.id, ...d.data() }));
 }
