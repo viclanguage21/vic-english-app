@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>VIC English — Inglês Operacional</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#1a0d2e"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="VIC English"/>
+  <link rel="apple-touch-icon" href="app_icon.png"/>
+
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="xp-toast" id="xp-toast"></div>
+
+<!-- Daily missions complete celebration -->
+<div class="daily-complete-overlay" id="daily-complete-overlay" style="display:none">
+  <div class="daily-complete-card">
+    <div class="daily-complete-emoji">🎉</div>
+    <div class="daily-complete-title">Daily Missions Complete!</div>
+    <div class="daily-complete-sub">Missões do dia concluídas!</div>
+    <div class="daily-complete-xp" id="daily-complete-xp">+65 XP Bônus</div>
+    <button class="btn-primary" id="btn-daily-complete-ok">Continuar 🚀</button>
+  </div>
+</div>
+
+<!-- ══ AUTH ══════════════════════════════════════════════ -->
+<div class="view" id="view-auth">
+
+  <!-- Full-screen loading -->
+  <div class="auth-loading" id="auth-loading" style="display:none">
+    <div class="auth-loading-card">
+      <div class="auth-spinner"></div>
+      <div class="auth-loading-text">Carregando...</div>
+      <div class="auth-loading-sub"></div>
+    </div>
+  </div>
+
+  <div class="auth-scroll">
+    <!-- Logo -->
+    <div class="auth-logo-wrap">
+      <img src="vic_logo.png" alt="VIC English" class="auth-logo-img"/>
+      <p class="auth-app-desc">Inglês Operacional Profissional</p>
+      <p class="auth-tagline">Turn English into your advantage</p>
+      <p class="auth-tagline-pt">Faça do inglês sua vantagem</p>
+      <a href="https://www.viclanguage.com.br" target="_blank" class="auth-vic-link">
+        <span class="auth-powered">Powered by</span>
+        <img src="vic_lamp.png" alt="VIC" class="auth-footer-logo"/>
+        <span>VIC Language</span>
+      </a>
+    </div>
+
+    <!-- Card -->
+    <div class="auth-box">
+
+      <!-- Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login">Entrar</button>
+        <button class="auth-tab"        id="tab-register">Criar Conta</button>
+      </div>
+
+      <!-- Error -->
+      <div class="auth-error" id="auth-error" style="display:none"></div>
+
+      <!-- LOGIN FORM -->
+      <div class="auth-form active" id="form-login">
+        <div class="auth-field">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" placeholder="seu@email.com" autocomplete="email"/>
+        </div>
+        <div class="auth-field">
+          <label for="login-password">Senha</label>
+          <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password"/>
+        </div>
+        <button class="auth-btn-primary" id="btn-login">Entrar</button>
+
+        <div class="auth-sep"><span>ou</span></div>
+
+        <button class="auth-btn-google" id="btn-google">
+          <svg width="18" height="18" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+          Entrar com Google
+        </button>
+
+        <button class="auth-btn-anon" id="btn-anon">
+          👤 Entrar sem cadastro
+        </button>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div class="auth-form" id="form-register">
+        <div class="auth-field">
+          <label for="reg-name">Nome</label>
+          <input type="text" id="reg-name" placeholder="Seu nome" autocomplete="name"/>
+        </div>
+        <div class="auth-field">
+          <label for="reg-email">Email</label>
+          <input type="email" id="reg-email" placeholder="seu@email.com" autocomplete="email"/>
+        </div>
+        <div class="auth-field">
+          <label for="reg-password">Senha</label>
+          <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"/>
+        </div>
+        <button class="auth-btn-primary" id="btn-register">Criar Conta</button>
+      </div>
+
+    </div><!-- end auth-box -->
+
+    <!-- Footer link -->
+    <div class="auth-page-footer">
+      <a href="https://www.viclanguage.com.br" target="_blank" class="auth-footer-full">
+        <img src="vic_lamp.png" alt="VIC" class="auth-footer-full-logo"/>
+        <div>
+          <div class="auth-footer-powered">Powered by</div>
+          <div class="auth-footer-name">VIC Language — Languages Services Hub</div>
+        </div>
+      </a>
+    </div>
+
+  </div><!-- end auth-scroll -->
+
+  <!-- Reload button -->
+  <button class="btn-reload-auth" onclick="location.reload()" title="Recarregar">↻</button>
+
+</div>
+
+<!-- ══ DIAGNOSIS ═════════════════════════════════════════ -->
+<div class="view" id="view-diagnosis">
+  <div class="diagnosis-wrapper">
+    <div class="diagnosis-header">
+      <div class="auth-logo-mark" style="margin:0 auto 16px"><img src="vic_logo.png" alt="V"/></div>
+      <h2>🎯 Diagnóstico Inicial</h2>
+      <p>3 perguntas rápidas para personalizar seu treino</p>
+    </div>
+    <div class="diagnosis-card">
+      <div class="diag-progress" id="diag-progress"></div>
+
+      <!-- Step 0: objetivo -->
+      <div class="diag-step active" id="diag-step-0">
+        <div class="diag-step-title">Qual é o seu principal objetivo?</div>
+        <div class="diag-options">
+          <button class="diag-option" data-value="trabalho">💼 Usar no trabalho</button>
+          <button class="diag-option" data-value="viagem">✈️ Viagens</button>
+          <button class="diag-option" data-value="estudo">📚 Estudo / escola</button>
+          <button class="diag-option" data-value="negocios">🤝 Negócios</button>
+        </div>
+      </div>
+
+      <!-- Step 1: dificuldade -->
+      <div class="diag-step" id="diag-step-1">
+        <div class="diag-step-title">Qual é sua maior dificuldade?</div>
+        <div class="diag-options">
+          <button class="diag-option" data-value="pronuncia">🗣️ Pronúncia</button>
+          <button class="diag-option" data-value="vocabulario">📝 Vocabulário</button>
+          <button class="diag-option" data-value="gramatica">📖 Gramática</button>
+          <button class="diag-option" data-value="escuta">👂 Entender o que falam</button>
+        </div>
+      </div>
+
+      <!-- Step 2: segmento -->
+      <div class="diag-step" id="diag-step-2">
+        <div class="diag-step-title">Qual área é mais importante para você?</div>
+        <div class="diag-options">
+          <button class="diag-option" data-value="maritimo">⚓ Marítimo / Porto / COMEX</button>
+          <button class="diag-option" data-value="hotelaria">🏨 Hotelaria / Recepção</button>
+          <button class="diag-option" data-value="restaurantes">🍽️ Restaurantes / Atendimento</button>
+          <button class="diag-option" data-value="gramatica">📖 Inglês Geral / Gramática</button>
+        </div>
+      </div>
+
+      <!-- Step 3: personal note (free text + voice) -->
+      <div class="diag-step" id="diag-step-3">
+        <div class="diag-step-title">O que você quer melhorar no seu inglês? ✍️</div>
+        <div class="diag-step-sub">Escreva ou fale à vontade — isso nos ajuda a personalizar seu treino</div>
+        <textarea class="diag-textarea" id="diag-personal-note"
+          placeholder="Ex: Quero falar com tripulantes estrangeiros no porto sem travar..."></textarea>
+        <div class="diag-voice-row">
+          <button class="diag-voice-btn" id="btn-diag-voice">🎤 Falar</button>
+          <span class="diag-voice-status" id="diag-voice-status"></span>
+        </div>
+        <div class="diag-step-actions">
+          <button class="btn-primary" id="btn-finish-diag-note">Continuar →</button>
+          <button class="diag-skip-note" id="btn-skip-diag-note">Pular esta etapa</button>
+        </div>
+      </div>
+
+      <!-- Result: bridge to level test -->
+      <div class="diag-step" id="diag-step-result">
+        <div class="diag-result">
+          <div class="diag-result-icon">✅</div>
+          <div class="diag-result-level" id="diag-result-level">Perfil criado!</div>
+          <div class="diag-result-sub"   id="diag-result-sub"></div>
+          <div class="diag-next-info">
+            <p>Agora vamos descobrir seu nível real com um <strong>teste rápido de 8 questões</strong></p>
+            <p class="diag-next-sub">Leva menos de 3 minutos</p>
+          </div>
+          <button class="btn-primary" id="btn-finish-diag" style="margin-top:20px">Fazer o Teste de Nível →</button>
+          <button class="diag-skip-note" id="btn-skip-level-test-diag" style="margin-top:8px;display:block;text-align:center">Pular teste e ir para o app</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LEVEL TEST ═════════════════════════════════════════ -->
+<div class="view" id="view-level-test">
+  <div class="lt-wrapper">
+
+    <div class="lt-header">
+      <div class="lt-header-top">
+        <div class="lt-logo"><img src="vic_logo.png" alt="V"/></div>
+        <div class="lt-header-text">
+          <div class="lt-header-title">Teste de Nível</div>
+          <div class="lt-counter" id="lt-counter">1 / 8</div>
+        </div>
+        <button class="btn-skip-lt" id="btn-skip-level-test">Pular</button>
+      </div>
+      <div class="lt-progress-bg">
+        <div class="lt-progress-fill" id="lt-progress-bar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Questions area -->
+    <div id="lt-questions-area">
+      <div class="lt-card">
+        <div class="lt-type-badge" id="lt-title">Grammar</div>
+        <div class="lt-question" id="lt-question"></div>
+
+        <!-- Multiple choice / reading -->
+        <div class="lt-mc" id="lt-mc" style="display:none"></div>
+
+        <!-- Fill blank -->
+        <div id="lt-fill" style="display:none">
+          <input class="lt-fill-input" id="lt-fill-input" type="text" placeholder=""/>
+          <button class="btn-check lt-check-btn" id="lt-fill-check">Verificar ✓</button>
+        </div>
+
+        <!-- Word order -->
+        <div id="lt-order" style="display:none">
+          <div class="word-order-zone" id="lt-order-zone"></div>
+          <div class="word-order-bank" id="lt-order-bank"></div>
+          <button class="btn-check lt-check-btn" id="lt-order-check">Verificar ✓</button>
+        </div>
+
+        <div class="lt-feedback" id="lt-feedback" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div id="lt-result" style="display:none">
+      <div class="lt-result-card">
+        <div class="lt-result-emoji">🎓</div>
+        <div class="lt-result-title">Seu nível detectado</div>
+        <div class="lt-result-level" id="lt-result-level"></div>
+        <div class="lt-result-msg"   id="lt-result-msg"></div>
+        <div class="lt-result-score-wrap">
+          <div class="lt-result-score-label">Pontuação</div>
+          <div class="lt-result-score" id="lt-result-score"></div>
+          <div class="lt-result-pct"   id="lt-result-pct"></div>
+        </div>
+        <div class="lt-result-bar-bg">
+          <div class="lt-result-bar" id="lt-result-bar" style="width:0%"></div>
+        </div>
+        <button class="btn-primary" id="btn-finish-level-test" style="margin-top:24px">
+          Começar meu treino 🚀
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ═════════════════════════════════════════ -->
+<div class="view" id="view-dashboard">
+  <div class="dashboard-inner">
+
+    <div class="dash-header">
+      <div class="dash-logo">
+        <img src="vic_logo.png" alt="VIC English" id="dash-logo-img"/>
+      </div>
+      <div class="dash-center">
+        <div class="dash-date" id="dash-date"></div>
+      </div>
+      <div class="dash-user">
+        <div class="dash-user-info">
+          <span class="dash-username" id="dash-username"></span>
+          <span class="dash-user-level" id="dash-user-level"></span>
+        </div>
+        <button class="btn-profile-icon" id="btn-open-profile" title="Perfil">
+          <span id="dash-avatar-icon">👤</span>
+        </button>
+        <button class="btn-logout-icon" id="btn-logout" title="Sair">⏻</button>
+      </div>
+    </div>
+
+    <div class="greeting-card">
+      <div class="greeting-hi"      id="greeting-hi"></div>
+      <div class="greeting-time-en" id="greeting-time-en"></div>
+      <div class="greeting-time-pt" id="greeting-time-pt"></div>
+      <div class="greeting-level"   id="greeting-level"></div>
+      <div                          id="greeting-motivational" style="display:none"></div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card"><span class="stat-value" id="dash-xp">0</span><span class="stat-label">XP Total</span></div>
+      <div class="stat-card"><span class="stat-value" id="dash-level">1</span><span class="stat-label">Nível</span></div>
+      <div class="stat-card"><span class="stat-value" id="dash-streak">0</span><span class="stat-label">Streak 🔥</span></div>
+    </div>
+
+    <div class="xp-track">
+      <div class="xp-track-header">
+        <span class="xp-track-label">Progresso XP</span>
+        <span class="xp-track-next" id="dash-xp-next">100 XP</span>
+      </div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="dash-xp-bar" style="width:0%"></div></div>
+    </div>
+
+    <!-- level shown in greeting card instead -->
+
+    <!-- Optional diagnosis invite -->
+    <div class="diag-invite-banner" id="diag-invite-banner" style="display:none">
+      <div class="diag-invite-left">
+        <span class="diag-invite-icon">🎯</span>
+        <div>
+          <div class="diag-invite-title">Descubra seu nível real</div>
+          <div class="diag-invite-sub">Teste rápido de 3 min — totalmente opcional</div>
+        </div>
+      </div>
+      <div class="diag-invite-actions">
+        <button class="diag-invite-btn" id="btn-start-diag">Fazer →</button>
+        <button class="diag-invite-skip" id="btn-skip-diag">✕</button>
+      </div>
+    </div>
+
+    <!-- START NOW button -->
+    <button class="btn-start-now" id="btn-start-now">▶ Start Now!</button>
+
+    <!-- Pro upgrade banner (only for free users) -->
+    <div class="pro-banner" id="pro-banner" style="display:none">
+      <div class="pro-banner-left">
+        <span class="pro-banner-icon">⭐</span>
+        <div>
+          <div class="pro-banner-title">Desbloqueie tudo</div>
+          <div class="pro-banner-sub">R$ 15/mês — todos os segmentos</div>
+        </div>
+      </div>
+      <button class="pro-banner-btn" id="btn-upgrade-dash">Assinar</button>
+    </div>
+
+    <!-- daily missions -->
+    <div class="daily-block">
+      <div class="daily-block-header">
+        <div class="daily-block-title">🎯 Daily Missions</div>
+        <div class="daily-overall-pct" id="daily-overall-pct">0% done today</div>
+      </div>
+      <div class="daily-overall-bar-wrap">
+        <div class="daily-overall-bar" id="daily-overall-bar" style="width:0%"></div>
+      </div>
+      <div id="daily-missions-list"></div>
+    </div>
+
+    <!-- quick access -->
+    <div class="section-label">🎯 Acesso Rápido</div>
+    <div class="quick-grid">
+      <button class="quick-btn" id="btn-goto-flashcards">🃏 Flashcards</button>
+      <button class="quick-btn" id="btn-goto-memory">🧠 Memória</button>
+      <button class="quick-btn" id="btn-goto-truefalse">✅ V ou F</button>
+      <button class="quick-btn" id="btn-goto-dialogue">💬 Diálogo</button>
+    </div>
+
+    <div class="section-label" style="margin-top:20px">Segmentos</div>
+    <div class="segments-grid" id="segments-grid"></div>
+
+    <!-- Grammar Core Banner -->
+    <div class="grammar-core-banner" id="grammar-core-banner" style="display:none">
+      <div class="gc-left">
+        <div class="gc-icon">📖</div>
+        <div class="gc-text">
+          <div class="gc-title">Grammar Core</div>
+          <div class="gc-sub">20 subcategorias — todas liberadas</div>
+          <div class="gc-tags">
+            <span>Present Simple</span><span>Modals</span><span>Phrasal Verbs</span>
+            <span>Conditionals</span><span>Passive Voice</span><span>+15 mais</span>
+          </div>
+        </div>
+      </div>
+      <div class="gc-arrow">→</div>
+    </div>
+
+    <!-- Writing Core Banner — at the bottom, distinct color -->
+    <div class="writing-core-banner" id="writing-core-banner">
+      <div class="gc-left">
+        <div class="gc-icon">✍️</div>
+        <div class="gc-text">
+          <div class="gc-title">Writing & Translation</div>
+          <div class="gc-sub">Escreva, traduza e corrija com IA</div>
+          <div class="gc-tags">
+            <span>Emails</span><span>Relatórios</span><span>Tradução</span>
+            <span>Composição</span><span>Correção automática</span>
+          </div>
+        </div>
+      </div>
+      <div class="gc-arrow">→</div>
+    </div>
+
+    <!-- Feedback widget -->
+    <div class="feedback-strip" id="feedback-strip">
+      <div class="feedback-strip-title">Como está seu aprendizado? ⭐</div>
+      <div class="feedback-stars" id="feedback-stars">
+        <span class="feedback-star" data-v="1">⭐</span>
+        <span class="feedback-star" data-v="2">⭐</span>
+        <span class="feedback-star" data-v="3">⭐</span>
+        <span class="feedback-star" data-v="4">⭐</span>
+        <span class="feedback-star" data-v="5">⭐</span>
+      </div>
+      <div class="feedback-actions">
+        <button class="feedback-btn" id="btn-feedback-comment">💬 Comentário</button>
+        <button class="feedback-btn" id="btn-feedback-like">👍 Gostei</button>
+        <button class="feedback-btn bug" id="btn-feedback-bug">🐛 Reportar bug</button>
+      </div>
+    </div>
+
+    <div class="powered-footer"><a href="https://www.viclanguage.com.br" target="_blank" class="vic-link"><img src="vic_lamp.png" alt="VIC Language" class="vic-logo-sm"><span>VIC Language</span></a></div>
+
+    <!-- Feedback modal -->
+    <div class="feedback-modal" id="feedback-modal" style="display:none">
+      <div class="feedback-modal-card">
+        <div class="feedback-modal-title" id="feedback-modal-title">Deixe seu comentário</div>
+        <textarea id="feedback-textarea" placeholder="Escreva aqui..."></textarea>
+        <div class="feedback-modal-actions">
+          <button class="feedback-cancel-btn" id="btn-close-feedback">✕ Cancelar</button>
+          <button class="feedback-send-btn" id="btn-send-feedback">✓ Enviar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reload button (fixed) -->
+    <button class="btn-reload" onclick="location.reload()" title="Recarregar app">↻</button>
+    <a href="https://www.viclanguage.com.br" target="_blank" class="vic-site-link">viclanguage.com.br →</a>
+  </div>
+</div>
+
+<!-- ══ SEGMENT PHASES ════════════════════════════════════ -->
+<div class="view" id="view-phases">
+  <div class="phases-inner">
+    <div class="phases-header">
+      <button class="btn-back" id="btn-back-phases">←</button>
+      <div class="phases-title" id="phases-title"></div>
+      <div style="width:40px"></div>
+    </div>
+    <div class="phases-list" id="phases-list"></div>
+  </div>
+</div>
+
+<!-- ══ MISSION LIST ══════════════════════════════════════ -->
+<div class="view" id="view-missions-list">
+  <div class="phases-inner">
+    <div class="phases-header">
+      <button class="btn-back" id="btn-back-missions">←</button>
+      <div class="phases-title" id="missions-title"></div>
+      <div style="width:40px"></div>
+    </div>
+    <div class="phases-list" id="missions-list"></div>
+  </div>
+</div>
+
+<!-- ══ MISSION ══════════════════════════════════════════ -->
+<div class="view" id="view-mission">
+  <div class="mission-inner">
+
+    <div class="mission-header">
+      <button class="btn-back" id="btn-back">←</button>
+      <div class="mission-header-info">
+        <div class="mission-header-name" id="mission-name"></div>
+        <div class="phrase-counter"      id="phrase-counter">1/1</div>
+      </div>
+      <div style="width:40px"></div>
+    </div>
+
+    <div class="mission-progress-wrap">
+      <div class="mission-progress-label">Progresso</div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="mission-progress-bar" style="width:0%"></div></div>
+    </div>
+
+    <div id="ex-type-badge" class="ex-type-badge"></div>
+
+    <div class="phrase-card">
+      <div class="phrase-label">Frase</div>
+      <div class="phrase-en-wrap">
+        <div class="phrase-en" id="phrase-en"></div>
+        <div class="phrase-sound-group">
+          <button class="phrase-sound-btn" id="phrase-sound-inline" title="Ouvir">🔊</button>
+          <button class="phrase-sound-btn slow" id="phrase-sound-slow" title="Ouvir devagar">🐢</button>
+          <button class="phrase-sound-btn pt" id="phrase-sound-pt" title="Ouvir em português">🇧🇷</button>
+        </div>
+      </div>
+
+      <div class="phrase-pt"  id="phrase-pt"></div>
+      <div class="vocab-list" id="vocab-list"></div>
+
+      <!-- translate -->
+      <div class="translate-box" id="translate-box" style="display:none">
+        <div class="translate-label" id="translate-label"></div>
+        <input class="translate-input" id="translate-input" type="text" placeholder="Digite sua resposta..."/>
+        <button class="btn-check" id="btn-check-translate">Verificar ✓</button>
+        <div class="answer-feedback" id="answer-feedback"></div>
+        <button class="btn-next-exercise" id="btn-next-exercise">Próximo →</button>
+      </div>
+
+      <!-- multiple choice -->
+      <div class="mc-options" id="mc-options" style="display:none"></div>
+
+      <!-- fill blank -->
+      <div id="fill-wrap" style="display:none">
+        <div class="fill-sentence" id="fill-sentence"></div>
+        <input type="hidden" id="fill-input-hidden"/>
+        <button class="btn-check" style="margin-top:12px;width:100%" id="btn-check-fill">Verificar ✓</button>
+        <div class="answer-feedback" id="answer-feedback-fill" style="display:none"></div>
+        <button class="btn-next-exercise" id="btn-next-fill">Próximo →</button>
+      </div>
+
+      <!-- word order -->
+      <div id="word-order-wrap" style="display:none">
+        <div class="word-order-zone" id="word-order-zone"></div>
+        <div class="word-order-bank" id="word-order-bank"></div>
+        <button class="btn-check" style="margin-top:10px;width:100%" id="btn-check-order">Verificar ✓</button>
+        <div class="answer-feedback" id="answer-feedback-order" style="display:none"></div>
+        <button class="btn-next-exercise" id="btn-next-order">Próximo →</button>
+      </div>
+
+      <!-- memory match -->
+      <div id="memory-wrap" style="display:none">
+        <div class="memory-grid" id="memory-grid"></div>
+        <div class="memory-status" id="memory-status"></div>
+      </div>
+
+      <!-- match columns -->
+      <div id="match-wrap" style="display:none">
+        <div class="match-columns" id="match-columns"></div>
+        <div class="answer-feedback" id="answer-feedback-match" style="display:none"></div>
+      </div>
+
+      <div class="phrase-tip" id="phrase-tip"></div>
+    </div>
+
+    <div class="controls-grid" id="controls-wrap" style="display:none">
+      <button class="ctrl-btn listen"    id="btn-listen">🔊 Ouvir</button>
+      <button class="ctrl-btn record"    id="btn-record">🎤 Gravar</button>
+      <button class="ctrl-btn stop"      id="btn-stop"   style="display:none">⏹ Parar</button>
+      <button class="ctrl-btn play-back" id="btn-play-recording" disabled>▶️ Minha voz</button>
+    </div>
+
+    <div class="recording-status"       id="recording-status"></div>
+    <div class="transcript-box"         id="transcript-box" style="display:none"></div>
+    <div class="pronunciation-feedback" id="pronunciation-feedback" style="display:none"></div>
+
+    <div class="score-panel" id="score-panel" style="display:none">
+      <div class="score-label">Como foi sua pronúncia?</div>
+      <div class="score-buttons">
+        <button class="score-btn score-0"  id="score-0" >😬<span>0</span><small>Errei</small></button>
+        <button class="score-btn score-5"  id="score-5" >👍<span>5</span><small>Quase</small></button>
+        <button class="score-btn score-10" id="score-10">🌟<span>10</span><small>Perfeito</small></button>
+      </div>
+    </div>
+
+    <button class="btn-next" id="btn-next">Próxima →</button>
+    <audio id="audio-player"></audio>
+  </div>
+</div>
+
+<!-- ══ FLASHCARDS ════════════════════════════════════════ -->
+<div class="view" id="view-flashcards">
+  <div class="phases-inner">
+    <div class="phases-header">
+      <button class="btn-back" id="btn-back-flashcards">←</button>
+      <div class="phases-title">🃏 Flashcards</div>
+      <div style="width:40px"></div>
+    </div>
+    <!-- deck selector -->
+    <div id="fc-deck-selector">
+      <div class="section-label">Escolha um deck</div>
+      <div class="phases-list" id="fc-deck-list"></div>
+    </div>
+    <!-- flashcard player -->
+    <div id="fc-player" style="display:none">
+      <div class="fc-counter" id="fc-counter"></div>
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div class="fc-front" id="fc-front">
+          <div class="fc-word"    id="fc-word"></div>
+          <div class="fc-pron"   id="fc-pron-pt"></div>
+          <div class="fc-speak-row">
+            <button class="fc-speak" id="fc-speak" onclick="event.stopPropagation();speakFC()">🔊 EN</button>
+            <button class="fc-speak fc-slow" id="fc-speak-slow" onclick="event.stopPropagation();speakFCSlow()">🐢</button>
+            <button class="fc-speak-pt" onclick="event.stopPropagation();speakFCPT()">🇧🇷 PT</button>
+          </div>
+          <div class="fc-hint">Toque para ver a tradução</div>
+        </div>
+        <div class="fc-back" id="fc-back">
+          <div class="fc-translation" id="fc-translation"></div>
+          <div class="fc-hint">Toque para virar</div>
+        </div>
+      </div>
+      <div class="fc-actions">
+        <button class="fc-btn fc-wrong" id="fc-wrong">❌ Difícil</button>
+        <button class="fc-btn fc-right" id="fc-right">✅ Sei!</button>
+      </div>
+      <button class="btn-back-sm" id="btn-back-fc-player">← Decks</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MEMORY GAME (LIVRE) ══════════════════════════════ -->
+<div class="view" id="view-memory-free">
+  <div class="phases-inner">
+    <div class="phases-header">
+      <button class="btn-back" id="btn-back-memory">←</button>
+      <div class="phases-title">🧠 Jogo da Memória</div>
+      <div style="width:40px"></div>
+    </div>
+    <!-- theme selector -->
+    <div id="mem-theme-selector">
+      <div class="section-label">Escolha um tema</div>
+      <div class="phases-list" id="mem-theme-list"></div>
+    </div>
+    <!-- memory board -->
+    <div id="mem-board" style="display:none">
+      <div class="mem-info">
+        <span id="mem-pairs-left"></span>
+        <span id="mem-score-display">XP: 0</span>
+      </div>
+      <div class="memory-grid-free" id="memory-grid-free"></div>
+      <button class="btn-back-sm" id="btn-back-mem-board">← Temas</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TRUE / FALSE GAME ════════════════════════════════ -->
+<div class="view" id="view-truefalse">
+  <div class="phases-inner">
+    <div class="phases-header">
+      <button class="btn-back" id="btn-back-truefalse">←</button>
+      <div class="phases-title">✅ Verdadeiro ou Falso</div>
+      <div style="width:40px"></div>
+    </div>
+    <!-- category selector -->
+    <div id="tf-selector">
+      <div class="section-label">Escolha uma categoria</div>
+      <div class="phases-list" id="tf-category-list"></div>
+    </div>
+    <!-- game board -->
+    <div id="tf-board" style="display:none">
+      <div class="tf-progress-row">
+        <span id="tf-counter" class="tf-counter"></span>
+        <span id="tf-score-display" class="tf-score"></span>
+      </div>
+      <div class="progress-bar-bg" style="margin-bottom:16px">
+        <div class="progress-bar-fill" id="tf-progress-bar" style="width:0%"></div>
+      </div>
+      <div class="tf-card" id="tf-card">
+        <div class="tf-category-tag" id="tf-category-tag"></div>
+        <div class="tf-statement"    id="tf-statement"></div>
+        <div class="tf-hint"         id="tf-hint"></div>
+      </div>
+      <div class="tf-feedback" id="tf-feedback" style="display:none"></div>
+      <div class="tf-buttons">
+        <button class="tf-btn tf-true"  id="tf-true">✅ Verdadeiro</button>
+        <button class="tf-btn tf-false" id="tf-false">❌ Falso</button>
+      </div>
+      <button class="btn-next-mission" id="btn-tf-next" style="display:none;margin-top:12px">Próxima →</button>
+      <button class="btn-back-sm" style="margin-top:12px" id="btn-back-tf-board">← Categorias</button>
+    </div>
+    <!-- result -->
+    <div id="tf-result" style="display:none">
+      <div class="lt-result-card">
+        <div class="lt-result-emoji">🎯</div>
+        <div class="lt-result-title">Resultado</div>
+        <div class="lt-result-level" id="tf-result-score"></div>
+        <div class="lt-result-msg"   id="tf-result-msg"></div>
+        <div class="lt-result-bar-bg"><div class="lt-result-bar" id="tf-result-bar" style="width:0%"></div></div>
+        <button class="btn-primary" style="margin-top:20px" id="btn-tf-again">Jogar de novo</button>
+        <button class="btn-back-sm" style="margin-top:10px" id="btn-back-tf-result">← Categorias</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DIALOGUE GAME ═════════════════════════════════════ -->
+<div class="view" id="view-dialogue">
+  <div class="phases-inner">
+    <div class="phases-header">
+      <button class="btn-back" id="btn-back-dialogue">←</button>
+      <div class="phases-title">💬 Simulação de Diálogo</div>
+      <div style="width:40px"></div>
+    </div>
+    <!-- scenario selector -->
+    <div id="dlg-selector">
+      <div class="section-label">Escolha um cenário</div>
+      <div class="phases-list" id="dlg-scenario-list"></div>
+    </div>
+    <!-- dialogue board -->
+    <div id="dlg-board" style="display:none">
+      <div class="dlg-progress-row">
+        <span class="tf-counter" id="dlg-counter"></span>
+        <span class="tf-score"   id="dlg-score"></span>
+      </div>
+      <div class="progress-bar-bg" style="margin-bottom:14px">
+        <div class="progress-bar-fill" id="dlg-progress-bar" style="width:0%"></div>
+      </div>
+      <!-- chat bubbles -->
+      <div class="dlg-chat" id="dlg-chat"></div>
+      <!-- current line to complete -->
+      <div class="dlg-card" id="dlg-card">
+        <div class="dlg-role"      id="dlg-role"></div>
+        <div class="dlg-line-wrap">
+          <div class="dlg-line"    id="dlg-line"></div>
+          <button class="phrase-sound-btn" id="dlg-sound">🔊</button>
+        </div>
+        <div class="dlg-options"   id="dlg-options"></div>
+        <div class="dlg-feedback"  id="dlg-feedback" style="display:none"></div>
+      </div>
+      <button class="btn-back-sm" style="margin-top:12px" id="btn-back-dlg-board">← Cenários</button>
+    </div>
+    <!-- result -->
+    <div id="dlg-result" style="display:none">
+      <div class="lt-result-card">
+        <div class="lt-result-emoji">💬</div>
+        <div class="lt-result-title">Conversa concluída!</div>
+        <div class="lt-result-level" id="dlg-result-score"></div>
+        <div class="lt-result-msg"   id="dlg-result-msg"></div>
+        <button class="btn-primary" style="margin-top:20px" id="btn-dlg-again">Jogar de novo</button>
+        <button class="btn-back-sm" style="margin-top:10px" id="btn-back-dlg-result">← Cenários</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ COMPLETE ══════════════════════════════════════════ -->
+<div class="view" id="view-complete">
+  <div class="complete-inner">
+    <div class="complete-icon">🏆</div>
+    <div class="complete-title">Missão Concluída!</div>
+    <div class="complete-subtitle">Você completou <strong id="complete-mission-name"></strong></div>
+    <div class="complete-result-badge">
+      <div class="complete-result-level" id="complete-result-level"></div>
+      <div class="complete-result-text"  id="complete-result-text"></div>
+      <div class="complete-xp-badge">⚡ <span id="complete-xp">0</span> XP</div>
+    </div>
+    <button class="btn-primary" id="btn-back-complete">Voltar ao Dashboard</button>
+    <button class="btn-next-mission" id="btn-next-mission" style="display:none"></button>
+    <div class="powered-footer" style="margin-top:20px"><a href="https://www.viclanguage.com.br" target="_blank" class="vic-link"><img src="vic_lamp.png" alt="VIC Language" class="vic-logo-sm"><span>VIC Language</span></a></div>
+    <a href="https://www.viclanguage.com.br" target="_blank" class="vic-site-link">viclanguage.com.br →</a>
+  </div>
+</div>
+
+<!-- ══ ADMIN DASHBOARD ════════════════════════════════════ -->
+<div class="view" id="view-admin">
+  <div class="admin-wrapper">
+
+    <div class="admin-header">
+      <div class="admin-logo">
+        <img src="vic_logo.png" alt="VIC"/>
+        <div>
+          <div class="admin-title">Painel do Professor</div>
+          <div class="admin-sub">VIC English — Controle Total</div>
+        </div>
+      </div>
+      <div class="admin-header-btns">
+        <button class="admin-preview-btn" id="btn-admin-preview" title="Ver como aluno Pro">👁️ Preview</button>
+        <button class="btn-logout" id="btn-admin-logout">Sair</button>
+      </div>
+    </div>
+
+    <!-- metrics -->
+    <div class="admin-metrics" id="admin-metrics">
+      <div class="admin-metric-card">
+        <span class="admin-metric-val" id="adm-total-users">—</span>
+        <span class="admin-metric-label">Alunos</span>
+      </div>
+      <div class="admin-metric-card">
+        <span class="admin-metric-val" id="adm-active-today">—</span>
+        <span class="admin-metric-label">Ativos hoje</span>
+      </div>
+      <div class="admin-metric-card">
+        <span class="admin-metric-val" id="adm-avg-xp">—</span>
+        <span class="admin-metric-label">XP médio</span>
+      </div>
+      <div class="admin-metric-card">
+        <span class="admin-metric-val" id="adm-pro-users">—</span>
+        <span class="admin-metric-label">Pro</span>
+      </div>
+    </div>
+
+    <!-- admin tabs -->
+    <div class="admin-main-tabs">
+      <button class="admin-main-tab active" data-panel="users">👥 Alunos</button>
+      <button class="admin-main-tab" data-panel="customize">🎨 Customizar</button>
+      <button class="admin-main-tab" data-panel="feedback">💬 Feedbacks</button>
+    </div>
+
+    <!-- USERS PANEL -->
+    <div id="admin-panel-users">
+    <!-- search + refresh -->
+    <div class="admin-search-row">
+      <input class="admin-search-input" id="admin-search" type="text" placeholder="🔍 Buscar por nome ou email..."/>
+      <button class="admin-refresh-btn" id="btn-admin-refresh">↻</button>
+    </div>
+    <!-- users table -->
+    <div class="admin-table-wrap">
+      <div class="admin-table-header">
+        <span>Aluno</span><span>Nível</span><span>XP</span><span>Streak</span><span>Plano</span><span>Ações</span>
+      </div>
+      <div id="admin-users-list"></div>
+    </div>
+    </div>
+
+    <!-- CUSTOMIZE PANEL -->
+    <div id="admin-panel-customize" style="display:none">
+      <div class="cust-section">
+        <div class="cust-title">🎨 Cores do App</div>
+        <div class="cust-grid">
+          <div class="cust-field">
+            <label>Cor Principal (roxo)</label>
+            <input type="color" id="cust-color-primary" value="#7c3aed"/>
+          </div>
+          <div class="cust-field">
+            <label>Cor de Destaque (dourado)</label>
+            <input type="color" id="cust-color-accent" value="#c9933a"/>
+          </div>
+          <div class="cust-field">
+            <label>Fundo Escuro</label>
+            <input type="color" id="cust-color-bg" value="#1a0d2e"/>
+          </div>
+          <div class="cust-field">
+            <label>Fundo Light Mode</label>
+            <input type="color" id="cust-color-bg-light" value="#f0ead4"/>
+          </div>
+        </div>
+        <button class="btn-primary" id="btn-apply-colors" style="margin-top:12px">✅ Aplicar cores</button>
+        <button class="admin-action-btn" id="btn-reset-colors" style="margin-top:8px">↩️ Restaurar padrão</button>
+      </div>
+
+      <div class="cust-section">
+        <div class="cust-title">📋 Ordem dos Segmentos</div>
+        <div class="cust-note">Arraste para reordenar. Salva automaticamente.</div>
+        <div id="cust-segments-list" class="cust-drag-list"></div>
+      </div>
+
+      <div class="cust-section">
+        <div class="cust-title">🔓 Pro / Free por Segmento</div>
+        <div id="cust-pro-list"></div>
+      </div>
+
+      <div class="cust-section">
+        <div class="cust-title">✏️ Textos do App</div>
+        <div class="cust-field">
+          <label>Slogan principal</label>
+          <input type="text" id="cust-slogan" placeholder="Turn English into your advantage"/>
+        </div>
+        <div class="cust-field">
+          <label>Subtítulo PT</label>
+          <input type="text" id="cust-slogan-pt" placeholder="Faça do inglês sua vantagem"/>
+        </div>
+        <div class="cust-field">
+          <label>Descrição do app</label>
+          <input type="text" id="cust-app-desc" placeholder="Inglês Operacional Profissional"/>
+        </div>
+        <button class="btn-primary" id="btn-save-texts" style="margin-top:12px">💾 Salvar textos</button>
+      </div>
+
+      <div class="cust-section">
+        <div class="cust-title">🤖 Gerar Exercício com IA</div>
+        <div class="cust-field">
+          <label>Segmento / tema</label>
+          <input type="text" id="ai-ex-segment" placeholder="Ex: Hotelaria, Porto, COMEX..."/>
+        </div>
+        <div class="cust-field">
+          <label>Tipo de exercício</label>
+          <select id="ai-ex-type">
+            <option value="multiple_choice">Múltipla escolha</option>
+            <option value="fill_blank">Complete a frase</option>
+            <option value="translate_pt_en">Tradução PT→EN</option>
+            <option value="word_order">Ordene a frase</option>
+          </select>
+        </div>
+        <div class="cust-field">
+          <label>Nível</label>
+          <select id="ai-ex-level">
+            <option value="A1">A1 — Iniciante</option>
+            <option value="A2">A2 — Básico</option>
+            <option value="B1">B1 — Intermediário</option>
+            <option value="B2">B2 — Avançado</option>
+          </select>
+        </div>
+        <div class="cust-field">
+          <label>Contexto / situação (opcional)</label>
+          <input type="text" id="ai-ex-context" placeholder="Ex: agente portuário falando com cliente gringo"/>
+        </div>
+        <button class="btn-primary" id="btn-gen-exercise">🤖 Gerar com IA</button>
+        <div class="ai-ex-result" id="ai-ex-result" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- FEEDBACK PANEL -->
+    <div id="admin-panel-feedback" style="display:none">
+      <div class="admin-refresh-btn" id="btn-load-feedbacks" style="margin-bottom:12px;width:100%;text-align:center;padding:10px;">↻ Carregar feedbacks</div>
+      <div id="admin-feedbacks-list"></div>
+    </div>
+
+    <!-- user detail modal -->
+    <div class="admin-modal" id="admin-modal" style="display:none">
+      <div class="admin-modal-card">
+        <button class="admin-modal-close" id="btn-modal-close">✕</button>
+        <div class="admin-modal-header">
+          <div class="admin-modal-avatar" id="modal-avatar"></div>
+          <div>
+            <div class="admin-modal-name"  id="modal-name"></div>
+            <div class="admin-modal-email" id="modal-email"></div>
+            <div class="admin-modal-uid"   id="modal-uid"></div>
+          </div>
+        </div>
+        <div class="admin-modal-stats" id="modal-stats"></div>
+
+        <!-- tabs -->
+        <div class="modal-tabs">
+          <button class="modal-tab active" id="tab-info"   onclick="switchModalTab('info')">📊 Info</button>
+          <button class="modal-tab"        id="tab-access" onclick="switchModalTab('access')">🔑 Acesso</button>
+          <button class="modal-tab"        id="tab-edit"   onclick="switchModalTab('edit')">✏️ Editar</button>
+        </div>
+
+        <!-- tab: info -->
+        <div id="modal-tab-info">
+          <div class="admin-modal-progress" id="modal-progress"></div>
+          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+            <button class="btn-primary" id="btn-gen-pdf" style="flex:1">📄 Relatório PDF</button>
+            <button class="admin-action-btn btn-activate-pro" id="btn-activate-pro">⭐ Ativar Pro</button>
+            <button class="admin-action-btn btn-deactivate-pro" id="btn-deactivate-pro">↩️ Remover Pro</button>
+          </div>
+        </div>
+
+        <!-- tab: access control -->
+        <div id="modal-tab-access" style="display:none">
+          <div class="access-note">Ligue/desligue qualquer fase para este aluno</div>
+          <div id="modal-access-list"></div>
+        </div>
+
+        <!-- tab: edit data -->
+        <div id="modal-tab-edit" style="display:none">
+          <div class="admin-edit-section">
+            <div class="admin-edit-title">✏️ Editar dados do aluno</div>
+            <div class="admin-edit-field">
+              <label>Nome</label>
+              <input type="text" id="edit-name" placeholder="Nome do aluno"/>
+            </div>
+            <div class="admin-edit-field">
+              <label>XP total</label>
+              <input type="number" id="edit-xp" placeholder="0"/>
+            </div>
+            <div class="admin-edit-field">
+              <label>Streak (dias)</label>
+              <input type="number" id="edit-streak" placeholder="0"/>
+            </div>
+            <div class="admin-edit-field">
+              <label>Nível detectado</label>
+              <select id="edit-level">
+                <option value="a1">A1 — Iniciante</option>
+                <option value="a2">A2 — Básico</option>
+                <option value="b1">B1 — Intermediário</option>
+                <option value="b2">B2 — Avançado</option>
+              </select>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <button class="btn-primary" id="btn-save-edit-admin" style="flex:1">💾 Salvar</button>
+              <button class="admin-action-btn admin-btn-danger" id="btn-reset-progress">🔄 Resetar progresso</button>
+            </div>
+            <button class="admin-action-btn admin-btn-danger" id="btn-delete-user" style="width:100%;margin-top:8px">
+              🗑️ Excluir conta
+            </button>
+            <div class="admin-edit-msg" id="admin-edit-msg"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ UPGRADE / PRO ══════════════════════════════════════ -->
+<div class="view" id="view-upgrade">
+  <div class="upgrade-wrapper">
+    <button class="btn-back upgrade-back" id="btn-back-upgrade">←</button>
+
+    <div class="upgrade-logo">
+      <img src="vic_logo.png" alt="VIC English"/>
+    </div>
+
+    <div class="upgrade-badge">⭐ VIC English Pro</div>
+    <div class="upgrade-title">Desbloqueie tudo por</div>
+    <div class="upgrade-price">R$ 15<span>/mês</span></div>
+
+    <div class="upgrade-benefits">
+      <div class="upgrade-benefit">✅ Todos os segmentos desbloqueados</div>
+      <div class="upgrade-benefit">✅ Todas as fases (1 → 5)</div>
+      <div class="upgrade-benefit">✅ Marítimo completo + COMEX</div>
+      <div class="upgrade-benefit">✅ Grammar Core completo</div>
+      <div class="upgrade-benefit">✅ Jogos ilimitados</div>
+      <div class="upgrade-benefit">✅ Progresso salvo na nuvem</div>
+    </div>
+
+    <a class="btn-pay" id="btn-pay-mp" href="#" target="_blank">
+      💳 Assinar agora — R$ 15/mês
+    </a>
+
+    <div class="upgrade-note">
+      Após o pagamento, envie o comprovante para<br>
+      <strong>contato@viclanguage.com.br</strong><br>
+      e seu acesso Pro será ativado em até 1 hora.
+    </div>
+
+    <a href="https://www.viclanguage.com.br" target="_blank" class="vic-site-link">
+      viclanguage.com.br →
+    </a>
+  </div>
+</div>
+
+<!-- ══ WRITING & TRANSLATION ══════════════════════════════ -->
+<div class="view" id="view-writing">
+  <div class="phases-inner">
+    <div class="phases-header">
+      <button class="btn-back" id="btn-back-writing">←</button>
+      <div class="phases-title">✍️ Writing & Translation</div>
+      <div style="width:40px"></div>
+    </div>
+
+    <!-- topic selector -->
+    <div id="writing-selector">
+      <div class="section-label">Escolha um exercício</div>
+      <div class="phases-list" id="writing-topic-list"></div>
+    </div>
+
+    <!-- writing exercise -->
+    <div id="writing-exercise" style="display:none">
+      <div class="writing-card">
+        <div class="writing-level-badge" id="writing-level-badge"></div>
+        <div class="writing-title" id="writing-title"></div>
+        <div class="writing-prompt" id="writing-prompt"></div>
+
+        <!-- Tips — always visible -->
+        <div class="writing-tips-box" id="writing-tips-box">
+          <div class="writing-tips-title">💡 Dicas para construir seu texto</div>
+          <div id="writing-tips"></div>
+        </div>
+
+        <!-- Example — always open -->
+        <div class="writing-example-open">
+          <div class="writing-example-label">📝 Exemplo completo</div>
+          <div class="writing-example" id="writing-example"></div>
+        </div>
+      </div>
+
+      <!-- PT→EN Auto-translate -->
+      <div class="writing-translate-box">
+        <div class="writing-translate-label">🇧🇷 Escreva em português para traduzir automaticamente</div>
+        <textarea class="writing-textarea writing-textarea-pt" id="writing-textarea-pt"
+          placeholder="Digite em português aqui... a tradução aparece abaixo automaticamente"></textarea>
+        <div class="writing-auto-translate" id="writing-auto-translate">
+          <div class="wat-label">🔄 Tradução automática</div>
+          <div class="wat-text" id="wat-text">—</div>
+          <button class="wat-use-btn" id="btn-use-translation">↓ Usar esta tradução</button>
+        </div>
+      </div>
+
+      <!-- EN writing area -->
+      <div class="writing-en-label">✍️ Escreva em inglês</div>
+      <textarea class="writing-textarea" id="writing-textarea"
+        placeholder="Escreva seu texto em inglês aqui..."></textarea>
+
+      <!-- Speak button -->
+      <div class="writing-speak-row">
+        <span class="writing-charcount" id="writing-charcount">0 palavras</span>
+        <button class="writing-speak-btn" id="btn-speak-writing" title="Ouvir seu texto">🔊 Ouvir</button>
+      </div>
+
+      <!-- Corrected version inline -->
+      <div class="writing-correction-inline" id="writing-correction-inline" style="display:none">
+        <div class="wci-label">✅ Versão corrigida:</div>
+        <div class="wci-text" id="wci-text"></div>
+      </div>
+
+      <div class="writing-actions">
+        <button class="btn-primary writing-check-btn" id="btn-check-writing">
+          🤖 Corrigir com IA
+        </button>
+      </div>
+
+      <!-- Feedback area -->
+      <div class="writing-feedback" id="writing-feedback" style="display:none">
+        <div class="wf-header">
+          <span class="wf-score" id="wf-score"></span>
+          <span class="wf-title">Análise da IA</span>
+        </div>
+        <div class="wf-section">
+          <div class="wf-label">✅ O que ficou bom</div>
+          <div class="wf-text" id="wf-good"></div>
+        </div>
+        <div class="wf-section">
+          <div class="wf-label">⚠️ Erros encontrados</div>
+          <div id="wf-errors" style="display:none"></div>
+        </div>
+        <div class="wf-section">
+          <div class="wf-label">✍️ Versão corrigida</div>
+          <div class="wf-corrected" id="wf-corrected"></div>
+        </div>
+      </div>
+
+      <div class="writing-nav">
+        <button class="btn-back-sm" id="btn-back-writing-ex">← Exercícios</button>
+        <button class="btn-next-mission" id="btn-next-writing" style="display:none">Próximo →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PROFILE & SETTINGS ════════════════════════════════ -->
+<div class="view" id="view-profile">
+  <div class="profile-wrapper">
+
+    <div class="profile-header">
+      <button class="btn-back" id="btn-back-profile">←</button>
+      <div class="profile-header-title">Meu Perfil</div>
+      <div style="width:40px"></div>
+    </div>
+
+    <!-- Avatar + name -->
+    <div class="profile-hero">
+      <div class="profile-avatar-wrap">
+        <div class="profile-avatar" id="profile-avatar"></div>
+        <button class="profile-avatar-edit" id="btn-edit-avatar" title="Mudar avatar">✏️</button>
+      </div>
+      <div class="profile-hero-name"  id="profile-hero-name"></div>
+      <div class="profile-hero-level" id="profile-hero-level"></div>
+    </div>
+
+    <!-- Avatar picker modal -->
+    <div class="avatar-picker-modal" id="avatar-picker-modal" style="display:none">
+      <div class="avatar-picker-card">
+        <div class="avatar-picker-title">Escolha seu avatar</div>
+        <div class="avatar-emoji-grid" id="avatar-emoji-grid"></div>
+        <div class="avatar-picker-divider">ou escolha uma foto</div>
+        <label class="avatar-file-label">
+          📁 Escolher da galeria
+          <input type="file" id="avatar-file-input" accept="image/*" style="display:none"/>
+        </label>
+        <button class="btn-back-sm" style="margin-top:10px" id="btn-close-avatar-picker">Cancelar</button>
+      </div>
+    </div>
+
+    <!-- Stats row -->
+    <div class="profile-stats-row">
+      <div class="profile-stat"><span id="ps-xp">0</span><small>XP Total</small></div>
+      <div class="profile-stat"><span id="ps-streak">0</span><small>Streak 🔥</small></div>
+      <div class="profile-stat"><span id="ps-missions">0</span><small>Missões</small></div>
+    </div>
+
+    <!-- Commitment — right after XP -->
+    <div class="profile-section">
+      <div class="profile-section-title">🎯 Comprometimento</div>
+      <div class="commitment-card" id="commitment-card"></div>
+    </div>
+
+    <!-- Activity Calendar -->
+    <div class="profile-section">
+      <div class="profile-section-title">📅 Calendário de Atividade</div>
+      <div class="activity-calendar" id="activity-calendar"></div>
+      <div class="activity-legend">
+        <span class="al-box al-0"></span><span>Sem atividade</span>
+        <span class="al-box al-1"></span><span>Baixo</span>
+        <span class="al-box al-2"></span><span>Médio</span>
+        <span class="al-box al-3"></span><span>Alto</span>
+      </div>
+    </div>
+
+    <!-- Weekly + Monthly progress chart -->
+    <div class="profile-section">
+      <div class="profile-section-title">📊 Progresso de XP</div>
+      <div class="chart-tabs">
+        <button class="chart-tab active" data-period="week">7 dias</button>
+        <button class="chart-tab" data-period="month">Este mês</button>
+      </div>
+      <div class="xp-chart" id="xp-chart"></div>
+    </div>
+
+    <!-- Skills analysis -->
+    <div class="profile-section">
+      <div class="profile-section-title">🧠 Habilidades</div>
+      <div id="profile-skills"></div>
+    </div>
+
+    <!-- Personal goal -->
+    <div class="profile-section" id="profile-goal-section" style="display:none">
+      <div class="profile-section-title">💬 Seu objetivo pessoal</div>
+      <div class="profile-goal-text" id="profile-goal-text"></div>
+    </div>
+
+    <!-- Account settings -->
+    <div class="profile-section">
+      <div class="profile-section-title">👤 Conta</div>
+      <div class="settings-item" id="btn-edit-name">
+        <span>✏️ Mudar nome</span><span class="settings-arrow">→</span>
+      </div>
+      <div class="settings-item" id="btn-edit-email">
+        <span>📧 Mudar email</span><span class="settings-arrow">→</span>
+      </div>
+      <div class="settings-item" id="btn-edit-password">
+        <span>🔒 Mudar senha</span><span class="settings-arrow">→</span>
+      </div>
+    </div>
+
+    <!-- Preferences -->
+    <div class="profile-section">
+      <div class="profile-section-title">⚙️ Preferências</div>
+      <div class="settings-item">
+        <span>🔊 Sons</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-sounds" checked/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="settings-item">
+        <span>🌙 Modo Escuro</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-darkmode" checked/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="settings-item">
+        <span>🔤 Tamanho da letra</span>
+        <div class="font-size-buttons">
+          <button class="font-size-btn" data-size="small">A</button>
+          <button class="font-size-btn active" data-size="medium">AA</button>
+          <button class="font-size-btn" data-size="large">AAA</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Share & Contact -->
+    <div class="profile-section">
+      <div class="profile-section-title">🌐 Compartilhar & Contato</div>
+      <div class="settings-item" id="btn-share-app">
+        <span>📤 Compartilhar o app</span><span class="settings-arrow">→</span>
+      </div>
+      <!-- Share panel -->
+      <div class="share-panel" id="share-panel" style="display:none">
+        <a class="share-btn share-whatsapp" id="share-whatsapp" href="#" target="_blank">
+          <span>📱</span> WhatsApp
+        </a>
+        <a class="share-btn share-facebook" id="share-facebook" href="#" target="_blank">
+          <span>👥</span> Facebook
+        </a>
+        <a class="share-btn share-instagram" id="share-instagram" href="#" target="_blank">
+          <span>📸</span> Instagram
+        </a>
+        <button class="share-btn share-copy" id="share-copy">
+          <span>🔗</span> Copiar link
+        </button>
+      </div>
+      <a class="settings-item settings-link" href="https://www.viclanguage.com.br" target="_blank">
+        <span>🏫 VIC Language — site oficial</span><span class="settings-arrow">↗</span>
+      </a>
+    </div>
+
+    <!-- Edit modal -->
+    <div class="profile-edit-modal" id="profile-edit-modal" style="display:none">
+      <div class="profile-edit-card">
+        <div class="profile-edit-title" id="profile-edit-title"></div>
+        <input class="profile-edit-input" id="profile-edit-input" type="text"/>
+        <div class="profile-edit-actions">
+          <button class="btn-primary" id="btn-save-edit">Salvar</button>
+          <button class="btn-back-sm" id="btn-cancel-edit">Cancelar</button>
+        </div>
+        <div class="profile-edit-msg" id="profile-edit-msg"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="sounds.js"></script>
+<script src="data.js"></script>
+<script type="module" src="app.js"></script>
+<script>
+  if("serviceWorker" in navigator){
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/sw.js")
+        .then(() => console.log("VIC English PWA ready ✅"))
+        .catch(e => console.log("SW error:", e));
+    });
+  }
+</script>
+</body>
+</html>
