@@ -5738,3 +5738,38 @@ body.light-mode .notif-freq-select { background: #1e0a50 !important; color: #fff
 .greeting-time-en { font-size: 15px !important; font-weight: 700 !important; }
 .greeting-time-pt { font-size: 12px !important; font-weight: 400 !important; }
 .greeting-level { font-size: 13px !important; }
+
+/* ══ EXERCISE NAV ROW — always at bottom ═══════════════ */
+.exercise-nav-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  align-items: center;
+}
+.exercise-nav-row .btn-prev-exercise { flex-shrink: 0; }
+.exercise-nav-row .btn-next-exercise-main { flex: 1; }
+
+/* Main next button same style as btn-next-exercise */
+.btn-next-exercise-main {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid var(--rim2);
+  border-radius: 999px;
+  color: rgba(255,255,255,0.3) !important;
+  font-family: var(--font); font-size: 15px; font-weight: 800;
+  cursor: not-allowed;
+  transition: all 0.3s ease;
+  opacity: 0.5;
+  text-align: center;
+}
+.btn-next-exercise-main.visible {
+  background: linear-gradient(135deg,#c9933a,#e4b45c) !important;
+  border: none !important;
+  color: #1a0d2e !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  box-shadow: 0 4px 20px rgba(201,147,58,0.4) !important;
+  animation: pulse-gold 1.5s ease infinite !important;
+}

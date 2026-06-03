@@ -1346,8 +1346,8 @@ async function autoAdvance(score){
 }
 
 function updateNavButtons(nextUnlocked, score){
-  // NEXT — all buttons with class btn-next-exercise
-  document.querySelectorAll(".btn-next-exercise").forEach(btn=>{
+  // NEXT — all next buttons including main bottom one
+  document.querySelectorAll(".btn-next-exercise, .btn-next-exercise-main, #btn-next-mc").forEach(btn=>{
     btn.style.display="block";
     if(nextUnlocked){
       btn.classList.add("visible");
