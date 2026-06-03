@@ -290,8 +290,26 @@ async function handleRegister(){
   if(!name||!email||!pw) return showAuthError("Preencha todos os campos.");
   if(pw.length<6) return showAuthError("Senha mínimo 6 caracteres.");
   btn.disabled=true; btn.textContent="Criando...";
-  try{await registerUser(email,pw,name);}
-  catch(e){showAuthError(translateErr(e.code));btn.disabled=false;btn.textContent="Criar Conta";}
+  showAuthLoading("Criando sua conta... 🚀");
+  // Safety timeout — if auth doesn't fire in 10s, reset
+  const timeout=setTimeout(()=>{
+    hideAuthLoading();
+    btn.disabled=false; btn.textContent="Criar Conta";
+    showAuthError("Algo deu errado. Tente novamente.");
+  }, 10000);
+  try{
+    await registerUser(email,pw,name);
+    localStorage.setItem("vic_last_email",email);
+    clearTimeout(timeout);
+    // _handleAuth will be called automatically by onAuthChange
+  }
+  catch(e){
+    clearTimeout(timeout);
+    hideAuthLoading();
+    showAuthError(translateErr(e.code));
+    btn.disabled=false;
+    btn.textContent="Criar Conta";
+  }
 }
 const LOADING_QUOTES=[
   {en:"Your next job opportunity is waiting for you.",pt:"Sua próxima oportunidade de emprego está te aguardando."},
@@ -584,11 +602,15 @@ async function loadDashboard(user){
     if(!userData){
       console.log("Creating new user doc...");
       const name=user.displayName||user.email?.split("@")[0]||"Aluno";
-      await saveProgress(user.uid,{
-        name, email:user.email||"", xp:0, level:1, streak:0,
-        completedMissions:[], plan:"free",
-      });
-      userData=await getUserData(user.uid);
+      try{
+        await saveProgress(user.uid,{
+          name, email:user.email||"", xp:0, level:1, streak:0,
+          completedMissions:[], plan:"free",
+        });
+        userData=await getUserData(user.uid);
+      }catch(fsErr){
+        console.warn("Firestore write failed, using local data:", fsErr.message);
+      }
       console.log("userData after create:", userData?"found":"still null");
     }
     if(!userData){
@@ -3495,8 +3517,20 @@ async function _handleAuth(user){
     }
   }catch(e){
     console.error("Auth error:",e.message, e);
-    hideAuthLoading();
-    showView("view-auth");
+    // Don't show auth page on error if user exists — try again once
+    if(user){
+      console.log("Retrying loadDashboard...");
+      try{ await loadDashboard(user); }
+      catch(e2){
+        console.error("Retry failed:", e2.message);
+        hideAuthLoading();
+        showView("view-auth");
+        showAuthError("Erro ao carregar. Tente novamente.");
+      }
+    } else {
+      hideAuthLoading();
+      showView("view-auth");
+    }
   }
 }
 

@@ -5672,3 +5672,14 @@ body.light-mode .notif-freq-select { background: #1e0a50 !important; color: #fff
 .streak-legend { font-size: 11px; color: rgba(255,255,255,0.5) !important; margin-bottom: 8px; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
 .streak-total { text-align: center; font-size: 14px; color: rgba(255,255,255,0.7) !important; }
 .streak-total strong { color: #f0d070 !important; font-size: 16px; }
+
+/* ══ LOGIN LOGO — logo_full.png (has own bg) ═══════════ */
+.auth-logo-img {
+  width: 90vw !important;
+  max-width: 420px !important;
+  height: auto !important;
+  border-radius: 16px !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4) !important;
+}

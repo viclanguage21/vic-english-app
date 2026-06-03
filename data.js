@@ -3029,3 +3029,471 @@ VICTOR_DATA.dialogueScenarios.push(
     ]
   }
 );
+
+// ── CONCAIS / CRUZEIROS — Vocabulário do Terminal de Passageiros de Santos
+VICTOR_DATA.flashcardDecks.push({
+  id:"concais_vocab", name:"🛳️ CONCAIS — Terminal de Passageiros",
+  cards:[
+    {en:"embarkation",pronPT:"em-bar-KÉI-shon",pt:"embarque"},
+    {en:"disembarkation",pronPT:"dis-em-bar-KÉI-shon",pt:"desembarque"},
+    {en:"gangway",pronPT:"GÆNG-uei",pt:"passarela / rampa de embarque"},
+    {en:"terminal",pronPT:"TÉR-mi-nal",pt:"terminal"},
+    {en:"passenger",pronPT:"PÆS-in-jer",pt:"passageiro"},
+    {en:"cruise card",pronPT:"CRÚZ card",pt:"cartão de bordo"},
+    {en:"luggage",pronPT:"LÁG-ij",pt:"bagagem"},
+    {en:"suitcase",pronPT:"SÚT-keis",pt:"mala"},
+    {en:"backpack",pronPT:"BÆK-pæk",pt:"mochila"},
+    {en:"carry-on",pronPT:"KÆR-i on",pt:"bagagem de mão"},
+    {en:"duffle bag",pronPT:"DÁF-el bæg",pt:"bolsa de viagem"},
+    {en:"checked luggage",pronPT:"CHEKT LÁG-ij",pt:"bagagem despachada"},
+    {en:"baggage claim",pronPT:"BÆG-ij kleim",pt:"retirada de bagagem"},
+    {en:"baggage drop",pronPT:"BÆG-ij drop",pt:"despacho de mala"},
+    {en:"security check",pronPT:"si-KIUR-i-ti chek",pt:"verificação de segurança"},
+    {en:"X-ray screening",pronPT:"EKS-rei SKRÍ-ning",pt:"triagem por raio-X"},
+    {en:"boarding pass",pronPT:"BÓR-ding pæs",pt:"cartão de embarque"},
+    {en:"shuttle",pronPT:"SHÁTT-el",pt:"ônibus de transferência / shuttle"},
+    {en:"porter",pronPT:"PÓR-ter",pt:"carregador de bagagem"},
+    {en:"trolley",pronPT:"TRÓH-li",pt:"carrinho de bagagem"},
+    {en:"dock",pronPT:"dok",pt:"cais / doca"},
+    {en:"berth",pronPT:"berth",pt:"atracadouro / berço"},
+    {en:"gangplank",pronPT:"GÆNG-plænk",pt:"prancha de embarque"},
+    {en:"deck",pronPT:"dek",pt:"convés / deck"},
+    {en:"cabin",pronPT:"KÆB-in",pt:"cabine"},
+    {en:"life jacket",pronPT:"laif DJÆ-ket",pt:"colete salva-vidas"},
+    {en:"muster drill",pronPT:"MÁS-ter dril",pt:"simulacro de emergência"},
+    {en:"port of call",pronPT:"port ov kol",pt:"escala / porto de escala"},
+    {en:"shore excursion",pronPT:"shor eks-KÉR-shon",pt:"excursão em terra"},
+    {en:"all-inclusive",pronPT:"ol in-KLÚ-siv",pt:"tudo incluído"},
+  ]
+});
+
+// ══════════════════════════════════════════════════════════
+// CONTEÚDO ENRIQUECIDO — BASEADO EM DADOS REAIS
+// ══════════════════════════════════════════════════════════
+
+// ── MARÍTIMO — Flashcards enriquecidos ────────────────────
+VICTOR_DATA.flashcardDecks.push({
+  id:"maritimo_doc", name:"⚓ Documentos & Operações Portuárias",
+  cards:[
+    {en:"Bill of Lading",pronPT:"bil ov LÉI-ding",pt:"Conhecimento de embarque (B/L)"},
+    {en:"cargo manifest",pronPT:"KÁR-go MÆN-i-fest",pt:"manifesto de carga"},
+    {en:"berth",pronPT:"berth",pt:"local de atracagem / berço"},
+    {en:"demurrage",pronPT:"di-MÁ-rij",pt:"multa por excesso de tempo no porto"},
+    {en:"laytime",pronPT:"LÉI-taim",pt:"tempo de operação permitido"},
+    {en:"stevedore",pronPT:"STÍI-vi-dor",pt:"carregador / estivador de navios"},
+    {en:"gantry crane",pronPT:"GÆN-tri krein",pt:"guindaste de pórtico"},
+    {en:"TEU",pronPT:"TÍI-í-iú",pt:"contêiner de 20 pés (unidade padrão)"},
+    {en:"tally sheet",pronPT:"TÆL-i shiit",pt:"relatório de contagem de carga"},
+    {en:"discharge",pronPT:"dis-CHÁRJ",pt:"descarregar"},
+    {en:"mooring",pronPT:"MÚR-ing",pt:"amarração do navio"},
+    {en:"shifting",pronPT:"SHÍF-ting",pt:"movimentação interna de carga"},
+    {en:"hatch",pronPT:"hætch",pt:"boca de carga do navio"},
+    {en:"dock receipt",pronPT:"dok ri-SÍIT",pt:"recibo de doca"},
+    {en:"vessel",pronPT:"VÉS-el",pt:"embarcação / navio (termo técnico)"},
+    {en:"shipping order",pronPT:"SHÍP-ing ÓR-der",pt:"ordem de embarque"},
+    {en:"customs declaration",pronPT:"KÁS-tomz dek-la-RÉI-shon",pt:"declaração aduaneira"},
+    {en:"damage report",pronPT:"DÆM-ij ri-PORT",pt:"relatório de avarias"},
+    {en:"port authority",pronPT:"port o-THÓ-ri-ti",pt:"autoridade portuária"},
+    {en:"anchorage",pronPT:"ÆNK-or-ij",pt:"fundeadouro / área de ancoragem"},
+  ]
+});
+
+// ── MARÍTIMO — V/F enriquecido ────────────────────────────
+if(!VICTOR_DATA.trueFalseQuestions) VICTOR_DATA.trueFalseQuestions=[];
+VICTOR_DATA.trueFalseQuestions.push(...[
+  {category:"Marítimo",statement:"A Bill of Lading is the official cargo document for sea shipments.",pt:"O Bill of Lading é o documento oficial de carga para embarques marítimos.",answer:true},
+  {category:"Marítimo",statement:"Demurrage means the ship arrived early at the port.",pt:"Demurrage significa que o navio chegou cedo ao porto.",answer:false},
+  {category:"Marítimo",statement:"A stevedore is responsible for loading and unloading cargo from ships.",pt:"O estivador é responsável por carregar e descarregar cargas dos navios.",answer:true},
+  {category:"Marítimo",statement:"TEU stands for Twenty-Foot Equivalent Unit — a standard container size.",pt:"TEU significa Twenty-Foot Equivalent Unit — tamanho padrão de contêiner.",answer:true},
+  {category:"Marítimo",statement:"'Discharge' in a port context means to load cargo onto the ship.",pt:"'Discharge' em contexto portuário significa carregar carga no navio.",answer:false},
+  {category:"Marítimo",statement:"The cargo manifest lists all goods on board a vessel.",pt:"O manifesto de carga lista todas as mercadorias a bordo de uma embarcação.",answer:true},
+  {category:"Marítimo",statement:"A berth is the area where a ship parks at the port.",pt:"Um berth é o local onde o navio atraca no porto.",answer:true},
+  {category:"Marítimo",statement:"'Vessel' and 'ship' mean exactly the same thing in all contexts.",pt:"'Vessel' e 'ship' significam exatamente a mesma coisa em todos os contextos.",answer:false},
+]);
+
+// ── COMEX — Flashcards enriquecidos ───────────────────────
+VICTOR_DATA.flashcardDecks.push({
+  id:"comex_incoterms", name:"🌍 Incoterms & Documentos COMEX",
+  cards:[
+    {en:"FOB — Free on Board",pronPT:"éf-ó-bíi",pt:"Livre a bordo — vendedor entrega no porto de origem"},
+    {en:"CIF — Cost Insurance Freight",pronPT:"síi-ái-éf",pt:"Custo, Seguro e Frete — vendedor paga até destino"},
+    {en:"EXW — Ex Works",pronPT:"íi-eks-dáb-liú",pt:"Na fábrica — comprador retira na origem"},
+    {en:"DDP — Delivered Duty Paid",pronPT:"díi-díi-píi",pt:"Entregue com impostos pagos — máxima responsabilidade do vendedor"},
+    {en:"customs clearance",pronPT:"KÁS-tomz KLÍER-ens",pt:"desembaraço aduaneiro"},
+    {en:"letter of credit",pronPT:"LÉT-er ov KRÉD-it",pt:"carta de crédito (L/C)"},
+    {en:"commercial invoice",pronPT:"ko-MÉR-shal ÍN-vois",pt:"fatura comercial"},
+    {en:"packing list",pronPT:"PÆK-ing list",pt:"romaneio de carga"},
+    {en:"certificate of origin",pronPT:"ser-TÍF-i-ket ov ÓR-i-jin",pt:"certificado de origem"},
+    {en:"freight forwarder",pronPT:"freit FÓR-wor-der",pt:"despachante / agente de carga"},
+    {en:"bonded warehouse",pronPT:"BÓN-ded WÉR-haus",pt:"entreposto aduaneiro"},
+    {en:"cabotage",pronPT:"KÆB-o-tij",pt:"cabotagem — transporte entre portos do mesmo país"},
+    {en:"import duty",pronPT:"ÍM-port DÚ-ti",pt:"imposto de importação"},
+    {en:"pro forma invoice",pronPT:"pró FÓR-ma ÍN-vois",pt:"fatura pro forma"},
+    {en:"sight draft",pronPT:"sait dræft",pt:"saque à vista"},
+  ]
+});
+
+VICTOR_DATA.trueFalseQuestions.push(...[
+  {category:"COMEX",statement:"FOB means the seller is responsible for all costs until the goods arrive at the buyer's country.",pt:"FOB significa que o vendedor é responsável por todos os custos até o país do comprador.",answer:false},
+  {category:"COMEX",statement:"A commercial invoice is required for all international shipments.",pt:"Uma fatura comercial é exigida para todos os embarques internacionais.",answer:true},
+  {category:"COMEX",statement:"Customs clearance means the goods have passed through all import/export controls.",pt:"Customs clearance significa que as mercadorias passaram por todos os controles de importação/exportação.",answer:true},
+  {category:"COMEX",statement:"CIF includes the cost of insurance and freight to the destination port.",pt:"CIF inclui o custo de seguro e frete até o porto de destino.",answer:true},
+  {category:"COMEX",statement:"A Letter of Credit is a document that guarantees payment to the seller.",pt:"Uma carta de crédito é um documento que garante o pagamento ao vendedor.",answer:true},
+  {category:"COMEX",statement:"'Freight' and 'weight' mean the same thing in COMEX.",pt:"'Freight' e 'weight' significam a mesma coisa no COMEX.",answer:false},
+]);
+
+// ── HOTELARIA — Flashcards enriquecidos ───────────────────
+VICTOR_DATA.flashcardDecks.push({
+  id:"hotelaria_vocab2", name:"🏨 Hotelaria — Vocabulário Completo",
+  cards:[
+    {en:"no-show",pronPT:"nó-shóu",pt:"hóspede que não compareceu"},
+    {en:"overbooking",pronPT:"ó-ver-BÚK-ing",pt:"reserva acima da capacidade"},
+    {en:"amenities",pronPT:"a-MÍI-ni-tiz",pt:"itens de cortesia do quarto"},
+    {en:"concierge",pronPT:"kon-SIÉRJ",pt:"responsável por informações e serviços ao hóspede"},
+    {en:"wake-up call",pronPT:"wéik-ap kol",pt:"chamada de despertar"},
+    {en:"voucher",pronPT:"VÁU-cher",pt:"comprovante de reserva"},
+    {en:"walk-in guest",pronPT:"wók-in gest",pt:"hóspede sem reserva prévia"},
+    {en:"room service",pronPT:"rúum SÉR-vis",pt:"serviço de quarto"},
+    {en:"double room",pronPT:"DÁB-el rúum",pt:"quarto de casal"},
+    {en:"twin room",pronPT:"twin rúum",pt:"quarto com duas camas de solteiro"},
+    {en:"suite",pronPT:"suíit",pt:"suíte"},
+    {en:"late check-out",pronPT:"leit chék-aut",pt:"check-out tardio"},
+    {en:"early check-in",pronPT:"ér-li chék-in",pt:"check-in antecipado"},
+    {en:"complimentary",pronPT:"kom-pli-MÉN-ta-ri",pt:"gratuito / cortesia"},
+    {en:"key card",pronPT:"kíi kard",pt:"cartão-chave do quarto"},
+    {en:"occupancy rate",pronPT:"ÓK-iú-pan-si reit",pt:"taxa de ocupação"},
+    {en:"front desk",pronPT:"frant desk",pt:"recepção do hotel"},
+    {en:"housekeeping",pronPT:"HÁUS-kíi-ping",pt:"serviço de limpeza / camareira"},
+    {en:"bellboy / bellhop",pronPT:"BÉL-boi",pt:"carregador de malas"},
+    {en:"minibar",pronPT:"MÍN-i-bar",pt:"frigobar"},
+  ]
+});
+
+VICTOR_DATA.trueFalseQuestions.push(...[
+  {category:"Hotelaria",statement:"'No-show' means a guest arrived late at the hotel.",pt:"'No-show' significa que o hóspede chegou atrasado ao hotel.",answer:false},
+  {category:"Hotelaria",statement:"Amenities are complimentary items provided in hotel rooms.",pt:"Amenities são itens de cortesia fornecidos nos quartos de hotel.",answer:true},
+  {category:"Hotelaria",statement:"A twin room has two queen-sized beds.",pt:"Um twin room tem duas camas queen.",answer:false},
+  {category:"Hotelaria",statement:"Housekeeping is responsible for cleaning hotel rooms.",pt:"O housekeeping é responsável pela limpeza dos quartos do hotel.",answer:true},
+  {category:"Hotelaria",statement:"'Complimentary' means there is an extra charge for the service.",pt:"'Complimentary' significa que há uma cobrança extra pelo serviço.",answer:false},
+  {category:"Hotelaria",statement:"Overbooking occurs when a hotel sells more rooms than it has available.",pt:"Overbooking ocorre quando o hotel vende mais quartos do que possui disponível.",answer:true},
+]);
+
+// ── RESTAURANTES — V/F enriquecido ────────────────────────
+VICTOR_DATA.trueFalseQuestions.push(...[
+  {category:"Restaurantes",statement:"'Party of four' means a table for four people.",pt:"'Party of four' significa uma mesa para quatro pessoas.",answer:true},
+  {category:"Restaurantes",statement:"'Sparkling water' is the same as still water.",pt:"'Sparkling water' é o mesmo que água sem gás.",answer:false},
+  {category:"Restaurantes",statement:"'To go' means the customer wants to eat at the restaurant.",pt:"'To go' significa que o cliente quer comer no restaurante.",answer:false},
+  {category:"Restaurantes",statement:"'Specials' refers to the dishes available only that day.",pt:"'Specials' se refere aos pratos disponíveis apenas naquele dia.",answer:true},
+  {category:"Restaurantes",statement:"In the USA, asking for the 'bill' and the 'check' are both acceptable.",pt:"Nos EUA, pedir o 'bill' e o 'check' são ambos aceitáveis.",answer:true},
+  {category:"Restaurantes",statement:"'Appetizer' is another word for the main course.",pt:"'Appetizer' é outra palavra para o prato principal.",answer:false},
+  {category:"Restaurantes",statement:"'I'm allergic to nuts' is an important phrase for a waiter to understand.",pt:"'Sou alérgico a castanhas' é uma frase importante para um garçom entender.",answer:true},
+]);
+
+// ── AEROPORTO — Flashcards & V/F enriquecidos ─────────────
+VICTOR_DATA.flashcardDecks.push({
+  id:"aeroporto_vocab2", name:"✈️ Aeroporto — Vocabulário Completo",
+  cards:[
+    {en:"departures",pronPT:"di-PÁR-cherz",pt:"partidas"},
+    {en:"arrivals",pronPT:"a-RÁI-valz",pt:"chegadas"},
+    {en:"boarding pass",pronPT:"BÓR-ding pæs",pt:"cartão de embarque"},
+    {en:"gate",pronPT:"geit",pt:"portão de embarque"},
+    {en:"layover",pronPT:"LÉI-o-ver",pt:"escala"},
+    {en:"carry-on luggage",pronPT:"KÆR-i-on LÁG-ij",pt:"bagagem de mão"},
+    {en:"checked baggage",pronPT:"chekt BÆG-ij",pt:"bagagem despachada"},
+    {en:"excess baggage",pronPT:"EK-ses BÆG-ij",pt:"excesso de bagagem"},
+    {en:"baggage claim",pronPT:"BÆG-ij kleim",pt:"esteira / retirada de bagagem"},
+    {en:"security checkpoint",pronPT:"si-KIÚR-i-ti CHÉK-point",pt:"controle de segurança"},
+    {en:"departure lounge",pronPT:"di-PÁR-cher launj",pt:"sala de embarque"},
+    {en:"connecting flight",pronPT:"ko-NÉK-ting flait",pt:"voo de conexão"},
+    {en:"delayed",pronPT:"di-LÉID",pt:"atrasado"},
+    {en:"cancelled",pronPT:"KÆN-seld",pt:"cancelado"},
+    {en:"aisle seat",pronPT:"AÍL síit",pt:"assento de corredor"},
+    {en:"window seat",pronPT:"WÍN-do síit",pt:"assento de janela"},
+    {en:"overhead bin",pronPT:"Ó-ver-hed bin",pt:"compartimento superior"},
+    {en:"customs",pronPT:"KÁS-tomz",pt:"alfândega"},
+    {en:"immigration",pronPT:"im-i-GRÉI-shon",pt:"imigração"},
+    {en:"duty-free",pronPT:"DÚ-ti-fríi",pt:"livre de impostos / duty-free"},
+  ]
+});
+
+VICTOR_DATA.trueFalseQuestions.push(...[
+  {category:"Aeroporto",statement:"A 'boarding pass' is required to get on the plane.",pt:"Um cartão de embarque é necessário para embarcar no avião.",answer:true},
+  {category:"Aeroporto",statement:"'Departures' is where you go to pick up arriving passengers.",pt:"'Departures' é onde você vai buscar passageiros que chegam.",answer:false},
+  {category:"Aeroporto",statement:"A 'layover' is a stop between two flights.",pt:"Uma escala é uma parada entre dois voos.",answer:true},
+  {category:"Aeroporto",statement:"'Carry-on luggage' must be checked in at the counter.",pt:"A bagagem de mão deve ser despachada no balcão.",answer:false},
+  {category:"Aeroporto",statement:"When a flight is 'cancelled', passengers need to rebook.",pt:"Quando um voo é cancelado, os passageiros precisam remarcar.",answer:true},
+  {category:"Aeroporto",statement:"'Gate' refers to the restaurant area inside the airport.",pt:"'Gate' se refere à área de restaurantes dentro do aeroporto.",answer:false},
+  {category:"Aeroporto",statement:"Immigration is where you declare the goods you are bringing into the country.",pt:"Imigração é onde você declara os bens que está trazendo para o país.",answer:false},
+]);
+
+// ── CRUZEIROS — V/F enriquecido ───────────────────────────
+VICTOR_DATA.trueFalseQuestions.push(...[
+  {category:"Terminal de Cruzeiros",statement:"'Embarkation' means boarding the cruise ship.",pt:"'Embarkation' significa embarcar no navio de cruzeiro.",answer:true},
+  {category:"Terminal de Cruzeiros",statement:"A 'boarding pass' is not needed to board a cruise ship.",pt:"Um cartão de embarque não é necessário para embarcar em um cruzeiro.",answer:false},
+  {category:"Terminal de Cruzeiros",statement:"'Port of call' refers to a stop the cruise ship makes during the trip.",pt:"'Port of call' se refere a uma escala que o navio faz durante a viagem.",answer:true},
+  {category:"Terminal de Cruzeiros",statement:"A shore excursion takes place on the ship.",pt:"Uma excursão em terra acontece a bordo do navio.",answer:false},
+  {category:"Terminal de Cruzeiros",statement:"'Disembarkation' means getting off the cruise ship.",pt:"'Disembarkation' significa desembarcar do navio de cruzeiro.",answer:true},
+]);
+
+// ── SAÚDE — Flashcards adicionais ─────────────────────────
+VICTOR_DATA.flashcardDecks.push({
+  id:"saude_vocab2", name:"🏥 Saúde — Vocabulário Médico Completo",
+  cards:[
+    {en:"emergency room (ER)",pronPT:"i-MÉR-jen-si rúum",pt:"pronto-socorro"},
+    {en:"prescription",pronPT:"pri-SKRIP-shon",pt:"receita médica"},
+    {en:"symptoms",pronPT:"SÍM-tomz",pt:"sintomas"},
+    {en:"allergy",pronPT:"ÆL-er-ji",pt:"alergia"},
+    {en:"blood pressure",pronPT:"blad PRÉ-sher",pt:"pressão arterial"},
+    {en:"heart rate",pronPT:"hart reit",pt:"frequência cardíaca"},
+    {en:"anesthesia",pronPT:"æn-es-THÍ-zia",pt:"anestesia"},
+    {en:"insurance",pronPT:"in-SHÚR-ens",pt:"seguro saúde"},
+    {en:"diagnosis",pronPT:"dai-ag-NÓ-sis",pt:"diagnóstico"},
+    {en:"treatment",pronPT:"TRÍIT-ment",pt:"tratamento"},
+    {en:"X-ray",pronPT:"EKS-rei",pt:"raio-X"},
+    {en:"blood type",pronPT:"blad taip",pt:"tipo sanguíneo"},
+    {en:"surgery",pronPT:"SÉR-je-ri",pt:"cirurgia"},
+    {en:"wound",pronPT:"wúund",pt:"ferida / ferimento"},
+    {en:"fracture",pronPT:"FRÆK-cher",pt:"fratura"},
+    {en:"nausea",pronPT:"NÓ-zia",pt:"náusea"},
+    {en:"fever",pronPT:"FÍI-ver",pt:"febre"},
+    {en:"dizzy",pronPT:"DÍZ-i",pt:"tonto / com tontura"},
+    {en:"unconscious",pronPT:"an-KÓN-shes",pt:"inconsciente"},
+    {en:"inhaler",pronPT:"in-HÉI-ler",pt:"inalador"},
+  ]
+});
+
+// ── TRANSPORTE — Flashcards enriquecidos ──────────────────
+VICTOR_DATA.flashcardDecks.push({
+  id:"transporte_vocab2", name:"🚗 Transporte — Vocabulário do Motorista",
+  cards:[
+    {en:"destination",pronPT:"des-ti-NÉI-shon",pt:"destino"},
+    {en:"traffic jam",pronPT:"TRÆF-ik jæm",pt:"congestionamento"},
+    {en:"shortcut",pronPT:"SHÓRT-kat",pt:"atalho"},
+    {en:"toll",pronPT:"tol",pt:"pedágio"},
+    {en:"GPS / navigation",pronPT:"jíi-píi-és / næv-i-GÉI-shon",pt:"GPS / navegação"},
+    {en:"receipt",pronPT:"ri-SÍIT",pt:"recibo"},
+    {en:"cash",pronPT:"kæsh",pt:"dinheiro em espécie"},
+    {en:"fare",pronPT:"fér",pt:"tarifa / valor da corrida"},
+    {en:"pickup",pronPT:"PÍK-ap",pt:"ponto de embarque / coleta"},
+    {en:"drop-off",pronPT:"drop-of",pt:"ponto de desembarque"},
+    {en:"roundtrip",pronPT:"RÁUND-trip",pt:"ida e volta"},
+    {en:"one-way",pronPT:"wan-wei",pt:"somente ida"},
+    {en:"air conditioning",pronPT:"ér con-DÍSH-on-ing",pt:"ar condicionado"},
+    {en:"seatbelt",pronPT:"SÍIT-belt",pt:"cinto de segurança"},
+    {en:"trunk",pronPT:"trank",pt:"porta-malas"},
+  ]
+});
+
+
+// ══════════════════════════════════════════════════════════
+// CONTEÚDO ENRIQUECIDO — PARTE 2
+// ══════════════════════════════════════════════════════════
+
+// ── CORPORATIVO — Flashcards completos ────────────────────
+VICTOR_DATA.flashcardDecks.push({
+  id:"corporativo_vocab2", name:"💼 Corporativo — Vocabulário de Escritório",
+  cards:[
+    {en:"deadline",pronPT:"DÉD-lain",pt:"prazo final"},
+    {en:"ASAP — as soon as possible",pronPT:"éi-és-éi-píi",pt:"o mais rápido possível"},
+    {en:"FYI — for your information",pronPT:"éf-uái-ái",pt:"para seu conhecimento"},
+    {en:"briefing",pronPT:"BRÍ-fing",pt:"instruções / apresentação inicial"},
+    {en:"KPI — key performance indicator",pronPT:"kéi-píi-ái",pt:"indicador de desempenho"},
+    {en:"stakeholder",pronPT:"STÉIK-hol-der",pt:"parte interessada"},
+    {en:"on track",pronPT:"on træk",pt:"no caminho certo / dentro do prazo"},
+    {en:"off track",pronPT:"of træk",pt:"fora do planejado"},
+    {en:"revenue",pronPT:"RÉV-en-iú",pt:"receita da empresa"},
+    {en:"budget",pronPT:"BÁJ-et",pt:"orçamento"},
+    {en:"task",pronPT:"tæsk",pt:"tarefa"},
+    {en:"pending",pronPT:"PÉN-ding",pt:"pendente"},
+    {en:"follow-up",pronPT:"FÓL-o ap",pt:"acompanhamento / retorno"},
+    {en:"meeting minutes",pronPT:"MÍI-ting MÍN-its",pt:"ata de reunião"},
+    {en:"action items",pronPT:"ÆK-shon ÁI-temz",pt:"itens de ação / próximos passos"},
+    {en:"scope of work",pronPT:"skop ov werk",pt:"escopo do trabalho"},
+    {en:"proposal",pronPT:"pro-PÓ-zel",pt:"proposta comercial"},
+    {en:"invoice",pronPT:"ÍN-vois",pt:"nota fiscal / fatura"},
+    {en:"cc — carbon copy",pronPT:"síi-síi",pt:"com cópia para (e-mail)"},
+    {en:"reply all",pronPT:"ri-PLÁI ol",pt:"responder a todos"},
+  ]
+});
+
+VICTOR_DATA.flashcardDecks.push({
+  id:"corporativo_emails", name:"💼 Corporativo — Frases de E-mail Profissional",
+  cards:[
+    {en:"I hope this email finds you well",pronPT:"ai hóp dis íi-meil faindz iú wel",pt:"Espero que esteja bem"},
+    {en:"I'm writing to inform you",pronPT:"aim RAIT-ing tu in-FORM iú",pt:"Escrevo para informar"},
+    {en:"Please find attached",pronPT:"pliiz faind a-TÆCHT",pt:"Segue em anexo"},
+    {en:"Could you please confirm by Friday?",pronPT:"kud iú pliiz kon-FIRM bai FRÁi-dei",pt:"Poderia confirmar até sexta?"},
+    {en:"I look forward to hearing from you",pronPT:"ai luk FÓR-werd tu HÍR-ing from iú",pt:"Aguardo seu retorno"},
+    {en:"Best regards",pronPT:"best ri-GÁRDZ",pt:"Atenciosamente"},
+    {en:"As per our conversation",pronPT:"æz per áuer kon-ver-SÉI-shon",pt:"Conforme nossa conversa"},
+    {en:"Further to my previous email",pronPT:"FÉR-der tu mai PRÍi-vies íi-meil",pt:"Complementando meu e-mail anterior"},
+    {en:"I apologize for the delay",pronPT:"ai a-PÓL-o-jaiz for de di-LÉI",pt:"Peço desculpas pela demora"},
+    {en:"Please let me know if you have any questions",pronPT:"pliiz let mi nó if iú hæv éni KWES-chons",pt:"Fique à vontade para perguntar"},
+    {en:"I will get back to you shortly",pronPT:"ai wil get bæk tu iú SHÓRT-li",pt:"Retorno em breve"},
+    {en:"As discussed",pronPT:"æz dis-KÁST",pt:"Conforme discutido"},
+    {en:"Please be advised",pronPT:"pliiz bíi ad-VÁIZD",pt:"Informamos que / Favor observar"},
+    {en:"Thank you for your prompt response",pronPT:"thænk iú for ior prompt ri-SPÓNS",pt:"Obrigado pela resposta rápida"},
+    {en:"I am reaching out regarding",pronPT:"ai æm RÍI-ching aut ri-GÁRD-ing",pt:"Estou entrando em contato sobre"},
+  ]
+});
+
+// ── CORPORATIVO — V/F ─────────────────────────────────────
+VICTOR_DATA.trueFalseQuestions.push(...[
+  {category:"Corporativo",statement:"'ASAP' means 'As Soon As Possible' and is used to indicate urgency.",pt:"'ASAP' significa 'o mais rápido possível' e é usado para indicar urgência.",answer:true},
+  {category:"Corporativo",statement:"A 'deadline' is a suggestion, not a firm date.",pt:"Um 'deadline' é uma sugestão, não uma data firme.",answer:false},
+  {category:"Corporativo",statement:"'FYI' is used to share information without requiring a response.",pt:"'FYI' é usado para compartilhar informação sem exigir resposta.",answer:true},
+  {category:"Corporativo",statement:"'Revenue' and 'profit' mean the same thing in business.",pt:"'Revenue' e 'profit' significam a mesma coisa nos negócios.",answer:false},
+  {category:"Corporativo",statement:"'Please find attached' is used in emails when you include a file.",pt:"'Please find attached' é usado em e-mails quando você inclui um arquivo.",answer:true},
+  {category:"Corporativo",statement:"'Best regards' is an informal way to close an email.",pt:"'Best regards' é uma forma informal de encerrar um e-mail.",answer:false},
+  {category:"Corporativo",statement:"'Action items' are the tasks agreed upon during a meeting.",pt:"'Action items' são as tarefas acordadas durante uma reunião.",answer:true},
+  {category:"Corporativo",statement:"A 'stakeholder' is only the company's owner.",pt:"Um 'stakeholder' é apenas o dono da empresa.",answer:false},
+]);
+
+// ── MARÍTIMO — Vocabulário Avançado (B/L e Graneleiros) ───
+VICTOR_DATA.flashcardDecks.push({
+  id:"maritimo_bl", name:"⚓ Marítimo Avançado — Bill of Lading & Granel",
+  cards:[
+    {en:"shipper",pronPT:"SHÍP-er",pt:"embarcador / exportador"},
+    {en:"consignee",pronPT:"kon-sai-NÍI",pt:"destinatário / consignatário"},
+    {en:"notify party",pronPT:"NÓU-ti-fai PÁR-ti",pt:"parte a ser notificada"},
+    {en:"port of loading",pronPT:"port ov LÓD-ing",pt:"porto de embarque"},
+    {en:"port of discharge",pronPT:"port ov DIS-chárj",pt:"porto de descarga"},
+    {en:"freight prepaid",pronPT:"freit pri-PÉID",pt:"frete pago na origem"},
+    {en:"freight collect",pronPT:"freit ko-LÉKT",pt:"frete pago no destino"},
+    {en:"clean B/L",pronPT:"klíin bíi-el",pt:"B/L sem ressalvas"},
+    {en:"telex release",pronPT:"TÉL-eks ri-LÍIS",pt:"liberação telegráfica"},
+    {en:"gross weight",pronPT:"gros weit",pt:"peso bruto"},
+    {en:"net weight",pronPT:"net weit",pt:"peso líquido"},
+    {en:"bulk cargo",pronPT:"balk KÁR-go",pt:"carga a granel"},
+    {en:"dry bulk",pronPT:"drai balk",pt:"granel seco — grãos, minério"},
+    {en:"reefer container",pronPT:"RÍI-fer kon-TÉI-ner",pt:"contêiner refrigerado"},
+    {en:"high cube",pronPT:"hai kiúb",pt:"contêiner alto (9'6\")"},
+    {en:"flat rack",pronPT:"flæt ræk",pt:"contêiner plataforma aberta"},
+    {en:"deadweight tonnage",pronPT:"DÉD-weit TÁN-ij",pt:"capacidade de carga do navio (DWT)"},
+    {en:"stowage plan",pronPT:"STÓU-ij plæn",pt:"plano de estiva"},
+    {en:"lashing",pronPT:"LÆSH-ing",pt:"amarração de contêineres"},
+    {en:"despatch",pronPT:"dis-PÆCH",pt:"bonificação por operação mais rápida que o laytime"},
+  ]
+});
+
+VICTOR_DATA.trueFalseQuestions.push(...[
+  {category:"Marítimo",statement:"The 'consignee' on a Bill of Lading is the person sending the cargo.",pt:"O 'consignee' no Bill of Lading é a pessoa que envia a carga.",answer:false},
+  {category:"Marítimo",statement:"'Freight prepaid' means the shipper pays the freight before shipment.",pt:"'Freight prepaid' significa que o embarcador paga o frete antes do embarque.",answer:true},
+  {category:"Marítimo",statement:"A 'clean B/L' has remarks or clauses noting cargo damage.",pt:"Um 'clean B/L' tem observações ou cláusulas sobre danos à carga.",answer:false},
+  {category:"Marítimo",statement:"A 'reefer container' is used for cargo that needs temperature control.",pt:"Um 'reefer container' é usado para carga que precisa de controle de temperatura.",answer:true},
+  {category:"Marítimo",statement:"'Gross weight' and 'net weight' are the same measurement.",pt:"'Gross weight' e 'net weight' são a mesma medida.",answer:false},
+  {category:"Marítimo",statement:"'Despatch' is a reward paid to the charterer for finishing cargo operations faster than agreed.",pt:"'Despatch' é uma recompensa paga ao afretador por terminar as operações mais rápido que o acordado.",answer:true},
+  {category:"Marítimo",statement:"A 'flat rack' container is used for refrigerated cargo.",pt:"Um contêiner 'flat rack' é usado para carga refrigerada.",answer:false},
+]);
+
+// ── OFFSHORE — Vocabulário avançado ───────────────────────
+VICTOR_DATA.flashcardDecks.push({
+  id:"offshore_vocab3", name:"🛢️ Offshore Avançado — Petróleo & Comunicação",
+  cards:[
+    {en:"upstream",pronPT:"ÁP-striim",pt:"exploração e produção de petróleo"},
+    {en:"downstream",pronPT:"DÁUN-striim",pt:"refino e distribuição"},
+    {en:"midstream",pronPT:"MÍD-striim",pt:"transporte e armazenamento"},
+    {en:"FPSO",pronPT:"éf-píi-és-óu",pt:"unidade flutuante de produção, armazenamento e transferência"},
+    {en:"well integrity",pronPT:"wel in-TÉG-ri-ti",pt:"integridade do poço"},
+    {en:"blowout preventer (BOP)",pronPT:"BLÓU-aut pri-VÉN-ter",pt:"preventor de blowout"},
+    {en:"drill bit",pronPT:"dril bit",pt:"broca de perfuração"},
+    {en:"casing",pronPT:"KÉI-sing",pt:"revestimento do poço"},
+    {en:"Christmas tree",pronPT:"KRIS-mes tríi",pt:"árvore de natal — equipamento na cabeça do poço"},
+    {en:"flow rate",pronPT:"flo reit",pt:"vazão / taxa de fluxo"},
+    {en:"flare",pronPT:"fler",pt:"tocha de queima de gás"},
+    {en:"hot work permit",pronPT:"hot werk PÉR-mit",pt:"permissão para trabalho a quente"},
+    {en:"PTW — permit to work",pronPT:"píi-tíi-dáb-liú",pt:"permissão de trabalho"},
+    {en:"toolbox talk",pronPT:"TÚUL-boks tok",pt:"reunião de segurança no local de trabalho"},
+    {en:"JSA — job safety analysis",pronPT:"jéi-és-éi",pt:"análise de segurança do trabalho"},
+    {en:"mustering",pronPT:"MÁS-ter-ing",pt:"reunião de emergência no ponto de encontro"},
+    {en:"lifeboat",pronPT:"LÁIF-bot",pt:"barco salva-vidas"},
+    {en:"helideck",pronPT:"HÉL-i-dek",pt:"heliponto da plataforma"},
+    {en:"standby vessel",pronPT:"STÆND-bai VÉS-el",pt:"embarcação de apoio em prontidão"},
+    {en:"confined space",pronPT:"kon-FÁIND speis",pt:"espaço confinado"},
+  ]
+});
+
+VICTOR_DATA.trueFalseQuestions.push(...[
+  {category:"Offshore",statement:"A 'blowout preventer' is used to control pressure during drilling.",pt:"O 'blowout preventer' é usado para controlar a pressão durante a perfuração.",answer:true},
+  {category:"Offshore",statement:"'Upstream' refers to the refining and distribution of oil.",pt:"'Upstream' se refere ao refino e distribuição do petróleo.",answer:false},
+  {category:"Offshore",statement:"A 'permit to work' (PTW) must be signed before starting any hazardous task offshore.",pt:"Uma 'permit to work' deve ser assinada antes de iniciar qualquer tarefa perigosa offshore.",answer:true},
+  {category:"Offshore",statement:"A 'toolbox talk' is a meeting held at the beginning of a work shift to discuss safety.",pt:"Uma 'toolbox talk' é uma reunião no início do turno para discutir segurança.",answer:true},
+  {category:"Offshore",statement:"'Copy that' in radio communication means you disagree with the message.",pt:"'Copy that' na comunicação por rádio significa que você discorda da mensagem.",answer:false},
+  {category:"Offshore",statement:"A helideck is the landing area for helicopters on a platform.",pt:"O helideck é a área de pouso de helicópteros na plataforma.",answer:true},
+  {category:"Offshore",statement:"'Mustering' means starting work on the platform.",pt:"'Mustering' significa começar o trabalho na plataforma.",answer:false},
+  {category:"Offshore",statement:"'Man overboard' is an emergency phrase used when someone falls into the sea.",pt:"'Man overboard' é uma frase de emergência usada quando alguém cai no mar.",answer:true},
+]);
+
+// ── NEGOCIAÇÃO — segmento COMEX + Marítimo ────────────────
+VICTOR_DATA.flashcardDecks.push({
+  id:"negociacao_vocab", name:"🤝 Negociação & Reuniões em Inglês",
+  cards:[
+    {en:"Let's find a middle ground",pronPT:"lets faind a MÍD-el graund",pt:"Vamos encontrar um meio-termo"},
+    {en:"We can meet you halfway",pronPT:"wi kæn míit iú HÆF-wei",pt:"Podemos ceder pela metade"},
+    {en:"This is our best and final offer",pronPT:"dis iz áuer best ænd FÁI-nal ÓF-er",pt:"Esta é nossa melhor e última oferta"},
+    {en:"We have a deal",pronPT:"wi hæv a díil",pt:"Temos um acordo"},
+    {en:"Can you do better?",pronPT:"kæn iú du BÉT-er",pt:"Pode fazer melhor?"},
+    {en:"What's your best offer?",pronPT:"wots ior best ÓF-er",pt:"Qual sua melhor oferta?"},
+    {en:"We're willing to compromise",pronPT:"wier WÍL-ing tu KÓM-pro-maiz",pt:"Estamos dispostos a negociar"},
+    {en:"Let's touch base next week",pronPT:"lets tach beis nekst wíik",pt:"Vamos entrar em contato semana que vem"},
+    {en:"This is a win-win situation",pronPT:"dis iz a WIN-win sich-u-ÉI-shon",pt:"É uma situação vantajosa para ambos"},
+    {en:"We need to close this deal today",pronPT:"wi níid tu klóuz dis díil tu-DÉI",pt:"Precisamos fechar esse acordo hoje"},
+    {en:"I'll get back to you with a proposal",pronPT:"ail get bæk tu iú wid a pro-PÓ-zel",pt:"Retorno com uma proposta"},
+    {en:"Please confirm in writing",pronPT:"pliiz kon-FÉRM in RÁI-ting",pt:"Por favor, confirme por escrito"},
+    {en:"We value our long-term partnership",pronPT:"wi VÆL-iú áuer long-term PÁRT-ner-ship",pt:"Valorizamos nossa parceria de longo prazo"},
+    {en:"The delay was not our fault",pronPT:"de di-LÉI woz not áuer folt",pt:"O atraso não foi culpa nossa"},
+    {en:"We're requesting a reduction",pronPT:"wier ri-KWÉST-ing a ri-DÁK-shon",pt:"Estamos solicitando uma redução"},
+  ]
+});
+
+// ── VAREJO — Flashcards enriquecidos ──────────────────────
+VICTOR_DATA.flashcardDecks.push({
+  id:"varejo_vocab2", name:"🛒 Varejo — Atendimento ao Cliente",
+  cards:[
+    {en:"Can I help you?",pronPT:"kæn ai hélp iú",pt:"Posso ajudar?"},
+    {en:"Are you looking for something specific?",pronPT:"ar iú LÚK-ing for SOM-thing spe-SÍF-ik",pt:"Está procurando algo específico?"},
+    {en:"We have it in stock",pronPT:"wi hæv it in stok",pt:"Temos em estoque"},
+    {en:"We're out of stock",pronPT:"wier aut ov stok",pt:"Estamos sem estoque"},
+    {en:"This is on sale",pronPT:"dis iz on seil",pt:"Este item está em promoção"},
+    {en:"discount",pronPT:"DÍS-kaunt",pt:"desconto"},
+    {en:"receipt",pronPT:"ri-SÍIT",pt:"recibo / nota fiscal"},
+    {en:"exchange / return",pronPT:"iks-CHÉNJ / ri-TÉRN",pt:"troca / devolução"},
+    {en:"gift wrapping",pronPT:"gift RÆP-ing",pt:"embrulho para presente"},
+    {en:"fitting room",pronPT:"FÍT-ing rúum",pt:"provador"},
+    {en:"size",pronPT:"saiz",pt:"tamanho / numeração"},
+    {en:"Do you accept credit card?",pronPT:"du iú ak-SÉPT KRÉD-it kard",pt:"Aceita cartão de crédito?"},
+    {en:"Your change is...",pronPT:"ior cheinj iz",pt:"Seu troco é..."},
+    {en:"Would you like a bag?",pronPT:"wud iú laik a bæg",pt:"Gostaria de uma sacola?"},
+    {en:"Have a nice day!",pronPT:"hæv a nais dei",pt:"Tenha um bom dia!"},
+  ]
+});
+
+VICTOR_DATA.trueFalseQuestions.push(...[
+  {category:"Varejo",statement:"'We're out of stock' means the item is available for purchase.",pt:"'We're out of stock' significa que o item está disponível para compra.",answer:false},
+  {category:"Varejo",statement:"A 'fitting room' is where customers try on clothes.",pt:"Um 'fitting room' é onde os clientes experimentam roupas.",answer:true},
+  {category:"Varejo",statement:"'This is on sale' means the price has been increased.",pt:"'This is on sale' significa que o preço foi aumentado.",answer:false},
+  {category:"Varejo",statement:"'Your change' refers to the money returned after a cash payment.",pt:"'Your change' se refere ao dinheiro devolvido após um pagamento em dinheiro.",answer:true},
+]);
+
+// ── TURISMO SANTOS — Flashcards enriquecidos ──────────────
+VICTOR_DATA.flashcardDecks.push({
+  id:"turismo_santos2", name:"🏖️ Turismo Santos — Guia & Atrativos",
+  cards:[
+    {en:"tourist information",pronPT:"TÚR-ist in-for-MÉI-shon",pt:"informações turísticas"},
+    {en:"city tour",pronPT:"SÍT-i tur",pt:"passeio pela cidade"},
+    {en:"guided tour",pronPT:"GÁI-ded tur",pt:"passeio com guia"},
+    {en:"beach boardwalk",pronPT:"bíich BÓRD-wok",pt:"orla da praia"},
+    {en:"aquarium",pronPT:"a-KWÉR-i-em",pt:"aquário"},
+    {en:"orchid garden",pronPT:"ÓR-kid GÁR-den",pt:"jardim de orquídeas"},
+    {en:"fish market",pronPT:"fish MÁR-ket",pt:"mercado de peixe"},
+    {en:"waterfront",pronPT:"WÓT-er-frant",pt:"orla / frente marítima"},
+    {en:"port tour",pronPT:"port tur",pt:"passeio pelo porto"},
+    {en:"cruise ship",pronPT:"krúuz ship",pt:"navio de cruzeiro"},
+    {en:"How far is...?",pronPT:"hau far iz",pt:"Qual a distância até...?"},
+    {en:"What time does it open?",pronPT:"wot taim daz it ÓU-pen",pt:"A que horas abre?"},
+    {en:"Is there an entrance fee?",pronPT:"iz der æn ÉN-trens fíi",pt:"Tem taxa de entrada?"},
+    {en:"Do you have a map?",pronPT:"du iú hæv a mæp",pt:"Tem um mapa?"},
+    {en:"I'd like to visit...",pronPT:"aid laik tu VÍZ-it",pt:"Gostaria de visitar..."},
+  ]
+});
+
