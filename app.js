@@ -701,6 +701,92 @@ function startCuriosityTicker(){
   _curiosityTimer=setInterval(show,20000); // 20 seconds — time to read
 }
 
+function showXPHistoryPopup(){
+  document.getElementById("xp-history-popup")?.remove();
+  const history=userData.xpHistory||{};
+  const today=new Date();
+  const weekdays=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+
+  const buildWeek=(offsetStart, offsetEnd)=>{
+    const days=[];
+    for(let i=offsetStart;i>=offsetEnd;i--){
+      const d=new Date(today); d.setDate(d.getDate()-i);
+      days.push({date:d.toISOString().slice(0,10), label:weekdays[d.getDay()], day:d.getDate()});
+    }
+    return days;
+  };
+
+  const weeks=[
+    {label:"Esta semana", days:buildWeek(6,0)},
+    {label:"Semana passada", days:buildWeek(13,7)},
+    {label:"2 semanas atrás", days:buildWeek(20,14)},
+  ];
+
+  const maxXP=Math.max(...weeks.flatMap(w=>w.days.map(d=>history[d.date]||0)),1);
+
+  let html=`<div class="popup-overlay" id="xp-history-popup" onclick="if(event.target===this)this.remove()">
+    <div class="popup-card">
+      <div class="popup-title">📊 Histórico de XP</div>`;
+
+  weeks.forEach(w=>{
+    const total=w.days.reduce((a,d)=>a+(history[d.date]||0),0);
+    html+=`<div class="xph-week-label">${w.label} — <strong>${total} XP</strong></div>
+    <div class="xph-bars">`;
+    w.days.forEach(d=>{
+      const v=history[d.date]||0;
+      const h=v?Math.max(8,Math.round((v/maxXP)*52)):4;
+      html+=`<div class="xph-col">
+        <div class="xph-val">${v||""}</div>
+        <div class="xph-bar" style="height:${h}px;opacity:${v?1:0.2}"></div>
+        <div class="xph-day">${d.label}</div>
+        <div class="xph-num">${d.day}</div>
+      </div>`;
+    });
+    html+=`</div>`;
+  });
+
+  html+=`<button class="popup-close-btn" onclick="document.getElementById('xp-history-popup').remove()">Fechar</button>
+    </div></div>`;
+
+  document.body.insertAdjacentHTML("beforeend",html);
+}
+
+function showStreakCalendarPopup(){
+  document.getElementById("streak-popup")?.remove();
+  const history=userData.xpHistory||{};
+  const today=new Date();
+  const days=[];
+  for(let i=29;i>=0;i--){
+    const d=new Date(today); d.setDate(d.getDate()-i);
+    const key=d.toISOString().slice(0,10);
+    const xp=history[key]||0;
+    days.push({key,xp,day:d.getDate(),month:d.getMonth()+1});
+  }
+
+  const cells=days.map(d=>{
+    const cls=d.xp>50?"cal-hot":d.xp>0?"cal-warm":"cal-cold";
+    return `<div class="streak-cell ${cls}" title="${d.key}: ${d.xp} XP">
+      <span>${d.day}</span>
+      ${d.xp?`<span class="streak-xp">${d.xp}</span>`:""}
+    </div>`;
+  }).join("");
+
+  document.body.insertAdjacentHTML("beforeend",`
+    <div class="popup-overlay" id="streak-popup" onclick="if(event.target===this)this.remove()">
+      <div class="popup-card">
+        <div class="popup-title">🔥 Sua Consistência — 30 dias</div>
+        <div class="streak-legend">
+          <span class="cal-cold" style="width:14px;height:14px;display:inline-block;border-radius:3px"></span> Sem atividade
+          <span class="cal-warm" style="width:14px;height:14px;display:inline-block;border-radius:3px;margin-left:8px"></span> Praticou
+          <span class="cal-hot" style="width:14px;height:14px;display:inline-block;border-radius:3px;margin-left:8px"></span> Ativo!
+        </div>
+        <div class="streak-grid">${cells}</div>
+        <div class="streak-total">Streak atual: <strong>${userData.streak||0} dias 🔥</strong></div>
+        <button class="popup-close-btn" onclick="document.getElementById('streak-popup').remove()">Fechar</button>
+      </div>
+    </div>`);
+}
+
 function initContactFloat(){
   const cfBtn=document.getElementById("btn-contact-float");
   const cfMenu=document.getElementById("contact-float-menu");
@@ -3468,7 +3554,10 @@ function init(){
     adminFloatBtn.onclick=()=>{ vibrate(30); showView("view-admin"); loadAdminPanel(); };
   }
 
-  initContactFloat();
+  // XP card → show history popup
+  document.getElementById("stat-xp-card")?.addEventListener("click",()=>showXPHistoryPopup());
+  // Streak card → show calendar popup
+  document.getElementById("stat-streak-card")?.addEventListener("click",()=>showStreakCalendarPopup());
   document.getElementById("btn-share-header")?.addEventListener("click",()=>{ vibrate(30); shareApp(); });
   startCuriosityTicker();
   requestNotificationPermission();
