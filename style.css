@@ -5773,3 +5773,80 @@ body.light-mode .notif-freq-select { background: #1e0a50 !important; color: #fff
   box-shadow: 0 4px 20px rgba(201,147,58,0.4) !important;
   animation: pulse-gold 1.5s ease infinite !important;
 }
+
+/* ══ GREETING — hi serif intro style ═══════════════════ */
+.greeting-hi {
+  font-family: 'Georgia', serif !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  letter-spacing: -0.3px !important;
+  margin-bottom: 10px !important;
+  line-height: 1.2 !important;
+}
+.greeting-time-wrap {
+  border-left: 3px solid rgba(201,147,58,0.5);
+  padding-left: 12px;
+  margin-bottom: 12px;
+}
+.greeting-time-en {
+  font-family: var(--font) !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #f5e6c8 !important;
+  font-style: normal !important;
+}
+.greeting-time-pt {
+  font-family: var(--font) !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  color: rgba(245,230,200,0.55) !important;
+  font-style: normal !important;
+}
+.greeting-level {
+  font-family: var(--font) !important;
+  font-size: 13px !important;
+  font-style: normal !important;
+}
+
+/* ══ STAT CARDS — glow animation ════════════════════════ */
+.stat-card {
+  animation: statGlow 3s ease infinite;
+  animation-delay: calc(var(--i,0) * 0.8s);
+}
+.stat-card:nth-child(1){ --i:0; }
+.stat-card:nth-child(2){ --i:1; }
+.stat-card:nth-child(3){ --i:2; }
+@keyframes statGlow {
+  0%,100%{ box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+  50%{ box-shadow: 0 4px 20px rgba(124,58,237,0.35); }
+}
+
+/* ══ CURIOSITY — bigger, white, bright ══════════════════ */
+.curiosity-text {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: rgba(255,255,255,0.92) !important;
+  text-shadow: 0 0 20px rgba(255,255,255,0.2) !important;
+  line-height: 1.6 !important;
+  font-style: normal !important;
+}
+.curiosity-text::before { content: "💡"; margin-right: 6px; font-style: normal; }
+.curiosity-ticker { min-height: 52px !important; }
+
+/* ══ RELOAD BUTTON — bigger ══════════════════════════════ */
+.btn-reload {
+  position: fixed !important;
+  top: 12px !important; right: 16px !important;
+  width: 44px !important; height: 44px !important;
+  background: rgba(124,58,237,0.25) !important;
+  border: 2px solid rgba(124,58,237,0.4) !important;
+  border-radius: 50% !important;
+  color: #c4b5fd !important;
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  z-index: 50 !important; transition: all 0.3s ease !important;
+}
+.btn-reload:hover { background: var(--p) !important; transform: rotate(180deg) scale(1.1) !important; color: #fff !important; }

@@ -836,6 +836,7 @@ function shareApp(){
 }
 
 function renderDashboard(){
+  try{
   const xp=userData.xp||0, lv=levelInfo(xp), level=calcLevel(xp);
   buildDate(); buildGreeting(userData.name||"Aluno");
   fitUserName(userData.name||"Aluno");
@@ -906,6 +907,7 @@ function renderDashboard(){
   if(diagBanner) diagBanner.style.display=userData.diagnosisAnswers?"none":"flex";
 
   renderSegments();
+  }catch(e){ console.error("renderDashboard error:", e.message); }
 }
 
 function renderSegments(){
@@ -3751,10 +3753,20 @@ function init(){
     document.getElementById("writing-charcount").textContent=`${words} palavra${words!==1?"s":""}`;
   });
   document.getElementById("btn-reload-dashboard")?.addEventListener("click",async()=>{
-    if(!currentUser) return;
+    vibrate(30);
     showXpToast("🔄 Atualizando...");
-    userData=await getUserData(currentUser.uid);
-    if(userData){ renderDashboard(); showXpToast("✅ Atualizado!"); }
+    // Clear service worker cache then hard reload
+    try{
+      if('serviceWorker' in navigator){
+        const regs=await navigator.serviceWorker.getRegistrations();
+        for(const reg of regs) await reg.unregister();
+      }
+      if('caches' in window){
+        const keys=await caches.keys();
+        await Promise.all(keys.map(k=>caches.delete(k)));
+      }
+    }catch(e){}
+    setTimeout(()=>window.location.reload(true), 300);
   });
   document.getElementById("btn-start-now")?.addEventListener("click",()=>openSegmentPhases(currentSegmentId));
   document.getElementById("btn-goto-flashcards")?.addEventListener("click",openFlashcards);
