@@ -73,25 +73,6 @@ function getRandomTip(level){
   const tips = LEVEL_TIPS[Math.min(level,4)] || LEVEL_TIPS[4];
   return tips[Math.floor(Math.random()*tips.length)];
 }
-
-// ── SAFE DOM HELPERS ─────────────────────────────────────
-// Never crashes on null elements
-function el(id){ return document.getElementById(id); }
-function setText(id, val){ const e=el(id); if(e) e.textContent=val??''; }
-function setHTML(id, val){ const e=el(id); if(e) e.innerHTML=val??''; }
-function setStyle(id, prop, val){ const e=el(id); if(e) e.style[prop]=val; }
-function setDisplay(id, val){ const e=el(id); if(e) e.style.display=val; }
-function getValue(id){ const e=el(id); return e?e.value:''; }
-function setValue(id, val){ const e=el(id); if(e) e.value=val??''; }
-
-// Safe localStorage wrapper
-const Store = {
-  get(key, def=null){ try{ const v=localStorage.getItem(key); return v!==null?v:def; }catch(e){ return def; } },
-  set(key, val){ try{ localStorage.setItem(key, String(val)); }catch(e){} },
-  getJSON(key, def=null){ try{ const v=localStorage.getItem(key); return v?JSON.parse(v):def; }catch(e){ return def; } },
-  setJSON(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} },
-};
-
 function levelInfo(xp){
   const l=calcLevel(xp);
   if(l<=2) return {label:"Iniciante 🌱", msg:getRandomTip(1)};
@@ -101,77 +82,54 @@ function levelInfo(xp){
 }
 
 let _lastView = null;
-// ── LOADING SPLASH ────────────────────────────────────────
-function showLoadingSplash(cb, delay=400){
-  const splash=document.getElementById("loading-splash");
-  if(!splash){ cb(); return; }
-  splash.style.display="flex";
-  splash.style.opacity="0";
-  splash.style.transition="opacity 0.2s ease";
-  requestAnimationFrame(()=>{
-    splash.style.opacity="1";
-    setTimeout(()=>{
-      cb();
-      setTimeout(()=>{
-        splash.style.opacity="0";
-        setTimeout(()=>{ splash.style.display="none"; }, 250);
-      }, delay);
-    }, 200);
-  });
-}
-
-function showView(id, useSplash=false){
+function showView(id){
   const next=document.getElementById(id);
   if(!next) return;
+
   const current=document.querySelector(".view.active");
   if(current===next) return;
 
-  const doTransition=()=>{
-    const views=["view-auth","view-dashboard","view-phases","view-missions-list","view-mission","view-complete","view-flashcards","view-memory-free","view-truefalse","view-dialogue","view-writing","view-profile","view-upgrade","view-admin","view-diagnosis","view-leveltest"];
-    const ci=views.indexOf(current?.id||"");
-    const ni=views.indexOf(id);
-    const dir=ni>=ci?1:-1;
+  // Determine direction
+  const views=["view-auth","view-dashboard","view-phases","view-missions-list","view-mission","view-complete","view-flashcards","view-memory-free","view-truefalse","view-dialogue","view-writing","view-profile","view-upgrade","view-admin","view-diagnosis","view-leveltest"];
+  const ci=views.indexOf(current?.id||"");
+  const ni=views.indexOf(id);
+  const dir=ni>=ci?1:-1; // 1=forward (slide left), -1=back (slide right)
 
-    if(current){
-      current.style.transition="transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.32s ease";
-      current.style.transform=`translateX(${dir*-60}%)`;
-      current.style.opacity="0";
-      current.style.pointerEvents="none";
-      setTimeout(()=>{
-        current.classList.remove("active");
-        current.style.transform="";
-        current.style.opacity="";
-        current.style.transition="";
-        current.style.pointerEvents="";
-      },340);
-    }
-
-    next.style.transform=`translateX(${dir*60}%)`;
-    next.style.opacity="0";
-    next.style.transition="none";
-    next.classList.add("active");
-    requestAnimationFrame(()=>{
-      requestAnimationFrame(()=>{
-        next.style.transition="transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.32s ease";
-        next.style.transform="translateX(0)";
-        next.style.opacity="1";
-        setTimeout(()=>{
-          next.style.transform="";
-          next.style.opacity="";
-          next.style.transition="";
-        },340);
-      });
-    });
-
-    _lastView=current?.id||null;
-    window.scrollTo(0,0);
-  };
-
-  if(useSplash){
-    showLoadingSplash(doTransition, 350);
-  } else {
-    doTransition();
+  // Hide current with slide out
+  if(current){
+    current.style.transition="transform 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.38s ease";
+    current.style.transform=`translateX(${dir*-100}%)`;
+    current.style.opacity="0";
+    current.style.pointerEvents="none";
+    setTimeout(()=>{
+      current.classList.remove("active");
+      current.style.transform="";
+      current.style.opacity="";
+      current.style.transition="";
+      current.style.pointerEvents="";
+    },380);
   }
+
+  // Show next with slide in
+  next.style.transform=`translateX(${dir*100}%)`;
+  next.style.opacity="0";
+  next.style.transition="none";
+  next.classList.add("active");
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      next.style.transition="transform 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.38s ease";
+      next.style.transform="translateX(0)";
+      next.style.opacity="1";
+      setTimeout(()=>{
+        next.style.transform="";
+        next.style.opacity="";
+        next.style.transition="";
+      },390);
+    });
+  });
+
+  _lastView=current?.id||null;
+  window.scrollTo(0,0);
 }
 
 // ── MERCADO PAGO ─────────────────────────────────────────────────────────────
@@ -204,7 +162,7 @@ async function updateStreak(){
   userData.xpToday=0;
   userData.streak=streak;
   userData.lastLoginDate=today;
-  await saveProgress(currentUser?.uid,{streak,lastLoginDate:today,xpYesterday:userData.xpYesterday,xpToday:0});
+  await saveProgress(currentUser.uid,{streak,lastLoginDate:today,xpYesterday:userData.xpYesterday,xpToday:0});
 }
 
 // ── GREETING ──────────────────────────────────────────────────────────────────
@@ -278,12 +236,12 @@ async function updateDailyProgress(type){
     dp.allComplete=true;
     const bonusXP=DAILY_DEF.reduce((a,dm)=>a+dm.xp,0);
     userData.xp=(userData.xp||0)+bonusXP;
-    await saveProgress(currentUser?.uid,{xp:userData.xp,dailyProgress:dp});
+    await saveProgress(currentUser.uid,{xp:userData.xp,dailyProgress:dp});
     userData.dailyProgress=dp;
     showDailyComplete(bonusXP);
   } else {
     userData.dailyProgress=dp;
-    await saveProgress(currentUser?.uid,{dailyProgress:dp});
+    await saveProgress(currentUser.uid,{dailyProgress:dp});
   }
   renderDailyMissions();
 }
@@ -341,7 +299,7 @@ async function handleRegister(){
   }, 10000);
   try{
     await registerUser(email,pw,name);
-    Store.set("vic_last_email",email);
+    localStorage.setItem("vic_last_email",email);
     clearTimeout(timeout);
     // _handleAuth will be called automatically by onAuthChange
   }
@@ -416,7 +374,7 @@ async function handleLogin(){
     const {browserLocalPersistence, browserSessionPersistence, setPersistence} = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
     await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
     await loginUser(email,pw);
-    Store.set("vic_last_email",email);
+    localStorage.setItem("vic_last_email",email);
     clearTimeout(timeout);
   }
   catch(e){clearTimeout(timeout);hideAuthLoading();showAuthError(translateErr(e.code));reset();}
@@ -516,7 +474,7 @@ async function finishDiagnosisNote(){
 }
 async function finishDiagnosis(){
   if(currentUser){
-    await saveProgress(currentUser?.uid,{diagnosisAnswers:diagAnswers,currentMission:{segmentId:currentSegmentId,phaseId:"f1",missionId:getSegment(currentSegmentId)?.phases[0]?.missions[0]?.id||"",phraseIndex:0}});
+    await saveProgress(currentUser.uid,{diagnosisAnswers:diagAnswers,currentMission:{segmentId:currentSegmentId,phaseId:"f1",missionId:getSegment(currentSegmentId)?.phases[0]?.missions[0]?.id||"",phraseIndex:0}});
     userData.diagnosisAnswers=diagAnswers;
   }
   startLevelTest();
@@ -648,7 +606,7 @@ function showLTResult(){
 }
 async function finishLevelTest(){
   if(currentUser){
-    await saveProgress(currentUser?.uid,{diagnosisAnswers:diagAnswers,detectedLevel:diagAnswers.level,currentMission:{segmentId:currentSegmentId,phaseId:"f1",missionId:getSegment(currentSegmentId)?.phases[0]?.missions[0]?.id||"",phraseIndex:0}});
+    await saveProgress(currentUser.uid,{diagnosisAnswers:diagAnswers,detectedLevel:diagAnswers.level,currentMission:{segmentId:currentSegmentId,phaseId:"f1",missionId:getSegment(currentSegmentId)?.phases[0]?.missions[0]?.id||"",phraseIndex:0}});
     userData.diagnosisAnswers=diagAnswers; userData.detectedLevel=diagAnswers.level;
   }
   renderDashboard(); showView("view-dashboard");
@@ -691,22 +649,12 @@ async function loadDashboard(user){
       }
     }
   }catch(e){
-    console.warn("Firestore read failed, trying local backup:", e.message);
-    // Try local backup first
-    const localBackup = Store.getJSON("vic_userData_"+user.uid);
-    if(localBackup){
-      console.log("✅ Restored from local backup");
-      userData = localBackup;
-    } else {
-      userData=fallback;
-    }
+    console.warn("Firestore read failed, using fallback:", e.message);
+    userData=fallback;
   }
 
   // Always proceed to dashboard — never block the user
   try{ await updateStreak(); }catch(e){ console.warn("streak err:", e.message); }
-
-  // 💾 Save userData locally as backup
-  try{ Store.setJSON("vic_userData_"+user.uid, userData); }catch(e){}
 
   if(userData.currentMission){
     currentSegmentId  =userData.currentMission.segmentId  ||"maritimo";
@@ -977,7 +925,7 @@ function renderDashboard(){
   // Update header avatar
   const avatarIcon=document.getElementById("dash-avatar-icon");
   if(avatarIcon){
-    const saved=Store.get("vic_avatar");
+    const saved=localStorage.getItem("vic_avatar");
     avatarIcon.textContent=saved||userData.name?.[0]?.toUpperCase()||"👤";
   }
 
@@ -1086,9 +1034,9 @@ function renderMission(){
   exerciseAnswered=false; memSelected=null; memMatched=0; wordOrderPlaced=[]; matchSelected=null; matchCorrect=0;
   showLockedNextBtn(); // show locked next button
 
-  setText("mission-name",        =stripEmoji(mission?.name||"");
-  setText("phrase-counter",      =`${currentPhraseIndex+1}/${total}`;
-  setStyle("mission-progress-bar","width",=`${Math.round(((currentPhraseIndex+1)/total)*100)}%`;
+  document.getElementById("mission-name").textContent        =stripEmoji(mission?.name||"");
+  document.getElementById("phrase-counter").textContent      =`${currentPhraseIndex+1}/${total}`;
+  document.getElementById("mission-progress-bar").style.width=`${Math.round(((currentPhraseIndex+1)/total)*100)}%`;
   const ptEl=document.getElementById("phrase-pt");
   if(ptEl){
     if(phrase.pt&&phrase.type!=="translate_en_pt"&&phrase.type!=="translate_pt_en"){
@@ -1213,23 +1161,8 @@ function renderExerciseUI(phrase){
       bank.appendChild(btn);
     });
   }
-  if(phrase.type==="memory_match"){
-    document.getElementById("memory-wrap").style.display="block";
-    renderMemoryGrid(phrase.pairs,"memory-grid");
-    // Memory auto-advances when complete — hide next button
-    document.querySelectorAll(".btn-next-exercise,.btn-next-exercise-main").forEach(b=>b.style.display="none");
-  }
-  if(phrase.type==="match_columns"){
-    document.getElementById("match-wrap").style.display="block";
-    renderMatchColumns(phrase.pairs);
-    // Match auto-advances when complete — hide next button
-    document.querySelectorAll(".btn-next-exercise,.btn-next-exercise-main").forEach(b=>b.style.display="none");
-  }
-
-  // Always call showLockedNextBtn at end to ensure button state is correct
-  if(!["memory_match","match_columns"].includes(phrase.type)){
-    showLockedNextBtn();
-  }
+  if(phrase.type==="memory_match"){document.getElementById("memory-wrap").style.display="block";renderMemoryGrid(phrase.pairs,"memory-grid");}
+  if(phrase.type==="match_columns"){document.getElementById("match-wrap").style.display="block";renderMatchColumns(phrase.pairs);}
 }
 
 // ── MEMORY MATCH (in-mission) ─────────────────────────────────────────────────
@@ -1434,34 +1367,20 @@ function showScoreResult(score, spokenText){
 }
 
 async function autoAdvance(score){
-  try{
-    if(!currentUser?.uid){ console.warn("autoAdvance: no user"); return; }
-    const xpGain=10; const newXp=(userData.xp||0)+xpGain;
-    userData.xp=newXp; showXpToast(`+${xpGain} XP`);
-    try{ trackDailyXP(xpGain); }catch(e){}
-    try{ trackAnswer(score>=5); }catch(e){}
-    try{ await updateDailyProgress("exercise"); }catch(e){}
-    try{ if(score===10) await updateDailyProgress("perfect"); }catch(e){}
-    try{ if(currentSegmentId==="maritimo") await updateDailyProgress("maritime"); }catch(e){}
-    const mission=getMission(currentSegmentId,currentPhaseId,currentMissionId);
-    const total=mission?.phrases?.length||1;
-    if(currentPhraseIndex<total-1){
-      currentPhraseIndex++;
-      try{
-        await saveProgress(currentUser?.uid,{
-          xp:newXp,
-          currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:currentPhraseIndex}
-        });
-      }catch(e){ console.warn("saveProgress failed:", e.message); }
-      renderMission();
-    } else {
-      try{ await completeMission(newXp); }catch(e){ console.error("completeMission error:", e.message); }
-    }
-  }catch(e){
-    console.error("autoAdvance error:", e.message);
-    // Still try to advance even if something fails
-    try{ renderMission(); }catch(e2){}
-  }
+  const xpGain=10; const newXp=(userData.xp||0)+xpGain;
+  userData.xp=newXp; showXpToast(`+${xpGain} XP`);
+  trackDailyXP(xpGain);
+  trackAnswer(score>=5);
+  await updateDailyProgress("exercise");
+  if(score===10) await updateDailyProgress("perfect");
+  if(currentSegmentId==="maritimo") await updateDailyProgress("maritime");
+  const mission=getMission(currentSegmentId,currentPhaseId,currentMissionId);
+  const total=mission?.phrases.length||1;
+  if(currentPhraseIndex<total-1){
+    currentPhraseIndex++;
+    await saveProgress(currentUser.uid,{xp:newXp,currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:currentPhraseIndex}});
+    renderMission();
+  } else await completeMission(newXp);
 }
 
 function updateNavButtons(nextUnlocked, score){
@@ -1493,7 +1412,6 @@ function updateNavButtons(nextUnlocked, score){
 }
 
 function showNextBtn(btnId, score){
-  // Always unlock ALL next buttons regardless of specific btnId
   updateNavButtons(true, score);
 }
 
@@ -1505,40 +1423,31 @@ function showLockedNextBtn(){
 async function nextPhrase(){ await autoAdvance(10); }
 
 async function completeMission(xp){
-  try{
-    const mission=getMission(currentSegmentId,currentPhaseId,currentMissionId);
-    const completed=userData.completedMissions||[];
-    const key=`${currentSegmentId}_${currentPhaseId}_${currentMissionId}`;
-    if(!completed.includes(key)) completed.push(key);
-    currentPhraseIndex=0;
-    try{
-      await saveProgress(currentUser?.uid,{xp:xp??userData.xp,completedMissions:completed,currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:0}});
-    }catch(e){ console.warn("completeMission saveProgress failed:", e.message); }
-    userData.completedMissions=completed;
-    try{ SoundFX.complete(); }catch(e){}
-    if(completed.length===1) try{ showNotifBanner(); }catch(e){}
-    const lv=levelInfo(xp??userData.xp);
-    setText("complete-mission-name", stripEmoji(mission?.name||""));
-    setText("complete-xp", String(xp??userData.xp));
-    setText("complete-result-level", lv.label||"");
-    setText("complete-result-text", lv.msg||"");
-    const phase=getPhase(currentSegmentId,currentPhaseId);
-    const missions=phase?.missions||[];
-    const curIdx=missions.findIndex(m=>m.id===currentMissionId);
-    const nextMission=missions[curIdx+1];
-    const nextBtn=document.getElementById("btn-next-mission");
-    if(nextBtn){
-      if(nextMission){nextBtn.style.display="block";nextBtn.textContent=`Próxima: ${stripEmoji(nextMission.name)} →`;nextBtn.onclick=()=>enterMission(currentSegmentId,currentPhaseId,nextMission.id);}
-      else nextBtn.style.display="none";
-    }
-    showView("view-complete");
-    try{ checkBadges(); }catch(e){}
-    if(completed.length % 7 === 0){
-      setTimeout(()=>{ try{ showPostMissionFeedback(); }catch(e){} }, 1800);
-    }
-  }catch(e){
-    console.error("completeMission error:", e.message);
-    showView("view-dashboard");
+  const mission=getMission(currentSegmentId,currentPhaseId,currentMissionId);
+  const completed=userData.completedMissions||[];
+  const key=`${currentSegmentId}_${currentPhaseId}_${currentMissionId}`;
+  if(!completed.includes(key)) completed.push(key);
+  currentPhraseIndex=0;
+  await saveProgress(currentUser.uid,{xp:xp??userData.xp,completedMissions:completed,currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:0}});
+  userData.completedMissions=completed;
+  SoundFX.complete();
+  if(completed.length===1) showNotifBanner();
+  const lv=levelInfo(xp??userData.xp);
+  document.getElementById("complete-mission-name").textContent=stripEmoji(mission?.name||"");
+  document.getElementById("complete-xp").textContent=xp??userData.xp;
+  document.getElementById("complete-result-level").textContent=lv.label;
+  document.getElementById("complete-result-text").textContent=lv.msg;
+  const phase=getPhase(currentSegmentId,currentPhaseId);
+  const missions=phase?.missions||[];
+  const curIdx=missions.findIndex(m=>m.id===currentMissionId);
+  const nextMission=missions[curIdx+1];
+  const nextBtn=document.getElementById("btn-next-mission");
+  if(nextMission){nextBtn.style.display="block";nextBtn.textContent=`Próxima: ${stripEmoji(nextMission.name)} →`;nextBtn.onclick=()=>enterMission(currentSegmentId,currentPhaseId,nextMission.id);}
+  else nextBtn.style.display="none";
+  showView("view-complete");
+  // Show feedback popup after 2s on every 3rd mission
+  if(completed.length % 7 === 0){
+    setTimeout(()=>showPostMissionFeedback(), 1800);
   }
 }
 
@@ -1596,7 +1505,7 @@ function openFlashcards(){
     div.addEventListener("click",()=>startFlashcardDeck(deck.id));
     list.appendChild(div);
   });
-  showView("view-flashcards", true);
+  showView("view-flashcards");
 }
 function startFlashcardDeck(deckId){
   const deck=VICTOR_DATA.flashcardDecks.find(d=>d.id===deckId); if(!deck) return;
@@ -1606,7 +1515,7 @@ function startFlashcardDeck(deckId){
   renderFlashcard();
 }
 function renderFlashcard(){
-  if(fcIndex>=fcCards.length){showXpToast(`🃏 +${fcXP} XP`);openFlashcards();return;}
+  if(fcIndex>=fcCards.length){showXpToast(`🃏 +${fcXP} XP`);trackGame("flashcard");openFlashcards();return;}
   const card=fcCards[fcIndex]; fcFlipped=false;
   document.getElementById("fc-counter").textContent=`${fcIndex+1} / ${fcCards.length}`;
   document.getElementById("fc-word").textContent=card.en;
@@ -1771,7 +1680,7 @@ function handleFreeMemCard(div,total){
       a.classList.add("matched");b.classList.add("matched");SoundFX.correct();freeMemMatched++;freeMemXP+=10;
       document.getElementById("mem-score-display").textContent=`XP: ${freeMemXP}`;
       freeMemSelected=[];
-      if(freeMemMatched===total){showXpToast(`🧠 +${freeMemXP} XP`);if(currentUser)saveProgress(currentUser?.uid,{xp:(userData.xp||0)+freeMemXP}).then(()=>{userData.xp=(userData.xp||0)+freeMemXP;});setTimeout(()=>openMemoryFree(),1500);}
+      if(freeMemMatched===total){showXpToast(`🧠 +${freeMemXP} XP`);if(currentUser)saveProgress(currentUser.uid,{xp:(userData.xp||0)+freeMemXP}).then(()=>{userData.xp=(userData.xp||0)+freeMemXP;});trackGame("memory");setTimeout(()=>openMemoryFree(),1500);}
     } else {SoundFX.wrong();setTimeout(()=>{a.classList.remove("flipped");b.classList.remove("flipped");freeMemSelected=[];},900);}
   }
 }
@@ -1844,7 +1753,7 @@ function showTFResult(){
   document.getElementById("tf-result-msg").textContent=pct>=80?"Excelente! 🌟":pct>=50?"Bom trabalho! 👍":"Continue praticando! 💪";
   document.getElementById("tf-result-bar").style.width=`${pct}%`;
   showXpToast(`✅ +${tfScore} XP`);
-  if(currentUser)saveProgress(currentUser?.uid,{xp:(userData.xp||0)+tfScore}).then(()=>{userData.xp=(userData.xp||0)+tfScore;});
+  if(currentUser)saveProgress(currentUser.uid,{xp:(userData.xp||0)+tfScore}).then(()=>{userData.xp=(userData.xp||0)+tfScore;});
   SoundFX.complete();
 }
 
@@ -1854,7 +1763,7 @@ function openDialogue(){
   document.getElementById("dlg-board").style.display="none";
   document.getElementById("dlg-result").style.display="none";
   renderDialogueSegments();
-  showView("view-dialogue", true);
+  showView("view-dialogue");
 }
 
 function renderDialogueSegments(){
@@ -2086,7 +1995,8 @@ function showDlgResult(){
   document.getElementById("dlg-result-score").textContent=`${dlgScore} / ${max} pts`;
   document.getElementById("dlg-result-msg").textContent=pct>=80?"Conversa fluente! 🌟":pct>=50?"Bom trabalho! 👍":"Pratique mais! 💪";
   showXpToast(`💬 +${dlgScore} XP`);
-  if(currentUser)saveProgress(currentUser?.uid,{xp:(userData.xp||0)+dlgScore}).then(()=>{userData.xp=(userData.xp||0)+dlgScore;});
+  if(currentUser)saveProgress(currentUser.uid,{xp:(userData.xp||0)+dlgScore}).then(()=>{userData.xp=(userData.xp||0)+dlgScore;});
+  trackGame("dialogue");
   SoundFX.complete();
 }
 
@@ -2496,7 +2406,7 @@ async function loadAdminFeedbacks(){
 function showUpgradeScreen(){ showView("view-upgrade"); }
 
 // ── ADMIN DASHBOARD ───────────────────────────────────────────────────────────
-async function loadAdminDashboard(){ showView("view-admin", true); await refreshAdminUsers(); }
+async function loadAdminDashboard(){ showView("view-admin"); await refreshAdminUsers(); }
 async function refreshAdminUsers(){
   document.getElementById("admin-users-list").innerHTML=`<div style="text-align:center;padding:20px;color:#c4a96a">Carregando...</div>`;
   try{adminUsers=await getAllUsers();renderAdminMetrics();renderAdminUsers();}
@@ -2713,7 +2623,7 @@ function openProfile(){
 
     // avatar
     const av=document.getElementById("profile-avatar");
-    if(av){ loadAvatar(); if(!Store.get("vic_avatar")) av.textContent=name[0]?.toUpperCase()||"👤"; }
+    if(av){ loadAvatar(); if(!localStorage.getItem("vic_avatar")) av.textContent=name[0]?.toUpperCase()||"👤"; }
     const hn=document.getElementById("profile-hero-name"); if(hn) hn.textContent=name;
     const hl=document.getElementById("profile-hero-level"); if(hl) hl.textContent=lv.label;
     const pxp=document.getElementById("ps-xp"); if(pxp) pxp.textContent=xp;
@@ -2738,7 +2648,7 @@ function openProfile(){
     const td=document.getElementById("toggle-darkmode"); if(td) td.checked=darkMode;
     document.querySelectorAll(".font-size-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.size===fontSize));
 
-    showView("view-profile", true);
+    showView("view-profile");
   }catch(e){
     console.error("Profile error:",e);
     showXpToast("❌ Erro ao abrir perfil");
@@ -2911,7 +2821,7 @@ async function trackDailyXP(amount){
   const history=userData.xpHistory||{};
   history[today]=(history[today]||0)+amount;
   userData.xpHistory=history;
-  await saveProgress(currentUser?.uid,{xpHistory:history});
+  await saveProgress(currentUser.uid,{xpHistory:history});
 }
 
 window.showSkillDetail=function(name, pct){
@@ -3130,7 +3040,7 @@ function applyFontSize(size){
   document.body.classList.remove("font-xs","font-small","font-medium","font-large","font-xl");
   document.body.classList.add(`font-${size}`);
   document.querySelectorAll(".font-size-btn").forEach(b=>b.classList.toggle("active",b.dataset.size===size));
-  Store.set("vic_fontSize",size);
+  localStorage.setItem("vic_fontSize",size);
 }
 
 function applyDarkMode(dark){
@@ -3141,7 +3051,7 @@ function applyDarkMode(dark){
 
 function applySounds(enabled){
   soundsEnabled=enabled;
-  Store.set("vic_sounds",enabled?"1":"0");
+  localStorage.setItem("vic_sounds",enabled?"1":"0");
 }
 
 function shareAppPanel(){
@@ -3184,9 +3094,9 @@ async function saveEdit(){
         await updateProfile(m.auth.currentUser,{displayName:val});
       });
       userData.name=val;
-      await saveProgress(currentUser?.uid,{name:val});
+      await saveProgress(currentUser.uid,{name:val});
       document.getElementById("profile-hero-name").textContent=val;
-      setText("dash-username",=val;
+      document.getElementById("dash-username").textContent=val;
     } else if(editField==="email"){
       msg.textContent="⚠️ Para mudar o email, faça logout e login novamente com o novo email.";
       return;
@@ -3201,9 +3111,9 @@ async function saveEdit(){
 
 // Load saved preferences on startup
 function loadPreferences(){
-  const fs=Store.get("vic_fontSize");
+  const fs=localStorage.getItem("vic_fontSize");
   const dm=localStorage.getItem("vic_darkMode");
-  const sn=Store.get("vic_sounds");
+  const sn=localStorage.getItem("vic_sounds");
   if(fs) applyFontSize(fs);
   if(dm==="0") applyDarkMode(false);
   if(sn==="0") applySounds(false);
@@ -3225,7 +3135,7 @@ function openAvatarPicker(){
 }
 
 function saveAvatar(value){
-  Store.set("vic_avatar",value);
+  localStorage.setItem("vic_avatar",value);
   // Update all avatar displays
   const pa=document.getElementById("profile-avatar");
   const dai=document.getElementById("dash-avatar-icon");
@@ -3234,7 +3144,7 @@ function saveAvatar(value){
 }
 
 function loadAvatar(){
-  const saved=Store.get("vic_avatar");
+  const saved=localStorage.getItem("vic_avatar");
   if(!saved) return;
   const pa=document.getElementById("profile-avatar");
   const dai=document.getElementById("dash-avatar-icon");
@@ -3270,7 +3180,7 @@ function openWriting(){
     div.addEventListener("click",()=>startWritingTopic(i));
     list.appendChild(div);
   });
-  showView("view-writing", true);
+  showView("view-writing");
 }
 
 function startWritingTopic(index){
@@ -3406,8 +3316,10 @@ Maximum 5 errors. Focus on most important ones. If no errors, use empty array.`
     // XP reward
     const xpGain=result.score>=8?30:result.score>=5?20:10;
     userData.xp=(userData.xp||0)+xpGain;
+    userData.writingCompleted=(userData.writingCompleted||0)+1;
     showXpToast(`✍️ +${xpGain} XP`);
-    if(currentUser) saveProgress(currentUser?.uid,{xp:userData.xp});
+    if(currentUser) saveProgress(currentUser.uid,{xp:userData.xp, writingCompleted:userData.writingCompleted});
+    trackGame("writing");
     btn.textContent="✅ Corrigido!";
     document.getElementById("writing-feedback").scrollIntoView({behavior:"smooth",block:"start"});
 
@@ -3420,31 +3332,153 @@ Maximum 5 errors. Focus on most important ones. If no errors, use empty array.`
 // ── BADGE SYSTEM ──────────────────────────────────────────────────────────────
 
 const BADGES = [
-  // ⚡ MOMENTO — Day 1
-  {id:"first_mission",  cat:"momento",    icon:"🕷️", name:"With Great Power Comes Great Responsibility",        desc:"Completou sua primeira missão.",             condition:s=>s.missionsCompleted>=1,       xp:30},
-  {id:"first_perfect",  cat:"momento",    icon:"🪄", name:"Wingardium Leviosa!",         desc:"Primeira resposta perfeita.",                condition:s=>s.perfectAnswers>=1,          xp:20},
-  {id:"first_voice",    cat:"momento",    icon:"🎙️", name:"May the Force Be With You",   desc:"Usou o microfone pela primeira vez.",        condition:s=>s.voiceUsed>=1,               xp:25},
 
-  // 🔥 PERFORMANCE — Days 2-6 (gradual)
-  {id:"streak3",        cat:"performance",icon:"💪", name:"Super Soldier",               desc:"3 acertos seguidos — digno do soro do Rogers.",condition:s=>s.answerStreak>=3,          xp:30},
-  {id:"streak5",        cat:"performance",icon:"🔥", name:"I Volunteer as Tribute",      desc:"5 acertos seguidos — Katniss aprovaria.",    condition:s=>s.answerStreak>=5,            xp:50},
-  {id:"xp100",          cat:"performance",icon:"🌩️","name":"Thor's Hammer",             desc:"100 XP — só os dignos chegam aqui!",         condition:s=>s.xp>=100,                    xp:20},
-  {id:"missions3",      cat:"performance",icon:"🟢", name:"Hulk Smash!",                 desc:"3 missões — HULK INGLÊS!",                   condition:s=>s.missionsCompleted>=3,       xp:40},
-  {id:"streak10",       cat:"performance",icon:"⚡", name:"I Am Iron Man",               desc:"10 seguidos — Tony Stark aprova.",           condition:s=>s.answerStreak>=10,           xp:100},
-  {id:"xp250",          cat:"performance",icon:"💰", name:"Show Me The Money!",          desc:"250 XP — Jerry Maguire ficaria feliz.",      condition:s=>s.xp>=250,                    xp:30},
+  // ══ MOMENTO — primeiros passos ══════════════════════════════════════════════
+  {id:"first_mission",  cat:"momento", icon:"⚓", name:"All Hands on Deck",
+   desc:"Completou sua primeira missão. O convés está pronto!", xp:30,
+   condition:s=>s.missionsCompleted>=1},
+  {id:"first_perfect",  cat:"momento", icon:"🪄", name:"Wingardium Leviosa!",
+   desc:"Primeira resposta perfeita. Magia pura!", xp:20,
+   condition:s=>s.perfectAnswers>=1},
+  {id:"first_voice",    cat:"momento", icon:"🎙️", name:"Speak Up, Sailor",
+   desc:"Usou o microfone pela primeira vez. Sua voz manda!", xp:25,
+   condition:s=>s.voiceUsed>=1},
+  {id:"first_game",     cat:"momento", icon:"🎮", name:"Welcome Aboard",
+   desc:"Jogou seu primeiro jogo (memória, flashcard ou diálogo).", xp:20,
+   condition:s=>s.gamesPlayed>=1},
+  {id:"first_writing",  cat:"momento", icon:"✍️", name:"Captain's Log",
+   desc:"Escreveu sua primeira redação em inglês. Isso é navegação real!", xp:25,
+   condition:s=>s.writingCompleted>=1},
 
-  // ⚔️ RESILIÊNCIA — Days 7-14
-  {id:"daily3",         cat:"resiliencia",icon:"🛡️", name:"Avengers, Assemble!",         desc:"3 dias seguidos — o time está se formando.", condition:s=>s.loginStreak>=3,             xp:50},
-  {id:"missions5",      cat:"resiliencia",icon:"🌀", name:"I'll Be Back",                desc:"5 missões — The Terminator não desiste.",    condition:s=>s.missionsCompleted>=5,       xp:60},
-  {id:"daily7",         cat:"resiliencia",icon:"🌟", name:"Wakanda Forever",             desc:"7 dias seguidos — T'Challa ficaria orgulhoso!",condition:s=>s.loginStreak>=7,          xp:100},
-  {id:"missions10",     cat:"resiliencia",icon:"🏆", name:"One Ring to Rule Them All",   desc:"10 missões — digno do Monte Doom!",          condition:s=>s.missionsCompleted>=10,      xp:120},
-  {id:"xp500",          cat:"resiliencia",icon:"🔱", name:"King of the Seven Seas",      desc:"500 XP — Aquaman reconhece seu domínio.",    condition:s=>s.xp>=500,                    xp:60},
+  // ══ JOGOS — a cada ~3 jogos ══════════════════════════════════════════════════
+  {id:"games3",  cat:"jogos", icon:"🃏", name:"Deck Officer",
+   desc:"3 jogos completos. Você está pegando o ritmo!", xp:30,
+   condition:s=>s.gamesPlayed>=3},
+  {id:"games6",  cat:"jogos", icon:"🧭", name:"Navigator",
+   desc:"6 jogos — você já sabe se virar em alto mar!", xp:40,
+   condition:s=>s.gamesPlayed>=6},
+  {id:"games10", cat:"jogos", icon:"🚢", name:"First Mate",
+   desc:"10 jogos — imparável! Oficializado como imediato.", xp:60,
+   condition:s=>s.gamesPlayed>=10},
+  {id:"games15", cat:"jogos", icon:"🌊", name:"Rough Sea Survivor",
+   desc:"15 jogos — mares agitados não te assustam mais.", xp:80,
+   condition:s=>s.gamesPlayed>=15},
+  {id:"games25", cat:"jogos", icon:"🏴‍☠️", name:"Seasoned Sailor",
+   desc:"25 jogos — veterano dos mares do inglês!", xp:120,
+   condition:s=>s.gamesPlayed>=25},
+  {id:"games40", cat:"jogos", icon:"👑", name:"Admiral",
+   desc:"40 jogos — você comanda a frota agora, Almirante!", xp:200,
+   condition:s=>s.gamesPlayed>=40},
+  {id:"memory5", cat:"jogos", icon:"🧠", name:"Cargo Manifest",
+   desc:"5 jogos de memória — cada par é um container organizado.", xp:50,
+   condition:s=>s.memoryPlayed>=5},
+  {id:"flashcard10", cat:"jogos", icon:"⚡", name:"Signal Officer",
+   desc:"10 decks de flashcard — sinais captados e respondidos!", xp:60,
+   condition:s=>s.flashcardsPlayed>=10},
+  {id:"dialogue5", cat:"jogos", icon:"💬", name:"Radio Operator",
+   desc:"5 diálogos — comunicação estabelecida com clareza!", xp:50,
+   condition:s=>s.dialoguesPlayed>=5},
 
-  // 🧠 DOMÍNIO — Days 15+
-  {id:"maritime_dom",   cat:"dominio",    icon:"⚓", name:"The Name is Bond...",          desc:"Dominou o Marítimo — licença para navegar.", condition:s=>s.segmentsDone.includes("maritimo"),  xp:200},
-  {id:"comex_dom",      cat:"dominio",    icon:"🌍", name:"King of COMEX",               desc:"Dominou COMEX — o mundo é seu mercado.",     condition:s=>s.segmentsDone.includes("comex"),     xp:200},
-  {id:"xp1000",         cat:"dominio",    icon:"💎", name:"Infinity Gauntlet",           desc:"1000 XP — poder do universo nas mãos!",      condition:s=>s.xp>=1000,                   xp:150},
-  {id:"polyglot",       cat:"raro",       icon:"⭐", name:"The One",                     desc:"3+ segmentos — 'There is no spoon.' — Neo",  condition:s=>s.segmentsDone.length>=3,     xp:400},
+  // ══ PERFORMANCE — streak de acertos ═════════════════════════════════════════
+  {id:"streak3",  cat:"performance", icon:"💪", name:"Steady As She Goes",
+   desc:"3 acertos seguidos. Curso firme!", xp:30,
+   condition:s=>s.answerStreak>=3},
+  {id:"streak5",  cat:"performance", icon:"🔥", name:"Full Speed Ahead",
+   desc:"5 acertos seguidos — máquinas a toda!", xp:50,
+   condition:s=>s.answerStreak>=5},
+  {id:"streak10", cat:"performance", icon:"⚡", name:"I Am Iron Man",
+   desc:"10 seguidos — Tony Stark aprova.", xp:100,
+   condition:s=>s.answerStreak>=10},
+  {id:"xp100",    cat:"performance", icon:"🌩️", name:"Thor's Hammer",
+   desc:"100 XP — só os dignos chegam aqui!", xp:20,
+   condition:s=>s.xp>=100},
+  {id:"xp250",    cat:"performance", icon:"💰", name:"Freight Loaded",
+   desc:"250 XP — carga completa e pronta para embarcar!", xp:30,
+   condition:s=>s.xp>=250},
+  {id:"xp500",    cat:"performance", icon:"🔱", name:"Port Authority",
+   desc:"500 XP — você tem autoridade neste porto!", xp:60,
+   condition:s=>s.xp>=500},
+  {id:"missions3",  cat:"performance", icon:"🟢", name:"Bosun's Mate",
+   desc:"3 missões — tripulação aprovada!", xp:40,
+   condition:s=>s.missionsCompleted>=3},
+  {id:"missions10", cat:"performance", icon:"🏆", name:"One Ring to Rule Them All",
+   desc:"10 missões — digno do Monte Doom!", xp:120,
+   condition:s=>s.missionsCompleted>=10},
+
+  // ══ RESILIÊNCIA — streak de dias ═════════════════════════════════════════════
+  {id:"daily3",  cat:"resiliencia", icon:"🛡️", name:"Avengers, Assemble!",
+   desc:"3 dias seguidos — o time está se formando.", xp:50,
+   condition:s=>s.loginStreak>=3},
+  {id:"daily7",  cat:"resiliencia", icon:"🌟", name:"Wakanda Forever",
+   desc:"7 dias seguidos — T'Challa ficaria orgulhoso!", xp:100,
+   condition:s=>s.loginStreak>=7},
+  {id:"daily14", cat:"resiliencia", icon:"🌊", name:"The Tide Never Stops",
+   desc:"14 dias seguidos — como o mar, você não para!", xp:150,
+   condition:s=>s.loginStreak>=14},
+  {id:"daily30", cat:"resiliencia", icon:"🌍", name:"Around the World",
+   desc:"30 dias seguidos — você circunavegou o globo!", xp:300,
+   condition:s=>s.loginStreak>=30},
+  {id:"missions5",  cat:"resiliencia", icon:"🌀", name:"Boarding Completed",
+   desc:"5 missões — check-in feito, embarque autorizado!", xp:60,
+   condition:s=>s.missionsCompleted>=5},
+  {id:"xp1000", cat:"resiliencia", icon:"💎", name:"Infinity Gauntlet",
+   desc:"1000 XP — poder do universo nas mãos!", xp:150,
+   condition:s=>s.xp>=1000},
+
+  // ══ DOMÍNIO — por segmento ═══════════════════════════════════════════════════
+  {id:"dom_maritimo",   cat:"dominio", icon:"⚓", name:"Master Mariner",
+   desc:"Dominou o Marítimo — certificado de capitão!", xp:200,
+   condition:s=>s.segmentsDone.includes("maritimo")},
+  {id:"dom_comex",      cat:"dominio", icon:"🌍", name:"Global Trader",
+   desc:"Dominou COMEX — o mundo é seu mercado.", xp:200,
+   condition:s=>s.segmentsDone.includes("comex")},
+  {id:"dom_offshore",   cat:"dominio", icon:"🛢️", name:"Offshore Pro",
+   desc:"Dominou Offshore — plataformas não têm segredo!", xp:200,
+   condition:s=>s.segmentsDone.includes("offshore")},
+  {id:"dom_hotelaria",  cat:"dominio", icon:"🏨", name:"Concierge d'Excellence",
+   desc:"Dominou Hotelaria — hóspedes internacionais bem-recebidos!", xp:200,
+   condition:s=>s.segmentsDone.includes("hotelaria")},
+  {id:"dom_restaurante",cat:"dominio", icon:"🍽️", name:"Head Waiter",
+   desc:"Dominou Restaurantes — pedidos fluindo em inglês!", xp:200,
+   condition:s=>s.segmentsDone.includes("restaurantes")},
+  {id:"dom_aeroporto",  cat:"dominio", icon:"✈️", name:"Ground Control",
+   desc:"Dominou Aeroporto — passageiros atendidos com excelência!", xp:200,
+   condition:s=>s.segmentsDone.includes("aeroporto")},
+  {id:"dom_cruzeiro",   cat:"dominio", icon:"🛳️", name:"Cruise Director",
+   desc:"Dominou Cruzeiros — diversão a bordo garantida!", xp:200,
+   condition:s=>s.segmentsDone.includes("cruzeiros")},
+  {id:"dom_corporativo",cat:"dominio", icon:"💼", name:"C-Suite English",
+   desc:"Dominou o Corporativo — reuniões em inglês sem medo!", xp:200,
+   condition:s=>s.segmentsDone.includes("corporativo")},
+  {id:"dom_saude",      cat:"dominio", icon:"🏥", name:"Chief Medical Officer",
+   desc:"Dominou Saúde — comunicação precisa salva vidas!", xp:200,
+   condition:s=>s.segmentsDone.includes("saude")},
+  {id:"dom_transporte", cat:"dominio", icon:"🚛", name:"Road Commander",
+   desc:"Dominou Transporte — rota traçada em inglês!", xp:200,
+   condition:s=>s.segmentsDone.includes("transporte")},
+  {id:"dom_varejo",     cat:"dominio", icon:"🛍️", name:"Sales Champion",
+   desc:"Dominou Varejo — vendas internacionais desbloqueadas!", xp:200,
+   condition:s=>s.segmentsDone.includes("varejo")},
+  {id:"dom_santos",     cat:"dominio", icon:"🏖️", name:"Santos Expert",
+   desc:"Dominou Turismo Santos — cidade no mapa global!", xp:200,
+   condition:s=>s.segmentsDone.includes("turismo_santos")},
+
+  // ══ RARO — conquistas especiais ══════════════════════════════════════════════
+  {id:"polyglot",   cat:"raro", icon:"⭐", name:"The One",
+   desc:"3+ segmentos — 'There is no spoon.' — Neo", xp:400,
+   condition:s=>s.segmentsDone.length>=3},
+  {id:"fleet",      cat:"raro", icon:"🌐", name:"Fleet Commander",
+   desc:"6+ segmentos — você comanda frotas inteiras!", xp:600,
+   condition:s=>s.segmentsDone.length>=6},
+  {id:"all_games",  cat:"raro", icon:"🎯", name:"Complete Crew",
+   desc:"Jogou todos os tipos de jogo pelo menos uma vez.", xp:150,
+   condition:s=>s.memoryPlayed>=1&&s.flashcardsPlayed>=1&&s.dialoguesPlayed>=1&&s.writingCompleted>=1},
+  {id:"xp2500",     cat:"raro", icon:"🏅", name:"Maritime Legend",
+   desc:"2500 XP — lenda viva dos mares do inglês!", xp:300,
+   condition:s=>s.xp>=2500},
+  {id:"missions50", cat:"raro", icon:"🔱", name:"Odyssey Complete",
+   desc:"50 missões — Ulisses voltou para casa.", xp:500,
+   condition:s=>s.missionsCompleted>=50},
 ];
 
 // Session stats tracker (resets per session, persisted cumulatively in userData)
@@ -3454,6 +3488,10 @@ let _sessionStats = {
   perfectAnswers: 0,
   voiceUsed: 0,
   retries: 0,
+  gamesPlayed: 0,
+  memoryPlayed: 0,
+  flashcardsPlayed: 0,
+  dialoguesPlayed: 0,
 };
 
 function getBadgeStats(){
@@ -3477,6 +3515,11 @@ function getBadgeStats(){
     segmentsDone: segDone,
     writingCompleted: userData?.writingCompleted||0,
     grammarCompleted: completed.filter(m=>m.startsWith("gramatica_")).length,
+    // Contadores de jogos
+    gamesPlayed:     (userData?.gamesPlayed||0)+_sessionStats.gamesPlayed,
+    memoryPlayed:    (userData?.memoryPlayed||0)+_sessionStats.memoryPlayed,
+    flashcardsPlayed:(userData?.flashcardsPlayed||0)+_sessionStats.flashcardsPlayed,
+    dialoguesPlayed: (userData?.dialoguesPlayed||0)+_sessionStats.dialoguesPlayed,
   };
 }
 
@@ -3489,7 +3532,7 @@ function checkBadges(){
   // Save to userData
   const updated = [...earned, ...newBadges.map(b=>b.id)];
   userData.badges = updated;
-  if(currentUser) saveProgress(currentUser?.uid, {badges:updated});
+  if(currentUser) saveProgress(currentUser.uid, {badges:updated});
 
   // Show first new badge (queue others)
   newBadges.forEach((b,i) => setTimeout(()=>showBadgeUnlock(b), i*2500));
@@ -3517,7 +3560,7 @@ function showBadgeUnlock(badge){
 
   // Award XP
   userData.xp=(userData.xp||0)+badge.xp;
-  if(currentUser) saveProgress(currentUser?.uid,{xp:userData.xp});
+  if(currentUser) saveProgress(currentUser.uid,{xp:userData.xp});
   showXpToast(`${badge.icon} +${badge.xp} XP — ${badge.name}`);
 
   // Auto close after 6 seconds
@@ -3537,13 +3580,31 @@ function trackAnswer(isCorrect, isVoice=false){
   if(isVoice) _sessionStats.voiceUsed++;
   // Save stats periodically
   if(_sessionStats.totalAnswers%5===0&&currentUser){
-    saveProgress(currentUser?.uid,{
+    saveProgress(currentUser.uid,{
       totalAnswers:(userData.totalAnswers||0)+_sessionStats.totalAnswers,
       perfectAnswers:(userData.perfectAnswers||0)+_sessionStats.perfectAnswers,
       answerStreak:userData.answerStreak||0,
     });
   }
   // Check for new badges
+  checkBadges();
+}
+
+function trackGame(type){
+  // type: "memory" | "flashcard" | "dialogue" | "writing" | "generic"
+  _sessionStats.gamesPlayed++;
+  if(type==="memory")    _sessionStats.memoryPlayed++;
+  if(type==="flashcard") _sessionStats.flashcardsPlayed++;
+  if(type==="dialogue")  _sessionStats.dialoguesPlayed++;
+  // Persist a cada 3 jogos
+  if(_sessionStats.gamesPlayed%3===0 && currentUser){
+    saveProgress(currentUser.uid,{
+      gamesPlayed:    (userData?.gamesPlayed||0)+_sessionStats.gamesPlayed,
+      memoryPlayed:   (userData?.memoryPlayed||0)+_sessionStats.memoryPlayed,
+      flashcardsPlayed:(userData?.flashcardsPlayed||0)+_sessionStats.flashcardsPlayed,
+      dialoguesPlayed:(userData?.dialoguesPlayed||0)+_sessionStats.dialoguesPlayed,
+    });
+  }
   checkBadges();
 }
 
@@ -3593,36 +3654,38 @@ async function requestNotificationPermission(){
 
 function scheduleNotifications(){
   if(!("Notification" in window)||Notification.permission!=="granted") return;
-  if(Store.get("vic_notif_enabled")==="0") return;
-
-  const freq=parseInt(Store.get("vic_notif_freq")||"3");
-  const minHours=24/freq; // e.g. 3x/day = every 8h
-  const last=parseInt(Store.get("vic_last_notif","0")||"0");
+  if(localStorage.getItem("vic_notif_enabled")==="0") return;
+  const freq=parseInt(localStorage.getItem("vic_notif_freq")||"3");
+  const minHours=24/freq;
+  const last=parseInt(localStorage.getItem("vic_last_notif")||"0");
   const now=Date.now();
   const hoursSinceLast=(now-last)/(3600*1000);
-
   if(hoursSinceLast>=minHours){
     const idx=Math.floor(Math.random()*NOTIF_MESSAGES.length);
     const msg=NOTIF_MESSAGES[idx];
     try{
-      new Notification(msg.title,{
-        body: msg.body,
-        icon: "new_logo_big.png",
-        badge: "vic_lamp.png",
-        tag: "vic-english-"+idx,
-        requireInteraction: false,
-      });
-      Store.set("vic_last_notif", String(now));
+      new Notification(msg.title,{body:msg.body,icon:"logo_full_2.png",badge:"vic_lamp.png",tag:"vic-english-"+idx,requireInteraction:false});
+      localStorage.setItem("vic_last_notif",String(now));
     }catch(e){}
   }
-  Store.set("vic_last_visit", String(now));
+  if("serviceWorker" in navigator&&navigator.serviceWorker.controller){
+    const msPerNotif=(minHours*3600*1000);
+    [1,2,3].forEach(mult=>{
+      const delay=msPerNotif*mult;
+      const idx=Math.floor(Math.random()*NOTIF_MESSAGES.length);
+      const msg=NOTIF_MESSAGES[idx];
+      navigator.serviceWorker.controller.postMessage({type:"SCHEDULE_NOTIF",delay,title:msg.title,body:msg.body});
+    });
+  }
+  localStorage.setItem("vic_last_visit",String(now));
+}
 }
 
 // Ask for notifications with friendly banner after first mission
 function showNotifBanner(){
   if(!("Notification" in window)||Notification.permission!=="default") return;
-  if(Store.get("vic_notif_asked")) return;
-  Store.set("vic_notif_asked","1");
+  if(localStorage.getItem("vic_notif_asked")) return;
+  localStorage.setItem("vic_notif_asked","1");
   const banner=document.createElement("div");
   banner.className="notif-banner";
   banner.innerHTML=`<span style="font-size:22px">🔔</span><div style="flex:1"><div style="font-weight:800;color:#fff">Ativar lembretes?</div><div style="font-size:12px;opacity:0.6">Receba frases motivacionais de filmes + lembretes diários</div></div><button style="padding:8px 16px;background:var(--p);border:none;border-radius:999px;color:#fff;font-weight:800;cursor:pointer;font-family:var(--font)" onclick="requestNotificationPermission();this.closest('.notif-banner').remove()">Ativar</button><button style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:18px;padding:4px 8px" onclick="this.closest('.notif-banner').remove()">✕</button>`;
@@ -3676,7 +3739,7 @@ function init(){
   document.getElementById("tab-login").addEventListener("click",()=>switchTab("login"));
   document.getElementById("tab-register").addEventListener("click",()=>switchTab("register"));
   // Restore last email
-  const lastEmail=Store.get("vic_last_email");
+  const lastEmail=localStorage.getItem("vic_last_email");
   const emailIn=document.getElementById("login-email");
   if(lastEmail&&emailIn) emailIn.value=lastEmail;
 
@@ -3714,7 +3777,7 @@ function init(){
   const adminFloatBtn=document.getElementById("btn-admin-float");
   if(adminFloatBtn&&currentUser?.uid===OWNER_UID){
     adminFloatBtn.style.display="flex";
-    adminFloatBtn.onclick=()=>{ vibrate(30); showView("view-admin", true); loadAdminPanel(); };
+    adminFloatBtn.onclick=()=>{ vibrate(30); showView("view-admin"); loadAdminPanel(); };
   }
 
   // XP card → show history popup
@@ -3752,29 +3815,28 @@ function init(){
   document.getElementById("btn-profile-bug")?.addEventListener("click",()=>openFeedbackModal("🐛 Reportar bug","bug"));
 
   document.getElementById("toggle-notif")?.addEventListener("change",e=>{
-    Store.set("vic_notif_enabled", e.target.checked?"1":"0");
+    localStorage.setItem("vic_notif_enabled", e.target.checked?"1":"0");
     const freqRow=document.getElementById("notif-freq-row");
     if(freqRow) freqRow.style.display=e.target.checked?"flex":"none";
     if(e.target.checked) requestNotificationPermission();
   });
   document.getElementById("notif-freq")?.addEventListener("change",e=>{
-    Store.set("vic_notif_freq", e.target.value);
+    localStorage.setItem("vic_notif_freq", e.target.value);
   });
   // Restore notification settings
-  const notifEnabled=Store.get("vic_notif_enabled");
+  const notifEnabled=localStorage.getItem("vic_notif_enabled");
   const notifToggle=document.getElementById("toggle-notif");
   if(notifToggle&&notifEnabled==="0"){
     notifToggle.checked=false;
     const fr=document.getElementById("notif-freq-row");
     if(fr) fr.style.display="none";
   }
-  const notifFreq=Store.get("vic_notif_freq");
+  const notifFreq=localStorage.getItem("vic_notif_freq");
   const notifFreqEl=document.getElementById("notif-freq");
   if(notifFreqEl&&notifFreq) notifFreqEl.value=notifFreq;
   document.getElementById("btn-modal-close")?.addEventListener("click",()=>document.getElementById("admin-modal").style.display="none");
   document.getElementById("admin-search")?.addEventListener("input",e=>{adminSearchTerm=e.target.value;renderAdminUsers();});
-  document.getElementById("btn-admin-preview")?.addEventListener("click",()=>{ vibrate(20); enterPreviewMode(); });
-  document.getElementById("btn-admin-logout")?.addEventListener("click",()=>{ vibrate(20); showView("view-dashboard"); });
+  document.getElementById("btn-admin-preview")?.addEventListener("click",enterPreviewMode);
   document.getElementById("btn-activate-pro")?.addEventListener("click",()=>activatePro(true));
   document.getElementById("btn-deactivate-pro")?.addEventListener("click",()=>activatePro(false));
   document.getElementById("btn-save-edit-admin")?.addEventListener("click",saveAdminEdit);
@@ -3824,7 +3886,7 @@ function init(){
   document.getElementById("btn-skip-diag")?.addEventListener("click",async()=>{
     // mark as skipped so banner doesn't show again
     document.getElementById("diag-invite-banner").style.display="none";
-    if(currentUser) await saveProgress(currentUser?.uid,{diagnosisAnswers:{skipped:true}});
+    if(currentUser) await saveProgress(currentUser.uid,{diagnosisAnswers:{skipped:true}});
     userData.diagnosisAnswers={skipped:true};
   });
   // Writing

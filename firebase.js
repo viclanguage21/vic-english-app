@@ -6,12 +6,15 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signInAnonymously,
   GoogleAuthProvider,
   signOut,
   onAuthStateChanged,
   updateProfile,
   browserLocalPersistence,
+  indexedDBLocalPersistence,
   setPersistence,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
@@ -41,8 +44,35 @@ const app  = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db   = getFirestore(app);
 
-// Keep user logged in permanently — even after closing the app
-setPersistence(auth, browserLocalPersistence).catch(()=>{});
+// ── Safari/iOS: detectar se é WebKit/Safari ──────────────────────────────────
+export const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+  || /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+// Keep user logged in permanently — IndexedDB first (more stable on iOS), fallback localStorage
+setPersistence(auth, indexedDBLocalPersistence)
+  .catch(() => setPersistence(auth, browserLocalPersistence))
+  .catch(() => {});
+
+// ── Handle redirect result (Safari Google Login) ─────────────────────────────
+export async function handleGoogleRedirectResult() {
+  try {
+    const result = await getRedirectResult(auth);
+    if (result?.user) {
+      const snap = await getDoc(doc(db, "users", result.user.uid));
+      if (!snap.exists()) {
+        await createUserDoc(result.user.uid, {
+          name: result.user.displayName || "Usuário",
+          email: result.user.email || "",
+          provider: "google",
+        });
+      }
+      return result.user;
+    }
+  } catch (e) {
+    console.warn("getRedirectResult error:", e.message);
+  }
+  return null;
+}
 
 export const OWNER_UID = "BPj6R6IH5naAcW0SWcZglXL7pEy2";
 
@@ -62,6 +92,11 @@ export async function loginUser(email, password) {
 }
 
 export async function loginWithGoogle() {
+  // Safari/iOS: popup falha em WebViews e versões antigas — usar redirect
+  if (isSafari) {
+    await signInWithRedirect(auth, gProvider);
+    return null; // página vai recarregar, resultado capturado em handleGoogleRedirectResult
+  }
   const c = await signInWithPopup(auth, gProvider);
   const snap = await getDoc(doc(db, "users", c.user.uid));
   if (!snap.exists()) {
