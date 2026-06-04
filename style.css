@@ -6239,3 +6239,24 @@ body.light-mode .notif-freq-select { background: #1e0a50 !important; color: #fff
 .modal-info-row:last-child{border-bottom:none;}
 .modal-info-label{color:rgba(255,255,255,0.5);font-size:12px;}
 .modal-info-row strong{color:#fff;font-weight:700;text-align:right;max-width:60%;}
+
+/* ── Seletor de língua na tela de login ─────────────────────────────────── */
+.auth-lang-btn{
+  padding:6px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.12);
+  background:rgba(255,255,255,0.05);
+  color:rgba(255,255,255,0.6);
+  font-size:12px;font-weight:700;
+  cursor:pointer;font-family:inherit;
+  transition:all .15s ease;
+}
+.auth-lang-btn:hover{
+  background:rgba(255,255,255,0.1);
+  color:#fff;
+}
+.auth-lang-btn.active{
+  background:rgba(201,147,58,0.2);
+  border-color:rgba(201,147,58,0.5);
+  color:#e4b45c;
+}

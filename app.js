@@ -816,15 +816,22 @@ function applyLang() {
 
   // Botão no header removido — seletor só no perfil agora
 
-  // Destacar botão ativo nas configurações
+  // Destacar botão ativo — configurações E tela de login
   ["pt","en","es","de","it"].forEach(lang => {
-    const btn = document.getElementById(`lang-btn-${lang}`);
-    if (!btn) return;
     const active = _lang === lang;
-    btn.style.background    = active ? "rgba(201,147,58,0.25)" : "rgba(255,255,255,0.05)";
-    btn.style.borderColor   = active ? "rgba(201,147,58,0.5)"  : "rgba(255,255,255,0.15)";
-    btn.style.color         = active ? "#e4b45c" : "#fff";
-    btn.style.transform     = active ? "scale(1.08)" : "scale(1)";
+    // Botões no perfil/configurações
+    const btn = document.getElementById(`lang-btn-${lang}`);
+    if (btn) {
+      btn.style.background  = active ? "rgba(201,147,58,0.25)" : "rgba(255,255,255,0.05)";
+      btn.style.borderColor = active ? "rgba(201,147,58,0.5)"  : "rgba(255,255,255,0.15)";
+      btn.style.color       = active ? "#e4b45c" : "#fff";
+      btn.style.transform   = active ? "scale(1.08)" : "scale(1)";
+    }
+    // Botões na tela de login
+    const authBtn = document.getElementById(`auth-lang-${lang}`);
+    if (authBtn) {
+      authBtn.classList.toggle("active", active);
+    }
   });
 
   // Atualizar todos os elementos marcados com data-i18n
@@ -1580,6 +1587,12 @@ const DIAG_KEYS = ["motivo","segment","difficulty"]; // 3 steps de opções + 1 
 
 function startDiagnosis(){
   diagStep=0; diagAnswers={};
+  _selectedSegments = []; // resetar seleção de segmentos
+  // Esconder botão confirmar
+  const confirmBtn = document.getElementById("btn-confirm-segments");
+  if(confirmBtn) confirmBtn.style.display = "none";
+  // Limpar seleções anteriores
+  document.querySelectorAll(".diag-option-multi").forEach(b=>b.classList.remove("selected"));
   document.querySelectorAll(".diag-step").forEach(s=>s.classList.remove("active"));
   document.getElementById("diag-step-0")?.classList.add("active");
   renderDiagProgress(); showView("view-diagnosis");
@@ -1644,13 +1657,19 @@ function confirmSegments(){
   if(stepEl) stepEl.classList.remove("active");
   diagStep++; renderDiagProgress();
   const next = document.getElementById(`diag-step-${diagStep}`);
-  if(next) next.classList.add("active");
+  if(next){
+    next.classList.add("active");
+    // Scroll para o topo do step
+    next.scrollIntoView({behavior:"smooth", block:"start"});
+  }
 }
 
 function handleDiagOption(val,stepEl){
   // Step 1 = segmentos → múltipla seleção com botão confirmar
-  if(diagStep === 1 && stepEl.id === "diag-step-1"){
-    handleDiagSegmentToggle(val, [...stepEl.querySelectorAll(".diag-option")].find(b=>b.dataset.value===val));
+  if(stepEl && stepEl.id === "diag-step-1"){
+    // Encontrar o botão pelo data-value
+    const btn = stepEl.querySelector(`.diag-option[data-value="${val}"]`);
+    if(btn) handleDiagSegmentToggle(val, btn);
     return; // não avança automaticamente
   }
 
