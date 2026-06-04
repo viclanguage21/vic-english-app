@@ -947,7 +947,65 @@ function renderDiagProgress(){
   }
 }
 
+// Segmentos selecionados no diagnóstico (múltipla seleção)
+let _selectedSegments = [];
+
+function handleDiagSegmentToggle(val, btn){
+  const idx = _selectedSegments.indexOf(val);
+  if(idx >= 0){
+    _selectedSegments.splice(idx, 1);
+    btn.classList.remove("selected");
+  } else {
+    _selectedSegments.push(val);
+    btn.classList.add("selected");
+  }
+  // Mostrar botão confirmar quando tem pelo menos 1 selecionado
+  const confirmBtn = document.getElementById("btn-confirm-segments");
+  if(confirmBtn){
+    confirmBtn.style.display = _selectedSegments.length > 0 ? "block" : "none";
+    confirmBtn.textContent = _selectedSegments.length > 1
+      ? `Confirmar ${_selectedSegments.length} segmentos →`
+      : "Confirmar →";
+  }
+}
+
+function confirmSegments(){
+  if(_selectedSegments.length === 0) return;
+  diagAnswers.segments = _selectedSegments;
+  // Segmento principal = primeiro selecionado
+  diagAnswers.segment = _selectedSegments[0];
+
+  // Personalizar placeholder da nota
+  const placeholders = {
+    maritimo:"Ex: Quero falar com tripulantes estrangeiros no porto...",
+    comex:"Ex: Quero negociar com fornecedores internacionais...",
+    offshore:"Ex: Preciso entender procedimentos de segurança na plataforma...",
+    hotelaria:"Ex: Quero atender hóspedes estrangeiros na recepção...",
+    restaurantes:"Ex: Preciso entender pedidos de clientes internacionais...",
+    aeroporto:"Ex: Quero entender passageiros estrangeiros...",
+    corporativo:"Ex: Quero participar de reuniões em inglês...",
+    cruzeiros:"Ex: Quero me comunicar com passageiros a bordo...",
+    saude:"Ex: Preciso atender pacientes estrangeiros...",
+    outro:"Ex: Quero melhorar meu inglês para crescer na carreira...",
+  };
+  const ta = document.getElementById("diag-personal-note");
+  if(ta) ta.placeholder = placeholders[_selectedSegments[0]] || placeholders.outro;
+
+  // Avançar para próximo step
+  const stepEl = document.getElementById("diag-step-1");
+  if(stepEl) stepEl.classList.remove("active");
+  diagStep++; renderDiagProgress();
+  const next = document.getElementById(`diag-step-${diagStep}`);
+  if(next) next.classList.add("active");
+}
+
 function handleDiagOption(val,stepEl){
+  // Step 1 = segmentos → múltipla seleção com botão confirmar
+  if(diagStep === 1 && stepEl.id === "diag-step-1"){
+    handleDiagSegmentToggle(val, [...stepEl.querySelectorAll(".diag-option")].find(b=>b.dataset.value===val));
+    return; // não avança automaticamente
+  }
+
   stepEl.querySelectorAll(".diag-option").forEach(b=>b.classList.remove("selected"));
   [...stepEl.querySelectorAll(".diag-option")].find(b=>b.dataset.value===val)?.classList.add("selected");
   // Salvar resposta com chave correta
@@ -3535,18 +3593,58 @@ function renderAdminMetrics(){
   document.getElementById("adm-avg-xp").textContent=avgXP;
   document.getElementById("adm-pro-users").textContent=pro;
 }
+// Renderizar avatar do usuário (emoji ou foto ou inicial)
+function renderUserAvatar(u, size=36){
+  const av = u.avatar || null;
+  const name = u.provider==="anonymous" ? "👤" : (u.name||"?");
+  if(av && av.startsWith("data:")){
+    return `<div style="width:${size}px;height:${size}px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#2a1a4e;"><img src="${av}" style="width:100%;height:100%;object-fit:cover;"/></div>`;
+  }
+  if(av && av.length <= 4){ // emoji
+    return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,#2d1b4e,#1a0d2e);display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*0.5)}px;flex-shrink:0;">${av}</div>`;
+  }
+  // Inicial do nome
+  return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*0.4)}px;font-weight:800;color:#fff;flex-shrink:0;">${name[0]?.toUpperCase()||"?"}</div>`;
+}
+
 function renderAdminUsers(){
   const list=document.getElementById("admin-users-list"); list.innerHTML="";
   const term=adminSearchTerm.toLowerCase();
-  const filtered=term?adminUsers.filter(u=>(u.name||"").toLowerCase().includes(term)||(u.email||"").toLowerCase().includes(term)):adminUsers;
+  const filtered=term?adminUsers.filter(u=>(u.name||"").toLowerCase().includes(term)||(u.email||"").toLowerCase().includes(term)||(u.username||"").toLowerCase().includes(term)):adminUsers;
   if(!filtered.length){list.innerHTML=`<div style="padding:16px;text-align:center;color:#6b7a90">Nenhum aluno encontrado</div>`;return;}
   filtered.forEach(u=>{
     const lv=calcLevel(u.xp||0), plan=u.plan==="pro"?"🟡 Pro":"⬜ Free";
+    const lastSeen = u.lastSeen?.toDate ? u.lastSeen.toDate() : (u.lastSeen ? new Date(u.lastSeen) : null);
+    const lastSeenStr = lastSeen ? timeSince(lastSeen) : "—";
     const row=document.createElement("div"); row.className="admin-user-row";
-    row.innerHTML=`<span class="adm-col adm-name">${u.provider==="anonymous"?"👤 Visitante":u.name||"—"}</span><span class="adm-col">Nv ${lv}</span><span class="adm-col adm-xp">${u.xp||0} XP</span><span class="adm-col">${u.streak||0} 🔥</span><span class="adm-col">${plan}</span><span class="adm-col"><button class="adm-view-btn" data-uid="${u.uid}">Ver</button></span>`;
+    row.style.cssText="display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;transition:background .15s;";
+    row.innerHTML=`
+      ${renderUserAvatar(u, 38)}
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+          ${u.provider==="anonymous"?"👤 Visitante":u.name||"—"}
+          ${u.username?`<span style="font-size:11px;color:rgba(255,255,255,0.4);font-weight:400;margin-left:4px;">@${u.username}</span>`:""}
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;">
+          ${u.xp||0} XP · Nv${lv} · ${u.streak||0}🔥 · ${lastSeenStr}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;">
+        <span style="font-size:11px;font-weight:700;${u.plan==="pro"?"color:#ffd700":"color:rgba(255,255,255,0.3)"}">${plan}</span>
+        <button class="adm-view-btn" data-uid="${u.uid}" style="padding:4px 10px;font-size:11px;">Ver</button>
+      </div>`;
     row.querySelector(".adm-view-btn").addEventListener("click",()=>openUserModal(u.uid));
     list.appendChild(row);
   });
+}
+
+function timeSince(date){
+  const seconds = Math.floor((new Date() - date) / 1000);
+  if(seconds < 60) return "agora";
+  if(seconds < 3600) return `${Math.floor(seconds/60)}min`;
+  if(seconds < 86400) return `${Math.floor(seconds/3600)}h`;
+  if(seconds < 604800) return `${Math.floor(seconds/86400)}d`;
+  return `${Math.floor(seconds/604800)}sem`;
 }
 async function openUserModal(uid){
   const u=adminUsers.find(x=>x.uid===uid)||await getUserById(uid); if(!u) return;
@@ -3554,11 +3652,64 @@ async function openUserModal(uid){
   const uidEl=document.getElementById("modal-uid");
   if(uidEl) uidEl.textContent=`UID: ${u.uid.slice(0,12)}...`;
   const lv=calcLevel(u.xp||0), lvInfo_=levelInfo(u.xp||0), completed=(u.completedMissions||[]);
-  document.getElementById("modal-avatar").textContent=u.provider==="anonymous"?"👤":(u.name||"?")[0].toUpperCase();
-  document.getElementById("modal-name").textContent=u.provider==="anonymous"?"Visitante":u.name||"—";
-  document.getElementById("modal-email").textContent=u.email||u.provider||"—";
-  document.getElementById("modal-stats").innerHTML=`<div class="modal-stat"><span>${u.xp||0}</span><small>XP</small></div><div class="modal-stat"><span>Nv ${lv}</span><small>${lvInfo_.label}</small></div><div class="modal-stat"><span>${u.streak||0}</span><small>Streak 🔥</small></div><div class="modal-stat"><span>${completed.length}</span><small>Missões</small></div>`;
-  document.getElementById("modal-progress").innerHTML=`<div class="modal-prog-label">Diagnóstico: <strong>${u.detectedLevel?.toUpperCase()||"não feito"}</strong></div><div class="modal-prog-label">Segmento: <strong>${u.currentMission?.segmentId||"—"}</strong></div><div class="modal-prog-label" id="modal-prog-label-plan">Plano: <strong>${u.plan==="pro"?"Pro ⭐":"Free"}</strong></div><div class="modal-prog-label">Login: <strong>${u.provider==="google"?"Google":u.provider==="anonymous"?"Anônimo":"Email"}</strong></div>`;
+  // Avatar real no modal
+  const avatarEl = document.getElementById("modal-avatar");
+  if(avatarEl) avatarEl.outerHTML = renderUserAvatar(u, 52).replace('flex-shrink:0;', 'flex-shrink:0;') + `<div id="modal-avatar" style="display:none"></div>`;
+  // Fallback simples caso renderUserAvatar falhe
+  const avEl = document.getElementById("modal-avatar");
+  if(avEl) avEl.innerHTML = (u.avatar && u.avatar.length<=4) ? u.avatar : (u.name||"?")[0]?.toUpperCase()||"?";
+
+  document.getElementById("modal-name").textContent = u.provider==="anonymous"?"Visitante":u.name||"—";
+  document.getElementById("modal-email").textContent = u.username ? `@${u.username} · ${u.email||u.provider||"—"}` : (u.email||u.provider||"—");
+
+  // Stats expandidos
+  const gamesTotal = (u.gamesPlayed||0);
+  const missionsTotal = completed.length;
+  const lastSeen = u.lastSeen?.toDate ? u.lastSeen.toDate() : (u.lastSeen ? new Date(u.lastSeen) : null);
+  document.getElementById("modal-stats").innerHTML=`
+    <div class="modal-stat"><span>${u.xp||0}</span><small>XP</small></div>
+    <div class="modal-stat"><span>Nv ${lv}</span><small>${lvInfo_.label}</small></div>
+    <div class="modal-stat"><span>${u.streak||0}</span><small>Streak 🔥</small></div>
+    <div class="modal-stat"><span>${missionsTotal}</span><small>Missões</small></div>
+    <div class="modal-stat"><span>${gamesTotal}</span><small>Jogos</small></div>
+    <div class="modal-stat"><span>${u.writingCompleted||0}</span><small>Redações</small></div>
+  `;
+
+  // Segmentos praticados
+  const segsDone = [...new Set((completed).map(k=>k.split("_").slice(0,-2).join("_")||k.split("_")[0]))];
+  const segsHtml = segsDone.map(s=>{
+    const seg = getSegment(s); 
+    return seg ? `<span style="display:inline-flex;align-items:center;gap:3px;padding:3px 8px;background:rgba(255,255,255,0.06);border-radius:6px;font-size:11px;">${seg.icon||"📚"} ${seg.name}</span>` : "";
+  }).filter(Boolean).join("");
+
+  // Diagnóstico detalhado
+  const diag = u.diagnosisAnswers||{};
+  const diagMotivo = {profissional:"💼 Trabalho", pessoal:"🌍 Pessoal", ambos:"🚀 Ambos"}[diag.motivo] || diag.goal || "—";
+  const diagSegments = Array.isArray(diag.segments) ? diag.segments.join(", ") : (diag.segment||"—");
+  const diagDiff = {vocabulario:"📝 Vocabulário", pronuncia:"🗣️ Pronúncia", gramatica:"📖 Gramática", escuta:"👂 Escuta"}[diag.difficulty] || diag.difficulty || "—";
+
+  // Atividade recente
+  const createdAt = u.createdAt?.toDate ? u.createdAt.toDate() : null;
+  const createdStr = createdAt ? createdAt.toLocaleDateString("pt-BR") : "—";
+  const lastSeenStr = lastSeen ? lastSeen.toLocaleDateString("pt-BR",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}) : "—";
+  const referrals = u.referralCount||0;
+  const badges = (u.completedMissions||[]).length > 0 ? "Sim" : "Não";
+
+  document.getElementById("modal-progress").innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="modal-info-row"><span class="modal-info-label">📅 Cadastro</span><strong>${createdStr}</strong></div>
+      <div class="modal-info-row"><span class="modal-info-label">🕐 Última vez</span><strong>${lastSeenStr}</strong></div>
+      <div class="modal-info-row"><span class="modal-info-label">📊 Nível</span><strong>${u.detectedLevel?.toUpperCase()||"não testado"}</strong></div>
+      <div class="modal-info-row"><span class="modal-info-label">💳 Plano</span><strong>${u.plan==="pro"?"Pro ⭐":"Free"}</strong></div>
+      <div class="modal-info-row"><span class="modal-info-label">🔑 Login</span><strong>${u.provider==="google"?"Google":u.provider==="anonymous"?"Anônimo":"Email"}</strong></div>
+      <div class="modal-info-row"><span class="modal-info-label">🎯 Objetivo</span><strong>${diagMotivo}</strong></div>
+      <div class="modal-info-row"><span class="modal-info-label">😣 Dificuldade</span><strong>${diagDiff}</strong></div>
+      <div class="modal-info-row"><span class="modal-info-label">📚 Segmentos diag.</span><strong>${diagSegments}</strong></div>
+      ${referrals>0?`<div class="modal-info-row"><span class="modal-info-label">🎁 Indicações</span><strong>${referrals}</strong></div>`:""}
+      ${segsHtml?`<div style="margin-top:4px;"><div class="modal-info-label" style="margin-bottom:6px;">🗺️ Segmentos praticados</div><div style="display:flex;flex-wrap:wrap;gap:5px;">${segsHtml}</div></div>`:""}
+      ${diag.personalNote?`<div style="margin-top:4px;padding:10px;background:rgba(255,255,255,0.04);border-radius:10px;font-size:12px;color:rgba(255,255,255,0.6);line-height:1.5;">💬 "${diag.personalNote}"</div>`:""}
+    </div>
+  `;
   document.getElementById("btn-gen-pdf").onclick=()=>generatePDF(u);
   window.switchModalTab("info");
   document.getElementById("admin-modal").style.display="flex";

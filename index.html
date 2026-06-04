@@ -288,21 +288,28 @@
         </div>
       </div>
 
-      <!-- Step 1: ÁREA (segmento) -->
+      <!-- Step 1: ÁREA (segmento) — múltipla seleção -->
       <div class="diag-step" id="diag-step-1">
         <div class="diag-step-emoji">🏢</div>
         <div class="diag-step-title">Qual é a sua área de atuação?</div>
-        <div class="diag-step-sub">Vamos priorizar o vocabulário do seu setor</div>
-        <div class="diag-options diag-options-grid">
-          <button class="diag-option" data-value="maritimo">⚓ Marítimo / Porto</button>
-          <button class="diag-option" data-value="comex">🌍 COMEX / Exportação</button>
-          <button class="diag-option" data-value="offshore">🛢️ Offshore / Petróleo</button>
-          <button class="diag-option" data-value="hotelaria">🏨 Hotelaria</button>
-          <button class="diag-option" data-value="restaurantes">🍽️ Restaurantes</button>
-          <button class="diag-option" data-value="aeroporto">✈️ Aeroporto</button>
-          <button class="diag-option" data-value="corporativo">💼 Corporativo</button>
-          <button class="diag-option" data-value="outro">📖 Outro / Geral</button>
+        <div class="diag-step-sub">Pode escolher mais de uma! Vamos priorizar o vocabulário do seu setor</div>
+        <div class="diag-options diag-options-grid" id="diag-segment-options">
+          <button class="diag-option diag-option-multi" data-value="maritimo">⚓ Marítimo / Porto</button>
+          <button class="diag-option diag-option-multi" data-value="comex">🌍 COMEX / Exportação</button>
+          <button class="diag-option diag-option-multi" data-value="offshore">🛢️ Offshore / Petróleo</button>
+          <button class="diag-option diag-option-multi" data-value="hotelaria">🏨 Hotelaria</button>
+          <button class="diag-option diag-option-multi" data-value="restaurantes">🍽️ Restaurantes</button>
+          <button class="diag-option diag-option-multi" data-value="aeroporto">✈️ Aeroporto</button>
+          <button class="diag-option diag-option-multi" data-value="cruzeiros">🛳️ Cruzeiros</button>
+          <button class="diag-option diag-option-multi" data-value="corporativo">💼 Corporativo</button>
+          <button class="diag-option diag-option-multi" data-value="saude">🏥 Saúde</button>
+          <button class="diag-option diag-option-multi" data-value="turismo_santos">🏖️ Turismo Santos</button>
+          <button class="diag-option diag-option-multi" data-value="transporte">🚛 Transporte</button>
+          <button class="diag-option diag-option-multi" data-value="outro">📖 Outro / Geral</button>
         </div>
+        <button class="btn-primary" id="btn-confirm-segments" onclick="confirmSegments()" style="margin-top:16px;width:100%;display:none;">
+          Confirmar →
+        </button>
       </div>
 
       <!-- Step 2: DIFICULDADE -->
