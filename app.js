@@ -162,6 +162,30 @@ var I18N = {
     "feedback": "Feedback", "send_feedback": "Send Feedback",
     "pro_banner": "Unlock all segments",
     "daily_complete": "Daily missions complete!", "streak_record": "New streak record!",
+
+    // Dashboard
+    "lets_go": "Let's go!", "you_got_this": "You got this!",
+    "every_word": "Every word counts!", "hope_well": "Hope things are well!",
+    "one_step": "One step at a time!", "keep_going_strong": "Keep going strong!",
+    "xp_next_level": "XP to next level",
+    "pro_banner_sub": "Access all segments and phases",
+    "start_mission": "Start mission",
+    "all_missions_done": "All daily missions done! 🎉",
+    "tip_vocab": "Tip: repeat phrases out loud to remember better!",
+    "tip_streak": "Tip: practice every day to keep your streak!",
+    "tip_pro": "Tip: Pro users access all segments!",
+    "level_beginner": "Beginner 🌱", "level_basic": "Basic 📘",
+    "level_inter": "Intermediate ⭐", "level_advanced": "Advanced 🏆",
+    "next_mission": "Next:", "back_home": "Back to home",
+    "total_xp": "Total XP", "total_streak": "Streak 🔥", "total_missions": "Missions",
+    "edit_name": "Name", "edit_email": "Email", "edit_password": "Password",
+    "review_missions": "🔄 Review Missions", "refer_friends": "🎁 Refer Friends",
+    "pro_banner_title": "Unlock everything",
+    "pro_banner_sub2": "R$ 15/mo — all segments",
+    "next_badge_label": "Next achievement",
+    "xp_to_next": "XP to next level",
+    "coming_soon": "Coming soon",
+    "language_label": "🌐 Language",
   },
 
   // ── ESPAÑOL ────────────────────────────────────────────────────────────────
@@ -225,6 +249,33 @@ var I18N = {
     "feedback": "Comentarios", "send_feedback": "Enviar comentarios",
     "pro_banner": "Desbloquea todos los segmentos",
     "daily_complete": "¡Misiones del día completadas!", "streak_record": "¡Nuevo récord de racha!",
+    "lets_go": "¡Vamos allá!", "you_got_this": "¡Tú puedes!",
+    "every_word": "¡Cada palabra cuenta!", "hope_well": "¡Espero que estés bien!",
+    "one_step": "¡Un paso a la vez!", "keep_going_strong": "¡Sigue adelante!",
+    "xp_next_level": "XP para el siguiente nivel",
+    "pro_banner_sub": "Accede a todos los segmentos y fases",
+    "start_mission": "Iniciar misión",
+    "all_missions_done": "¡Todas las misiones del día completadas! 🎉",
+    "tip_vocab": "Consejo: repite las frases en voz alta para recordar mejor.",
+    "tip_streak": "Consejo: practica todos los días para mantener tu racha.",
+    "tip_pro": "Consejo: los usuarios Pro acceden a todos los segmentos.",
+    "level_beginner": "Principiante 🌱", "level_basic": "Básico 📘",
+    "level_inter": "Intermedio ⭐", "level_advanced": "Avanzado 🏆",
+    "next_mission": "Siguiente:", "back_home": "Volver al inicio",
+    "total_xp": "XP Total", "total_streak": "Racha 🔥", "total_missions": "Misiones",
+    "edit_name": "Nombre", "edit_email": "Correo", "edit_password": "Contraseña",
+    "review_missions": "🔄 Repasar Misiones", "refer_friends": "🎁 Invitar Amigos",
+    "pro_banner_title": "Desbloqueie tudo",
+    "pro_banner_sub2": "R$ 15/mês — todos os segmentos",
+    "next_badge_label": "Próxima conquista",
+    "xp_to_next": "XP para o próximo nível",
+    "coming_soon": "Em breve",
+    "pro_banner_title": "Desbloquea todo",
+    "pro_banner_sub2": "R$ 15/mes — todos los segmentos",
+    "next_badge_label": "Próximo logro",
+    "xp_to_next": "XP para el siguiente nivel",
+    "coming_soon": "Próximamente",
+    "language_label": "🌐 Idioma",
   },
 
   // ── DEUTSCH ────────────────────────────────────────────────────────────────
@@ -288,6 +339,28 @@ var I18N = {
     "feedback": "Feedback", "send_feedback": "Feedback senden",
     "pro_banner": "Alle Bereiche freischalten",
     "daily_complete": "Tägliche Aufgaben abgeschlossen!", "streak_record": "Neuer Streak-Rekord!",
+    "lets_go": "Los geht's!", "you_got_this": "Du schaffst das!",
+    "every_word": "Jedes Wort zählt!", "hope_well": "Ich hoffe, es geht dir gut!",
+    "one_step": "Schritt für Schritt!", "keep_going_strong": "Weiter so!",
+    "xp_next_level": "XP bis zum nächsten Level",
+    "pro_banner_sub": "Alle Bereiche und Phasen freischalten",
+    "start_mission": "Aufgabe starten",
+    "all_missions_done": "Alle täglichen Aufgaben erledigt! 🎉",
+    "tip_vocab": "Tipp: Sätze laut wiederholen hilft beim Merken!",
+    "tip_streak": "Tipp: Übe täglich, um deinen Streak zu halten!",
+    "tip_pro": "Tipp: Pro-Nutzer haben Zugang zu allen Bereichen!",
+    "level_beginner": "Anfänger 🌱", "level_basic": "Grundlagen 📘",
+    "level_inter": "Mittelstufe ⭐", "level_advanced": "Fortgeschritten 🏆",
+    "next_mission": "Nächste:", "back_home": "Zurück zur Übersicht",
+    "total_xp": "XP Gesamt", "total_streak": "Streak 🔥", "total_missions": "Aufgaben",
+    "edit_name": "Name", "edit_email": "E-Mail", "edit_password": "Passwort",
+    "review_missions": "🔄 Aufgaben wiederholen", "refer_friends": "🎁 Freunde einladen",
+    "pro_banner_title": "Alles freischalten",
+    "pro_banner_sub2": "R$ 15/Mo — alle Bereiche",
+    "next_badge_label": "Nächste Errungenschaft",
+    "xp_to_next": "XP bis zum nächsten Level",
+    "coming_soon": "Demnächst",
+    "language_label": "🌐 Sprache",
   },
 
   // ── ITALIANO ───────────────────────────────────────────────────────────────
@@ -351,8 +424,73 @@ var I18N = {
     "feedback": "Feedback", "send_feedback": "Invia feedback",
     "pro_banner": "Sblocca tutti i segmenti",
     "daily_complete": "Missioni del giorno completate!", "streak_record": "Nuovo record di streak!",
+    "lets_go": "Andiamo!", "you_got_this": "Ce la fai!",
+    "every_word": "Ogni parola conta!", "hope_well": "Spero che tu stia bene!",
+    "one_step": "Un passo alla volta!", "keep_going_strong": "Continua così!",
+    "xp_next_level": "XP per il prossimo livello",
+    "pro_banner_sub": "Accedi a tutti i segmenti e le fasi",
+    "start_mission": "Inizia missione",
+    "all_missions_done": "Tutte le missioni del giorno completate! 🎉",
+    "tip_vocab": "Consiglio: ripeti le frasi ad alta voce per ricordare meglio!",
+    "tip_streak": "Consiglio: pratica ogni giorno per mantenere la tua striscia!",
+    "tip_pro": "Consiglio: gli utenti Pro accedono a tutti i segmenti!",
+    "level_beginner": "Principiante 🌱", "level_basic": "Base 📘",
+    "level_inter": "Intermedio ⭐", "level_advanced": "Avanzato 🏆",
+    "next_mission": "Prossima:", "back_home": "Torna alla home",
+    "total_xp": "XP Totale", "total_streak": "Striscia 🔥", "total_missions": "Missioni",
+    "edit_name": "Nome", "edit_email": "Email", "edit_password": "Password",
+    "review_missions": "🔄 Ripassa Missioni", "refer_friends": "🎁 Invita Amici",
+    "pro_banner_title": "Sblocca tutto",
+    "pro_banner_sub2": "R$ 15/mese — tutti i segmenti",
+    "next_badge_label": "Prossimo traguardo",
+    "xp_to_next": "XP per il prossimo livello",
+    "coming_soon": "Prossimamente",
+    "language_label": "🌐 Lingua",
   }
 };
+
+// Nomes dos segmentos por idioma
+var SEG_NAMES = {
+  pt: {
+    maritimo:"Marítimo", comex:"COMEX", offshore:"Offshore",
+    hotelaria:"Hotelaria", restaurantes:"Restaurantes", aeroporto:"Aeroporto",
+    cruzeiros:"Cruzeiros", corporativo:"Corporativo", saude:"Saúde",
+    transporte:"Transporte", varejo:"Varejo", turismo_santos:"Turismo Santos",
+    gramatica:"Gramática",
+  },
+  en: {
+    maritimo:"Maritime", comex:"COMEX", offshore:"Offshore",
+    hotelaria:"Hospitality", restaurantes:"Restaurants", aeroporto:"Airport",
+    cruzeiros:"Cruises", corporativo:"Corporate", saude:"Healthcare",
+    transporte:"Transport", varejo:"Retail", turismo_santos:"Santos Tourism",
+    gramatica:"Grammar",
+  },
+  es: {
+    maritimo:"Marítimo", comex:"COMEX", offshore:"Petróleo",
+    hotelaria:"Hotelería", restaurantes:"Restaurantes", aeroporto:"Aeropuerto",
+    cruzeiros:"Cruceros", corporativo:"Corporativo", saude:"Salud",
+    transporte:"Transporte", varejo:"Ventas", turismo_santos:"Turismo Santos",
+    gramatica:"Gramática",
+  },
+  de: {
+    maritimo:"Maritime", comex:"Außenhandel", offshore:"Offshore",
+    hotelaria:"Hotellerie", restaurantes:"Gastronomie", aeroporto:"Flughafen",
+    cruzeiros:"Kreuzfahrt", corporativo:"Unternehmen", saude:"Gesundheit",
+    transporte:"Transport", varejo:"Einzelhandel", turismo_santos:"Santos Tourismus",
+    gramatica:"Grammatik",
+  },
+  it: {
+    maritimo:"Marittimo", comex:"Commercio", offshore:"Offshore",
+    hotelaria:"Ospitalità", restaurantes:"Ristoranti", aeroporto:"Aeroporto",
+    cruzeiros:"Crociere", corporativo:"Aziendale", saude:"Sanità",
+    transporte:"Trasporti", varejo:"Vendita", turismo_santos:"Turismo Santos",
+    gramatica:"Grammatica",
+  },
+};
+
+function segName(segId){
+  return SEG_NAMES[_lang]?.[segId] || SEG_NAMES["pt"]?.[segId] || segId;
+}
 
 // Idioma atual — padrão PT, salvo no localStorage
 var _lang = localStorage.getItem("vic_lang") || "pt";
@@ -371,20 +509,10 @@ function setLang(lang) {
 
 // Aplicar idioma em todos os elementos com data-i18n
 function applyLang() {
-  // Flags e labels por idioma
-  const LANG_FLAGS = { pt:"🇧🇷", en:"🇺🇸", es:"🇪🇸", de:"🇩🇪", it:"🇮🇹" };
-  const LANG_NEXT  = { pt:"🇺🇸 EN", en:"🇪🇸 ES", es:"🇩🇪 DE", de:"🇮🇹 IT", it:"🇧🇷 PT" };
+  // Flags e labels por idioma — mostra o idioma ATUAL
+  const LANG_LABELS = { pt:"🇧🇷 PT", en:"🇺🇸 EN", es:"🇪🇸 ES", de:"🇩🇪 DE", it:"🇮🇹 IT" };
 
-  // Atualizar toggle do header (cicla entre os idiomas)
-  const toggle = document.getElementById("lang-toggle");
-  if (toggle) {
-    toggle.textContent = LANG_NEXT[_lang] || "🇺🇸 EN";
-    toggle.onclick = () => {
-      const order = ["pt","en","es","de","it"];
-      const next = order[(order.indexOf(_lang)+1) % order.length];
-      setLang(next);
-    };
-  }
+  // Botão no header removido — seletor só no perfil agora
 
   // Destacar botão ativo nas configurações
   ["pt","en","es","de","it"].forEach(lang => {
@@ -421,13 +549,73 @@ function applyLang() {
 
 function renderDashboardTexts() {
   const el = id => document.getElementById(id);
-  if (el("dash-daily-title")) el("dash-daily-title").textContent = t("daily_missions");
+  // Labels principais
+  if (el("dash-daily-title"))    el("dash-daily-title").textContent    = t("daily_missions");
   if (el("dash-segments-label")) el("dash-segments-label").textContent = t("segments");
-  if (el("dash-quick-label")) el("dash-quick-label").textContent = t("quick_access");
-  if (el("btn-start-now")) el("btn-start-now").textContent = t("start_now");
-  if (el("btn-upgrade-dash")) el("btn-upgrade-dash").textContent = t("subscribe");
-  if (el("xp-track-label")) el("xp-track-label").textContent = t("xp_progress");
-  if (el("stat-ranking-label")) el("stat-ranking-label").textContent = t("ranking");
+  if (el("dash-quick-label"))    el("dash-quick-label").textContent    = t("quick_access");
+  if (el("btn-start-now"))       el("btn-start-now").textContent       = t("start_now");
+  if (el("btn-upgrade-dash"))    el("btn-upgrade-dash").textContent    = t("subscribe");
+  if (el("xp-track-label"))      el("xp-track-label").textContent      = t("xp_progress");
+  if (el("stat-ranking-label"))  el("stat-ranking-label").textContent  = t("ranking");
+  // XP next level
+  const xpNext = el("dash-xp-next");
+  if (xpNext && xpNext.textContent) {
+    const num = xpNext.textContent.replace(/[^0-9]/g,"");
+    if(num) xpNext.textContent = `${num} ${t("xp_next_level")}`;
+  }
+  // Pro banner
+  // pro banner sub handled in applyLang
+  // Botão sair admin
+  const logoutBtn = el("btn-logout");
+  if(logoutBtn) logoutBtn.title = t("logout");
+  // Stat card labels
+  const statLabels = document.querySelectorAll(".stat-label");
+  statLabels.forEach(el => {
+    const txt = el.textContent;
+    if(txt.includes("XP Total"))      el.textContent = t("total_xp")+" 📊";
+    if(txt.includes("Nível"))         el.textContent = t("level")+" ⭐";
+    if(txt.includes("Streak"))        el.textContent = t("total_streak");
+    if(txt.includes("Ranking"))       el.textContent = t("ranking");
+    if(txt.includes("Total XP"))      el.textContent = t("total_xp")+" 📊";
+    if(txt.includes("Level"))         el.textContent = t("level")+" ⭐";
+  });
+  // Perfil stat labels
+  document.querySelectorAll(".profile-stat small").forEach(el => {
+    const txt = el.textContent;
+    if(txt.includes("XP Total") || txt.includes("Total XP")) el.textContent = t("total_xp");
+    if(txt.includes("Streak"))   el.textContent = t("total_streak");
+    if(txt.includes("Missões") || txt.includes("Missions")) el.textContent = t("total_missions");
+  });
+  // Próxima conquista
+  const nbiLabel = document.querySelector(".nbi-label");
+  if(nbiLabel) nbiLabel.textContent = t("next_badge_label")||_lang==="pt"?"Próxima conquista":"Next achievement";
+  // Pro banner
+  const _pbt = document.getElementById("pro-banner-title");
+  const _pbs = document.getElementById("pro-banner-sub");
+  if(_pbt) _pbt.textContent = t("pro_banner_title");
+  if(_pbs) _pbs.textContent = t("pro_banner_sub2");
+  // Upgrade screen — traduzir
+  const upgTitle = document.querySelector(".upgrade-title");
+  if(upgTitle) upgTitle.textContent = t("upgrade_title");
+  const upgBtn = document.getElementById("btn-pay-mp");
+  if(upgBtn) upgBtn.textContent = t("upgrade_btn");
+  // Benefits
+  const benefits = document.querySelectorAll(".upgrade-benefit");
+  const benefitKeys = [
+    {pt:"Todos os segmentos", en:"All segments unlocked", es:"Todos los segmentos", de:"Alle Bereiche", it:"Tutti i segmenti"},
+    {pt:"Todas as fases",     en:"All phases (1→5)",      es:"Todas las fases",    de:"Alle Phasen",  it:"Tutte le fasi"},
+    {pt:"Jogos ilimitados",   en:"Unlimited games",       es:"Juegos ilimitados",  de:"Unbegrenzte Spiele", it:"Giochi illimitati"},
+    {pt:"Progresso na nuvem", en:"Cloud progress",        es:"Progreso en la nube",de:"Cloud-Fortschritt", it:"Progressi nel cloud"},
+  ];
+  benefits.forEach((el,i) => {
+    if(benefitKeys[i]) el.textContent = "✅ " + (benefitKeys[i][_lang] || benefitKeys[i].pt);
+  });
+  // Segmentos — re-render cards
+  if(document.querySelector(".segment-card")) renderSegments();
+  // Refazer saudação com novo idioma
+  if(userData?.name) buildGreeting(userData.name.split(" ")[0]||userData.name);
+  // Missões diárias — re-render
+  if(userData) renderDailyMissions();
 }
 
 function renderMissionTexts() {
@@ -515,10 +703,10 @@ function getRandomTip(level){
 }
 function levelInfo(xp){
   const l=calcLevel(xp);
-  if(l<=2) return {label:"Iniciante 🌱", msg:getRandomTip(1)};
-  if(l<=5) return {label:"Básico 📘",    msg:getRandomTip(2)};
-  if(l<=9) return {label:"Intermediário ⭐", msg:getRandomTip(3)};
-  return         {label:"Avançado 🏆",   msg:getRandomTip(4)};
+  if(l<=2) return {label:t("level_beginner"), msg:getRandomTip(1)};
+  if(l<=5) return {label:t("level_basic"),    msg:getRandomTip(2)};
+  if(l<=9) return {label:t("level_inter"),    msg:getRandomTip(3)};
+  return         {label:t("level_advanced"),  msg:getRandomTip(4)};
 }
 
 let _lastView = null;
@@ -610,22 +798,34 @@ const GREETINGS = ["Hello","Hi","Hey","Hi there","What's up","How's it going","H
 
 function buildGreeting(name){
   const h=new Date().getHours();
-  const timeEN=h<12?"Good morning":h<18?"Good afternoon":"Good evening";
-  const timePT=h<12?"Bom dia":h<18?"Boa tarde":"Boa noite";
-  const mots=[
-    {en:"Let's get this!",       pt:"Vamos nessa!"},
-    {en:"You got this!",         pt:"Você consegue!"},
-    {en:"Every word counts!",    pt:"Cada palavra conta!"},
-    {en:"Hope things are well!", pt:"Espero que esteja bem!"},
-    {en:"One step at a time!",   pt:"Um passo de cada vez!"},
-    {en:"Keep going strong!",    pt:"Continue firme!"},
-  ];
-  const mot=mots[Math.floor(Math.random()*mots.length)];
+  // Saudação de hora — usa i18n
+  const timeGreet = h<12 ? t("good_morning") : h<18 ? t("good_afternoon") : t("good_evening");
+  // Sempre em inglês (não muda)
+  const timeEN = h<12?"Good morning":h<18?"Good afternoon":"Good evening";
+
+  // Frases motivacionais — traduzidas
+  const motKeys=["lets_go","you_got_this","every_word","hope_well","one_step","keep_going_strong"];
+  const motKey = motKeys[Math.floor(Math.random()*motKeys.length)];
+  const motTranslated = t(motKey);
+  // Versão EN sempre fixa
+  const motEN_map = {"lets_go":"Let's get this!","you_got_this":"You got this!","every_word":"Every word counts!","hope_well":"Hope things are well!","one_step":"One step at a time!","keep_going_strong":"Keep going strong!"};
+  const motEN = motEN_map[motKey];
+
   const el=id=>document.getElementById(id);
   const greet=GREETINGS[Math.floor(Math.random()*GREETINGS.length)];
+  // Saudação sempre em inglês
   if(el("greeting-hi"))  el("greeting-hi").textContent=`${greet}, ${name}! 👋`;
-  if(el("greeting-time-en")) el("greeting-time-en").textContent=`${timeEN} — ${mot.en}`;
-  if(el("greeting-time-pt")) el("greeting-time-pt").textContent=`${timePT} — ${mot.pt}`;
+  if(el("greeting-time-en")) el("greeting-time-en").textContent=`${timeEN} — ${motEN}`;
+  // Linha de baixo = tradução no idioma selecionado (se não for EN)
+  const ptLine = el("greeting-time-pt");
+  if(ptLine){
+    if(_lang === "en"){
+      ptLine.style.display = "none"; // em inglês não precisa de 2ª linha
+    } else {
+      ptLine.style.display = "";
+      ptLine.textContent = `${timeGreet} — ${motTranslated}`;
+    }
+  }
   if(el("greeting-motivational")) el("greeting-motivational").style.display="none";
 }
 
@@ -1745,7 +1945,7 @@ function renderDashboard(){
   const milestoneEl=document.getElementById("dash-milestone-marker");
   if(milestoneEl&&nextBadge){
     milestoneEl.textContent=nextBadge.icon;
-    milestoneEl.title=`Próxima conquista: ${nextBadge.name}`;
+    milestoneEl.title=`${t('next_badge_label')}: ${nextBadge.name}`;
   }
   const lvEl=document.getElementById("greeting-level");
   if(lvEl) lvEl.textContent=`${lv.label} — ${lv.msg}`;
@@ -1781,7 +1981,7 @@ function renderSegments(){
   regularSegs.forEach(seg=>{
     const div=document.createElement("div");
     div.className=`segment-card ${seg.available?"available":"locked"}`;
-    div.innerHTML=`<span class="seg-icon">${seg.icon}</span><span class="seg-name">${seg.name}</span>${seg.comingSoon?'<span class="seg-badge">Em breve</span>':""}`;
+    div.innerHTML=`<span class="seg-icon">${seg.icon}</span><span class="seg-name">${segName(seg.id)}</span>${seg.comingSoon?'<span class="seg-badge">Em breve</span>':""}`;
     if(seg.available) div.addEventListener("click",()=>openSegmentPhases(seg.id));
     c.appendChild(div);
   });
