@@ -1785,6 +1785,10 @@ function openMissionsList(segId,phaseId){
 
 // ── MISSION ───────────────────────────────────────────────────────────────────
 function enterMission(segId,phaseId,misId){
+  // Som do segmento ao entrar num novo segmento
+  if(segId !== currentSegmentId){
+    try{ SoundFX.segmentSound(segId); }catch(e){}
+  }
   currentSegmentId=segId; currentPhaseId=phaseId; currentMissionId=misId; currentPhraseIndex=0;
   resetRecorder(); renderMission(); showView("view-mission");
 }
@@ -4998,11 +5002,78 @@ async function loadLeaderboard(mode){
   }
 }
 
+// ── MERCADO PAGO — verificar retorno ─────────────────────────────────────────
+async function checkMercadoPagoReturn(){
+  const params = new URLSearchParams(window.location.search);
+  const status = params.get("status") || params.get("collection_status");
+  const paymentId = params.get("payment_id") || params.get("collection_id");
+  if(!status || !paymentId) return;
+  window.history.replaceState({}, document.title, window.location.pathname);
+  if(status === "approved"){
+    localStorage.setItem("vic_pending_pro", JSON.stringify({paymentId, approvedAt: Date.now()}));
+    if(currentUser?.uid) await activateProAfterPayment(paymentId);
+  } else if(status === "pending" || status === "in_process"){
+    setTimeout(()=>showXpToast("⏳ Pagamento em processamento!"), 1000);
+  } else if(status === "failure" || status === "rejected"){
+    setTimeout(()=>showXpToast("❌ Pagamento não aprovado. Tente novamente."), 1000);
+  }
+}
+
+async function activateProAfterPayment(paymentId){
+  if(!currentUser?.uid) return;
+  try{
+    await saveProgress(currentUser.uid,{plan:"pro",proActivatedAt:Date.now(),proPaymentId:paymentId});
+    if(userData) userData.plan="pro";
+    localStorage.removeItem("vic_pending_pro");
+    setTimeout(()=>showProActivatedCelebration(), 500);
+  }catch(e){ console.error("Erro ao ativar Pro:",e.message); }
+}
+
+function showProActivatedCelebration(){
+  document.getElementById("pro-celebration-overlay")?.remove();
+  const overlay = document.createElement("div");
+  overlay.id = "pro-celebration-overlay";
+  overlay.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeIn .3s ease;";
+  overlay.innerHTML = `<div style="background:linear-gradient(135deg,#1a0d2e,#2d1b4e);border:2px solid #ffd700;border-radius:24px;padding:40px 32px;text-align:center;max-width:320px;width:90%;box-shadow:0 0 60px rgba(255,215,0,0.3);">
+    <div style="font-size:64px;margin-bottom:16px;">🌟</div>
+    <div style="font-size:24px;font-weight:800;color:#ffd700;margin-bottom:8px;">Você é PRO agora!</div>
+    <div style="font-size:15px;color:#e0d0ff;margin-bottom:24px;line-height:1.5;">Acesso total desbloqueado!<br>Todos os segmentos são seus!</div>
+    <button onclick="document.getElementById('pro-celebration-overlay').remove();renderDashboard();" style="background:linear-gradient(135deg,#ffd700,#ffaa00);color:#1a0d2e;border:none;border-radius:12px;padding:14px 32px;font-size:16px;font-weight:800;cursor:pointer;width:100%;">🚀 Começar agora!</button>
+  </div>`;
+  document.body.appendChild(overlay);
+  SoundFX.complete();
+}
+
+
 function init(){
   _domReady = true;
 
-  // Start by showing auth view
-  showView("view-auth");
+  // ── Safari/iOS: AudioContext precisa ser resumido após interação ─────────────
+  document.addEventListener("touchstart", ()=>{
+    if(window.AudioContext || window.webkitAudioContext){
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      if(ctx.state === "suspended") ctx.resume();
+    }
+  }, {once: true});
+
+  // ── Aplicar idioma salvo ────────────────────────────────────────────────────
+  applyLang();
+
+  // ── Mercado Pago: verificar retorno de pagamento ────────────────────────────
+  checkMercadoPagoReturn();
+
+  // ── Safari/iOS: capturar resultado do redirect Google ───────────────────────
+  if(typeof handleGoogleRedirectResult === "function"){
+    handleGoogleRedirectResult().catch(()=>{});
+  }
+
+  // ── Onboarding: mostrar só na primeira vez ──────────────────────────────────
+  const onboardingDone = localStorage.getItem("vic_onboarding_done");
+  if(!onboardingDone){
+    startOnboarding();
+  } else {
+    showView("view-auth");
+  }
 
   // If auth already fired before DOM was ready, handle it now
   if(_pendingAuthUser !== undefined) _handleAuth(_pendingAuthUser);
