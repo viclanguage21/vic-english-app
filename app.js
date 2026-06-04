@@ -8,7 +8,7 @@ import { auth, registerUser, loginUser, loginWithGoogle, loginAnonymous, logoutU
 // Só a interface (botões, labels, menus) muda
 // ══════════════════════════════════════════════════════════════════════════════
 
-const I18N = {
+var I18N = {
   pt: {
     // Auth
     "login": "Entrar", "register": "Criar Conta", "logout": "Sair",
@@ -16,10 +16,10 @@ const I18N = {
     "username": "@ Nome de usuário", "keep_logged": "Manter-me conectado",
     "login_google": "Entrar com Google", "login_anon": "👤 Entrar sem cadastro",
     "creating": "Criando...", "entering": "Entrando...",
-    "fill_all": t("fill_all"),
-    "min_password": t("min_password"),
-    "min_username": t("min_username"),
-    "create_username": t("create_username"),
+    "fill_all": "Preencha todos os campos.",
+    "min_password": "Senha mínimo 6 caracteres.",
+    "min_username": "Nome de usuário precisa ter ao menos 3 caracteres.",
+    "create_username": "Crie um nome de usuário para o ranking.",
     "username_hint": "Aparece no ranking. Só letras, números e _",
 
     // Dashboard
@@ -32,7 +32,7 @@ const I18N = {
     // Navegação
     "back": "← Voltar", "next": "Próximo →", "previous": "← Anterior",
     "continue": "Continuar", "skip": "Pular", "done": "Concluído",
-    "back_dashboard": "Voltar ao Dashboard", "back_segments": t("back_segments"),
+    "back_dashboard": "Voltar ao Dashboard", "back_segments": "← Segmentos",
     "back_phases": "← Fases", "back_exercises": "← Exercícios",
 
     // Exercícios
@@ -43,7 +43,7 @@ const I18N = {
     "your_answer": "Sua resposta...", "type_here": "Digite aqui...",
 
     // Missão completa
-    "mission_complete": t("mission_complete"), "perfect_score": "Nota perfeita!",
+    "mission_complete": "Missão Concluída!", "perfect_score": "Nota perfeita!",
     "great_job": "Muito bem!", "keep_going": "Continue assim!",
 
     // Perfil
@@ -355,7 +355,7 @@ const I18N = {
 };
 
 // Idioma atual — padrão PT, salvo no localStorage
-let _lang = localStorage.getItem("vic_lang") || "pt";
+var _lang = localStorage.getItem("vic_lang") || "pt";
 
 // Função principal de tradução
 function t(key) {
