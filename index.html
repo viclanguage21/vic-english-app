@@ -443,13 +443,6 @@
           <span id="dash-avatar-icon">👤</span>
           <span class="dash-avatar-edit">✏️</span>
         </div>
-        <button id="lang-toggle" onclick="setLang(_lang==='pt'?'en':'pt')"
-          title="Switch language"
-          style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
-                 border-radius:999px;padding:5px 12px;color:#fff;font-size:12px;font-weight:700;
-                 cursor:pointer;font-family:inherit;letter-spacing:.3px;">
-          🇺🇸 EN
-        </button>
         <button class="btn-logout-icon" id="btn-logout" title="Sair">⏻</button>
       </div>
     </div>
@@ -552,7 +545,7 @@
     <div class="quick-grid">
       <button class="quick-btn" id="btn-goto-flashcards">🃏 Flashcards</button>
       <button class="quick-btn" id="btn-goto-memory">🧠 Memória</button>
-      <button class="quick-btn" id="btn-goto-truefalse">✅ V ou F</button>
+      <button class="quick-btn" id="btn-goto-truefalse">✅ Verdadeiro ou Falso</button>
       <button class="quick-btn" id="btn-goto-dialogue">💬 Diálogo</button>
     </div>
 
@@ -565,10 +558,10 @@
         <div class="gc-icon">📖</div>
         <div class="gc-text">
           <div class="gc-title">Grammar Core</div>
-          <div class="gc-sub">20 subcategorias — todas liberadas</div>
+          <div class="gc-sub" id="gc-sub-grammar">20 subcategorias — todas liberadas</div>
           <div class="gc-tags">
             <span>Present Simple</span><span>Modals</span><span>Phrasal Verbs</span>
-            <span>Conditionals</span><span>Passive Voice</span><span>+15 mais</span>
+            <span>Conditionals</span><span>Passive Voice</span><span id="gc-tags-more">+15 mais</span>
           </div>
         </div>
       </div>
@@ -581,7 +574,7 @@
         <div class="gc-icon">✍️</div>
         <div class="gc-text">
           <div class="gc-title">Writing & Translation</div>
-          <div class="gc-sub">Escreva, traduza e corrija com IA</div>
+          <div class="gc-sub" id="writing-sub">Escreva, traduza e corrija com IA</div>
           <div class="gc-tags">
             <span>Emails</span><span>Relatórios</span><span>Tradução</span>
             <span>Composição</span><span>Correção automática</span>
@@ -628,7 +621,7 @@
           <img src="new_logo_big.png" alt="VIC English" class="about-logo-eq"/>
           <img src="vic_speech.png" alt="VIC Language" class="about-logo-eq"/>
         </div>
-        <div class="about-title">Quem Somos</div>
+        <div class="about-title" id="about-title-text">Quem Somos</div>
         <div class="about-body">
           <p>A <a href="https://viclanguage.com.br" target="_blank" class="about-link">VIC Language</a> é um hub de serviços linguísticos fundado por <strong>Victor Ayres</strong> — linguista, professor certificado TEFL e intérprete com mais de 10 anos de experiência, com atuação em ambientes como Virgin Voyages, Tribunal de Justiça de SP e o setor portuário de Santos.</p>
           <p>O <strong>VIC English App</strong> é nossa solução digital de treinamento profissional — desenvolvido especialmente para trabalhadores da <strong>Baixada Santista</strong> que atuam em contextos internacionais: portuários, hoteleiros, profissionais de saúde, motoristas, equipes offshore e equipes corporativas.</p>
@@ -1496,13 +1489,13 @@
 
     <!-- Commitment — right after XP -->
     <div class="profile-section">
-      <div class="profile-section-title">🎯 Comprometimento</div>
+      <div class="profile-section-title" id="prof-title-commitment">🎯 Comprometimento</div>
       <div class="commitment-card" id="commitment-card" style="cursor:pointer" onclick="showCommitmentTips()"></div>
     </div>
 
     <!-- Activity Calendar -->
     <div class="profile-section">
-      <div class="profile-section-title">📅 Calendário de Atividade</div>
+      <div class="profile-section-title" id="prof-title-calendar">📅 Calendário de Atividade</div>
       <div class="activity-calendar" id="activity-calendar"></div>
       <div class="activity-legend">
         <span class="al-box al-0"></span><span>Sem atividade</span>
@@ -1531,19 +1524,19 @@
 
     <!-- Skills analysis -->
     <div class="profile-section">
-      <div class="profile-section-title">🧠 Habilidades</div>
+      <div class="profile-section-title" id="prof-title-skills">🧠 Habilidades</div>
       <div id="profile-skills"></div>
     </div>
 
     <!-- Personal goal -->
     <div class="profile-section" id="profile-goal-section" style="display:none">
-      <div class="profile-section-title">💬 Seu objetivo pessoal</div>
+      <div class="profile-section-title" id="prof-title-goal">💬 Seu objetivo pessoal</div>
       <div class="profile-goal-text" id="profile-goal-text"></div>
     </div>
 
     <!-- Account settings -->
     <div class="profile-section">
-      <div class="profile-section-title">👤 Conta</div>
+      <div class="profile-section-title" id="prof-title-account">👤 Conta</div>
       <div class="settings-big-btns">
         <button class="settings-big-btn" id="btn-edit-name">✏️ Mudar Nome</button>
         <button class="settings-big-btn" id="btn-edit-email">📧 Mudar Email</button>
@@ -1553,7 +1546,7 @@
 
     <!-- Social links -->
     <div class="profile-section">
-      <div class="profile-section-title">📱 Nossas Redes</div>
+      <div class="profile-section-title" id="prof-title-networks">📱 Nossas Redes</div>
       <div class="social-links-grid">
         <a href="https://www.instagram.com/viclanguage" target="_blank" class="social-link-btn social-instagram">
           <span class="sl-icon">📸</span>
@@ -1576,7 +1569,7 @@
 
     <!-- Preferences -->
     <div class="profile-section">
-      <div class="profile-section-title">⚙️ Preferências</div>
+      <div class="profile-section-title" id="prof-title-prefs">⚙️ Preferências</div>
       <div class="settings-item">
         <span>🔊 Sons</span>
         <label class="toggle-switch">
@@ -1602,16 +1595,16 @@
       </div>
       <div class="settings-item">
         <div class="settings-row settings-row-lang" style="flex-direction:column;align-items:flex-start;gap:10px;border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:16px;margin-bottom:4px;">
-          <span data-i18n="language">🌐 Idioma</span>
+          <span id="lang-section-label">Língua do App</span>
           <div style="display:flex;gap:6px;flex-wrap:wrap;">
-            <button onclick="setLang('pt')" id="lang-btn-pt" class="lang-btn">🇧🇷 PT</button>
-            <button onclick="setLang('en')" id="lang-btn-en" class="lang-btn">🇺🇸 EN</button>
-            <button onclick="setLang('es')" id="lang-btn-es" class="lang-btn">🇪🇸 ES</button>
-            <button onclick="setLang('de')" id="lang-btn-de" class="lang-btn">🇩🇪 DE</button>
-            <button onclick="setLang('it')" id="lang-btn-it" class="lang-btn">🇮🇹 IT</button>
+            <button onclick="setLang('pt')" id="lang-btn-pt" class="lang-btn">🇧🇷 Português</button>
+            <button onclick="setLang('en')" id="lang-btn-en" class="lang-btn">🇺🇸 English</button>
+            <button onclick="setLang('es')" id="lang-btn-es" class="lang-btn">🇪🇸 Español</button>
+            <button onclick="setLang('de')" id="lang-btn-de" class="lang-btn">🇩🇪 Deutsch</button>
+            <button onclick="setLang('it')" id="lang-btn-it" class="lang-btn">🇮🇹 Italiano</button>
           </div>
         </div>
-        <span>🔔 Notificações</span>
+        <span id="notif-label">🔔 Notificações</span>
         <label class="toggle-switch">
           <input type="checkbox" id="toggle-notif" checked/>
           <span class="toggle-slider"></span>
@@ -1629,11 +1622,11 @@
 
     <!-- Share & Contact -->
     <div class="profile-section">
-      <div class="profile-section-title">🌐 Compartilhar & Contato</div>
+      <div class="profile-section-title" id="prof-title-share">🌐 Compartilhar & Contato</div>
       <div class="settings-big-btns">
         <button class="settings-big-btn" id="btn-share-app">📤 Compartilhar o App</button>
         <a class="settings-big-btn" href="https://viclanguage.com.br" target="_blank" style="text-decoration:none">
-          🏫 Site Oficial — VIC Language
+          <span id="official-site-btn">🏫 Site Oficial — VIC Language</span>
         </a>
       </div>
       <!-- Share panel -->
@@ -1646,8 +1639,8 @@
 
       <!-- Contact form -->
       <div class="contact-form-section">
-        <div class="contact-form-title">💬 Manda uma mensagem pra gente!</div>
-        <div class="contact-form-sub">Dúvidas, sugestões ou quer saber mais sobre o VIC English?</div>
+        <div class="contact-form-title" id="contact-form-title-text">💬 Manda uma mensagem pra gente!</div>
+        <div class="contact-form-sub" id="contact-form-sub-text">Dúvidas, sugestões ou quer saber mais sobre o VIC English?</div>
         <textarea class="contact-form-textarea" id="contact-form-text" placeholder="Escreva aqui..."></textarea>
         <button class="settings-big-btn contact-form-send" id="btn-send-contact">📨 Enviar mensagem</button>
       </div>

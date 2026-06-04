@@ -185,6 +185,60 @@ var I18N = {
     "next_badge_label": "Next achievement",
     "xp_to_next": "XP to next level",
     "coming_soon": "Coming soon",
+    "qa_memory": "🧠 Memory",
+    "qa_truefalse": "✅ True or False",
+    "qa_dialogue": "💬 Dialogue",
+    "qa_flashcards": "🃏 Flashcards",
+    "gc_sub": "20 subcategories — all unlocked",
+    "gc_tags_more": "+15 more",
+    "writing_sub": "Write, translate and correct with AI",
+    "writing_tag1": "Emails",
+    "writing_tag2": "Reports",
+    "writing_tag3": "Translation",
+    "writing_tag4": "Composition",
+    "writing_tag5": "Auto-correction",
+    "feedback_title": "How is your learning going? ⭐",
+    "feedback_comment": "💬 Comment",
+    "feedback_like": "👍 Liked it",
+    "feedback_bug": "🐛 Report bug",
+    "about_us": "ℹ️ About us",
+    "about_title": "About Us",
+    "about_mission": "💡 Mission: connecting people, cultures and businesses through English — turning potential into real results.",
+    "about_app": "📱 VIC English App — digital training ›",
+    "about_incompany": "🏢 In-Company Training ›",
+    "about_aulas": "📚 Private lessons ›",
+    "about_trad": "📄 Professional translation ›",
+    "about_interp": "🎙️ Live interpretation ›",
+    "prof_commitment": "🎯 Commitment",
+    "prof_calendar": "📅 Activity Calendar",
+    "prof_skills": "🧠 Skills",
+    "prof_goal": "💬 Your personal goal",
+    "prof_account": "👤 Account",
+    "prof_networks": "📱 Our Networks",
+    "prof_prefs": "⚙️ Preferences",
+    "prof_share": "🌐 Share & Contact",
+    "acc_name": "Name",
+    "acc_email": "Email",
+    "acc_password": "Password",
+    "acc_edit_name": "✏️ Edit name",
+    "acc_edit_email": "✏️ Edit email",
+    "acc_edit_pass": "🔑 Change password",
+    "commitment_high": "🔥 High",
+    "commitment_mid": "⚡ Medium",
+    "commitment_low": "🌱 Low",
+    "share_app": "📤 Share the App",
+    "contact_title": "💬 Send us a message!",
+    "contact_sub": "Questions, suggestions or want to know more about VIC English?",
+    "contact_placeholder": "Write here...",
+    "contact_send": "📨 Send message",
+    "pref_sounds": "🔊 Sounds",
+    "pref_dark": "🌙 Dark mode",
+    "pref_font": "🔤 Font size",
+    "pref_lang": "App Language",
+    "notif_title": "🔔 Notifications",
+    "notif_freq_label": "Reminder frequency",
+    "notif_per_day": "times per day",
+    "official_site": "🏫 Official Site — VIC Language",
     "language_label": "🌐 Language",
   },
 
@@ -275,6 +329,114 @@ var I18N = {
     "next_badge_label": "Próximo logro",
     "xp_to_next": "XP para el siguiente nivel",
     "coming_soon": "Próximamente",
+    "qa_memory": "🧠 Memória",
+    "qa_truefalse": "✅ Verdadeiro ou Falso",
+    "qa_dialogue": "💬 Diálogo",
+    "qa_flashcards": "🃏 Flashcards",
+    "gc_sub": "20 subcategorias — todas liberadas",
+    "gc_tags_more": "+15 mais",
+    "writing_sub": "Escreva, traduza e corrija com IA",
+    "writing_tag1": "Emails",
+    "writing_tag2": "Relatórios",
+    "writing_tag3": "Tradução",
+    "writing_tag4": "Composição",
+    "writing_tag5": "Correção automática",
+    "feedback_title": "Como está seu aprendizado? ⭐",
+    "feedback_comment": "💬 Comentário",
+    "feedback_like": "👍 Gostei",
+    "feedback_bug": "🐛 Reportar bug",
+    "about_us": "ℹ️ Quem somos",
+    "about_title": "Quem Somos",
+    "about_mission": "💡 Missão: conectar pessoas, culturas e negócios através do inglês — transformando potencial em resultados reais.",
+    "about_app": "📱 VIC English App — treinamento digital ›",
+    "about_incompany": "🏢 Treinamentos In-Company ›",
+    "about_aulas": "📚 Aulas personalizadas ›",
+    "about_trad": "📄 Tradução profissional ›",
+    "about_interp": "🎙️ Interpretação ao vivo ›",
+    "prof_commitment": "🎯 Comprometimento",
+    "prof_calendar": "📅 Calendário de Atividade",
+    "prof_skills": "🧠 Habilidades",
+    "prof_goal": "💬 Seu objetivo pessoal",
+    "prof_account": "👤 Conta",
+    "prof_networks": "📱 Nossas Redes",
+    "prof_prefs": "⚙️ Preferências",
+    "prof_share": "🌐 Compartilhar & Contato",
+    "acc_name": "Nome",
+    "acc_email": "Email",
+    "acc_password": "Senha",
+    "acc_edit_name": "✏️ Editar nome",
+    "acc_edit_email": "✏️ Editar email",
+    "acc_edit_pass": "🔑 Trocar senha",
+    "commitment_high": "🔥 Alto",
+    "commitment_mid": "⚡ Médio",
+    "commitment_low": "🌱 Baixo",
+    "share_app": "📤 Compartilhar o App",
+    "contact_title": "💬 Manda uma mensagem pra gente!",
+    "contact_sub": "Dúvidas, sugestões ou quer saber mais sobre o VIC English?",
+    "contact_placeholder": "Escreva aqui...",
+    "contact_send": "📨 Enviar mensagem",
+    "pref_sounds": "🔊 Sons",
+    "pref_dark": "🌙 Modo escuro",
+    "pref_font": "🔤 Tamanho da fonte",
+    "pref_lang": "Língua do App",
+    "notif_title": "🔔 Notificações",
+    "notif_freq_label": "Frequência de lembretes",
+    "notif_per_day": "vezes por dia",
+    "official_site": "🏫 Site Oficial — VIC Language",
+    "qa_memory": "🧠 Memoria",
+    "qa_truefalse": "✅ Verdadero o Falso",
+    "qa_dialogue": "💬 Diálogo",
+    "qa_flashcards": "🃏 Tarjetas",
+    "gc_sub": "20 subcategorías — todas desbloqueadas",
+    "gc_tags_more": "+15 más",
+    "writing_sub": "Escribe, traduce y corrige con IA",
+    "writing_tag1": "Emails",
+    "writing_tag2": "Informes",
+    "writing_tag3": "Traducción",
+    "writing_tag4": "Composición",
+    "writing_tag5": "Corrección automática",
+    "feedback_title": "¿Cómo va tu aprendizaje? ⭐",
+    "feedback_comment": "💬 Comentario",
+    "feedback_like": "👍 Me gustó",
+    "feedback_bug": "🐛 Reportar error",
+    "about_us": "ℹ️ Quiénes somos",
+    "about_title": "Quiénes Somos",
+    "about_mission": "💡 Misión: conectar personas, culturas y negocios a través del inglés.",
+    "about_app": "📱 VIC English App ›",
+    "about_incompany": "🏢 Capacitaciones In-Company ›",
+    "about_aulas": "📚 Clases personalizadas ›",
+    "about_trad": "📄 Traducción profesional ›",
+    "about_interp": "🎙️ Interpretación en vivo ›",
+    "prof_commitment": "🎯 Compromiso",
+    "prof_calendar": "📅 Calendario de Actividad",
+    "prof_skills": "🧠 Habilidades",
+    "prof_goal": "💬 Tu objetivo personal",
+    "prof_account": "👤 Cuenta",
+    "prof_networks": "📱 Nuestras Redes",
+    "prof_prefs": "⚙️ Preferencias",
+    "prof_share": "🌐 Compartir & Contacto",
+    "acc_name": "Nombre",
+    "acc_email": "Correo",
+    "acc_password": "Contraseña",
+    "acc_edit_name": "✏️ Editar nombre",
+    "acc_edit_email": "✏️ Editar correo",
+    "acc_edit_pass": "🔑 Cambiar contraseña",
+    "commitment_high": "🔥 Alto",
+    "commitment_mid": "⚡ Medio",
+    "commitment_low": "🌱 Bajo",
+    "share_app": "📤 Compartir la App",
+    "contact_title": "💬 ¡Envíanos un mensaje!",
+    "contact_sub": "¿Dudas, sugerencias o quieres saber más sobre VIC English?",
+    "contact_placeholder": "Escribe aquí...",
+    "contact_send": "📨 Enviar mensaje",
+    "pref_sounds": "🔊 Sonidos",
+    "pref_dark": "🌙 Modo oscuro",
+    "pref_font": "🔤 Tamaño de fuente",
+    "pref_lang": "Idioma de la App",
+    "notif_title": "🔔 Notificaciones",
+    "notif_freq_label": "Frecuencia de recordatorios",
+    "notif_per_day": "veces al día",
+    "official_site": "🏫 Sitio Oficial — VIC Language",
     "language_label": "🌐 Idioma",
   },
 
@@ -360,6 +522,60 @@ var I18N = {
     "next_badge_label": "Nächste Errungenschaft",
     "xp_to_next": "XP bis zum nächsten Level",
     "coming_soon": "Demnächst",
+    "qa_memory": "🧠 Memory",
+    "qa_truefalse": "✅ Wahr oder Falsch",
+    "qa_dialogue": "💬 Dialog",
+    "qa_flashcards": "🃏 Lernkarten",
+    "gc_sub": "20 Unterkategorien — alle freigeschaltet",
+    "gc_tags_more": "+15 mehr",
+    "writing_sub": "Schreiben, übersetzen und korrigieren mit KI",
+    "writing_tag1": "E-Mails",
+    "writing_tag2": "Berichte",
+    "writing_tag3": "Übersetzung",
+    "writing_tag4": "Aufsatz",
+    "writing_tag5": "Automatische Korrektur",
+    "feedback_title": "Wie läuft dein Lernen? ⭐",
+    "feedback_comment": "💬 Kommentar",
+    "feedback_like": "👍 Gefällt mir",
+    "feedback_bug": "🐛 Fehler melden",
+    "about_us": "ℹ️ Über uns",
+    "about_title": "Über Uns",
+    "about_mission": "💡 Mission: Menschen, Kulturen und Unternehmen durch Englisch verbinden.",
+    "about_app": "📱 VIC English App ›",
+    "about_incompany": "🏢 In-Company Training ›",
+    "about_aulas": "📚 Private Kurse ›",
+    "about_trad": "📄 Professionelle Übersetzung ›",
+    "about_interp": "🎙️ Live-Dolmetschen ›",
+    "prof_commitment": "🎯 Engagement",
+    "prof_calendar": "📅 Aktivitätskalender",
+    "prof_skills": "🧠 Fähigkeiten",
+    "prof_goal": "💬 Dein persönliches Ziel",
+    "prof_account": "👤 Konto",
+    "prof_networks": "📱 Unsere Netzwerke",
+    "prof_prefs": "⚙️ Einstellungen",
+    "prof_share": "🌐 Teilen & Kontakt",
+    "acc_name": "Name",
+    "acc_email": "E-Mail",
+    "acc_password": "Passwort",
+    "acc_edit_name": "✏️ Name bearbeiten",
+    "acc_edit_email": "✏️ E-Mail bearbeiten",
+    "acc_edit_pass": "🔑 Passwort ändern",
+    "commitment_high": "🔥 Hoch",
+    "commitment_mid": "⚡ Mittel",
+    "commitment_low": "🌱 Niedrig",
+    "share_app": "📤 App teilen",
+    "contact_title": "💬 Schreib uns!",
+    "contact_sub": "Fragen, Vorschläge oder mehr über VIC English erfahren?",
+    "contact_placeholder": "Hier schreiben...",
+    "contact_send": "📨 Nachricht senden",
+    "pref_sounds": "🔊 Töne",
+    "pref_dark": "🌙 Dunkelmodus",
+    "pref_font": "🔤 Schriftgröße",
+    "pref_lang": "App-Sprache",
+    "notif_title": "🔔 Benachrichtigungen",
+    "notif_freq_label": "Erinnerungsfrequenz",
+    "notif_per_day": "mal pro Tag",
+    "official_site": "🏫 Offizielle Website — VIC Language",
     "language_label": "🌐 Sprache",
   },
 
@@ -445,6 +661,60 @@ var I18N = {
     "next_badge_label": "Prossimo traguardo",
     "xp_to_next": "XP per il prossimo livello",
     "coming_soon": "Prossimamente",
+    "qa_memory": "🧠 Memory",
+    "qa_truefalse": "✅ Vero o Falso",
+    "qa_dialogue": "💬 Dialogo",
+    "qa_flashcards": "🃏 Flashcard",
+    "gc_sub": "20 sottocategorie — tutte sbloccate",
+    "gc_tags_more": "+15 altro",
+    "writing_sub": "Scrivi, traduci e correggi con l'IA",
+    "writing_tag1": "Email",
+    "writing_tag2": "Relazioni",
+    "writing_tag3": "Traduzione",
+    "writing_tag4": "Composizione",
+    "writing_tag5": "Correzione automatica",
+    "feedback_title": "Com'è il tuo apprendimento? ⭐",
+    "feedback_comment": "💬 Commento",
+    "feedback_like": "👍 Mi è piaciuto",
+    "feedback_bug": "🐛 Segnala errore",
+    "about_us": "ℹ️ Chi siamo",
+    "about_title": "Chi Siamo",
+    "about_mission": "💡 Missione: connettere persone, culture e aziende attraverso l'inglese.",
+    "about_app": "📱 VIC English App ›",
+    "about_incompany": "🏢 Formazione In-Company ›",
+    "about_aulas": "📚 Lezioni private ›",
+    "about_trad": "📄 Traduzione professionale ›",
+    "about_interp": "🎙️ Interpretariato dal vivo ›",
+    "prof_commitment": "🎯 Impegno",
+    "prof_calendar": "📅 Calendario Attività",
+    "prof_skills": "🧠 Competenze",
+    "prof_goal": "💬 Il tuo obiettivo personale",
+    "prof_account": "👤 Account",
+    "prof_networks": "📱 I Nostri Social",
+    "prof_prefs": "⚙️ Preferenze",
+    "prof_share": "🌐 Condividi & Contatto",
+    "acc_name": "Nome",
+    "acc_email": "Email",
+    "acc_password": "Password",
+    "acc_edit_name": "✏️ Modifica nome",
+    "acc_edit_email": "✏️ Modifica email",
+    "acc_edit_pass": "🔑 Cambia password",
+    "commitment_high": "🔥 Alto",
+    "commitment_mid": "⚡ Medio",
+    "commitment_low": "🌱 Basso",
+    "share_app": "📤 Condividi l'App",
+    "contact_title": "💬 Mandaci un messaggio!",
+    "contact_sub": "Domande, suggerimenti o vuoi saperne di più su VIC English?",
+    "contact_placeholder": "Scrivi qui...",
+    "contact_send": "📨 Invia messaggio",
+    "pref_sounds": "🔊 Suoni",
+    "pref_dark": "🌙 Modalità scura",
+    "pref_font": "🔤 Dimensione font",
+    "pref_lang": "Lingua dell'App",
+    "notif_title": "🔔 Notifiche",
+    "notif_freq_label": "Frequenza dei promemoria",
+    "notif_per_day": "volte al giorno",
+    "official_site": "🏫 Sito Ufficiale — VIC Language",
     "language_label": "🌐 Lingua",
   }
 };
@@ -610,6 +880,115 @@ function renderDashboardTexts() {
   benefits.forEach((el,i) => {
     if(benefitKeys[i]) el.textContent = "✅ " + (benefitKeys[i][_lang] || benefitKeys[i].pt);
   });
+  // Quick access buttons
+  const qa = id => document.getElementById(id);
+  if(qa("btn-goto-flashcards")) qa("btn-goto-flashcards").textContent = t("qa_flashcards");
+  if(qa("btn-goto-memory"))     qa("btn-goto-memory").textContent     = t("qa_memory");
+  if(qa("btn-goto-truefalse"))  qa("btn-goto-truefalse").textContent  = t("qa_truefalse");
+  if(qa("btn-goto-dialogue"))   qa("btn-goto-dialogue").textContent   = t("qa_dialogue");
+
+  // V/F buttons (dentro do jogo)
+  if(qa("tf-true"))  qa("tf-true").innerHTML  = "✅ " + (_lang==="pt"?"Verdadeiro":_lang==="es"?"Verdadero":_lang==="de"?"Wahr":_lang==="it"?"Vero":"True");
+  if(qa("tf-false")) qa("tf-false").innerHTML = "❌ " + (_lang==="pt"?"Falso":_lang==="es"?"Falso":_lang==="de"?"Falsch":_lang==="it"?"Falso":"False");
+
+  // Grammar Core banner
+  const gcSub = document.querySelector(".grammar-core-banner .gc-sub");
+  if(gcSub) gcSub.textContent = t("gc_sub");
+  const gcMore = document.querySelector(".grammar-core-banner .gc-tags span:last-child");
+  if(gcMore) gcMore.textContent = t("gc_tags_more");
+
+  // Writing banner
+  const wSub = document.querySelector(".writing-core-banner .gc-sub");
+  if(wSub) wSub.textContent = t("writing_sub");
+  const wTags = document.querySelectorAll(".writing-core-banner .gc-tags span");
+  const wTagKeys = ["writing_tag1","writing_tag2","writing_tag3","writing_tag4","writing_tag5"];
+  wTags.forEach((el,i)=>{ if(wTagKeys[i]) el.textContent = t(wTagKeys[i]); });
+
+  // Feedback strip
+  const fbTitle = document.querySelector(".feedback-strip-title");
+  if(fbTitle) fbTitle.textContent = t("feedback_title");
+  if(qa("btn-feedback-comment")) qa("btn-feedback-comment").textContent = t("feedback_comment");
+  if(qa("btn-feedback-like"))    qa("btn-feedback-like").textContent    = t("feedback_like");
+  if(qa("btn-feedback-bug"))     qa("btn-feedback-bug").textContent     = t("feedback_bug");
+
+  // About button e modal — via ID (sólido)
+  if(qa("btn-about-us")) qa("btn-about-us").textContent = t("about_us");
+  if(qa("about-title-text")) qa("about-title-text").textContent = t("about_title");
+  const aboutMission = document.querySelector(".about-mission");
+  if(aboutMission) aboutMission.textContent = t("about_mission");
+  const aboutServices = document.querySelectorAll(".about-service");
+  const aboutSvcKeys = ["about_app","about_incompany","about_aulas","about_trad","about_interp"];
+  aboutServices.forEach((el,i)=>{ if(aboutSvcKeys[i]) el.textContent = t(aboutSvcKeys[i]); });
+
+  // Perfil — section titles via ID (sólido)
+  const profMap = {
+    "prof-title-commitment": "prof_commitment",
+    "prof-title-calendar":   "prof_calendar",
+    "prof-title-skills":     "prof_skills",
+    "prof-title-goal":       "prof_goal",
+    "prof-title-account":    "prof_account",
+    "prof-title-networks":   "prof_networks",
+    "prof-title-prefs":      "prof_prefs",
+    "prof-title-share":      "prof_share",
+  };
+  Object.entries(profMap).forEach(([id, key]) => {
+    const el = qa(id);
+    if(el) el.textContent = t(key);
+  });
+
+  // Lang section label
+  if(qa("lang-section-label")) qa("lang-section-label").textContent = t("pref_lang");
+  if(qa("notif-label")) qa("notif-label").textContent = t("notif_title");
+
+  // Contato via ID
+  if(qa("contact-form-title-text")) qa("contact-form-title-text").textContent = t("contact_title");
+  if(qa("contact-form-sub-text"))   qa("contact-form-sub-text").textContent   = t("contact_sub");
+  if(qa("official-site-btn"))       qa("official-site-btn").textContent       = t("official_site");
+
+  // Conta — botões de edição
+  const accBtns = document.querySelectorAll(".account-edit-btn, .profile-edit-btn");
+  accBtns.forEach(btn => {
+    if(btn.textContent.includes("nome")||btn.textContent.includes("name")||btn.textContent.includes("Name")||btn.textContent.includes("Nome"))
+      btn.textContent = t("acc_edit_name");
+    else if(btn.textContent.includes("email")||btn.textContent.includes("Email"))
+      btn.textContent = t("acc_edit_email");
+    else if(btn.textContent.includes("senha")||btn.textContent.includes("password")||btn.textContent.includes("Password"))
+      btn.textContent = t("acc_edit_pass");
+  });
+
+  // Compartilhar & Contato
+  if(qa("btn-share-app")) qa("btn-share-app").textContent = t("share_app");
+  const ctTitle = document.querySelector(".contact-form-title");
+  if(ctTitle) ctTitle.textContent = t("contact_title");
+  const ctSub = document.querySelector(".contact-form-sub");
+  if(ctSub) ctSub.textContent = t("contact_sub");
+  const ctArea = qa("contact-form-text");
+  if(ctArea) ctArea.placeholder = t("contact_placeholder");
+  if(qa("btn-send-contact")) qa("btn-send-contact").textContent = t("contact_send");
+
+  // Preferências
+  document.querySelectorAll(".settings-row span").forEach(el => {
+    const txt = el.textContent;
+    if(txt.includes("Sons")||txt.includes("Sounds")||txt.includes("Töne")||txt.includes("Suoni"))
+      el.textContent = t("pref_sounds");
+    else if(txt.includes("Modo escuro")||txt.includes("Dark")||txt.includes("Dunkel")||txt.includes("scura"))
+      el.textContent = t("pref_dark");
+    else if(txt.includes("Idioma")||txt.includes("Language")||txt.includes("Sprache")||txt.includes("Lingua")||txt.includes("App"))
+      el.textContent = t("pref_lang");
+    else if(txt.includes("Notificações")||txt.includes("Notifications")||txt.includes("Benachrichtigung")||txt.includes("Notifiche"))
+      el.textContent = t("notif_title");
+    else if(txt.includes("Frequência")||txt.includes("Frequency")||txt.includes("Frequenz")||txt.includes("Frequenza"))
+      el.textContent = t("notif_freq_label");
+    else if(txt.includes("vezes")||txt.includes("times")||txt.includes("mal")||txt.includes("volte"))
+      el.textContent = t("notif_per_day");
+  });
+
+  // Site oficial
+  document.querySelectorAll(".settings-big-btn, a").forEach(el => {
+    if(el.textContent.includes("Site Oficial")||el.textContent.includes("Official Site")||el.textContent.includes("Offizielle"))
+      el.textContent = t("official_site");
+  });
+
   // Segmentos — re-render cards
   if(document.querySelector(".segment-card")) renderSegments();
   // Refazer saudação com novo idioma
@@ -5024,6 +5403,32 @@ const BADGES = [
   {id:"missions50", cat:"raro", icon:"🔱", name:"Odyssey Complete",
    desc:"50 missões — Ulisses voltou para casa.", xp:500,
    condition:s=>s.missionsCompleted>=50},
+
+  // ══ VIRGIN VOYAGES — Sailor Series ═══════════════════════════════════════
+  {id:"ahoy_sailor",    cat:"sailor", icon:"🏴‍☠️", name:"Ahoy, Sailor!",
+   desc:"First nautical mission complete. Welcome aboard, crew!", xp:40,
+   condition:s=>s.segmentsDone.includes("maritimo")||s.missionsCompleted>=1},
+  {id:"scarlet_night",  cat:"sailor", icon:"🌙", name:"Scarlet Night",
+   desc:"Practiced after 9pm — like a Scarlet Night on the high seas! 🍷", xp:60,
+   condition:s=>s.loginStreak>=5},
+  {id:"make_ship_happen",cat:"sailor",icon:"🚢", name:"Make Ship Happen",
+   desc:"5 maritime missions done. Nothing stops this crew!", xp:100,
+   condition:s=>(s.completedMissions||[]).filter(m=>m.startsWith("maritimo_")).length>=5},
+  {id:"ship_hooray",    cat:"sailor", icon:"🎉", name:"Ship Ship Hooray!",
+   desc:"10 days streak — three cheers for this sailor! Hip hip hooray!", xp:150,
+   condition:s=>s.loginStreak>=10},
+  {id:"crew_muster",    cat:"sailor", icon:"⚓", name:"Crew Muster Alarm",
+   desc:"All hands on deck! Completed missions in 3 different segments.", xp:200,
+   condition:s=>s.segmentsDone.length>=3},
+  {id:"sailor_swear",   cat:"sailor", icon:"🤬", name:"Sailor's Promise",
+   desc:"25 missions — you swear by the sea you'll never stop learning!", xp:120,
+   condition:s=>s.missionsCompleted>=25},
+  {id:"bon_voyage",     cat:"sailor", icon:"🌊", name:"Bon Voyage!",
+   desc:"Completed an entire segment — set sail to new horizons!", xp:180,
+   condition:s=>s.segmentsDone.length>=1},
+  {id:"sea_legs",       cat:"sailor", icon:"🦵", name:"Sea Legs",
+   desc:"7 days streak — you've found your sea legs, sailor!", xp:90,
+   condition:s=>s.loginStreak>=7},
 ];
 
 // Session stats tracker (resets per session, persisted cumulatively in userData)
