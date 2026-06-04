@@ -2196,6 +2196,17 @@ async function completeMission(xp){
   userData.completedMissions=completed;
   SoundFX.complete();
   if(completed.length===1) showNotifBanner();
+
+  // Verificar level up
+  checkLevelUp(xp??userData.xp);
+
+  // Verificar se completou o segmento inteiro
+  const wasComplete = (completed.filter(m=>m.startsWith(currentSegmentId+"_")).length - 1) ===
+    (getSegment(currentSegmentId)?.phases||[]).reduce((a,p)=>(p.missions||[]).length+a, 0) - 1;
+  if(!wasComplete && checkSegmentComplete(currentSegmentId)){
+    setTimeout(()=>showSegmentCelebration(currentSegmentId), 800);
+  }
+
   const lv=levelInfo(xp??userData.xp);
   document.getElementById("complete-mission-name").textContent=stripEmoji(mission?.name||"");
   document.getElementById("complete-xp").textContent=xp??userData.xp;
@@ -2213,6 +2224,146 @@ async function completeMission(xp){
   if(completed.length % 7 === 0){
     setTimeout(()=>showPostMissionFeedback(), 1800);
   }
+}
+
+// ── CELEBRAÇÃO DE SEGMENTO COMPLETO ──────────────────────────────────────────
+function checkSegmentComplete(segmentId){
+  const seg = getSegment(segmentId);
+  if(!seg) return false;
+  const total = (seg.phases||[]).reduce((a,p)=>(p.missions||[]).length+a, 0);
+  const done = (userData.completedMissions||[]).filter(m=>m.startsWith(segmentId+"_")).length;
+  return total > 0 && done >= total;
+}
+
+function showSegmentCelebration(segmentId){
+  const seg = getSegment(segmentId);
+  if(!seg) return;
+
+  // Badge do segmento correspondente
+  const segBadges = {
+    maritimo:{icon:"⚓",badge:"Master Mariner",color:"#4fc3f7"},
+    comex:{icon:"🌍",badge:"Global Trader",color:"#81c784"},
+    offshore:{icon:"🛢️",badge:"Offshore Pro",color:"#ffb74d"},
+    hotelaria:{icon:"🏨",badge:"Concierge d'Excellence",color:"#f48fb1"},
+    restaurantes:{icon:"🍽️",badge:"Head Waiter",color:"#ce93d8"},
+    aeroporto:{icon:"✈️",badge:"Ground Control",color:"#80cbc4"},
+    cruzeiros:{icon:"🛳️",badge:"Cruise Director",color:"#64b5f6"},
+    corporativo:{icon:"💼",badge:"C-Suite English",color:"#a5d6a7"},
+    saude:{icon:"🏥",badge:"Chief Medical Officer",color:"#ef9a9a"},
+    transporte:{icon:"🚛",badge:"Road Commander",color:"#ffcc80"},
+    varejo:{icon:"🛍️",badge:"Sales Champion",color:"#b39ddb"},
+    turismo_santos:{icon:"🏖️",badge:"Santos Expert",color:"#80deea"},
+  };
+  const info = segBadges[segmentId] || {icon:seg.icon||"🏆",badge:"Segmento Completo",color:"#ffd700"};
+
+  document.getElementById("seg-cel-overlay")?.remove();
+  const overlay = document.createElement("div");
+  overlay.id = "seg-cel-overlay";
+  overlay.style.cssText = "position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.92);animation:fadeIn .4s ease;";
+
+  overlay.innerHTML = `
+    <div class="seg-cel-card">
+      <canvas id="seg-cel-canvas" style="position:absolute;inset:0;pointer-events:none;border-radius:24px;"></canvas>
+      <div class="seg-cel-glow" style="background:radial-gradient(circle,${info.color}22 0%,transparent 70%);"></div>
+      <div class="seg-cel-icon" style="color:${info.color}">${info.icon}</div>
+      <div class="seg-cel-title">Segmento Concluído!</div>
+      <div class="seg-cel-seg-name" style="color:${info.color}">${seg.name}</div>
+      <div class="seg-cel-badge-wrap">
+        <div class="seg-cel-badge-label">Badge desbloqueado</div>
+        <div class="seg-cel-badge-name" style="border-color:${info.color}44;color:${info.color}">
+          ${info.icon} ${info.badge}
+        </div>
+      </div>
+      <div class="seg-cel-xp">+200 XP 🌟</div>
+      <button class="seg-cel-btn" style="background:linear-gradient(135deg,${info.color},${info.color}bb)" onclick="document.getElementById('seg-cel-overlay').remove();backToDashboard();">
+        🚀 Continuar
+      </button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  // Confetti canvas
+  setTimeout(() => {
+    const canvas = document.getElementById("seg-cel-canvas");
+    if(!canvas) return;
+    const ctx = canvas.getContext("2d");
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    const particles = Array.from({length:80},()=>({
+      x: Math.random()*canvas.width,
+      y: Math.random()*canvas.height - canvas.height,
+      r: Math.random()*6+3,
+      d: Math.random()*2+1,
+      color: [info.color,"#ffd700","#ffffff","#a78bfa"][Math.floor(Math.random()*4)],
+      tilt: Math.random()*10-5,
+      ts: Math.random()*0.1,
+    }));
+    let frame = 0;
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      particles.forEach(p=>{
+        ctx.beginPath();
+        ctx.fillStyle=p.color;
+        ctx.ellipse(p.x,p.y,p.r,p.r*0.6,p.tilt,0,Math.PI*2);
+        ctx.fill();
+        p.y += p.d; p.x += Math.sin(frame*p.ts)*1.5;
+        if(p.y > canvas.height) { p.y=-10; p.x=Math.random()*canvas.width; }
+      });
+      frame++;
+      if(frame < 180) requestAnimationFrame(draw);
+    }
+    draw();
+  }, 100);
+
+  SoundFX.complete();
+  vibrate([100,50,100,50,200,50,300]);
+}
+
+// ── LEVEL UP ÉPICO ────────────────────────────────────────────────────────────
+let _lastLevel = 0;
+
+function checkLevelUp(newXp){
+  const newLevel = calcLevel(newXp);
+  const oldLevel = _lastLevel || calcLevel((userData.xp||0) - 1);
+  if(newLevel > oldLevel && oldLevel > 0){
+    _lastLevel = newLevel;
+    setTimeout(()=>showLevelUp(newLevel), 600);
+  }
+  _lastLevel = newLevel;
+}
+
+function showLevelUp(level){
+  const titles = [
+    "","Aprendiz","Estudante","Explorador","Aventureiro","Navegador",
+    "Oficial","Imediato","Capitão","Mestre","Almirante",
+    "Lenda","Elite","Expert","Ícone","Campeão",
+  ];
+  const title = titles[Math.min(level, titles.length-1)] || "Mestre";
+  const colors = level<=3?"#4ade80":level<=6?"#60a5fa":level<=9?"#a78bfa":"#ffd700";
+
+  document.getElementById("lvlup-overlay")?.remove();
+  const overlay = document.createElement("div");
+  overlay.id = "lvlup-overlay";
+  overlay.style.cssText = "position:fixed;inset:0;z-index:9997;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.88);animation:fadeIn .3s ease;";
+  overlay.innerHTML = `
+    <div class="lvlup-card">
+      <div class="lvlup-rays"></div>
+      <div class="lvlup-badge" style="border-color:${colors};box-shadow:0 0 40px ${colors}66;">
+        <div class="lvlup-num" style="color:${colors}">${level}</div>
+        <div class="lvlup-lbl">NÍVEL</div>
+      </div>
+      <div class="lvlup-title" style="color:${colors}">Level Up! ⚡</div>
+      <div class="lvlup-rank">${title}</div>
+      <div class="lvlup-sub">Você está evoluindo! Continue assim.</div>
+      <button class="lvlup-btn" style="border-color:${colors};color:${colors}" onclick="document.getElementById('lvlup-overlay').remove()">
+        Continuar! →
+      </button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  SoundFX.complete();
+  vibrate([50,30,50,30,150]);
+  setTimeout(()=>document.getElementById("lvlup-overlay")?.remove(), 5000);
 }
 
 function showPostMissionFeedback(){
@@ -2257,6 +2408,194 @@ function showPostMissionFeedback(){
 
 function showXpToast(msg){const t=document.getElementById("xp-toast");if(!t)return;t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2500);}
 function backToDashboard(){renderDashboard();showView("view-dashboard");}
+
+// ── MODO REVISÃO ──────────────────────────────────────────────────────────────
+// Permite rever missões já completadas sem contar progresso novo
+let _reviewMode = false;
+
+function enterReviewMode(segmentId, phaseId, missionId){
+  _reviewMode = true;
+  // Mostrar banner de revisão
+  showXpToast("🔄 Modo revisão — sem XP novo");
+  enterMission(segmentId, phaseId, missionId);
+}
+
+function getLastCompletedMission(){
+  const completed = userData?.completedMissions||[];
+  if(!completed.length) return null;
+  const last = completed[completed.length-1];
+  const parts = last.split("_");
+  if(parts.length < 3) return null;
+  // formato: segmentId_phaseId_missionId
+  const missionId = parts[parts.length-1];
+  const phaseId   = parts[parts.length-2];
+  const segmentId = parts.slice(0,-2).join("_");
+  return {segmentId, phaseId, missionId};
+}
+
+function showReviewPanel(){
+  const completed = userData?.completedMissions||[];
+  if(!completed.length){
+    showXpToast("📚 Complete algumas missões primeiro!");
+    return;
+  }
+
+  document.getElementById("review-modal")?.remove();
+  const modal = document.createElement("div");
+  modal.id = "review-modal";
+  modal.style.cssText = "position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,0.85);display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .3s ease;backdrop-filter:blur(4px);";
+
+  // Agrupar missões completadas por segmento
+  const bySegment = {};
+  completed.forEach(key=>{
+    const parts = key.split("_");
+    const segId = parts.slice(0,-2).join("_") || parts[0];
+    if(!bySegment[segId]) bySegment[segId]=[];
+    bySegment[segId].push(key);
+  });
+
+  const segmentRows = Object.entries(bySegment).slice(0,6).map(([segId, keys])=>{
+    const seg = getSegment(segId);
+    if(!seg) return "";
+    return `
+      <div class="review-seg-row" onclick="reviewSegment('${segId}');document.getElementById('review-modal').remove()">
+        <span class="review-seg-icon">${seg.icon||"📚"}</span>
+        <div class="review-seg-info">
+          <div class="review-seg-name">${seg.name}</div>
+          <div class="review-seg-count">${keys.length} missão(ões) completada(s)</div>
+        </div>
+        <span class="review-seg-arrow">→</span>
+      </div>
+    `;
+  }).join("");
+
+  modal.innerHTML = `
+    <div class="review-card">
+      <div class="review-handle"></div>
+      <div class="review-title">🔄 Revisar missões</div>
+      <div class="review-sub">Pratique o que já aprendeu. Sem XP novo — só fixação!</div>
+      <div class="review-segs">${segmentRows}</div>
+      <button class="review-last-btn" onclick="reviewLastMission();document.getElementById('review-modal').remove()">
+        ⚡ Rever última missão
+      </button>
+      <button class="review-close-btn" onclick="document.getElementById('review-modal').remove()">Fechar</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function reviewLastMission(){
+  const last = getLastCompletedMission();
+  if(!last){ showXpToast("Nenhuma missão completada ainda!"); return; }
+  enterReviewMode(last.segmentId, last.phaseId, last.missionId);
+}
+
+function reviewSegment(segmentId){
+  const seg = getSegment(segmentId);
+  if(!seg) return;
+  const completed = userData?.completedMissions||[];
+  // Pegar primeira missão completada do segmento
+  const first = completed.find(k=>k.startsWith(segmentId+"_"));
+  if(!first) return;
+  const parts = first.split("_");
+  const missionId = parts[parts.length-1];
+  const phaseId   = parts[parts.length-2];
+  enterReviewMode(segmentId, phaseId, missionId);
+}
+
+// ── REFERRAL — Indicar amigo = Pro grátis ────────────────────────────────────
+// Lógica: cada novo usuário pode ter um refCode na URL (?ref=CODIGO)
+// Quando ele se cadastra, o código é atribuído ao dono → 3 indicações = 30 dias Pro
+
+function getReferralCode(uid){
+  // Código único baseado no UID
+  return uid.slice(0,8).toUpperCase();
+}
+
+function getReferralLink(){
+  const uid = currentUser?.uid;
+  if(!uid) return "";
+  const code = getReferralCode(uid);
+  return `https://app.viclanguage.com.br?ref=${code}`;
+}
+
+async function checkReferralOnRegister(newUid){
+  // Verificar se tem ref na URL
+  const params = new URLSearchParams(window.location.search);
+  const refCode = params.get("ref");
+  if(!refCode || refCode.length < 6) return;
+
+  try{
+    // Salvar ref no perfil do novo usuário
+    await saveProgress(newUid, { referredBy: refCode });
+
+    // Buscar quem tem esse código e incrementar contagem
+    const all = await getAllUsers();
+    const referrer = all.find(u=>u.uid.slice(0,8).toUpperCase()===refCode);
+    if(!referrer || referrer.uid===newUid) return;
+
+    const refCount = (referrer.referralCount||0)+1;
+    const updates = { referralCount: refCount };
+
+    // A cada 3 indicações → 30 dias de Pro grátis
+    if(refCount % 3 === 0){
+      updates.plan = "pro";
+      updates.proActivatedAt = Date.now();
+      updates.proSource = "referral";
+      // Notificar o referenciador
+      showXpToast("🎉 3 indicações! Pro ativado para seu amigo!");
+    }
+
+    await saveProgress(referrer.uid, updates);
+    console.log(`✅ Referral registrado: ${refCode} agora tem ${refCount} indicações`);
+  }catch(e){
+    console.warn("Referral error:", e.message);
+  }
+}
+
+function showReferralPanel(){
+  const link = getReferralLink();
+  if(!link){ showXpToast("Faça login para indicar amigos!"); return; }
+
+  const refCount = userData?.referralCount||0;
+  const needed = 3 - (refCount%3);
+  const total = Math.floor(refCount/3);
+
+  document.getElementById("referral-modal")?.remove();
+  const modal = document.createElement("div");
+  modal.id = "referral-modal";
+  modal.style.cssText = "position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;animation:fadeIn .3s ease;padding:20px;";
+
+  modal.innerHTML = `
+    <div class="referral-card">
+      <button class="referral-close" onclick="document.getElementById('referral-modal').remove()">✕</button>
+      <div class="referral-icon">🎁</div>
+      <div class="referral-title">Indique amigos,<br/>ganhe Pro grátis!</div>
+      <div class="referral-sub">Cada 3 amigos que se cadastrarem = <strong>30 dias de Pro</strong> para você!</div>
+
+      <div class="referral-progress">
+        <div class="referral-prog-bar">
+          <div class="referral-prog-fill" style="width:${Math.round(((refCount%3)/3)*100)}%"></div>
+        </div>
+        <div class="referral-prog-text">${refCount%3}/3 indicações ${total>0?`• ${total} mês(es) Pro ganho(s)`:""}</div>
+      </div>
+
+      <div class="referral-link-box" id="ref-link-box">${link}</div>
+
+      <div class="referral-btns">
+        <button class="referral-btn-copy" onclick="
+          navigator.clipboard.writeText('${link}').then(()=>showXpToast('🔗 Link copiado!'));
+        ">📋 Copiar link</button>
+        <a class="referral-btn-wa" href="https://wa.me/?text=${encodeURIComponent("Estou usando o VIC English pra aprender inglês profissional! Entra por esse link: "+link)}" target="_blank">
+          📱 Enviar no WhatsApp
+        </a>
+      </div>
+
+      <div class="referral-tip">💡 Funciona para login por Email. Google e anônimo não contam.</div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
 
 // ── FLASHCARDS ────────────────────────────────────────────────────────────────
 function openFlashcards(){
@@ -3883,7 +4222,50 @@ function loadPreferences(){
 }
 
 // ── AVATAR SYSTEM ─────────────────────────────────────────────────────────────
-const AVATAR_EMOJIS=["😊","🦁","🐯","🦊","🐺","🦅","⚓","🚀","🌟","💪","🎯","🏆","🌊","🐋","🎓","👨‍✈️","👩‍✈️","🧑‍💼","👨‍🍳","👩‍🍳","🧑‍🔧","🌍","✈️","🛳️","🛢️","🏨","🍽️","🏖️","📖","✍️","🧠","🥸","👽","💩","👹","🐗","🐷","🐉","🦖","🕷️","🐜","🦧","😏","😎","🥳","🤓","🫶","🎨","⚽","🏅","🎮","🧿","🪄","🎰","🕹️","🪬","🎷","📚","💸","⌛","🧑‍🎓","🥶","🤑","🫠","🏹","🥞","🛸","🌚","🌞","🔥","💜","💚"];
+// Avatares organizados por categoria temática
+const AVATAR_CATEGORIES = [
+  { label:"⚓ Marítimo & Porto",    emojis:["⚓","🚢","🛳️","🌊","🐋","🦈","🐬","⛵","🪝","🗺️","🔭","🧭"] },
+  { label:"🌍 COMEX & Negócios",    emojis:["🌍","💼","📦","🤝","📈","💰","🏦","📊","🌐","✉️","🖊️","🏢"] },
+  { label:"🛢️ Offshore & Petróleo", emojis:["🛢️","⛽","🔧","🦺","⚙️","🏗️","🔩","🪛","🛠️","💥","🌅","🤿"] },
+  { label:"🏨 Hotelaria & Turismo",  emojis:["🏨","🛎️","🗝️","🌺","🥂","🍾","🛁","🧳","🏖️","🌴","☀️","🎪"] },
+  { label:"✈️ Aeroporto & Aviação",  emojis:["✈️","🛫","🛬","🛂","🗃️","🎒","🧳","🌤️","🪂","🚁","🛩️","⛅"] },
+  { label:"🍽️ Restaurantes",        emojis:["🍽️","👨‍🍳","👩‍🍳","🥗","🍷","☕","🍰","🧑‍🍳","🥘","🫕","🍣","🧆"] },
+  { label:"💼 Corporativo",          emojis:["💼","🧑‍💼","👔","📋","🖥️","📱","🎯","🏆","🥇","👑","🌟","⭐"] },
+  { label:"🦸 Super-heróis & Fun",   emojis:["🦸","🦹","🧙","🧝","🤺","🥷","🦊","🐉","🦁","🐯","🦅","🐺"] },
+  { label:"😄 Expressões",           emojis:["😎","🤓","🥳","😏","🤑","🥶","🤩","😤","🥸","🤠","🫡","😤"] },
+];
+
+const AVATAR_EMOJIS = AVATAR_CATEGORIES.flatMap(c=>c.emojis);
+
+function loadAvatarPicker(){
+  const grid = document.getElementById("avatar-emoji-grid");
+  if(!grid) return;
+
+  // Renderizar por categorias
+  grid.innerHTML = AVATAR_CATEGORIES.map(cat=>`
+    <div class="avatar-category-label">${cat.label}</div>
+    <div class="avatar-category-row">
+      ${cat.emojis.map(e=>`<button class="avatar-emoji-btn" data-emoji="${e}">${e}</button>`).join("")}
+    </div>
+  `).join("");
+
+  grid.querySelectorAll(".avatar-emoji-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      saveAvatar(btn.dataset.emoji);
+      document.getElementById("avatar-picker-modal").style.display="none";
+    });
+  });
+
+  // Destacar avatar atual
+  const current = localStorage.getItem("vic_avatar");
+  if(current){
+    grid.querySelectorAll(".avatar-emoji-btn").forEach(btn=>{
+      btn.classList.toggle("selected", btn.dataset.emoji===current);
+    });
+  }
+
+  document.getElementById("avatar-picker-modal").style.display="flex";
+}
 
 function openAvatarPicker(){
   const grid=document.getElementById("avatar-emoji-grid"); if(!grid) return;

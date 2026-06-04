@@ -5959,3 +5959,115 @@ body.light-mode .notif-freq-select { background: #1e0a50 !important; color: #fff
   background:rgba(255,255,255,0.1);
   border-color:rgba(255,255,255,0.25);
 }
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   CELEBRAÇÃO DE SEGMENTO
+══════════════════════════════════════════════════════════════════════════════ */
+.seg-cel-card{
+  position:relative;background:linear-gradient(160deg,#1e0f38,#1a0d2e);
+  border:1px solid rgba(255,255,255,0.12);border-radius:24px;
+  padding:40px 28px 32px;text-align:center;
+  max-width:340px;width:90%;overflow:hidden;
+  animation:scaleIn .4s cubic-bezier(0.22,1,0.36,1);
+}
+.seg-cel-glow{position:absolute;inset:0;pointer-events:none;}
+.seg-cel-icon{font-size:72px;margin-bottom:8px;animation:bounce 1s ease infinite;}
+.seg-cel-title{font-size:13px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.seg-cel-seg-name{font-size:26px;font-weight:900;margin-bottom:20px;font-family:'Playfair Display',serif;}
+.seg-cel-badge-wrap{margin-bottom:16px;}
+.seg-cel-badge-label{font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.seg-cel-badge-name{display:inline-block;padding:8px 18px;border:1px solid;border-radius:999px;font-size:14px;font-weight:700;}
+.seg-cel-xp{font-size:20px;font-weight:900;color:#ffd700;margin-bottom:24px;}
+.seg-cel-btn{width:100%;padding:16px;border:none;border-radius:16px;color:#1a0d2e;font-size:16px;font-weight:900;cursor:pointer;font-family:inherit;}
+@keyframes scaleIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   LEVEL UP
+══════════════════════════════════════════════════════════════════════════════ */
+.lvlup-card{
+  position:relative;background:linear-gradient(160deg,#1a0d2e,#0d0720);
+  border:1px solid rgba(255,255,255,0.1);border-radius:24px;
+  padding:40px 28px 32px;text-align:center;max-width:300px;width:90%;
+  animation:scaleIn .35s cubic-bezier(0.22,1,0.36,1);overflow:hidden;
+}
+.lvlup-rays{
+  position:absolute;inset:-50%;
+  background:conic-gradient(from 0deg,transparent 0deg,rgba(255,255,255,0.03) 10deg,transparent 20deg);
+  animation:spin 8s linear infinite;pointer-events:none;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lvlup-badge{
+  width:100px;height:100px;border-radius:50%;border:3px solid;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  margin:0 auto 20px;background:rgba(255,255,255,0.05);
+  animation:pulse 1.5s ease infinite;
+}
+.lvlup-num{font-size:36px;font-weight:900;line-height:1;}
+.lvlup-lbl{font-size:10px;font-weight:800;opacity:.6;letter-spacing:2px;}
+.lvlup-title{font-size:24px;font-weight:900;margin-bottom:4px;}
+.lvlup-rank{font-size:16px;color:rgba(255,255,255,0.7);font-weight:700;margin-bottom:6px;}
+.lvlup-sub{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:24px;}
+.lvlup-btn{background:transparent;border:1px solid;border-radius:12px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   AVATAR CATEGORIAS
+══════════════════════════════════════════════════════════════════════════════ */
+.avatar-category-label{
+  font-size:11px;font-weight:700;color:rgba(255,255,255,0.4);
+  text-transform:uppercase;letter-spacing:.6px;
+  padding:10px 4px 6px;
+}
+.avatar-category-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+.avatar-emoji-btn.selected{
+  background:rgba(201,147,58,0.2)!important;
+  border:2px solid #e4b45c!important;
+  transform:scale(1.15);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   MODO REVISÃO
+══════════════════════════════════════════════════════════════════════════════ */
+.review-card{
+  background:linear-gradient(180deg,#1e0f38,#1a0d2e);
+  border:1px solid rgba(255,255,255,0.1);border-radius:24px 24px 0 0;
+  padding:20px 20px 40px;width:100%;max-width:480px;
+  animation:slideUp .35s cubic-bezier(0.22,1,0.36,1);
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.review-handle{width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 20px;}
+.review-title{font-size:19px;font-weight:800;margin-bottom:4px;}
+.review-sub{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:18px;line-height:1.5;}
+.review-segs{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.review-seg-row{display:flex;align-items:center;gap:12px;padding:13px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;cursor:pointer;transition:all .2s;}
+.review-seg-row:hover{background:rgba(124,58,237,0.1);border-color:rgba(124,58,237,0.3);}
+.review-seg-icon{font-size:24px;flex-shrink:0;}
+.review-seg-info{flex:1;}
+.review-seg-name{font-size:14px;font-weight:700;}
+.review-seg-count{font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;}
+.review-seg-arrow{color:rgba(255,255,255,0.3);font-size:16px;}
+.review-last-btn{width:100%;padding:13px;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);border-radius:14px;color:#a78bfa;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px;}
+.review-close-btn{width:100%;padding:11px;background:none;border:none;color:rgba(255,255,255,0.3);font-size:13px;cursor:pointer;font-family:inherit;}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   REFERRAL
+══════════════════════════════════════════════════════════════════════════════ */
+.referral-card{
+  background:linear-gradient(160deg,#1e0f38,#1a0d2e);
+  border:1px solid rgba(201,147,58,0.2);border-radius:24px;
+  padding:32px 24px;max-width:340px;width:90%;text-align:center;
+  position:relative;animation:scaleIn .35s cubic-bezier(0.22,1,0.36,1);
+}
+.referral-close{position:absolute;top:14px;right:14px;background:none;border:none;color:rgba(255,255,255,0.3);font-size:20px;cursor:pointer;padding:4px 8px;}
+.referral-icon{font-size:52px;margin-bottom:10px;}
+.referral-title{font-size:22px;font-weight:900;margin-bottom:8px;line-height:1.2;}
+.referral-sub{font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:20px;line-height:1.5;}
+.referral-progress{margin-bottom:18px;}
+.referral-prog-bar{height:8px;background:rgba(255,255,255,0.07);border-radius:999px;overflow:hidden;margin-bottom:6px;}
+.referral-prog-fill{height:100%;background:linear-gradient(90deg,#c9933a,#e4b45c);border-radius:999px;transition:width .5s ease;}
+.referral-prog-text{font-size:12px;color:rgba(255,255,255,0.5);}
+.referral-link-box{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;font-size:11px;font-family:monospace;color:rgba(255,255,255,0.6);margin-bottom:14px;word-break:break-all;text-align:left;}
+.referral-btns{display:flex;gap:8px;margin-bottom:12px;}
+.referral-btn-copy{flex:1;padding:13px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.referral-btn-wa{flex:1;padding:13px;background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.3);border-radius:12px;color:#25d366;font-size:13px;font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center;}
+.referral-tip{font-size:11px;color:rgba(255,255,255,0.3);line-height:1.5;}
