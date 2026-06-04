@@ -90,7 +90,7 @@ function showView(id){
   if(current===next) return;
 
   // Determine direction
-  const views=["view-auth","view-dashboard","view-phases","view-missions-list","view-mission","view-complete","view-flashcards","view-memory-free","view-truefalse","view-dialogue","view-writing","view-profile","view-upgrade","view-admin","view-diagnosis","view-leveltest"];
+  const views=["view-onboarding","view-auth","view-dashboard","view-phases","view-missions-list","view-mission","view-complete","view-flashcards","view-memory-free","view-truefalse","view-dialogue","view-writing","view-profile","view-upgrade","view-admin","view-diagnosis","view-leveltest","view-leaderboard"];
   const ci=views.indexOf(current?.id||"");
   const ni=views.indexOf(id);
   const dir=ni>=ci?1:-1; // 1=forward (slide left), -1=back (slide right)
@@ -200,11 +200,61 @@ function buildDate(){
 }
 
 // ── DAILY MISSIONS ─────────────────────────────────────────────────────────────
-const DAILY_DEF=[
-  {id:"dm1",icon:"🎤",en:"Complete 3 exercises",   pt:"Complete 3 exercícios", target:3, key:"dailyExercises",xp:30,segmentId:"maritimo",  phaseId:"f1"},
-  {id:"dm2",icon:"🌟",en:"Score perfect twice",     pt:"Acerte 2 com nota 10", target:2, key:"dailyPerfect",  xp:20,segmentId:"maritimo",  phaseId:"f2"},
-  {id:"dm3",icon:"⚓",en:"Train 1 maritime lesson", pt:"1 lição marítima",     target:1, key:"dailyMaritime", xp:15,segmentId:"maritimo",  phaseId:"f1"},
-];
+// ── MISSÕES DIÁRIAS DINÂMICAS ────────────────────────────────────────────────
+// Variam por segmento do usuário + dia da semana
+// Mudam apenas quando: (1) todas concluídas E (2) passou da meia-noite
+
+const DAILY_POOL = {
+  // Missões genéricas — para qualquer segmento
+  generic: [
+    {id:"dm_ex3",   icon:"⚡", pt:"Complete 3 exercícios",       en:"Complete 3 exercises",       key:"dailyExercises", target:3, xp:30},
+    {id:"dm_perf2", icon:"🌟", pt:"Acerte 2 com nota 10",        en:"Score perfect twice",         key:"dailyPerfect",   target:2, xp:25},
+    {id:"dm_ex5",   icon:"🔥", pt:"Complete 5 exercícios",       en:"Complete 5 exercises",        key:"dailyExercises", target:5, xp:50},
+    {id:"dm_perf3", icon:"💎", pt:"3 respostas perfeitas",       en:"3 perfect answers",           key:"dailyPerfect",   target:3, xp:40},
+    {id:"dm_voice", icon:"🎤", pt:"Use o microfone 2 vezes",     en:"Use voice 2 times",           key:"dailyVoice",     target:2, xp:30},
+    {id:"dm_streak",icon:"🏆", pt:"5 acertos seguidos",          en:"5 answers in a row",          key:"dailyStreak",    target:5, xp:45},
+    {id:"dm_fc3",   icon:"🃏", pt:"Revise 3 flashcards",         en:"Review 3 flashcards",         key:"dailyFlashcard", target:3, xp:20},
+    {id:"dm_mem1",  icon:"🧠", pt:"Complete 1 jogo de memória",  en:"Complete 1 memory game",      key:"dailyMemory",    target:1, xp:25},
+    {id:"dm_dlg1",  icon:"💬", pt:"Pratique 1 diálogo",          en:"Practice 1 dialogue",         key:"dailyDialogue",  target:1, xp:30},
+    {id:"dm_write", icon:"✍️", pt:"Escreva 1 redação",           en:"Write 1 essay",               key:"dailyWriting",   target:1, xp:40},
+  ],
+  // Missões específicas por segmento
+  maritimo:    [{id:"dm_mar1", icon:"⚓", pt:"1 lição marítima",         en:"1 maritime lesson",          key:"dailySegment",   target:1, xp:20}],
+  comex:       [{id:"dm_com1", icon:"🌍", pt:"1 lição de COMEX",         en:"1 COMEX lesson",             key:"dailySegment",   target:1, xp:20}],
+  offshore:    [{id:"dm_off1", icon:"🛢️", pt:"1 lição de offshore",      en:"1 offshore lesson",          key:"dailySegment",   target:1, xp:20}],
+  hotelaria:   [{id:"dm_hot1", icon:"🏨", pt:"1 lição de hotelaria",     en:"1 hospitality lesson",       key:"dailySegment",   target:1, xp:20}],
+  restaurantes:[{id:"dm_res1", icon:"🍽️", pt:"1 lição de restaurante",   en:"1 restaurant lesson",        key:"dailySegment",   target:1, xp:20}],
+  aeroporto:   [{id:"dm_aer1", icon:"✈️", pt:"1 lição de aeroporto",     en:"1 airport lesson",           key:"dailySegment",   target:1, xp:20}],
+  corporativo: [{id:"dm_cor1", icon:"💼", pt:"1 lição corporativa",      en:"1 corporate lesson",         key:"dailySegment",   target:1, xp:20}],
+  cruzeiros:   [{id:"dm_cru1", icon:"🛳️", pt:"1 lição de cruzeiros",    en:"1 cruise lesson",            key:"dailySegment",   target:1, xp:20}],
+};
+
+// Gera 3 missões do dia baseadas no segmento + seed do dia
+function getDailyMissions(segmentId) {
+  const today = new Date().toISOString().slice(0,10); // "2025-06-04"
+  const seed = today.split("-").reduce((a,b)=>a+parseInt(b),0); // número do dia
+
+  const segMission = (DAILY_POOL[segmentId]||DAILY_POOL.maritimo)[0];
+  const pool = DAILY_POOL.generic;
+
+  // Pegar 2 missões genéricas diferentes usando seed do dia
+  const idx1 = seed % pool.length;
+  const idx2 = (seed + 3) % pool.length;
+  const m1 = pool[idx1];
+  const m2 = pool[idx2 === idx1 ? (idx2+1)%pool.length : idx2];
+
+  return [segMission, m1, m2];
+}
+
+// getDailyDef: retorna as missões do dia para o segmento atual do usuário
+function getDailyDef() {
+  const seg = userData?.diagnosisAnswers?.segment || currentSegmentId || "maritimo";
+  return getDailyMissions(seg);
+}
+
+// Compatibilidade — DAILY_DEF agora é dinâmico
+const DAILY_DEF = getDailyMissions("maritimo"); // fallback inicial
+
 function getTodayKey(){ return new Date().toISOString().slice(0,10); }
 function getDailyProgress(){
   const today=getTodayKey();
@@ -231,10 +281,11 @@ async function updateDailyProgress(type){
 
   // Check if ALL missions newly completed
   const wasComplete=dp.allComplete||false;
-  const allDone=DAILY_DEF.every(dm=>(dp[dm.key]||0)>=(dm.target));
+  const todayMissions=getDailyDef();
+  const allDone=todayMissions.every(dm=>(dp[dm.key]||0)>=(dm.target));
   if(allDone&&!wasComplete){
     dp.allComplete=true;
-    const bonusXP=DAILY_DEF.reduce((a,dm)=>a+dm.xp,0);
+    const bonusXP=todayMissions.reduce((a,dm)=>a+dm.xp,0);
     userData.xp=(userData.xp||0)+bonusXP;
     await saveProgress(currentUser.uid,{xp:userData.xp,dailyProgress:dp});
     userData.dailyProgress=dp;
@@ -259,7 +310,8 @@ function renderDailyMissions(){
   const container=document.getElementById("daily-missions-list"); if(!container) return;
   container.innerHTML="";
   let totalDone=0,totalTarget=0;
-  DAILY_DEF.forEach(dm=>{
+  const todayMissions=getDailyDef();
+  todayMissions.forEach(dm=>{
     const current=dp[dm.key]||0, done=current>=dm.target;
     totalDone+=Math.min(current,dm.target); totalTarget+=dm.target;
     const pct=Math.min(Math.round((current/dm.target)*100),100);
@@ -283,10 +335,13 @@ function renderDailyMissions(){
 
 // ── AUTH ──────────────────────────────────────────────────────────────────────
 async function handleRegister(){
+  const username=document.getElementById("reg-username")?.value?.trim()||"";
   const name=document.getElementById("reg-name").value.trim();
   const email=document.getElementById("reg-email").value.trim();
   const pw=document.getElementById("reg-password").value;
   const btn=document.getElementById("btn-register");
+  if(!username) return showAuthError("Crie um nome de usuário para o ranking.");
+  if(username.length<3) return showAuthError("Nome de usuário precisa ter ao menos 3 caracteres.");
   if(!name||!email||!pw) return showAuthError("Preencha todos os campos.");
   if(pw.length<6) return showAuthError("Senha mínimo 6 caracteres.");
   btn.disabled=true; btn.textContent="Criando...";
@@ -298,7 +353,7 @@ async function handleRegister(){
     showAuthError("Algo deu errado. Tente novamente.");
   }, 10000);
   try{
-    await registerUser(email,pw,name);
+    await registerUser(email,pw,name,username);
     localStorage.setItem("vic_last_email",email);
     clearTimeout(timeout);
     // _handleAuth will be called automatically by onAuthChange
@@ -423,27 +478,75 @@ function translateErr(c){return{"auth/email-already-in-use":"Email já cadastrad
 function switchTab(t){document.querySelectorAll(".auth-tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".auth-form").forEach(x=>x.classList.remove("active"));document.getElementById(`tab-${t}`).classList.add("active");document.getElementById(`form-${t}`).classList.add("active");document.getElementById("auth-error").style.display="none";}
 
 // ── DIAGNOSIS ─────────────────────────────────────────────────────────────────
+const DIAG_KEYS = ["motivo","segment","difficulty"]; // 3 steps de opções + 1 nota livre
+
 function startDiagnosis(){
   diagStep=0; diagAnswers={};
   document.querySelectorAll(".diag-step").forEach(s=>s.classList.remove("active"));
   document.getElementById("diag-step-0")?.classList.add("active");
   renderDiagProgress(); showView("view-diagnosis");
 }
+
 function renderDiagProgress(){
   const c=document.getElementById("diag-progress"); if(!c) return; c.innerHTML="";
-  const total=4; // 3 questions + 1 note
-  for(let i=0;i<total;i++){const d=document.createElement("div");d.className=`diag-dot ${i<diagStep?"done":""}`;c.appendChild(d);}
+  const total=5; // 3 perguntas + nota + resultado
+  for(let i=0;i<total;i++){
+    const d=document.createElement("div");
+    d.className=`diag-dot ${i<diagStep?"done":""}`;
+    c.appendChild(d);
+  }
 }
+
 function handleDiagOption(val,stepEl){
   stepEl.querySelectorAll(".diag-option").forEach(b=>b.classList.remove("selected"));
   [...stepEl.querySelectorAll(".diag-option")].find(b=>b.dataset.value===val)?.classList.add("selected");
-  const keys=["goal","difficulty","segment"];
-  diagAnswers[keys[diagStep]]=val;
+  // Salvar resposta com chave correta
+  const key = DIAG_KEYS[diagStep]||"extra";
+  diagAnswers[key] = val;
+
+  // Personalizar placeholder da nota baseado no segmento escolhido
+  if(key==="segment"){
+    const placeholders = {
+      maritimo:"Ex: Quero falar com tripulantes estrangeiros no porto sem travar...",
+      comex:"Ex: Quero negociar com fornecedores internacionais e entender contratos...",
+      offshore:"Ex: Preciso entender procedimentos de segurança e comunicação na plataforma...",
+      hotelaria:"Ex: Quero atender hóspedes estrangeiros com confiança na recepção...",
+      restaurantes:"Ex: Preciso entender pedidos e me comunicar com clientes internacionais...",
+      aeroporto:"Ex: Quero entender passageiros estrangeiros e fazer anúncios em inglês...",
+      corporativo:"Ex: Quero participar de reuniões em inglês e escrever e-mails profissionais...",
+      outro:"Ex: Quero melhorar meu inglês para crescer na carreira e vida pessoal...",
+    };
+    const ta = document.getElementById("diag-personal-note");
+    if(ta && placeholders[val]) ta.placeholder = placeholders[val];
+  }
+
   setTimeout(()=>{
-    stepEl.classList.remove("active"); diagStep++; renderDiagProgress();
-    if(diagStep<DIAG_STEPS) document.getElementById(`diag-step-${diagStep}`)?.classList.add("active");
-    else document.getElementById("diag-step-3")?.classList.add("active"); // personal note
-  },350);
+    stepEl.classList.remove("active");
+    diagStep++;
+    renderDiagProgress();
+    const nextStep = document.getElementById(`diag-step-${diagStep}`);
+    if(nextStep) nextStep.classList.add("active");
+    else document.getElementById("diag-step-3")?.classList.add("active");
+  },320);
+}
+
+// Personalizar resultado do diagnóstico com base no motivo
+function getDiagResultText(){
+  const motivo = diagAnswers.motivo||"ambos";
+  const seg = diagAnswers.segment||"—";
+  const segNames = {
+    maritimo:"Marítimo",comex:"COMEX",offshore:"Offshore",
+    hotelaria:"Hotelaria",restaurantes:"Restaurantes",
+    aeroporto:"Aeroporto",corporativo:"Corporativo",outro:"Geral"
+  };
+  const segName = segNames[seg]||seg;
+
+  if(motivo==="profissional"){
+    return { icon:"💼", title:"Perfil Profissional criado!", sub:`Área: ${segName} • Foco total em inglês do trabalho` };
+  } else if(motivo==="pessoal"){
+    return { icon:"🌍", title:"Perfil Pessoal criado!", sub:`Área: ${segName} • Foco em fluência e comunicação geral` };
+  }
+  return { icon:"🚀", title:"Perfil Completo criado!", sub:`Área: ${segName} • Mix profissional + pessoal` };
 }
 
 let diagVoiceRec=null;
@@ -465,11 +568,16 @@ async function finishDiagnosisNote(){
   const note=document.getElementById("diag-personal-note")?.value?.trim()||"";
   if(diagVoiceRec){try{diagVoiceRec.stop();}catch(e){}}
   diagAnswers.personalNote=note;
-  diagAnswers.segment&&getSegment(diagAnswers.segment)&&(currentSegmentId=diagAnswers.segment);
+  // Definir segmento atual
+  const diagSeg = diagAnswers.segment||"maritimo";
+  if(getSegment(diagSeg)) currentSegmentId=diagSeg;
   diagStep++; renderDiagProgress();
   document.getElementById("diag-step-3")?.classList.remove("active");
-  document.getElementById("diag-result-level").textContent="Perfil criado! 🎉";
-  document.getElementById("diag-result-sub").textContent=`Objetivo: ${diagAnswers.goal||"—"} • Área: ${diagAnswers.segment||"—"}`;
+  // Mostrar resultado personalizado
+  const diagResult = getDiagResultText();
+  document.getElementById("diag-result-icon").textContent = diagResult.icon;
+  document.getElementById("diag-result-level").textContent = diagResult.title;
+  document.getElementById("diag-result-sub").textContent = diagResult.sub;
   document.getElementById("diag-step-result")?.classList.add("active");
 }
 async function finishDiagnosis(){
@@ -480,53 +588,250 @@ async function finishDiagnosis(){
   startLevelTest();
 }
 
-// ── LEVEL TEST ─────────────────────────────────────────────────────────────────
-const LEVEL_TEST_Q=[
-  {id:"lt1",type:"multiple_choice",title:"Grammar — Present Simple",
-   question:"She ___ to work every day by bus.",
-   options:["goes","go","going","went"],correct:0,pts:{0:2,1:0,2:0,3:0}},
-  {id:"lt2",type:"fill_blank",title:"Structure — Questions",
-   question:"___ you like coffee in the morning?",
-   placeholder:"Do or Does?",answer:"Do",pts:{correct:2,almost:1,wrong:0}},
-  {id:"lt3",type:"multiple_choice",title:"Vocabulary — Daily Life",
-   question:"A 'schedule' is best described as:",
-   options:["A plan with times and dates","A type of food","A vehicle","A country"],correct:0,pts:{0:2,1:0,2:0,3:0}},
-  {id:"lt4",type:"word_order",title:"Sentence Structure",
-   question:"Put the words in the correct order:",
-   scrambled:["She","has","never","visited","another","country."],
-   answer:"She has never visited another country.",pts:{correct:3,almost:1,wrong:0}},
-  {id:"lt5",type:"multiple_choice",title:"Grammar — Modal Verbs",
-   question:"You ___ wear a seatbelt in a car. It's the law.",
-   options:["must","can","may","would"],correct:0,pts:{0:2,1:0,2:0,3:0}},
-  {id:"lt6",type:"fill_blank",title:"Grammar — Present Perfect",
-   question:"I have already ___ my homework. (finish)",
-   placeholder:"Past participle of finish...",answer:"finished",pts:{correct:3,almost:1,wrong:0}},
-  {id:"lt7",type:"reading",title:"Reading Comprehension",
-   question:'Read and answer:\n\n"Maria woke up late and missed her bus. She called a taxi but it took twenty minutes to arrive. When she finally got to the office, her manager was waiting at the door."\n\nWhy was Maria late to the office?',
-   options:["She missed her bus and the taxi was slow","She forgot to set her alarm","The office was far away","Her manager called her"],correct:0,pts:{0:3,1:0,2:0,3:0}},
-  {id:"lt8",type:"multiple_choice",title:"Grammar — Past Simple",
-   question:"Last night I ___ a great movie with my friends.",
-   options:["watched","watch","watching","have watched"],correct:0,pts:{0:2,1:0,2:0,3:0}},
-];
+// ── LEVEL TEST ADAPTATIVO ────────────────────────────────────────────────────
+// 15 questões | 5 por nível (A1-A2, B1-B2, C1) | lógica adaptativa
+// Acertou 3 seguidas → sobe nível | Errou 2 seguidas → desce nível
+// Penalidade: erro em A1/A2 trava máximo em B1
+
+const LT_QUESTIONS = {
+
+  // ══ NÍVEL A1-A2 — Básico ══════════════════════════════════════════════════
+  a1: [
+    {id:"a1_1", type:"mcq", level:"A1",
+     title:"Verbo To Be",
+     question:"She ___ a very good student.",
+     options:["is","are","am","be"], correct:0,
+     pts:{correct:2,wrong:0}},
+
+    {id:"a1_2", type:"mcq", level:"A1",
+     title:"Presente Simples",
+     question:"He ___ to work every day by bus.",
+     options:["goes","go","going","went"], correct:0,
+     pts:{correct:2,wrong:0}},
+
+    {id:"a1_3", type:"error_correction", level:"A1",
+     title:"Corrija o erro",
+     question:"He don't like coffee in the morning.",
+     placeholder:"Escreva a frase correta...",
+     answer:"He doesn't like coffee in the morning.",
+     pts:{correct:3,almost:1,wrong:0}},
+
+    {id:"a1_4", type:"mcq", level:"A2",
+     title:"Vocabulário — Trabalho",
+     question:"Your 'schedule' at work is:",
+     options:["Your plan with times and tasks","Your salary","Your uniform","Your office"],
+     correct:0, pts:{correct:2,wrong:0}},
+
+    {id:"a1_5", type:"mcq", level:"A2",
+     title:"Passado Simples",
+     question:"Yesterday I ___ a very important meeting.",
+     options:["had","have","has","having"], correct:0,
+     pts:{correct:2,wrong:0}},
+  ],
+
+  // ══ NÍVEL B1-B2 — Intermediário ═══════════════════════════════════════════
+  b1: [
+    {id:"b1_1", type:"fill", level:"B1",
+     title:"Present Perfect",
+     question:"I have already ___ this report. (finish)",
+     placeholder:"Particípio passado de finish...",
+     answer:"finished",
+     pts:{correct:3,almost:1,wrong:0}},
+
+    {id:"b1_2", type:"mcq", level:"B1",
+     title:"Modal Verbs",
+     question:"You ___ wear a safety vest on the platform. It's mandatory.",
+     options:["must","can","may","would"], correct:0,
+     pts:{correct:2,wrong:0}},
+
+    {id:"b1_3", type:"error_correction", level:"B1",
+     title:"Erro clássico — Collocations",
+     question:"I did a big mistake during the negotiation.",
+     placeholder:"Corrija usando o verbo certo...",
+     answer:"I made a big mistake during the negotiation.",
+     pts:{correct:3,almost:1,wrong:0}},
+
+    {id:"b1_4", type:"word_order", level:"B2",
+     title:"Estrutura de Frase",
+     question:"Ordene as palavras corretamente:",
+     scrambled:["She","has","never","missed","a","deadline."],
+     answer:"She has never missed a deadline.",
+     pts:{correct:3,almost:1,wrong:0}},
+
+    {id:"b1_5", type:"translation", level:"B2",
+     title:"Tradução Profissional",
+     question:"Preciso confirmar o embarque para amanhã.",
+     placeholder:"Escreva em inglês...",
+     answer:"I need to confirm the shipment for tomorrow.",
+     pts:{correct:4,almost:2,wrong:0}},
+  ],
+
+  // ══ NÍVEL C1 — Avançado ═══════════════════════════════════════════════════
+  c1: [
+    {id:"c1_1", type:"mcq", level:"C1",
+     title:"Vocabulário Técnico — COMEX",
+     question:"The container is on hold due to a ___ discrepancy.",
+     options:["documentation","document","documental","documented"], correct:0,
+     pts:{correct:3,wrong:0}},
+
+    {id:"c1_2", type:"reading", level:"C1",
+     title:"Compreensão — Contexto Profissional",
+     question:"Read and answer:
+
+"The vessel arrived at berth 12 ahead of schedule, but the port authority placed it on hold pending a full cargo inspection. The captain requested an ETA update for the release."
+
+Why was the vessel placed on hold?",
+     options:[
+       "It needed a cargo inspection before being released",
+       "The vessel arrived too late",
+       "The captain made a request to the port",
+       "There was a problem with the berth"
+     ], correct:0,
+     pts:{correct:4,wrong:0}},
+
+    {id:"c1_3", type:"fill", level:"C1",
+     title:"Condicional — Uso Profissional",
+     question:"If the shipment ___ (delay) any further, we will lose the contract.",
+     placeholder:"Forma correta do verbo...",
+     answer:"delays",
+     pts:{correct:4,almost:2,wrong:0}},
+
+    {id:"c1_4", type:"error_correction", level:"C1",
+     title:"Precisão Gramatical",
+     question:"The team has been working in this project since three months.",
+     placeholder:"Corrija a preposição e o tempo verbal...",
+     answer:"The team has been working on this project for three months.",
+     pts:{correct:4,almost:2,wrong:0}},
+
+    {id:"c1_5", type:"translation", level:"C1",
+     title:"Tradução Avançada",
+     question:"O prazo de entrega foi adiado devido a problemas alfandegários.",
+     placeholder:"Escreva em inglês profissional...",
+     answer:"The delivery deadline was postponed due to customs issues.",
+     pts:{correct:5,almost:2,wrong:0}},
+  ],
+};
+
+// ── LÓGICA ADAPTATIVA ─────────────────────────────────────────────────────────
+let ltCurrentLevel = "a1";   // começa no A1
+let ltConsecutiveRight = 0;  // acertos seguidos
+let ltConsecutiveWrong = 0;  // erros seguidos
+let ltQueuedQuestions = [];  // fila de perguntas
+let ltAnsweredByLevel = {};  // rastrear perguntas já usadas
+let ltPenalized = false;     // errou A1/A2 → trava em B1
+let ltTotalQuestions = 15;
+let ltCurrentQ = 0;
+
+function buildAdaptiveQueue() {
+  // Começa com 5 questões A1, depois adapta
+  ltQueuedQuestions = [...LT_QUESTIONS.a1];
+  ltAnsweredByLevel = { a1: 0, b1: 0, c1: 0 };
+  ltCurrentLevel = "a1";
+  ltConsecutiveRight = 0;
+  ltConsecutiveWrong = 0;
+  ltPenalized = false;
+}
+
+function getNextAdaptiveQuestion() {
+  const pool = LT_QUESTIONS[ltCurrentLevel];
+  const used = ltAnsweredByLevel[ltCurrentLevel] || 0;
+  if (used < pool.length) {
+    ltAnsweredByLevel[ltCurrentLevel] = used + 1;
+    return pool[used];
+  }
+  // Pool esgotado — ir pro próximo nível
+  if (ltCurrentLevel === "a1") { ltCurrentLevel = "b1"; ltAnsweredByLevel.b1 = 0; }
+  else if (ltCurrentLevel === "b1") { ltCurrentLevel = "c1"; ltAnsweredByLevel.c1 = 0; }
+  const newPool = LT_QUESTIONS[ltCurrentLevel];
+  ltAnsweredByLevel[ltCurrentLevel] = 1;
+  return newPool[0];
+}
+
+function adaptLevel(wasCorrect) {
+  if (wasCorrect) {
+    ltConsecutiveWrong = 0;
+    ltConsecutiveRight++;
+    if (ltConsecutiveRight >= 3) {
+      // Sobe nível
+      ltConsecutiveRight = 0;
+      if (ltCurrentLevel === "a1") ltCurrentLevel = "b1";
+      else if (ltCurrentLevel === "b1" && !ltPenalized) ltCurrentLevel = "c1";
+    }
+  } else {
+    ltConsecutiveRight = 0;
+    ltConsecutiveWrong++;
+    // Penalidade: erro em A1 trava máximo em B1
+    if (ltCurrentLevel === "a1") ltPenalized = true;
+    if (ltConsecutiveWrong >= 2) {
+      ltConsecutiveWrong = 0;
+      if (ltCurrentLevel === "c1") ltCurrentLevel = "b1";
+      else if (ltCurrentLevel === "b1") ltCurrentLevel = "a1";
+    }
+  }
+}
+
+function calcFinalLevel() {
+  const maxPts = ltTotalQuestions * 3; // aprox
+  const pct = Math.round((ltScore / Math.max(ltScore + 1, 1)) * 100);
+
+  // Basear no nível onde terminou + pontuação
+  if (ltPenalized && ltCurrentLevel !== "c1") {
+    // Errou básico — máximo B1
+    if (ltScore < 15) return { level:"a2", label:"A2 — Básico 📘", msg:"Você tem uma base! Vamos fortalecer o essencial.", color:"#60a5fa" };
+    return { level:"b1", label:"B1 — Intermediário ⭐", msg:"Bom nível! Você se vira bem. Foco em fluência profissional.", color:"#a78bfa" };
+  }
+  if (ltCurrentLevel === "c1") {
+    if (ltAnsweredByLevel.c1 >= 3) return { level:"c1", label:"C1 — Avançado 🏆", msg:"Impressionante! Vamos polir detalhes e naturalidade.", color:"#ffd700" };
+    return { level:"b2", label:"B2 — Intermediário Alto 🌟", msg:"Ótimo nível! Comunicação fluida com pequenos refinamentos.", color:"#e4b45c" };
+  }
+  if (ltCurrentLevel === "b1") return { level:"b1", label:"B1 — Intermediário ⭐", msg:"Bom nível! Você se vira bem. Foco em fluência profissional.", color:"#a78bfa" };
+  if (ltScore >= 8) return { level:"a2", label:"A2 — Básico Funcional 📘", msg:"Você tem base! Vamos fortalecer vocabulário e gramática.", color:"#60a5fa" };
+  return { level:"a1", label:"A1 — Iniciante 🌱", msg:"Sem problema! Todo expert já foi iniciante. Vamos juntos!", color:"#22c55e" };
+}
 
 function startLevelTest(){
-  ltIndex=0; ltScore=0;
+  ltIndex=0; ltScore=0; ltCurrentQ=0;
+  buildAdaptiveQueue();
   document.getElementById("lt-result").style.display="none";
   document.getElementById("lt-questions-area").style.display="block";
-  showView("view-level-test");
+  showView("view-leveltest");
   renderLTQuestion();
 }
+
 function renderLTQuestion(){
-  const q=LEVEL_TEST_Q[ltIndex], total=LEVEL_TEST_Q.length;
-  document.getElementById("lt-counter").textContent=`${ltIndex+1} / ${total}`;
-  document.getElementById("lt-progress-bar").style.width=`${Math.round((ltIndex/total)*100)}%`;
-  document.getElementById("lt-title").textContent=q.title;
-  document.getElementById("lt-question").textContent=q.question;
+  const q = getNextAdaptiveQuestion();
+  if (!q || ltCurrentQ >= ltTotalQuestions) { showLTResult(); return; }
+
+  const total = ltTotalQuestions;
+  ltCurrentQ++;
+  document.getElementById("lt-counter").textContent=`${ltCurrentQ} / ${total}`;
+  document.getElementById("lt-progress-bar").style.width=`${Math.round((ltCurrentQ/total)*100)}%`;
+
+  // Badge de nível atual
+  const levelColors = {a1:"#22c55e",b1:"#a78bfa",c1:"#ffd700"};
+  const levelLabels = {a1:"A1-A2 • Básico",b1:"B1-B2 • Intermediário",c1:"C1 • Avançado"};
+  document.getElementById("lt-title").textContent = q.title;
+  document.getElementById("lt-title").style.color = levelColors[ltCurrentLevel]||"#e4b45c";
+
+  // Label de nível
+  let levelBadge = document.getElementById("lt-level-badge");
+  if(!levelBadge){
+    levelBadge = document.createElement("div");
+    levelBadge.id = "lt-level-badge";
+    levelBadge.style.cssText="font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;display:inline-block;margin-bottom:8px;";
+    document.getElementById("lt-title").parentNode.insertBefore(levelBadge, document.getElementById("lt-title"));
+  }
+  levelBadge.textContent = levelLabels[ltCurrentLevel]||"";
+  levelBadge.style.background = (levelColors[ltCurrentLevel]||"#e4b45c")+"22";
+  levelBadge.style.color = levelColors[ltCurrentLevel]||"#e4b45c";
+  levelBadge.style.border = `1px solid ${levelColors[ltCurrentLevel]||"#e4b45c"}44`;
+
+  document.getElementById("lt-question").textContent = q.question;
   document.getElementById("lt-feedback").style.display="none";
   ["lt-mc","lt-fill","lt-order"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display="none";});
 
-  if(q.type==="multiple_choice"||q.type==="reading"){
-    // randomize options
+  // ── MCQ ──
+  if(q.type==="mcq"||q.type==="reading"){
     const indices=[0,1,2,3];
     const shuffled=shuffle(indices);
     const newCorrect=shuffled.indexOf(q.correct);
@@ -536,31 +841,47 @@ function renderLTQuestion(){
       const btn=document.createElement("button"); btn.className="lt-option"; btn.textContent=opt;
       btn.addEventListener("click",()=>{
         wrap.querySelectorAll(".lt-option").forEach((b,j)=>{b.disabled=true;if(j===newCorrect)b.classList.add("correct");else if(j===i&&i!==newCorrect)b.classList.add("wrong");});
-        const pts=i===newCorrect?q.pts[0]:0; ltScore+=pts;
-        showLTFeedback(i===newCorrect?"correct":"tryagain",newOptions[newCorrect],pts);
+        const correct=(i===newCorrect);
+        const pts=correct?q.pts.correct:q.pts.wrong||0;
+        ltScore+=pts;
+        adaptLevel(correct);
+        showLTFeedback(correct?"correct":"tryagain",newOptions[newCorrect],pts);
       });
       wrap.appendChild(btn);
     });
   }
-  if(q.type==="fill_blank"){
-    const inp=document.getElementById("lt-fill-input"); inp.value=""; inp.disabled=false; inp.placeholder=q.placeholder||"";
+
+  // ── FILL / ERROR_CORRECTION / TRANSLATION ──
+  if(q.type==="fill"||q.type==="error_correction"||q.type==="translation"){
+    const inp=document.getElementById("lt-fill-input");
+    inp.value=""; inp.disabled=false;
+    inp.placeholder=q.placeholder||"";
     document.getElementById("lt-fill").style.display="block";
+    // Label especial para tradução
+    const fillLabel = document.getElementById("lt-fill-label")||null;
+    if(fillLabel){
+      fillLabel.textContent = q.type==="translation"?"🇧🇷 → 🇺🇸 Escreva em inglês:":q.type==="error_correction"?"✏️ Reescreva corretamente:":"✏️ Complete:";
+      fillLabel.style.display="block";
+    }
     document.getElementById("lt-fill-check").onclick=()=>{
       if(inp.disabled) return;
       const res=avaliarResposta(inp.value.trim(),q.answer);
-      const pts=res.feedback==="correct"?q.pts.correct:res.feedback==="almost"?q.pts.almost:q.pts.wrong;
+      const pts=res.feedback==="correct"?q.pts.correct:res.feedback==="almost"?(q.pts.almost||0):q.pts.wrong||0;
       ltScore+=pts; inp.disabled=true;
+      adaptLevel(res.feedback==="correct");
       showLTFeedback(res.feedback,q.answer,pts);
     };
     inp.onkeydown=e=>{if(e.key==="Enter")document.getElementById("lt-fill-check").click();};
     setTimeout(()=>inp.focus(),100);
   }
+
+  // ── WORD ORDER ──
   if(q.type==="word_order"){
     const wrap=document.getElementById("lt-order"); wrap.style.display="block";
     const zone=document.getElementById("lt-order-zone"); zone.innerHTML="";
     const bank=document.getElementById("lt-order-bank"); bank.innerHTML="";
     let placed=[];
-    shuffle(q.scrambled).forEach(w=>{
+    shuffle([...q.scrambled]).forEach(w=>{
       const btn=document.createElement("button"); btn.className="word-tile"; btn.textContent=w;
       btn.addEventListener("click",()=>{
         if(btn.classList.contains("placed")) return;
@@ -573,37 +894,40 @@ function renderLTQuestion(){
     });
     document.getElementById("lt-order-check").onclick=()=>{
       const res=avaliarResposta(placed.join(" "),q.answer);
-      const pts=res.feedback==="correct"?q.pts.correct:res.feedback==="almost"?q.pts.almost:q.pts.wrong;
-      ltScore+=pts; showLTFeedback(res.feedback,q.answer,pts);
+      const pts=res.feedback==="correct"?q.pts.correct:res.feedback==="almost"?(q.pts.almost||0):0;
+      ltScore+=pts;
+      adaptLevel(res.feedback==="correct");
+      showLTFeedback(res.feedback,q.answer,pts);
     };
   }
 }
+
 function showLTFeedback(feedback,correct,pts){
   const fb=document.getElementById("lt-feedback");
   if(feedback==="correct"){fb.className="lt-feedback correct";fb.innerHTML=`✅ Correto! <strong>+${pts} pts</strong>`;SoundFX.correct();}
-  else if(feedback==="almost"){fb.className="lt-feedback almost";fb.innerHTML=`👍 Quase! <strong>${correct}</strong> +${pts} pts`;SoundFX.almost();}
-  else{fb.className="lt-feedback wrong";fb.innerHTML=`✅ Correto: <strong>${correct}</strong>`;SoundFX.wrong();}
+  else if(feedback==="almost"){fb.className="lt-feedback almost";fb.innerHTML=`👍 Quase! Correto: <strong>${correct}</strong> +${pts} pts`;SoundFX.almost();}
+  else{fb.className="lt-feedback wrong";fb.innerHTML=`❌ Correto seria: <strong>${correct}</strong>`;SoundFX.wrong();}
   fb.style.display="block";
-  setTimeout(()=>{ltIndex++;if(ltIndex<LEVEL_TEST_Q.length)renderLTQuestion();else showLTResult();},1400);
+  setTimeout(()=>{if(ltCurrentQ>=ltTotalQuestions)showLTResult();else renderLTQuestion();},1600);
 }
+
 function showLTResult(){
-  const maxPts=LEVEL_TEST_Q.reduce((a,q)=>a+Math.max(...Object.values(q.pts)),0);
-  const pct=Math.round((ltScore/maxPts)*100);
-  let level,label,msg;
-  if(pct<=30){level="a1";label="A1 — Iniciante 🌱";msg="Vamos começar do início com calma!";}
-  else if(pct<=50){level="a2";label="A2 — Básico 📘";msg="Você tem uma base. Vamos fortalecer!";}
-  else if(pct<=72){level="b1";label="B1 — Intermediário ⭐";msg="Bom nível! Foco em fluência profissional.";}
-  else{level="b2";label="B2 — Avançado 🏆";msg="Excelente! Refinando comunicação profissional.";}
-  diagAnswers.level=level;
+  const result = calcFinalLevel();
+  diagAnswers.level = result.level;
+
   document.getElementById("lt-questions-area").style.display="none";
   document.getElementById("lt-result").style.display="block";
-  document.getElementById("lt-result-score").textContent=`${ltScore} / ${maxPts} pts`;
-  document.getElementById("lt-result-pct").textContent=`${pct}%`;
-  document.getElementById("lt-result-level").textContent=label;
-  document.getElementById("lt-result-msg").textContent=msg;
-  document.getElementById("lt-result-bar").style.width=`${pct}%`;
+  document.getElementById("lt-result-score").textContent=`${ltScore} pts`;
+  document.getElementById("lt-result-pct").textContent=result.label;
+  document.getElementById("lt-result-pct").style.color=result.color||"#e4b45c";
+  document.getElementById("lt-result-level").textContent=result.label;
+  document.getElementById("lt-result-msg").textContent=result.msg;
+  document.getElementById("lt-result-bar").style.width=
+    result.level==="c1"?"95%":result.level==="b2"?"80%":result.level==="b1"?"65%":result.level==="a2"?"40%":"20%";
+  document.getElementById("lt-result-bar").style.background=result.color||"#e4b45c";
   SoundFX.complete();
 }
+
 async function finishLevelTest(){
   if(currentUser){
     await saveProgress(currentUser.uid,{diagnosisAnswers:diagAnswers,detectedLevel:diagAnswers.level,currentMission:{segmentId:currentSegmentId,phaseId:"f1",missionId:getSegment(currentSegmentId)?.phases[0]?.missions[0]?.id||"",phraseIndex:0}});
@@ -866,7 +1190,7 @@ function initContactFloat(){
 }
 
 function shareApp(){
-  const url="https://vicenglish.netlify.app";
+  const url="https://app.viclanguage.com.br";
   if(navigator.share){navigator.share({title:"VIC English",text:"Aprenda inglês profissional!",url});}
   else{navigator.clipboard.writeText(url).then(()=>showXpToast("🔗 Link copiado!"));}
 }
@@ -1475,9 +1799,9 @@ function showPostMissionFeedback(){
       <div class="pmm-share-title">Compartilhe seu progresso!</div>
       <div class="pmm-share-row">
         <a href="https://wa.me/?text=${encodeURIComponent('Estou aprendendo inglês com o VIC English App! 🚀 app.viclanguage.com.br')}" target="_blank" class="pmm-share-btn pmm-wa">📱</a>
-        <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://vicenglish.netlify.app')}" target="_blank" class="pmm-share-btn pmm-fb">👥</a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://app.viclanguage.com.br')}" target="_blank" class="pmm-share-btn pmm-fb">👥</a>
         <a href="https://www.instagram.com/" target="_blank" class="pmm-share-btn pmm-ig">📸</a>
-        <button class="pmm-share-btn pmm-copy" onclick="navigator.clipboard.writeText('https://vicenglish.netlify.app').then(()=>showXpToast('🔗 Link copiado!'))">🔗</button>
+        <button class="pmm-share-btn pmm-copy" onclick="navigator.clipboard.writeText('https://app.viclanguage.com.br').then(()=>showXpToast('🔗 Link copiado!'))">🔗</button>
       </div>
     </div>`;
   // Wire stars
@@ -2611,7 +2935,7 @@ ${segProgress.map(s=>`
 }
 
 // ── PROFILE & SETTINGS ────────────────────────────────────────────────────────
-const APP_LINK="https://dynamic-speculoos-35ec76.netlify.app/";
+const APP_LINK="https://app.viclanguage.com.br";
 let soundsEnabled=true, darkMode=true, fontSize="medium";
 
 function openProfile(){
@@ -3741,6 +4065,117 @@ async function _handleAuth(user){
   }
 }
 
+// ── ONBOARDING ────────────────────────────────────────────────────────────────
+let obStep = 0;
+const OB_TOTAL = 3;
+
+function startOnboarding(){
+  obStep = 0;
+  renderObStep();
+  showView("view-onboarding");
+}
+
+function renderObStep(){
+  document.querySelectorAll(".ob-slide").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".ob-dot").forEach(d=>d.classList.remove("active"));
+  document.getElementById(`ob-slide-${obStep}`)?.classList.add("active");
+  document.getElementById(`ob-dot-${obStep}`)?.classList.add("active");
+  const btn = document.getElementById("ob-btn-next");
+  if(btn) btn.textContent = obStep===OB_TOTAL-1 ? "Começar! 🚀" : "Próximo →";
+}
+
+function obNext(){
+  if(obStep < OB_TOTAL-1){
+    obStep++;
+    renderObStep();
+  } else {
+    obSkip();
+  }
+}
+
+function obSkip(){
+  localStorage.setItem("vic_onboarding_done","1");
+  showView("view-auth");
+}
+
+// ── LEADERBOARD ────────────────────────────────────────────────────────────────
+let _lbMode = "week";
+
+async function openLeaderboard(){
+  showView("view-leaderboard");
+  await loadLeaderboard("week");
+}
+
+async function loadLeaderboard(mode){
+  _lbMode = mode;
+  // Atualizar tabs
+  document.getElementById("lb-tab-week")?.classList.toggle("active", mode==="week");
+  document.getElementById("lb-tab-all")?.classList.toggle("active", mode==="all");
+
+  const listEl = document.getElementById("lb-list");
+  if(listEl) listEl.innerHTML = '<div class="lb-loading">Carregando... ⏳</div>';
+
+  try {
+    const all = await getAllUsers();
+    // Ordenar por XP (all time) ou XP da semana
+    let sorted = [...all].sort((a,b)=>(b.xp||0)-(a.xp||0)).slice(0,10);
+
+    // Podium (top 3)
+    const renderAvatar = (u) => {
+      if(u.photoURL) return `<img src="${u.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;"/>`;
+      const username = u.username||u.name||"?";
+      return (username[0]||"?").toUpperCase();
+    };
+
+    [1,2,3].forEach(pos => {
+      const u = sorted[pos-1];
+      if(!u) return;
+      const avEl = document.getElementById(`lb-p${pos}-av`);
+      const nameEl = document.getElementById(`lb-p${pos}-name`);
+      const xpEl = document.getElementById(`lb-p${pos}-xp`);
+      if(avEl) avEl.innerHTML = renderAvatar(u);
+      if(nameEl) nameEl.textContent = "@"+(u.username||u.name||"Aluno").slice(0,12);
+      if(xpEl) xpEl.textContent = (u.xp||0)+" XP";
+    });
+
+    // Lista 4-10
+    const list = sorted.slice(3);
+    if(listEl){
+      listEl.innerHTML = list.map((u,i)=>`
+        <div class="lb-item ${currentUser?.uid===u.uid?"lb-item-me":""}">
+          <div class="lb-item-pos">#${i+4}</div>
+          <div class="lb-item-avatar">${u.photoURL?`<img src="${u.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;"/>`:(u.username||u.name||"?")[0].toUpperCase()}</div>
+          <div class="lb-item-info">
+            <div class="lb-item-name">@${(u.username||u.name||"Aluno").slice(0,16)}</div>
+            <div class="lb-item-meta">
+              <span>${u.xp||0} XP</span>
+              ${u.detectedLevel?`<span class="lb-item-level">${u.detectedLevel.toUpperCase()}</span>`:""}
+              ${u.streak?`<span>🔥${u.streak}</span>`:""}
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    // Minha posição
+    if(currentUser){
+      const myPos = sorted.findIndex(u=>u.uid===currentUser.uid);
+      const myRankEl = document.getElementById("lb-my-rank");
+      if(myRankEl){
+        myRankEl.style.display = "flex";
+        const myUser = sorted[myPos]||userData;
+        document.getElementById("lb-my-pos").textContent = myPos>=0 ? `#${myPos+1}` : "#—";
+        document.getElementById("lb-my-avatar").textContent = (userData?.username||userData?.name||"?")[0].toUpperCase();
+        document.getElementById("lb-my-name").textContent = "@"+(userData?.username||userData?.name||"Aluno");
+        document.getElementById("lb-my-xp").textContent = (userData?.xp||0)+" XP";
+      }
+    }
+  } catch(e) {
+    if(listEl) listEl.innerHTML = '<div class="lb-loading">Erro ao carregar ranking.</div>';
+    console.error("Leaderboard error:", e);
+  }
+}
+
 function init(){
   _domReady = true;
 
@@ -4014,6 +4449,8 @@ function init(){
 
   // upgrade
   document.getElementById("btn-back-upgrade")?.addEventListener("click",backToDashboard);
+  document.getElementById("btn-back-leaderboard")?.addEventListener("click",()=>showView("view-dashboard"));
+  document.getElementById("btn-leaderboard")?.addEventListener("click",openLeaderboard);
   const mpBtn=document.getElementById("btn-pay-mp"); if(mpBtn) mpBtn.href=MP_LINK;
 
   // phases

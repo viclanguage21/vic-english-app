@@ -32,6 +32,87 @@
 </div>
 
 <!-- ══ AUTH ══════════════════════════════════════════════ -->
+<!-- ══ ONBOARDING ══════════════════════════════════════════ -->
+<div class="view" id="view-onboarding">
+  <div class="ob-wrap">
+
+    <div class="ob-slides" id="ob-slides">
+
+      <!-- Slide 0 -->
+      <div class="ob-slide active" id="ob-slide-0">
+        <div class="ob-slide-art">
+          <img src="logo_full_2.png" alt="VIC English" style="width:200px;filter:drop-shadow(0 8px 32px rgba(201,147,58,0.4))"/>
+        </div>
+        <div class="ob-slide-content">
+          <div class="ob-slide-title">Bem-vindo ao VIC English!</div>
+          <div class="ob-slide-sub">O único app de inglês focado 100% no mercado profissional brasileiro.</div>
+          <div class="ob-slide-tags">
+            <span class="ob-tag">⚓ Marítimo</span>
+            <span class="ob-tag">🌍 COMEX</span>
+            <span class="ob-tag">🏨 Hotelaria</span>
+            <span class="ob-tag">🛢️ Offshore</span>
+            <span class="ob-tag">✈️ Aeroporto</span>
+            <span class="ob-tag">💼 Corporativo</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 1 -->
+      <div class="ob-slide" id="ob-slide-1">
+        <div class="ob-slide-art ob-slide-art-2">
+          <div class="ob-mock-dashboard">
+            <div class="ob-mock-header">🏠 Painel</div>
+            <div class="ob-mock-xp">⚡ 350 XP • 🔥 7 dias</div>
+            <div class="ob-mock-missions">
+              <div class="ob-mock-m done">✅ Complete 3 exercícios</div>
+              <div class="ob-mock-m done">✅ Acerte 2 com nota 10</div>
+              <div class="ob-mock-m">⚓ 1 lição marítima</div>
+            </div>
+            <div class="ob-mock-badges">🏅 🎯 ⚓ 🌟</div>
+          </div>
+        </div>
+        <div class="ob-slide-content">
+          <div class="ob-slide-title">Sua tela inicial</div>
+          <div class="ob-slide-sub">Missões diárias, XP, streak e badges. Tudo pensado pra te manter motivado todo dia.</div>
+        </div>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="ob-slide" id="ob-slide-2">
+        <div class="ob-slide-art ob-slide-art-3">
+          <div class="ob-mock-profile">
+            <div class="ob-mock-avatar">⚓</div>
+            <div class="ob-mock-pname">@capitao_victor</div>
+            <div class="ob-mock-pxp">🌟 1.250 XP • Nível B1</div>
+            <div class="ob-mock-pbadges">
+              <span>⚓</span><span>🌍</span><span>🏆</span><span>🔥</span>
+            </div>
+          </div>
+        </div>
+        <div class="ob-slide-content">
+          <div class="ob-slide-title">Seu perfil é seu</div>
+          <div class="ob-slide-sub">Escolha um nome de usuário, acompanhe seu nível, seus badges e compare com outros no ranking.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Dots -->
+    <div class="ob-dots">
+      <div class="ob-dot active" id="ob-dot-0"></div>
+      <div class="ob-dot" id="ob-dot-1"></div>
+      <div class="ob-dot" id="ob-dot-2"></div>
+    </div>
+
+    <!-- Botões -->
+    <div class="ob-actions">
+      <button class="ob-btn-next" id="ob-btn-next" onclick="obNext()">Próximo →</button>
+      <button class="ob-btn-skip" id="ob-btn-skip" onclick="obSkip()">Pular</button>
+    </div>
+
+  </div>
+</div>
+
 <div class="view" id="view-auth">
 
   <!-- Full-screen loading -->
@@ -108,7 +189,14 @@
       <!-- REGISTER FORM -->
       <div class="auth-form" id="form-register">
         <div class="auth-field">
-          <label for="reg-name">Nome</label>
+          <label for="reg-username">@ Nome de usuário</label>
+          <input type="text" id="reg-username" placeholder="Ex: capitao_silva" autocomplete="username"
+            style="font-family:monospace;letter-spacing:.3px;" maxlength="20"
+            oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_.]/g,'')"/>
+          <div style="font-size:11px;color:var(--text-muted,#888);margin-top:4px;">Aparece no ranking. Só letras, números e _</div>
+        </div>
+        <div class="auth-field">
+          <label for="reg-name">Nome completo</label>
           <input type="text" id="reg-name" placeholder="Seu nome" autocomplete="name"/>
         </div>
         <div class="auth-field">
@@ -147,51 +235,78 @@
   <div class="diagnosis-wrapper">
     <div class="diagnosis-header">
       <div class="auth-logo-mark" style="margin:0 auto 16px"><img src="vic_logo.png" alt="V"/></div>
-      <h2>🎯 Diagnóstico Inicial</h2>
-      <p>3 perguntas rápidas para personalizar seu treino</p>
+      <h2>🎯 Vamos personalizar seu treino</h2>
+      <p>4 perguntas rápidas — leva menos de 1 minuto</p>
     </div>
     <div class="diagnosis-card">
       <div class="diag-progress" id="diag-progress"></div>
 
-      <!-- Step 0: objetivo -->
+      <!-- Step 0: MOTIVO — profissional vs pessoal -->
       <div class="diag-step active" id="diag-step-0">
-        <div class="diag-step-title">Qual é o seu principal objetivo?</div>
+        <div class="diag-step-emoji">🎯</div>
+        <div class="diag-step-title">Por que você quer aprender inglês?</div>
+        <div class="diag-step-sub">Isso molda toda a sua experiência no app</div>
         <div class="diag-options">
-          <button class="diag-option" data-value="trabalho">💼 Usar no trabalho</button>
-          <button class="diag-option" data-value="viagem">✈️ Viagens</button>
-          <button class="diag-option" data-value="estudo">📚 Estudo / escola</button>
-          <button class="diag-option" data-value="negocios">🤝 Negócios</button>
+          <button class="diag-option diag-option-big" data-value="profissional">
+            <span class="diag-opt-icon">💼</span>
+            <span class="diag-opt-text">
+              <strong>Para o trabalho</strong>
+              <small>Me comunicar melhor, crescer na carreira e ganhar mais</small>
+            </span>
+          </button>
+          <button class="diag-option diag-option-big" data-value="pessoal">
+            <span class="diag-opt-icon">🌍</span>
+            <span class="diag-opt-text">
+              <strong>Desenvolvimento pessoal</strong>
+              <small>Viagens, cultura, séries, interesses pessoais</small>
+            </span>
+          </button>
+          <button class="diag-option diag-option-big" data-value="ambos">
+            <span class="diag-opt-icon">🚀</span>
+            <span class="diag-opt-text">
+              <strong>Os dois!</strong>
+              <small>Quero evoluir no trabalho e na vida pessoal</small>
+            </span>
+          </button>
         </div>
       </div>
 
-      <!-- Step 1: dificuldade -->
+      <!-- Step 1: ÁREA (segmento) -->
       <div class="diag-step" id="diag-step-1">
+        <div class="diag-step-emoji">🏢</div>
+        <div class="diag-step-title">Qual é a sua área de atuação?</div>
+        <div class="diag-step-sub">Vamos priorizar o vocabulário do seu setor</div>
+        <div class="diag-options diag-options-grid">
+          <button class="diag-option" data-value="maritimo">⚓ Marítimo / Porto</button>
+          <button class="diag-option" data-value="comex">🌍 COMEX / Exportação</button>
+          <button class="diag-option" data-value="offshore">🛢️ Offshore / Petróleo</button>
+          <button class="diag-option" data-value="hotelaria">🏨 Hotelaria</button>
+          <button class="diag-option" data-value="restaurantes">🍽️ Restaurantes</button>
+          <button class="diag-option" data-value="aeroporto">✈️ Aeroporto</button>
+          <button class="diag-option" data-value="corporativo">💼 Corporativo</button>
+          <button class="diag-option" data-value="outro">📖 Outro / Geral</button>
+        </div>
+      </div>
+
+      <!-- Step 2: DIFICULDADE -->
+      <div class="diag-step" id="diag-step-2">
+        <div class="diag-step-emoji">🤔</div>
         <div class="diag-step-title">Qual é sua maior dificuldade?</div>
         <div class="diag-options">
-          <button class="diag-option" data-value="pronuncia">🗣️ Pronúncia</button>
-          <button class="diag-option" data-value="vocabulario">📝 Vocabulário</button>
-          <button class="diag-option" data-value="gramatica">📖 Gramática</button>
-          <button class="diag-option" data-value="escuta">👂 Entender o que falam</button>
+          <button class="diag-option" data-value="vocabulario">📝 Não sei as palavras certas</button>
+          <button class="diag-option" data-value="pronuncia">🗣️ Vergonha de falar / pronúncia</button>
+          <button class="diag-option" data-value="gramatica">📖 Não sei montar frases</button>
+          <button class="diag-option" data-value="escuta">👂 Não entendo quando falam comigo</button>
         </div>
       </div>
 
-      <!-- Step 2: segmento -->
-      <div class="diag-step" id="diag-step-2">
-        <div class="diag-step-title">Qual área é mais importante para você?</div>
-        <div class="diag-options">
-          <button class="diag-option" data-value="maritimo">⚓ Marítimo / Porto / COMEX</button>
-          <button class="diag-option" data-value="hotelaria">🏨 Hotelaria / Recepção</button>
-          <button class="diag-option" data-value="restaurantes">🍽️ Restaurantes / Atendimento</button>
-          <button class="diag-option" data-value="gramatica">📖 Inglês Geral / Gramática</button>
-        </div>
-      </div>
-
-      <!-- Step 3: personal note (free text + voice) -->
+      <!-- Step 3: META pessoal (texto livre) -->
       <div class="diag-step" id="diag-step-3">
-        <div class="diag-step-title">O que você quer melhorar no seu inglês? ✍️</div>
-        <div class="diag-step-sub">Escreva ou fale à vontade — isso nos ajuda a personalizar seu treino</div>
+        <div class="diag-step-emoji">✍️</div>
+        <div class="diag-step-title">O que você quer conseguir fazer em inglês?</div>
+        <div class="diag-step-sub">Seja específico — isso ajuda muito na personalização</div>
         <textarea class="diag-textarea" id="diag-personal-note"
-          placeholder="Ex: Quero falar com tripulantes estrangeiros no porto sem travar..."></textarea>
+          placeholder="Ex: Quero falar com tripulantes estrangeiros no porto sem travar, entender comandos em inglês no navio..."></textarea>
         <div class="diag-voice-row">
           <button class="diag-voice-btn" id="btn-diag-voice">🎤 Falar</button>
           <span class="diag-voice-status" id="diag-voice-status"></span>
@@ -205,15 +320,15 @@
       <!-- Result: bridge to level test -->
       <div class="diag-step" id="diag-step-result">
         <div class="diag-result">
-          <div class="diag-result-icon">✅</div>
+          <div class="diag-result-icon">🎉</div>
           <div class="diag-result-level" id="diag-result-level">Perfil criado!</div>
-          <div class="diag-result-sub"   id="diag-result-sub"></div>
+          <div class="diag-result-sub" id="diag-result-sub"></div>
           <div class="diag-next-info">
-            <p>Agora vamos descobrir seu nível real com um <strong>teste rápido de 8 questões</strong></p>
-            <p class="diag-next-sub">Leva menos de 3 minutos</p>
+            <p>Agora vamos descobrir seu nível real com um <strong>teste adaptativo de 15 questões</strong></p>
+            <p class="diag-next-sub">⚡ Começa fácil e ajusta automaticamente • Leva ~5 minutos</p>
           </div>
           <button class="btn-primary" id="btn-finish-diag" style="margin-top:20px">Fazer o Teste de Nível →</button>
-          <button class="diag-skip-note" id="btn-skip-level-test-diag" style="margin-top:8px;display:block;text-align:center">Pular teste e ir para o app</button>
+          <button class="diag-skip-note" id="btn-skip-level-test-diag" style="margin-top:8px;display:block;text-align:center">Pular e ir para o app</button>
         </div>
       </div>
     </div>
@@ -322,6 +437,10 @@
       <div class="stat-card stat-card-click" id="stat-xp-card" title="Ver histórico de XP">
         <span class="stat-value" id="dash-xp">0</span>
         <span class="stat-label">XP Total 📊</span>
+      </div>
+      <div class="stat-card stat-card-click" id="stat-ranking-card" title="Ver ranking" onclick="openLeaderboard()" style="background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,215,0,0.04));border-color:rgba(255,215,0,0.2);">
+        <span class="stat-value" id="dash-rank" style="color:#ffd700;">🏆</span>
+        <span class="stat-label" style="color:rgba(255,215,0,0.8);">Ranking</span>
       </div>
       <div class="stat-card">
         <span class="stat-value" id="dash-level">1</span>
@@ -846,6 +965,68 @@
 </div>
 
 <!-- ══ ADMIN DASHBOARD ════════════════════════════════════ -->
+
+<!-- ══ LEADERBOARD ══════════════════════════════════════════ -->
+<div class="view" id="view-leaderboard">
+  <div class="lb-wrapper">
+
+    <!-- Header -->
+    <div class="lb-header">
+      <button class="lb-back-btn" id="btn-back-leaderboard">←</button>
+      <div class="lb-header-title">🏆 Ranking</div>
+      <div class="lb-header-sub">Top 10 da semana</div>
+    </div>
+
+    <!-- Meu ranking -->
+    <div class="lb-my-rank" id="lb-my-rank" style="display:none">
+      <div class="lb-my-rank-label">Minha posição</div>
+      <div class="lb-my-rank-row">
+        <div class="lb-my-pos" id="lb-my-pos">#—</div>
+        <div class="lb-my-avatar" id="lb-my-avatar">?</div>
+        <div class="lb-my-info">
+          <div class="lb-my-name" id="lb-my-name">—</div>
+          <div class="lb-my-xp" id="lb-my-xp">0 XP</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Podium top 3 -->
+    <div class="lb-podium" id="lb-podium">
+      <div class="lb-podium-item lb-pos-2" id="lb-p2">
+        <div class="lb-p-avatar" id="lb-p2-av">?</div>
+        <div class="lb-p-name" id="lb-p2-name">—</div>
+        <div class="lb-p-xp" id="lb-p2-xp">0 XP</div>
+        <div class="lb-p-medal">🥈</div>
+      </div>
+      <div class="lb-podium-item lb-pos-1" id="lb-p1">
+        <div class="lb-p-crown">👑</div>
+        <div class="lb-p-avatar" id="lb-p1-av">?</div>
+        <div class="lb-p-name" id="lb-p1-name">—</div>
+        <div class="lb-p-xp" id="lb-p1-xp">0 XP</div>
+        <div class="lb-p-medal">🥇</div>
+      </div>
+      <div class="lb-podium-item lb-pos-3" id="lb-p3">
+        <div class="lb-p-avatar" id="lb-p3-av">?</div>
+        <div class="lb-p-name" id="lb-p3-name">—</div>
+        <div class="lb-p-xp" id="lb-p3-xp">0 XP</div>
+        <div class="lb-p-medal">🥉</div>
+      </div>
+    </div>
+
+    <!-- Lista 4-10 -->
+    <div class="lb-list" id="lb-list">
+      <div class="lb-loading">Carregando ranking... ⏳</div>
+    </div>
+
+    <!-- Tabs: semanal / total -->
+    <div class="lb-tabs" id="lb-tabs">
+      <button class="lb-tab active" id="lb-tab-week" onclick="loadLeaderboard('week')">Esta semana</button>
+      <button class="lb-tab" id="lb-tab-all" onclick="loadLeaderboard('all')">Todos os tempos</button>
+    </div>
+
+  </div>
+</div>
+
 <div class="view" id="view-admin">
   <div class="admin-wrapper">
 
@@ -888,7 +1069,6 @@
       <button class="admin-main-tab active" data-panel="users">👥 Alunos</button>
       <button class="admin-main-tab" data-panel="customize">🎨 Customizar</button>
       <button class="admin-main-tab" data-panel="feedback">💬 Feedbacks</button>
-      <button class="admin-main-tab" data-panel="push">📣 Push</button>
     </div>
 
     <!-- USERS PANEL -->
@@ -998,40 +1178,6 @@
     <div id="admin-panel-feedback" style="display:none">
       <div class="admin-refresh-btn" id="btn-load-feedbacks" style="margin-bottom:12px;width:100%;text-align:center;padding:10px;">↻ Carregar feedbacks</div>
       <div id="admin-feedbacks-list"></div>
-    </div>
-
-    <!-- PUSH PANEL -->
-    <div id="admin-panel-push" style="display:none;padding:16px 0;">
-      <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:16px;">📣 Enviar Push para Todos</div>
-      <div style="margin-bottom:12px;">
-        <label style="font-size:12px;color:var(--text-muted);font-weight:700;">Título</label>
-        <input id="push-title" type="text" placeholder="ex: Hora de praticar! 🚀"
-          style="width:100%;margin-top:6px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;font-family:var(--font);box-sizing:border-box;"/>
-      </div>
-      <div style="margin-bottom:16px;">
-        <label style="font-size:12px;color:var(--text-muted);font-weight:700;">Mensagem</label>
-        <textarea id="push-body" placeholder="ex: Você tem uma nova missão disponível!"
-          style="width:100%;margin-top:6px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;font-family:var(--font);resize:none;height:80px;box-sizing:border-box;"></textarea>
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
-        <button onclick="document.getElementById('push-title').value='⏰ Hora de praticar!';document.getElementById('push-body').value='Sua missão diária está esperando. Só 5 minutos hoje! 💪'"
-          style="padding:6px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;cursor:pointer;font-family:var(--font);">⏰ Lembrete</button>
-        <button onclick="document.getElementById('push-title').value='🔥 Não perca seu streak!';document.getElementById('push-body').value='Entre hoje para manter sua sequência. 🔥'"
-          style="padding:6px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;cursor:pointer;font-family:var(--font);">🔥 Streak</button>
-        <button onclick="document.getElementById('push-title').value='🆕 Novo conteúdo!';document.getElementById('push-body').value='Novas missões foram adicionadas. Venha conferir! 🚀'"
-          style="padding:6px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;cursor:pointer;font-family:var(--font);">🆕 Novidade</button>
-        <button onclick="document.getElementById('push-title').value='🌟 VIC Pro — R$15/mês!';document.getElementById('push-body').value='Acesse todos os segmentos. Aproveite agora! 💳'"
-          style="padding:6px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;cursor:pointer;font-family:var(--font);">💳 Oferta</button>
-      </div>
-      <button id="btn-send-push"
-        style="width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#6d28d9);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:var(--font);">
-        📣 Enviar para todos
-      </button>
-      <div style="margin-top:12px;padding:12px;background:var(--card);border-radius:10px;font-size:12px;color:var(--text-muted);line-height:1.6;">
-        ⚠️ Só recebem quem aceitou a permissão de notificação.<br>
-        📱 Android Chrome: funciona sem instalar o app.<br>
-        🍎 iPhone: só funciona com PWA instalado (iOS 16.4+).
-      </div>
     </div>
 
     <!-- user detail modal -->
