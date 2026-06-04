@@ -719,6 +719,38 @@ var I18N = {
   }
 };
 
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ANALYTICS — Firebase Analytics + eventos customizados
+// ══════════════════════════════════════════════════════════════════════════════
+let _analytics = null;
+async function initAnalytics(){
+  try{
+    const { getAnalytics, logEvent, setUserId } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js");
+    // A instância do app já existe — acessar via window
+    if(!window._vicApp) return;
+    _analytics = getAnalytics(window._vicApp);
+    console.log("✅ Analytics inicializado");
+    return { logEvent: (name, params) => logEvent(_analytics, name, params), setUserId };
+  }catch(e){ console.warn("Analytics:", e.message); return null; }
+}
+
+function trackEvent(name, params={}){
+  try{
+    if(!_analytics) return;
+    // Evitar tracking de dados pessoais
+    const { getAnalytics, logEvent } = window._vicAnalyticsFns || {};
+    if(logEvent && _analytics) logEvent(_analytics, name, params);
+  }catch(e){}
+}
+
+// Eventos principais
+function analyticsTrackLogin(method){ trackEvent("login", {method}); }
+function analyticsTrackMission(segId, missionId){ trackEvent("complete_mission", {segment:segId, mission:missionId}); }
+function analyticsTrackGame(type){ trackEvent("play_game", {game_type:type}); }
+function analyticsTrackUpgrade(){ trackEvent("begin_checkout", {currency:"BRL", value:15}); }
+function analyticsTrackScreen(name){ trackEvent("screen_view", {screen_name:name}); }
+
 // Nomes dos segmentos por idioma
 var SEG_NAMES = {
   pt: {
@@ -880,6 +912,39 @@ function renderDashboardTexts() {
   benefits.forEach((el,i) => {
     if(benefitKeys[i]) el.textContent = "✅ " + (benefitKeys[i][_lang] || benefitKeys[i].pt);
   });
+  // Auth labels (login e cadastro)
+  const authLabels = {
+    "auth-label-email":    {pt:"EMAIL",         en:"EMAIL",     es:"CORREO",    de:"E-MAIL",    it:"EMAIL"},
+    "auth-label-password": {pt:"SENHA",         en:"PASSWORD",  es:"CONTRASEÑA",de:"PASSWORT",  it:"PASSWORD"},
+    "auth-label-username": {pt:"@ Nome de usuário", en:"@ Username", es:"@ Nombre de usuario", de:"@ Benutzername", it:"@ Nome utente"},
+  };
+  Object.entries(authLabels).forEach(([id, vals]) => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = vals[_lang] || vals.pt;
+  });
+  // Botões de auth tabs
+  const tabLogin = document.getElementById("tab-login");
+  const tabReg   = document.getElementById("tab-register");
+  if(tabLogin) tabLogin.textContent = t("login");
+  if(tabReg)   tabReg.textContent   = t("register");
+  // Placeholder do email/senha
+  const loginEmail = document.getElementById("login-email");
+  const loginPass  = document.getElementById("login-password");
+  if(loginEmail) loginEmail.placeholder = t("email").toLowerCase()+"@...";
+  // Botão Google
+  const btnGoogle = document.getElementById("btn-google");
+  if(btnGoogle) btnGoogle.textContent = t("login_google");
+  // Botão anon
+  const btnAnon = document.getElementById("btn-anon");
+  if(btnAnon) btnAnon.textContent = t("login_anon");
+  // Onboarding
+  const obSlide0Title = document.getElementById("ob-slide-0")?.querySelector(".ob-slide-title");
+  const obSlide1Title = document.getElementById("ob-slide-1")?.querySelector(".ob-slide-title");
+  const obSlide2Title = document.getElementById("ob-slide-2")?.querySelector(".ob-slide-title");
+  if(obSlide0Title) obSlide0Title.textContent = t("ob_title_0");
+  if(obSlide1Title) obSlide1Title.textContent = t("ob_title_1");
+  if(obSlide2Title) obSlide2Title.textContent = t("ob_title_2");
+
   // Quick access buttons
   const qa = id => document.getElementById(id);
   if(qa("btn-goto-flashcards")) qa("btn-goto-flashcards").textContent = t("qa_flashcards");
@@ -1090,6 +1155,10 @@ function levelInfo(xp){
 
 let _lastView = null;
 function showView(id){
+  // Aplicar idioma quando trocar de view (garante tradução em auth também)
+  if(id === "view-auth" || id === "view-onboarding") {
+    setTimeout(applyLang, 50);
+  }
   const next=document.getElementById(id);
   if(!next) return;
 
@@ -1674,6 +1743,60 @@ async function finishDiagnosis(){
   }
   startLevelTest();
 }
+
+
+// ══════════════════════════════════════════════════════════════════════════════
+// OFFLINE SYNC — fila de progresso quando sem internet
+// ══════════════════════════════════════════════════════════════════════════════
+const OFFLINE_QUEUE_KEY = "vic_offline_queue";
+
+function offlineEnqueue(uid, updates){
+  const queue = JSON.parse(localStorage.getItem(OFFLINE_QUEUE_KEY)||"[]");
+  queue.push({ uid, updates, ts: Date.now() });
+  localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(queue));
+}
+
+async function offlineFlush(){
+  const queue = JSON.parse(localStorage.getItem(OFFLINE_QUEUE_KEY)||"[]");
+  if(!queue.length) return;
+  const failed = [];
+  for(const item of queue){
+    try{
+      await saveProgress(item.uid, item.updates);
+    }catch(e){
+      if(Date.now() - item.ts < 86400000) failed.push(item); // retry por 24h
+    }
+  }
+  localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(failed));
+  if(queue.length > failed.length){
+    console.log(`✅ Offline sync: ${queue.length - failed.length} itens sincronizados`);
+  }
+}
+
+// Wrapper de saveProgress com fallback offline
+async function saveProgressSafe(uid, updates){
+  if(!navigator.onLine){
+    offlineEnqueue(uid, updates);
+    showXpToast("📶 Sem internet — progresso salvo localmente");
+    return;
+  }
+  try{
+    await saveProgress(uid, updates);
+  }catch(e){
+    offlineEnqueue(uid, updates);
+    console.warn("saveProgress falhou, enfileirado:", e.message);
+  }
+}
+
+// Sincronizar quando voltar online
+window.addEventListener("online", () => {
+  showXpToast("📶 Conexão restaurada! Sincronizando...");
+  if(currentUser) offlineFlush();
+});
+
+window.addEventListener("offline", () => {
+  showXpToast("📶 Sem internet — progresso salvo localmente");
+});
 
 // ── LEVEL TEST ADAPTATIVO ────────────────────────────────────────────────────
 // 15 questões | 5 por nível (A1-A2, B1-B2, C1) | lógica adaptativa
@@ -3011,6 +3134,28 @@ function showLevelUp(level){
   SoundFX.complete();
   vibrate([50,30,50,30,150]);
   setTimeout(()=>document.getElementById("lvlup-overlay")?.remove(), 5000);
+}
+
+function buildMissionSummary(){
+  // Montar lista de frases aprendidas na missão
+  const mission = getMission(currentSegmentId, currentPhaseId, currentMissionId);
+  if(!mission?.phrases?.length) return "";
+  const learned = mission.phrases.slice(0, 5).map(p => `
+    <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+      <span style="font-size:18px;flex-shrink:0;">🔤</span>
+      <div>
+        <div style="font-size:14px;font-weight:700;color:#fff;">${p.en||""}</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px;">${p.pt||""}</div>
+      </div>
+    </div>
+  `).join("");
+  return learned ? `
+    <div style="margin-top:20px;text-align:left;">
+      <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;">
+        📚 O que você aprendeu hoje
+      </div>
+      ${learned}
+    </div>` : "";
 }
 
 function showPostMissionFeedback(){
@@ -5006,7 +5151,7 @@ function removeAvatar(){
   if(av) av.textContent = name[0]?.toUpperCase() || "?";
   if(dashAv) dashAv.textContent = name[0]?.toUpperCase() || "👤";
   updateAvatarPreview(name[0]?.toUpperCase() || "?");
-  if(currentUser) saveProgress(currentUser.uid, {avatar: null}).catch(()=>{});
+  if(currentUser) saveProgressSafe(currentUser.uid, {avatar: null}).catch(()=>{});
   showXpToast("🗑️ Avatar removido");
 }
 
@@ -5061,7 +5206,7 @@ function openAvatarPicker(){
 
 function saveAvatar(value){
   localStorage.setItem("vic_avatar",value);
-  if(currentUser) saveProgress(currentUser.uid, {avatar: value}).catch(()=>{});
+  if(currentUser) saveProgressSafe(currentUser.uid, {avatar: value}).catch(()=>{});
   // Update all avatar displays
   const pa=document.getElementById("profile-avatar");
   const dai=document.getElementById("dash-avatar-icon");
@@ -5657,6 +5802,142 @@ async function sendPushFromAdmin(){
   }
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+// LOADING SPLASH — aparece quando usuário já está logado (keep me signed in)
+// ══════════════════════════════════════════════════════════════════════════════
+
+const LOADING_PHRASES = [
+  // Motivacionais com filmes/heróis
+  { en:'"With great power comes great responsibility."', sub:'— Uncle Ben, Spider-Man' },
+  { en:'"Do or do not. There is no try."', sub:"— Yoda, Star Wars" },
+  { en:'"I am Iron Man."', sub:"— Tony Stark  |  Be the hero of your career." },
+  { en:'"Whatever it takes."', sub:"— Avengers Endgame  |  Your English journey." },
+  { en:'"To infinity and beyond!"', sub:"— Buzz Lightyear  |  No limits in learning." },
+  { en:'"May the Force be with you."', sub:"— Obi-Wan Kenobi  |  And with your English!" },
+  { en:'"You shall not pass!"', sub:"— Gandalf  |  Except through this app, every day." },
+  { en:'"Why so serious?"', sub:"— Joker  |  Learning English can be fun!" },
+  { en:'"Elementary, my dear Watson."', sub:"— Sherlock Holmes  |  English is elementary." },
+  { en:'"Just keep swimming."', sub:"— Dory, Finding Nemo  |  Just keep practicing." },
+  // Mercado de trabalho
+  { en:"Professionals who speak English earn up to 40% more.", sub:"— Source: IBGE / FGV  |  Every mission = real value." },
+  { en:"70% of maritime communications worldwide are in English.", sub:"— IMO International Standards  |  Are you ready?" },
+  { en:"Bilingual professionals are hired 3x faster.", sub:"— LinkedIn Workforce Report  |  Start your mission." },
+  { en:"In Brazil, English fluency can double your salary.", sub:"— Catho Salary Survey  |  Each lesson counts." },
+  { en:"95% of international business is conducted in English.", sub:"— Harvard Business Review  |  Be part of it." },
+  // Porto de Santos — dados reais
+  { en:"Santos Port handles over 150 million tons of cargo per year.", sub:"🚢 Porto de Santos — the largest port in Latin America." },
+  { en:"Santos Port employs over 100,000 people directly and indirectly.", sub:"⚓ Santos  |  Your city. Your opportunity." },
+  { en:"More than 60 countries receive cargo from Santos Port every year.", sub:"🌍 Santos connects Brazil to the world — in English." },
+  { en:"Santos handles 28% of all Brazilian foreign trade.", sub:"📦 COMEX, maritime, logistics — all in English." },
+  { en:"Santos Port moved R$ 800 billion in goods in 2023.", sub:"💰 The biggest port business speaks English." },
+  { en:"Over 4,000 vessels dock at Santos Port every year.", sub:"⚓ Each ship needs English communication on board." },
+  { en:"Santos is the 4th busiest container port in South America.", sub:"🏆 And VIC English is training the people behind it." },
+  // Ciência de aprendizagem
+  { en:"The brain consolidates language during sleep.", sub:"🧠 Neuroscience  |  Practice before bed = wake up fluent." },
+  { en:"Spaced repetition is 3x more effective than mass studying.", sub:"📚 Cambridge Research  |  VIC uses this method." },
+  { en:"10 minutes a day beats 2 hours on weekends.", sub:"🎯 Harvard Learning Lab  |  Consistency is the superpower." },
+  { en:"Bilingual people develop Alzheimer's 5 years later on average.", sub:"🧬 Journal of Neurology  |  English is good for your brain!" },
+  { en:"Speaking out loud increases retention by 50%.", sub:"🗣️ Production Effect Study  |  Try our speaking exercises!" },
+  { en:"Learning a language increases grey matter density.", sub:"🧠 Max Planck Institute  |  You literally grow your brain." },
+  { en:"Context learning is 4x faster than memorizing word lists.", sub:"💡 VIC English approach  |  Real situations, real results." },
+  // Motivacionais diretos
+  { en:"Your next promotion might depend on this moment.", sub:"⚡ Keep going. Your future self will thank you." },
+  { en:"Every world-class professional speaks English.", sub:"🌐 Join them. One mission at a time." },
+  { en:"The best sailors speak the language of the sea.", sub:"⚓ English is the official language of maritime navigation." },
+  { en:"Offshore platforms communicate in English 100% of the time.", sub:"🛢️ Be ready when the opportunity arrives." },
+  { en:"International hotels prefer bilingual staff for every position.", sub:"🏨 Your English is your competitive advantage." },
+]
+
+const LOADING_TIPS = [
+  "Tap the 🐢 button to hear words more slowly",
+  "Use the microphone to practice pronunciation",
+  "Check your badges in your profile",
+  "Complete daily missions to keep your streak",
+  "Switch to English in Settings → Language",
+]
+
+let _splashTimeout = null;
+
+function showLoadingSplash(onDone) {
+  // Escolher frase aleatória
+  const phrase = LOADING_PHRASES[Math.floor(Math.random() * LOADING_PHRASES.length)];
+  const tip = LOADING_TIPS[Math.floor(Math.random() * LOADING_TIPS.length)];
+
+  // Remover overlay anterior
+  document.getElementById("loading-splash-overlay")?.remove();
+
+  const overlay = document.createElement("div");
+  overlay.id = "loading-splash-overlay";
+  overlay.style.cssText = `
+    position:fixed;inset:0;z-index:10000;
+    background:linear-gradient(160deg,#1a0d2e 0%,#0d0720 100%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:40px 32px;text-align:center;
+    animation:fadeIn .3s ease;
+  `;
+
+  overlay.innerHTML = `
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 30%,rgba(201,147,58,0.1),transparent);pointer-events:none;"></div>
+
+    <!-- Logo animado -->
+    <img src="logo_full_2.png" alt="VIC English"
+      style="width:180px;margin-bottom:32px;filter:drop-shadow(0 4px 24px rgba(201,147,58,0.3));animation:pulse 2s ease infinite;"/>
+
+    <!-- Frase principal -->
+    <div style="font-size:20px;font-weight:800;color:#fff;line-height:1.4;margin-bottom:10px;max-width:340px;font-style:italic;">
+      "${phrase.en}"
+    </div>
+    <div style="font-size:13px;color:#e4b45c;font-weight:600;margin-bottom:36px;opacity:0.85;">
+      ${phrase.sub}
+    </div>
+
+    <!-- Barra de progresso animada -->
+    <div style="width:200px;height:3px;background:rgba(255,255,255,0.1);border-radius:999px;margin-bottom:20px;overflow:hidden;">
+      <div id="splash-progress-bar"
+        style="height:100%;background:linear-gradient(90deg,#c9933a,#e4b45c);border-radius:999px;width:0%;transition:width 1.8s ease;"></div>
+    </div>
+
+    <!-- Tip -->
+    <div style="font-size:12px;color:rgba(255,255,255,0.35);max-width:280px;line-height:1.5;">
+      💡 ${tip}
+    </div>
+
+    <!-- Powered by -->
+    <div style="position:absolute;bottom:32px;font-size:11px;color:rgba(255,255,255,0.2);font-weight:600;letter-spacing:.5px;text-transform:uppercase;">
+      Powered by VIC Language
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  // Animar barra
+  requestAnimationFrame(() => {
+    const bar = document.getElementById("splash-progress-bar");
+    if(bar) bar.style.width = "100%";
+  });
+
+  // Remover após 2.2s e chamar callback
+  _splashTimeout = setTimeout(() => {
+    overlay.style.transition = "opacity .4s ease";
+    overlay.style.opacity = "0";
+    setTimeout(() => {
+      overlay.remove();
+      if(onDone) onDone();
+    }, 400);
+  }, 2200);
+}
+
+function hideLoadingSplash() {
+  clearTimeout(_splashTimeout);
+  const overlay = document.getElementById("loading-splash-overlay");
+  if(overlay) {
+    overlay.style.transition = "opacity .3s ease";
+    overlay.style.opacity = "0";
+    setTimeout(() => overlay.remove(), 300);
+  }
+}
+
+
 // ── INIT ──────────────────────────────────────────────────────────────────────
 async function _handleAuth(user){
   console.log("_handleAuth called, user:", user?.uid||"null");
@@ -5664,6 +5945,9 @@ async function _handleAuth(user){
   try{
     if(user){
       console.log("User logged in:", user.uid);
+      // Se já estava na tela de auth E tem onboarding feito = vem do login manual
+      // Se estava em loading splash = vem de sessão salva
+      const comingFromSplash = document.getElementById("loading-splash-overlay") !== null;
       if(user.uid===OWNER_UID){ currentUser=user; await loadAdminDashboard(); }
       else await loadDashboard(user);
       // Registrar token FCM após login
@@ -5673,6 +5957,7 @@ async function _handleAuth(user){
     } else {
       console.log("No user — showing auth");
       currentUser=null; userData=null;
+      localStorage.removeItem("vic_has_session");
       showView("view-auth");
     }
   }catch(e){
@@ -5805,6 +6090,65 @@ async function loadLeaderboard(mode){
   }
 }
 
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SERVICE WORKER UPDATE PROMPT
+// ══════════════════════════════════════════════════════════════════════════════
+function initSWUpdatePrompt(){
+  if(!("serviceWorker" in navigator)) return;
+  navigator.serviceWorker.ready.then(reg => {
+    reg.addEventListener("updatefound", () => {
+      const newSW = reg.installing;
+      newSW.addEventListener("statechange", () => {
+        if(newSW.state === "installed" && navigator.serviceWorker.controller){
+          showUpdatePrompt(newSW);
+        }
+      });
+    });
+  });
+  // Checar atualização a cada 30 min
+  setInterval(() => {
+    navigator.serviceWorker.ready.then(reg => reg.update().catch(()=>{}));
+  }, 30 * 60 * 1000);
+}
+
+function showUpdatePrompt(newSW){
+  document.getElementById("update-prompt")?.remove();
+  const banner = document.createElement("div");
+  banner.id = "update-prompt";
+  banner.style.cssText = `
+    position:fixed;bottom:80px;left:16px;right:16px;z-index:9990;
+    background:linear-gradient(135deg,#1e0f38,#2d1b4e);
+    border:1px solid rgba(201,147,58,0.4);border-radius:16px;
+    padding:14px 16px;display:flex;align-items:center;gap:12px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.4);animation:slideUp .3s ease;
+  `;
+  banner.innerHTML = `
+    <div style="font-size:24px">🚀</div>
+    <div style="flex:1;">
+      <div style="font-size:13px;font-weight:800;color:#fff;">Nova versão disponível!</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.5);">Atualizar para continuar</div>
+    </div>
+    <button onclick="applyUpdate()" style="
+      background:linear-gradient(135deg,#c9933a,#e4b45c);
+      border:none;border-radius:10px;padding:8px 16px;
+      color:#1a0d2e;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;
+    ">Atualizar</button>
+    <button onclick="document.getElementById('update-prompt').remove()" style="
+      background:none;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;
+    ">✕</button>
+  `;
+  document.body.appendChild(banner);
+  window._pendingUpdateSW = newSW;
+}
+
+function applyUpdate(){
+  if(window._pendingUpdateSW){
+    window._pendingUpdateSW.postMessage({type:"SKIP_WAITING"});
+    window.location.reload();
+  }
+}
+
 // ── MERCADO PAGO — verificar retorno ─────────────────────────────────────────
 async function checkMercadoPagoReturn(){
   const params = new URLSearchParams(window.location.search);
@@ -5864,6 +6208,18 @@ function init(){
 
   // ── Mercado Pago: verificar retorno de pagamento ────────────────────────────
   checkMercadoPagoReturn();
+
+  // ── Deep links ───────────────────────────────────────────────────────────────
+  // app.viclanguage.com.br?seg=maritimo → abre direto no segmento
+  // app.viclanguage.com.br?view=profile → abre perfil
+  // app.viclanguage.com.br?ref=XXXXX → referral (já tratado)
+  const _dlParams = new URLSearchParams(window.location.search);
+  const _dlSeg  = _dlParams.get("seg");
+  const _dlView = _dlParams.get("view");
+  if(_dlSeg || _dlView){
+    window._deepLink = { seg: _dlSeg, view: _dlView };
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
 
   // ── Safari/iOS: capturar resultado do redirect Google ───────────────────────
   if(typeof handleGoogleRedirectResult === "function"){
