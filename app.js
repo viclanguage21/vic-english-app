@@ -101,54 +101,77 @@ function levelInfo(xp){
 }
 
 let _lastView = null;
-function showView(id){
+// ── LOADING SPLASH ────────────────────────────────────────
+function showLoadingSplash(cb, delay=400){
+  const splash=document.getElementById("loading-splash");
+  if(!splash){ cb(); return; }
+  splash.style.display="flex";
+  splash.style.opacity="0";
+  splash.style.transition="opacity 0.2s ease";
+  requestAnimationFrame(()=>{
+    splash.style.opacity="1";
+    setTimeout(()=>{
+      cb();
+      setTimeout(()=>{
+        splash.style.opacity="0";
+        setTimeout(()=>{ splash.style.display="none"; }, 250);
+      }, delay);
+    }, 200);
+  });
+}
+
+function showView(id, useSplash=false){
   const next=document.getElementById(id);
   if(!next) return;
-
   const current=document.querySelector(".view.active");
   if(current===next) return;
 
-  // Determine direction
-  const views=["view-auth","view-dashboard","view-phases","view-missions-list","view-mission","view-complete","view-flashcards","view-memory-free","view-truefalse","view-dialogue","view-writing","view-profile","view-upgrade","view-admin","view-diagnosis","view-leveltest"];
-  const ci=views.indexOf(current?.id||"");
-  const ni=views.indexOf(id);
-  const dir=ni>=ci?1:-1; // 1=forward (slide left), -1=back (slide right)
+  const doTransition=()=>{
+    const views=["view-auth","view-dashboard","view-phases","view-missions-list","view-mission","view-complete","view-flashcards","view-memory-free","view-truefalse","view-dialogue","view-writing","view-profile","view-upgrade","view-admin","view-diagnosis","view-leveltest"];
+    const ci=views.indexOf(current?.id||"");
+    const ni=views.indexOf(id);
+    const dir=ni>=ci?1:-1;
 
-  // Hide current with slide out
-  if(current){
-    current.style.transition="transform 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.38s ease";
-    current.style.transform=`translateX(${dir*-100}%)`;
-    current.style.opacity="0";
-    current.style.pointerEvents="none";
-    setTimeout(()=>{
-      current.classList.remove("active");
-      current.style.transform="";
-      current.style.opacity="";
-      current.style.transition="";
-      current.style.pointerEvents="";
-    },380);
-  }
-
-  // Show next with slide in
-  next.style.transform=`translateX(${dir*100}%)`;
-  next.style.opacity="0";
-  next.style.transition="none";
-  next.classList.add("active");
-  requestAnimationFrame(()=>{
-    requestAnimationFrame(()=>{
-      next.style.transition="transform 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.38s ease";
-      next.style.transform="translateX(0)";
-      next.style.opacity="1";
+    if(current){
+      current.style.transition="transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.32s ease";
+      current.style.transform=`translateX(${dir*-60}%)`;
+      current.style.opacity="0";
+      current.style.pointerEvents="none";
       setTimeout(()=>{
-        next.style.transform="";
-        next.style.opacity="";
-        next.style.transition="";
-      },390);
-    });
-  });
+        current.classList.remove("active");
+        current.style.transform="";
+        current.style.opacity="";
+        current.style.transition="";
+        current.style.pointerEvents="";
+      },340);
+    }
 
-  _lastView=current?.id||null;
-  window.scrollTo(0,0);
+    next.style.transform=`translateX(${dir*60}%)`;
+    next.style.opacity="0";
+    next.style.transition="none";
+    next.classList.add("active");
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        next.style.transition="transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.32s ease";
+        next.style.transform="translateX(0)";
+        next.style.opacity="1";
+        setTimeout(()=>{
+          next.style.transform="";
+          next.style.opacity="";
+          next.style.transition="";
+        },340);
+      });
+    });
+
+    _lastView=current?.id||null;
+    window.scrollTo(0,0);
+  };
+
+  if(useSplash){
+    showLoadingSplash(doTransition, 350);
+  } else {
+    doTransition();
+  }
 }
 
 // ── MERCADO PAGO ─────────────────────────────────────────────────────────────
@@ -1573,7 +1596,7 @@ function openFlashcards(){
     div.addEventListener("click",()=>startFlashcardDeck(deck.id));
     list.appendChild(div);
   });
-  showView("view-flashcards");
+  showView("view-flashcards", true);
 }
 function startFlashcardDeck(deckId){
   const deck=VICTOR_DATA.flashcardDecks.find(d=>d.id===deckId); if(!deck) return;
@@ -1831,7 +1854,7 @@ function openDialogue(){
   document.getElementById("dlg-board").style.display="none";
   document.getElementById("dlg-result").style.display="none";
   renderDialogueSegments();
-  showView("view-dialogue");
+  showView("view-dialogue", true);
 }
 
 function renderDialogueSegments(){
@@ -2473,7 +2496,7 @@ async function loadAdminFeedbacks(){
 function showUpgradeScreen(){ showView("view-upgrade"); }
 
 // ── ADMIN DASHBOARD ───────────────────────────────────────────────────────────
-async function loadAdminDashboard(){ showView("view-admin"); await refreshAdminUsers(); }
+async function loadAdminDashboard(){ showView("view-admin", true); await refreshAdminUsers(); }
 async function refreshAdminUsers(){
   document.getElementById("admin-users-list").innerHTML=`<div style="text-align:center;padding:20px;color:#c4a96a">Carregando...</div>`;
   try{adminUsers=await getAllUsers();renderAdminMetrics();renderAdminUsers();}
@@ -2715,7 +2738,7 @@ function openProfile(){
     const td=document.getElementById("toggle-darkmode"); if(td) td.checked=darkMode;
     document.querySelectorAll(".font-size-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.size===fontSize));
 
-    showView("view-profile");
+    showView("view-profile", true);
   }catch(e){
     console.error("Profile error:",e);
     showXpToast("❌ Erro ao abrir perfil");
@@ -3247,7 +3270,7 @@ function openWriting(){
     div.addEventListener("click",()=>startWritingTopic(i));
     list.appendChild(div);
   });
-  showView("view-writing");
+  showView("view-writing", true);
 }
 
 function startWritingTopic(index){
@@ -3691,7 +3714,7 @@ function init(){
   const adminFloatBtn=document.getElementById("btn-admin-float");
   if(adminFloatBtn&&currentUser?.uid===OWNER_UID){
     adminFloatBtn.style.display="flex";
-    adminFloatBtn.onclick=()=>{ vibrate(30); showView("view-admin"); loadAdminPanel(); };
+    adminFloatBtn.onclick=()=>{ vibrate(30); showView("view-admin", true); loadAdminPanel(); };
   }
 
   // XP card → show history popup
@@ -3750,7 +3773,8 @@ function init(){
   if(notifFreqEl&&notifFreq) notifFreqEl.value=notifFreq;
   document.getElementById("btn-modal-close")?.addEventListener("click",()=>document.getElementById("admin-modal").style.display="none");
   document.getElementById("admin-search")?.addEventListener("input",e=>{adminSearchTerm=e.target.value;renderAdminUsers();});
-  document.getElementById("btn-admin-preview")?.addEventListener("click",enterPreviewMode);
+  document.getElementById("btn-admin-preview")?.addEventListener("click",()=>{ vibrate(20); enterPreviewMode(); });
+  document.getElementById("btn-admin-logout")?.addEventListener("click",()=>{ vibrate(20); showView("view-dashboard"); });
   document.getElementById("btn-activate-pro")?.addEventListener("click",()=>activatePro(true));
   document.getElementById("btn-deactivate-pro")?.addEventListener("click",()=>activatePro(false));
   document.getElementById("btn-save-edit-admin")?.addEventListener("click",saveAdminEdit);
