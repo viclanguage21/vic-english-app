@@ -1116,11 +1116,7 @@ const LT_QUESTIONS = {
 
     {id:"c1_2", type:"reading", level:"C1",
      title:"Compreensão — Contexto Profissional",
-     question:"Read and answer:
-
-"The vessel arrived at berth 12 ahead of schedule, but the port authority placed it on hold pending a full cargo inspection. The captain requested an ETA update for the release."
-
-Why was the vessel placed on hold?",
+     question:"Read and answer: The vessel arrived at berth 12 ahead of schedule, but the port authority placed it on hold pending a full cargo inspection. The captain requested an ETA update for the release. — Why was the vessel placed on hold?",
      options:[
        "It needed a cargo inspection before being released",
        "The vessel arrived too late",
