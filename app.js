@@ -371,26 +371,31 @@ function setLang(lang) {
 
 // Aplicar idioma em todos os elementos com data-i18n
 function applyLang() {
-  // Atualizar toggle visual no header
+  // Flags e labels por idioma
+  const LANG_FLAGS = { pt:"🇧🇷", en:"🇺🇸", es:"🇪🇸", de:"🇩🇪", it:"🇮🇹" };
+  const LANG_NEXT  = { pt:"🇺🇸 EN", en:"🇪🇸 ES", es:"🇩🇪 DE", de:"🇮🇹 IT", it:"🇧🇷 PT" };
+
+  // Atualizar toggle do header (cicla entre os idiomas)
   const toggle = document.getElementById("lang-toggle");
   if (toggle) {
-    toggle.textContent = _lang === "pt" ? "🇺🇸 EN" : "🇧🇷 PT";
-    toggle.title = _lang === "pt" ? "Switch to English" : "Mudar para Português";
+    toggle.textContent = LANG_NEXT[_lang] || "🇺🇸 EN";
+    toggle.onclick = () => {
+      const order = ["pt","en","es","de","it"];
+      const next = order[(order.indexOf(_lang)+1) % order.length];
+      setLang(next);
+    };
   }
 
-  // Atualizar botões PT/EN nas configurações
-  const btnPT = document.getElementById("lang-btn-pt");
-  const btnEN = document.getElementById("lang-btn-en");
-  if (btnPT) {
-    btnPT.style.background = _lang==="pt" ? "rgba(201,147,58,0.25)" : "rgba(255,255,255,0.05)";
-    btnPT.style.borderColor = _lang==="pt" ? "rgba(201,147,58,0.5)" : "rgba(255,255,255,0.15)";
-    btnPT.style.color = _lang==="pt" ? "#e4b45c" : "#fff";
-  }
-  if (btnEN) {
-    btnEN.style.background = _lang==="en" ? "rgba(201,147,58,0.25)" : "rgba(255,255,255,0.05)";
-    btnEN.style.borderColor = _lang==="en" ? "rgba(201,147,58,0.5)" : "rgba(255,255,255,0.15)";
-    btnEN.style.color = _lang==="en" ? "#e4b45c" : "#fff";
-  }
+  // Destacar botão ativo nas configurações
+  ["pt","en","es","de","it"].forEach(lang => {
+    const btn = document.getElementById(`lang-btn-${lang}`);
+    if (!btn) return;
+    const active = _lang === lang;
+    btn.style.background    = active ? "rgba(201,147,58,0.25)" : "rgba(255,255,255,0.05)";
+    btn.style.borderColor   = active ? "rgba(201,147,58,0.5)"  : "rgba(255,255,255,0.15)";
+    btn.style.color         = active ? "#e4b45c" : "#fff";
+    btn.style.transform     = active ? "scale(1.08)" : "scale(1)";
+  });
 
   // Atualizar todos os elementos marcados com data-i18n
   document.querySelectorAll("[data-i18n]").forEach(el => {
