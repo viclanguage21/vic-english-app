@@ -2,6 +2,441 @@
 
 import { auth, registerUser, loginUser, loginWithGoogle, loginAnonymous, logoutUser, onAuthChange, getUserData, saveProgress, getAllUsers, getUserById, OWNER_UID, registerFCMToken, onForegroundMessage } from "./firebase.js";
 
+// ══════════════════════════════════════════════════════════════════════════════
+// i18n — Sistema de idioma da interface (PT / EN)
+// Os exercícios sempre ficam em PT/EN como foram criados
+// Só a interface (botões, labels, menus) muda
+// ══════════════════════════════════════════════════════════════════════════════
+
+const I18N = {
+  pt: {
+    // Auth
+    "login": "Entrar", "register": "Criar Conta", "logout": "Sair",
+    "email": "Email", "password": "Senha", "name": "Nome completo",
+    "username": "@ Nome de usuário", "keep_logged": "Manter-me conectado",
+    "login_google": "Entrar com Google", "login_anon": "👤 Entrar sem cadastro",
+    "creating": "Criando...", "entering": "Entrando...",
+    "fill_all": t("fill_all"),
+    "min_password": t("min_password"),
+    "min_username": t("min_username"),
+    "create_username": t("create_username"),
+    "username_hint": "Aparece no ranking. Só letras, números e _",
+
+    // Dashboard
+    "good_morning": "Bom dia", "good_afternoon": "Boa tarde", "good_evening": "Boa noite",
+    "daily_missions": "🎯 Missões do Dia", "segments": "Segmentos",
+    "quick_access": "🎯 Acesso Rápido", "start_now": "▶ Começar agora!",
+    "subscribe": "Assinar", "xp_progress": "Progresso XP",
+    "ranking": "Ranking",
+
+    // Navegação
+    "back": "← Voltar", "next": "Próximo →", "previous": "← Anterior",
+    "continue": "Continuar", "skip": "Pular", "done": "Concluído",
+    "back_dashboard": "Voltar ao Dashboard", "back_segments": t("back_segments"),
+    "back_phases": "← Fases", "back_exercises": "← Exercícios",
+
+    // Exercícios
+    "correct": "✅ Correto!", "almost": "👍 Quase!",
+    "try_again": "Tente novamente", "correct_answer": "Correto:",
+    "check": "Verificar", "speak": "Falar", "listen": "Ouvir",
+    "progress": "Progresso", "question": "Questão",
+    "your_answer": "Sua resposta...", "type_here": "Digite aqui...",
+
+    // Missão completa
+    "mission_complete": t("mission_complete"), "perfect_score": "Nota perfeita!",
+    "great_job": "Muito bem!", "keep_going": "Continue assim!",
+
+    // Perfil
+    "my_profile": "Meu Perfil", "edit_profile": "Editar Perfil",
+    "achievements": "🏆 Conquistas", "xp_history": "📊 Progresso de XP",
+    "missions_done": "Missões", "days_streak": "Dias seguidos",
+    "level": "Nível", "save": "Salvar",
+
+    // Configurações
+    "settings": "⚙️ Configurações", "notifications": "🔔 Notificações",
+    "dark_mode": "🌙 Modo escuro", "language": "🌐 Idioma",
+    "notif_freq": "Frequência", "times_day": "vezes por dia",
+
+    // Games
+    "choose_deck": "Escolha um deck", "choose_theme": "Escolha um tema",
+    "choose_category": "Escolha uma categoria", "choose_scenario": "Escolha um cenário",
+    "choose_exercise": "Escolha um exercício", "choose_topic": "Escolha um tópico",
+    "flashcards": "Flashcards", "memory": "Memória",
+    "true_false": "Verdadeiro / Falso", "dialogue": "Diálogo", "writing": "Redação",
+    "slow": "🐢 Devagar", "flip": "Virar",
+
+    // Diagnóstico
+    "diag_title": "Vamos personalizar seu treino",
+    "diag_sub": "4 perguntas rápidas — leva menos de 1 minuto",
+    "diag_why": "Por que você quer aprender inglês?",
+    "diag_area": "Qual é a sua área de atuação?",
+    "diag_difficulty": "Qual é sua maior dificuldade?",
+    "diag_goal": "O que você quer conseguir fazer em inglês?",
+    "diag_continue": "Continuar →", "diag_skip": "Pular esta etapa",
+    "diag_ready": "Perfil criado!", "diag_test_info": "Agora vamos descobrir seu nível real",
+    "diag_test_btn": "Fazer o Teste de Nível →", "diag_skip_test": "Pular e ir para o app",
+
+    // Level test
+    "lt_title": "Teste de Nível", "lt_skip": "Pular",
+    "lt_result_title": "Seu nível:", "lt_finish": "Ir para o app →",
+
+    // Upgrade
+    "upgrade_title": "Desbloqueie tudo com o Pro",
+    "upgrade_btn": "💳 Assinar agora — R$ 15/mês",
+    "upgrade_back": "← Voltar",
+
+    // Ranking
+    "leaderboard_title": "🏆 Ranking", "leaderboard_week": "Esta semana",
+    "leaderboard_all": "Todos os tempos", "my_position": "Minha posição",
+    "loading": "Carregando...",
+
+    // Onboarding
+    "ob_next": "Próximo →", "ob_skip": "Pular", "ob_start": "Começar! 🚀",
+    "ob_title_0": "Bem-vindo ao VIC English!", "ob_title_1": "Sua tela inicial", "ob_title_2": "Seu perfil é seu",
+
+    // Misc
+    "share": "Compartilhar", "copy_link": "Copiar link",
+    "feedback": "Feedback", "send_feedback": "Enviar Feedback",
+    "pro_banner": "Desbloqueie todos os segmentos",
+    "daily_complete": "Missões do dia concluídas!",
+    "streak_record": "Novo recorde de streak!",
+  },
+
+  en: {
+    "login": "Sign In", "register": "Create Account", "logout": "Sign Out",
+    "email": "Email", "password": "Password", "name": "Full name",
+    "username": "@ Username", "keep_logged": "Keep me signed in",
+    "login_google": "Sign in with Google", "login_anon": "👤 Continue as guest",
+    "creating": "Creating...", "entering": "Signing in...",
+    "fill_all": "Please fill in all fields.",
+    "min_password": "Password must be at least 6 characters.",
+    "min_username": "Username must be at least 3 characters.",
+    "create_username": "Please create a username for the leaderboard.",
+    "username_hint": "Shown in rankings. Letters, numbers and _ only",
+    "good_morning": "Good morning", "good_afternoon": "Good afternoon", "good_evening": "Good evening",
+    "daily_missions": "🎯 Daily Missions", "segments": "Segments",
+    "quick_access": "🎯 Quick Access", "start_now": "▶ Start Now!",
+    "subscribe": "Subscribe", "xp_progress": "XP Progress", "ranking": "Ranking",
+    "back": "← Back", "next": "Next →", "previous": "← Previous",
+    "continue": "Continue", "skip": "Skip", "done": "Done",
+    "back_dashboard": "Back to Dashboard", "back_segments": "← Segments",
+    "back_phases": "← Phases", "back_exercises": "← Exercises",
+    "correct": "✅ Correct!", "almost": "👍 Almost!",
+    "try_again": "Try again", "correct_answer": "Correct:",
+    "check": "Check", "speak": "Speak", "listen": "Listen",
+    "progress": "Progress", "question": "Question",
+    "your_answer": "Your answer...", "type_here": "Type here...",
+    "mission_complete": "Mission Complete!", "perfect_score": "Perfect score!",
+    "great_job": "Great job!", "keep_going": "Keep it up!",
+    "my_profile": "My Profile", "edit_profile": "Edit Profile",
+    "achievements": "🏆 Achievements", "xp_history": "📊 XP Progress",
+    "missions_done": "Missions", "days_streak": "Day streak",
+    "level": "Level", "save": "Save",
+    "settings": "⚙️ Settings", "notifications": "🔔 Notifications",
+    "dark_mode": "🌙 Dark mode", "language": "🌐 Language",
+    "notif_freq": "Frequency", "times_day": "times per day",
+    "choose_deck": "Choose a deck", "choose_theme": "Choose a theme",
+    "choose_category": "Choose a category", "choose_scenario": "Choose a scenario",
+    "choose_exercise": "Choose an exercise", "choose_topic": "Choose a topic",
+    "flashcards": "Flashcards", "memory": "Memory",
+    "true_false": "True / False", "dialogue": "Dialogue", "writing": "Writing",
+    "slow": "🐢 Slow", "flip": "Flip",
+    "diag_title": "Let's personalize your training",
+    "diag_sub": "4 quick questions — takes less than 1 minute",
+    "diag_why": "Why do you want to learn English?",
+    "diag_area": "What is your area of work?",
+    "diag_difficulty": "What is your biggest challenge?",
+    "diag_goal": "What do you want to be able to do in English?",
+    "diag_continue": "Continue →", "diag_skip": "Skip this step",
+    "diag_ready": "Profile created!", "diag_test_info": "Now let's find your real level",
+    "diag_test_btn": "Take the Level Test →", "diag_skip_test": "Skip and go to the app",
+    "lt_title": "Level Test", "lt_skip": "Skip",
+    "lt_result_title": "Your level:", "lt_finish": "Go to the app →",
+    "upgrade_title": "Unlock everything with Pro",
+    "upgrade_btn": "💳 Subscribe now — R$ 15/mo", "upgrade_back": "← Back",
+    "leaderboard_title": "🏆 Leaderboard", "leaderboard_week": "This week",
+    "leaderboard_all": "All time", "my_position": "My position", "loading": "Loading...",
+    "ob_next": "Next →", "ob_skip": "Skip", "ob_start": "Let's go! 🚀",
+    "ob_title_0": "Welcome to VIC English!", "ob_title_1": "Your home screen", "ob_title_2": "Your profile",
+    "share": "Share", "copy_link": "Copy link",
+    "feedback": "Feedback", "send_feedback": "Send Feedback",
+    "pro_banner": "Unlock all segments",
+    "daily_complete": "Daily missions complete!", "streak_record": "New streak record!",
+  },
+
+  // ── ESPAÑOL ────────────────────────────────────────────────────────────────
+  es: {
+    "login": "Iniciar sesión", "register": "Crear cuenta", "logout": "Cerrar sesión",
+    "email": "Correo electrónico", "password": "Contraseña", "name": "Nombre completo",
+    "username": "@ Nombre de usuario", "keep_logged": "Mantenerme conectado",
+    "login_google": "Iniciar sesión con Google", "login_anon": "👤 Continuar como invitado",
+    "creating": "Creando...", "entering": "Iniciando sesión...",
+    "fill_all": "Por favor, completa todos los campos.",
+    "min_password": "La contraseña debe tener al menos 6 caracteres.",
+    "min_username": "El nombre de usuario debe tener al menos 3 caracteres.",
+    "create_username": "Crea un nombre de usuario para el ranking.",
+    "username_hint": "Visible en el ranking. Solo letras, números y _",
+    "good_morning": "Buenos días", "good_afternoon": "Buenas tardes", "good_evening": "Buenas noches",
+    "daily_missions": "🎯 Misiones del día", "segments": "Segmentos",
+    "quick_access": "🎯 Acceso rápido", "start_now": "▶ ¡Empezar ahora!",
+    "subscribe": "Suscribirse", "xp_progress": "Progreso XP", "ranking": "Ranking",
+    "back": "← Volver", "next": "Siguiente →", "previous": "← Anterior",
+    "continue": "Continuar", "skip": "Omitir", "done": "Listo",
+    "back_dashboard": "Volver al inicio", "back_segments": "← Segmentos",
+    "back_phases": "← Fases", "back_exercises": "← Ejercicios",
+    "correct": "✅ ¡Correcto!", "almost": "👍 ¡Casi!",
+    "try_again": "Inténtalo de nuevo", "correct_answer": "Correcto:",
+    "check": "Verificar", "speak": "Hablar", "listen": "Escuchar",
+    "progress": "Progreso", "question": "Pregunta",
+    "your_answer": "Tu respuesta...", "type_here": "Escribe aquí...",
+    "mission_complete": "¡Misión completada!", "perfect_score": "¡Puntuación perfecta!",
+    "great_job": "¡Muy bien!", "keep_going": "¡Sigue así!",
+    "my_profile": "Mi perfil", "edit_profile": "Editar perfil",
+    "achievements": "🏆 Logros", "xp_history": "📊 Progreso XP",
+    "missions_done": "Misiones", "days_streak": "Días seguidos",
+    "level": "Nivel", "save": "Guardar",
+    "settings": "⚙️ Configuración", "notifications": "🔔 Notificaciones",
+    "dark_mode": "🌙 Modo oscuro", "language": "🌐 Idioma",
+    "notif_freq": "Frecuencia", "times_day": "veces al día",
+    "choose_deck": "Elige un mazo", "choose_theme": "Elige un tema",
+    "choose_category": "Elige una categoría", "choose_scenario": "Elige un escenario",
+    "choose_exercise": "Elige un ejercicio", "choose_topic": "Elige un tema",
+    "flashcards": "Tarjetas", "memory": "Memoria",
+    "true_false": "Verdadero / Falso", "dialogue": "Diálogo", "writing": "Redacción",
+    "slow": "🐢 Lento", "flip": "Voltear",
+    "diag_title": "Vamos a personalizar tu entrenamiento",
+    "diag_sub": "4 preguntas rápidas — menos de 1 minuto",
+    "diag_why": "¿Por qué quieres aprender inglés?",
+    "diag_area": "¿Cuál es tu área de trabajo?",
+    "diag_difficulty": "¿Cuál es tu mayor dificultad?",
+    "diag_goal": "¿Qué quieres poder hacer en inglés?",
+    "diag_continue": "Continuar →", "diag_skip": "Omitir este paso",
+    "diag_ready": "¡Perfil creado!", "diag_test_info": "Ahora encontremos tu nivel real",
+    "diag_test_btn": "Hacer el test de nivel →", "diag_skip_test": "Omitir e ir a la app",
+    "lt_title": "Test de nivel", "lt_skip": "Omitir",
+    "lt_result_title": "Tu nivel:", "lt_finish": "Ir a la app →",
+    "upgrade_title": "Desbloquea todo con Pro",
+    "upgrade_btn": "💳 Suscribirse — R$ 15/mes", "upgrade_back": "← Volver",
+    "leaderboard_title": "🏆 Ranking", "leaderboard_week": "Esta semana",
+    "leaderboard_all": "Todos los tiempos", "my_position": "Mi posición", "loading": "Cargando...",
+    "ob_next": "Siguiente →", "ob_skip": "Omitir", "ob_start": "¡Vamos! 🚀",
+    "ob_title_0": "¡Bienvenido a VIC English!", "ob_title_1": "Tu pantalla de inicio", "ob_title_2": "Tu perfil",
+    "share": "Compartir", "copy_link": "Copiar enlace",
+    "feedback": "Comentarios", "send_feedback": "Enviar comentarios",
+    "pro_banner": "Desbloquea todos los segmentos",
+    "daily_complete": "¡Misiones del día completadas!", "streak_record": "¡Nuevo récord de racha!",
+  },
+
+  // ── DEUTSCH ────────────────────────────────────────────────────────────────
+  de: {
+    "login": "Anmelden", "register": "Konto erstellen", "logout": "Abmelden",
+    "email": "E-Mail", "password": "Passwort", "name": "Vollständiger Name",
+    "username": "@ Benutzername", "keep_logged": "Angemeldet bleiben",
+    "login_google": "Mit Google anmelden", "login_anon": "👤 Als Gast fortfahren",
+    "creating": "Wird erstellt...", "entering": "Anmeldung läuft...",
+    "fill_all": "Bitte alle Felder ausfüllen.",
+    "min_password": "Passwort muss mindestens 6 Zeichen haben.",
+    "min_username": "Benutzername muss mindestens 3 Zeichen haben.",
+    "create_username": "Bitte erstelle einen Benutzernamen für das Ranking.",
+    "username_hint": "Im Ranking sichtbar. Nur Buchstaben, Zahlen und _",
+    "good_morning": "Guten Morgen", "good_afternoon": "Guten Tag", "good_evening": "Guten Abend",
+    "daily_missions": "🎯 Tägliche Aufgaben", "segments": "Bereiche",
+    "quick_access": "🎯 Schnellzugriff", "start_now": "▶ Jetzt starten!",
+    "subscribe": "Abonnieren", "xp_progress": "XP-Fortschritt", "ranking": "Rangliste",
+    "back": "← Zurück", "next": "Weiter →", "previous": "← Zurück",
+    "continue": "Weiter", "skip": "Überspringen", "done": "Fertig",
+    "back_dashboard": "Zurück zur Übersicht", "back_segments": "← Bereiche",
+    "back_phases": "← Phasen", "back_exercises": "← Übungen",
+    "correct": "✅ Richtig!", "almost": "👍 Fast!",
+    "try_again": "Nochmal versuchen", "correct_answer": "Richtig:",
+    "check": "Prüfen", "speak": "Sprechen", "listen": "Anhören",
+    "progress": "Fortschritt", "question": "Frage",
+    "your_answer": "Deine Antwort...", "type_here": "Hier eingeben...",
+    "mission_complete": "Aufgabe abgeschlossen!", "perfect_score": "Perfekte Punktzahl!",
+    "great_job": "Sehr gut!", "keep_going": "Weiter so!",
+    "my_profile": "Mein Profil", "edit_profile": "Profil bearbeiten",
+    "achievements": "🏆 Erfolge", "xp_history": "📊 XP-Verlauf",
+    "missions_done": "Aufgaben", "days_streak": "Tage in Folge",
+    "level": "Stufe", "save": "Speichern",
+    "settings": "⚙️ Einstellungen", "notifications": "🔔 Benachrichtigungen",
+    "dark_mode": "🌙 Dunkelmodus", "language": "🌐 Sprache",
+    "notif_freq": "Häufigkeit", "times_day": "mal pro Tag",
+    "choose_deck": "Kartensatz wählen", "choose_theme": "Thema wählen",
+    "choose_category": "Kategorie wählen", "choose_scenario": "Szenario wählen",
+    "choose_exercise": "Übung wählen", "choose_topic": "Thema wählen",
+    "flashcards": "Lernkarten", "memory": "Memory",
+    "true_false": "Wahr / Falsch", "dialogue": "Dialog", "writing": "Aufsatz",
+    "slow": "🐢 Langsam", "flip": "Umdrehen",
+    "diag_title": "Lass uns dein Training personalisieren",
+    "diag_sub": "4 schnelle Fragen — weniger als 1 Minute",
+    "diag_why": "Warum möchtest du Englisch lernen?",
+    "diag_area": "Was ist dein Arbeitsbereich?",
+    "diag_difficulty": "Was ist deine größte Schwierigkeit?",
+    "diag_goal": "Was möchtest du auf Englisch tun können?",
+    "diag_continue": "Weiter →", "diag_skip": "Diesen Schritt überspringen",
+    "diag_ready": "Profil erstellt!", "diag_test_info": "Jetzt finden wir dein echtes Niveau",
+    "diag_test_btn": "Einstufungstest machen →", "diag_skip_test": "Überspringen und zur App",
+    "lt_title": "Einstufungstest", "lt_skip": "Überspringen",
+    "lt_result_title": "Dein Niveau:", "lt_finish": "Zur App →",
+    "upgrade_title": "Alles mit Pro freischalten",
+    "upgrade_btn": "💳 Jetzt abonnieren — R$ 15/Mo.", "upgrade_back": "← Zurück",
+    "leaderboard_title": "🏆 Rangliste", "leaderboard_week": "Diese Woche",
+    "leaderboard_all": "Gesamtzeit", "my_position": "Meine Position", "loading": "Wird geladen...",
+    "ob_next": "Weiter →", "ob_skip": "Überspringen", "ob_start": "Los geht's! 🚀",
+    "ob_title_0": "Willkommen bei VIC English!", "ob_title_1": "Dein Startbildschirm", "ob_title_2": "Dein Profil",
+    "share": "Teilen", "copy_link": "Link kopieren",
+    "feedback": "Feedback", "send_feedback": "Feedback senden",
+    "pro_banner": "Alle Bereiche freischalten",
+    "daily_complete": "Tägliche Aufgaben abgeschlossen!", "streak_record": "Neuer Streak-Rekord!",
+  },
+
+  // ── ITALIANO ───────────────────────────────────────────────────────────────
+  it: {
+    "login": "Accedi", "register": "Crea account", "logout": "Esci",
+    "email": "Email", "password": "Password", "name": "Nome completo",
+    "username": "@ Nome utente", "keep_logged": "Rimani connesso",
+    "login_google": "Accedi con Google", "login_anon": "👤 Continua come ospite",
+    "creating": "Creazione...", "entering": "Accesso in corso...",
+    "fill_all": "Compila tutti i campi.",
+    "min_password": "La password deve avere almeno 6 caratteri.",
+    "min_username": "Il nome utente deve avere almeno 3 caratteri.",
+    "create_username": "Crea un nome utente per la classifica.",
+    "username_hint": "Visibile nella classifica. Solo lettere, numeri e _",
+    "good_morning": "Buongiorno", "good_afternoon": "Buon pomeriggio", "good_evening": "Buonasera",
+    "daily_missions": "🎯 Missioni del giorno", "segments": "Segmenti",
+    "quick_access": "🎯 Accesso rapido", "start_now": "▶ Inizia ora!",
+    "subscribe": "Abbonati", "xp_progress": "Progresso XP", "ranking": "Classifica",
+    "back": "← Indietro", "next": "Avanti →", "previous": "← Precedente",
+    "continue": "Continua", "skip": "Salta", "done": "Fatto",
+    "back_dashboard": "Torna alla home", "back_segments": "← Segmenti",
+    "back_phases": "← Fasi", "back_exercises": "← Esercizi",
+    "correct": "✅ Corretto!", "almost": "👍 Quasi!",
+    "try_again": "Riprova", "correct_answer": "Corretto:",
+    "check": "Verifica", "speak": "Parla", "listen": "Ascolta",
+    "progress": "Progresso", "question": "Domanda",
+    "your_answer": "La tua risposta...", "type_here": "Scrivi qui...",
+    "mission_complete": "Missione completata!", "perfect_score": "Punteggio perfetto!",
+    "great_job": "Ottimo lavoro!", "keep_going": "Continua così!",
+    "my_profile": "Il mio profilo", "edit_profile": "Modifica profilo",
+    "achievements": "🏆 Obiettivi", "xp_history": "📊 Progresso XP",
+    "missions_done": "Missioni", "days_streak": "Giorni consecutivi",
+    "level": "Livello", "save": "Salva",
+    "settings": "⚙️ Impostazioni", "notifications": "🔔 Notifiche",
+    "dark_mode": "🌙 Modalità scura", "language": "🌐 Lingua",
+    "notif_freq": "Frequenza", "times_day": "volte al giorno",
+    "choose_deck": "Scegli un mazzo", "choose_theme": "Scegli un tema",
+    "choose_category": "Scegli una categoria", "choose_scenario": "Scegli uno scenario",
+    "choose_exercise": "Scegli un esercizio", "choose_topic": "Scegli un argomento",
+    "flashcards": "Flashcard", "memory": "Memory",
+    "true_false": "Vero / Falso", "dialogue": "Dialogo", "writing": "Composizione",
+    "slow": "🐢 Lento", "flip": "Gira",
+    "diag_title": "Personalizziamo il tuo allenamento",
+    "diag_sub": "4 domande rapide — meno di 1 minuto",
+    "diag_why": "Perché vuoi imparare l'inglese?",
+    "diag_area": "Qual è la tua area di lavoro?",
+    "diag_difficulty": "Qual è la tua difficoltà principale?",
+    "diag_goal": "Cosa vuoi riuscire a fare in inglese?",
+    "diag_continue": "Continua →", "diag_skip": "Salta questo passaggio",
+    "diag_ready": "Profilo creato!", "diag_test_info": "Ora troviamo il tuo livello reale",
+    "diag_test_btn": "Fai il test di livello →", "diag_skip_test": "Salta e vai all'app",
+    "lt_title": "Test di livello", "lt_skip": "Salta",
+    "lt_result_title": "Il tuo livello:", "lt_finish": "Vai all'app →",
+    "upgrade_title": "Sblocca tutto con Pro",
+    "upgrade_btn": "💳 Abbonati ora — R$ 15/mese", "upgrade_back": "← Indietro",
+    "leaderboard_title": "🏆 Classifica", "leaderboard_week": "Questa settimana",
+    "leaderboard_all": "Tutti i tempi", "my_position": "La mia posizione", "loading": "Caricamento...",
+    "ob_next": "Avanti →", "ob_skip": "Salta", "ob_start": "Andiamo! 🚀",
+    "ob_title_0": "Benvenuto in VIC English!", "ob_title_1": "La tua schermata iniziale", "ob_title_2": "Il tuo profilo",
+    "share": "Condividi", "copy_link": "Copia link",
+    "feedback": "Feedback", "send_feedback": "Invia feedback",
+    "pro_banner": "Sblocca tutti i segmenti",
+    "daily_complete": "Missioni del giorno completate!", "streak_record": "Nuovo record di streak!",
+  }
+};
+
+// Idioma atual — padrão PT, salvo no localStorage
+let _lang = localStorage.getItem("vic_lang") || "pt";
+
+// Função principal de tradução
+function t(key) {
+  return I18N[_lang]?.[key] || I18N["pt"]?.[key] || key;
+}
+
+// Trocar idioma e re-renderizar tudo
+function setLang(lang) {
+  _lang = lang;
+  localStorage.setItem("vic_lang", lang);
+  applyLang();
+}
+
+// Aplicar idioma em todos os elementos com data-i18n
+function applyLang() {
+  // Atualizar toggle visual no header
+  const toggle = document.getElementById("lang-toggle");
+  if (toggle) {
+    toggle.textContent = _lang === "pt" ? "🇺🇸 EN" : "🇧🇷 PT";
+    toggle.title = _lang === "pt" ? "Switch to English" : "Mudar para Português";
+  }
+
+  // Atualizar botões PT/EN nas configurações
+  const btnPT = document.getElementById("lang-btn-pt");
+  const btnEN = document.getElementById("lang-btn-en");
+  if (btnPT) {
+    btnPT.style.background = _lang==="pt" ? "rgba(201,147,58,0.25)" : "rgba(255,255,255,0.05)";
+    btnPT.style.borderColor = _lang==="pt" ? "rgba(201,147,58,0.5)" : "rgba(255,255,255,0.15)";
+    btnPT.style.color = _lang==="pt" ? "#e4b45c" : "#fff";
+  }
+  if (btnEN) {
+    btnEN.style.background = _lang==="en" ? "rgba(201,147,58,0.25)" : "rgba(255,255,255,0.05)";
+    btnEN.style.borderColor = _lang==="en" ? "rgba(201,147,58,0.5)" : "rgba(255,255,255,0.15)";
+    btnEN.style.color = _lang==="en" ? "#e4b45c" : "#fff";
+  }
+
+  // Atualizar todos os elementos marcados com data-i18n
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    el.textContent = t(key);
+  });
+
+  // Atualizar placeholders
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+    el.placeholder = t(el.getAttribute("data-i18n-placeholder"));
+  });
+
+  // Atualizar títulos
+  document.querySelectorAll("[data-i18n-title]").forEach(el => {
+    el.title = t(el.getAttribute("data-i18n-title"));
+  });
+
+  // Re-renderizar partes dinâmicas se estiverem visíveis
+  const activeView = document.querySelector(".view.active")?.id;
+  if (activeView === "view-dashboard") renderDashboardTexts();
+  if (activeView === "view-mission") renderMissionTexts();
+}
+
+function renderDashboardTexts() {
+  const el = id => document.getElementById(id);
+  if (el("dash-daily-title")) el("dash-daily-title").textContent = t("daily_missions");
+  if (el("dash-segments-label")) el("dash-segments-label").textContent = t("segments");
+  if (el("dash-quick-label")) el("dash-quick-label").textContent = t("quick_access");
+  if (el("btn-start-now")) el("btn-start-now").textContent = t("start_now");
+  if (el("btn-upgrade-dash")) el("btn-upgrade-dash").textContent = t("subscribe");
+  if (el("xp-track-label")) el("xp-track-label").textContent = t("xp_progress");
+  if (el("stat-ranking-label")) el("stat-ranking-label").textContent = t("ranking");
+}
+
+function renderMissionTexts() {
+  ["btn-prev-exercise","btn-prev-exercise"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = t("previous");
+  });
+  ["btn-next-exercise","btn-next-mc","btn-next-fill","btn-next-order","btn-next-main"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = t("next");
+  });
+}
+
+
 // Capture auth state before DOM ready
 let _pendingAuthUser = undefined;
 let _domReady = false;
@@ -340,10 +775,10 @@ async function handleRegister(){
   const email=document.getElementById("reg-email").value.trim();
   const pw=document.getElementById("reg-password").value;
   const btn=document.getElementById("btn-register");
-  if(!username) return showAuthError("Crie um nome de usuário para o ranking.");
-  if(username.length<3) return showAuthError("Nome de usuário precisa ter ao menos 3 caracteres.");
-  if(!name||!email||!pw) return showAuthError("Preencha todos os campos.");
-  if(pw.length<6) return showAuthError("Senha mínimo 6 caracteres.");
+  if(!username) return showAuthError(t("create_username"));
+  if(username.length<3) return showAuthError(t("min_username"));
+  if(!name||!email||!pw) return showAuthError(t("fill_all"));
+  if(pw.length<6) return showAuthError(t("min_password"));
   btn.disabled=true; btn.textContent="Criando...";
   showAuthLoading("Criando sua conta... 🚀");
   // Safety timeout — if auth doesn't fire in 10s, reset
@@ -904,7 +1339,7 @@ function renderLTQuestion(){
 
 function showLTFeedback(feedback,correct,pts){
   const fb=document.getElementById("lt-feedback");
-  if(feedback==="correct"){fb.className="lt-feedback correct";fb.innerHTML=`✅ Correto! <strong>+${pts} pts</strong>`;SoundFX.correct();}
+  if(feedback==="correct"){fb.className="lt-feedback correct";fb.innerHTML=`${t("correct")} <strong>+${pts} pts</strong>`;SoundFX.correct();}
   else if(feedback==="almost"){fb.className="lt-feedback almost";fb.innerHTML=`👍 Quase! Correto: <strong>${correct}</strong> +${pts} pts`;SoundFX.almost();}
   else{fb.className="lt-feedback wrong";fb.innerHTML=`❌ Correto seria: <strong>${correct}</strong>`;SoundFX.wrong();}
   fb.style.display="block";
@@ -1570,7 +2005,7 @@ function checkTranslate(){
   const fb=document.getElementById("answer-feedback");
   if(result.feedback==="correct"){fb.className="answer-feedback correct";fb.innerHTML=`🌟 Perfeito!<br><small>${correct}</small>`;SoundFX.correct();}
   else if(result.feedback==="almost"){fb.className="answer-feedback correct";fb.innerHTML=`👍 Quase!<br><small>${correct}</small>`;SoundFX.almost();}
-  else{fb.className="answer-feedback wrong";fb.innerHTML=`✅ Correto: <small>${correct}</small>`;SoundFX.wrong();}
+  else{fb.className="answer-feedback wrong";fb.innerHTML=`${t("correct_answer")} <small>${correct}</small>`;SoundFX.wrong();}
   fb.style.display="block";
   phrase.type==="translate_pt_en"?SoundFX.speakEN(stripEmoji(correct)):SoundFX.speakPT(stripEmoji(correct));
   showNextBtn('btn-next-exercise', result.score);
@@ -1582,9 +2017,9 @@ function checkFill(){
   const correct=phrase.answer||"";
   const result=avaliarResposta(input,correct);
   const fb=document.getElementById("answer-feedback-fill");
-  if(result.feedback==="correct"){fb.className="answer-feedback correct";fb.innerHTML=`🌟 Correto! <strong>${correct}</strong>`;SoundFX.correct();}
+  if(result.feedback==="correct"){fb.className="answer-feedback correct";fb.innerHTML=`${t("correct")} <strong>${correct}</strong>`;SoundFX.correct();}
   else if(result.feedback==="almost"){fb.className="answer-feedback correct";fb.innerHTML=`👍 Quase! <strong>${correct}</strong>`;SoundFX.almost();}
-  else{fb.className="answer-feedback wrong";fb.innerHTML=`✅ Correto: <strong>${correct}</strong>`;SoundFX.wrong();}
+  else{fb.className="answer-feedback wrong";fb.innerHTML=`${t("correct_answer")} <strong>${correct}</strong>`;SoundFX.wrong();}
   fb.style.display="block";
   SoundFX._isPT(correct)?SoundFX.speakPT(correct):SoundFX.speakEN(correct);
   showNextBtn('btn-next-fill', result.score);
@@ -1596,9 +2031,9 @@ function checkWordOrder(){
   const correct=stripEmoji(phrase.answer);
   const result=avaliarResposta(placed,correct);
   const fb=document.getElementById("answer-feedback-order");
-  if(result.feedback==="correct"){fb.className="answer-feedback correct";fb.innerHTML=`🌟 Correto!`;SoundFX.correct();}
+  if(result.feedback==="correct"){fb.className="answer-feedback correct";fb.innerHTML=t("correct");SoundFX.correct();}
   else if(result.feedback==="almost"){fb.className="answer-feedback correct";fb.innerHTML=`👍 Quase! <strong>${correct}</strong>`;SoundFX.almost();}
-  else{fb.className="answer-feedback wrong";fb.innerHTML=`✅ Correto: <strong>${correct}</strong>`;SoundFX.wrong();}
+  else{fb.className="answer-feedback wrong";fb.innerHTML=`${t("correct_answer")} <strong>${correct}</strong>`;SoundFX.wrong();}
   fb.style.display="block";
   SoundFX._isPT(correct)?SoundFX.speakPT(correct):SoundFX.speakEN(correct);
   showNextBtn('btn-next-order', result.score);
@@ -2125,7 +2560,7 @@ function renderDialogueScenarios(segName, scenarios){
 
   // Back button
   const back=document.createElement("button");
-  back.className="btn-back-sm"; back.textContent="← Segmentos";
+  back.className="btn-back-sm"; back.textContent=t("back_segments");
   back.addEventListener("click",renderDialogueSegments);
   list.appendChild(back);
 
@@ -2263,7 +2698,7 @@ function renderDlgLine(){
       SoundFX.speakEN(stripEmoji(fullText.replace(/\[|\]/g,"")));
       const fb=document.getElementById("dlg-feedback");
       fb.className=`dlg-feedback ${correct?"correct":"wrong"}`;
-      fb.innerHTML=correct?`✅ Correto! +10 pts`:`✅ Era: <strong>${line.options[line.correct]}</strong>`;
+      fb.innerHTML=correct?`${t("correct")} +10 pts`:`✅ Era: <strong>${line.options[line.correct]}</strong>`;
       fb.style.display="block";
       setTimeout(()=>{dlgIndex++;if(dlgIndex<dlgScenario.lines.length)renderDlgLine();else showDlgResult();},2000);
     });

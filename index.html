@@ -44,7 +44,7 @@
           <img src="logo_full_2.png" alt="VIC English" style="width:200px;filter:drop-shadow(0 8px 32px rgba(201,147,58,0.4))"/>
         </div>
         <div class="ob-slide-content">
-          <div class="ob-slide-title">Bem-vindo ao VIC English!</div>
+          <div class="ob-slide-title" data-i18n="ob_title_0">Bem-vindo ao VIC English!</div>
           <div class="ob-slide-sub">O único app de inglês focado 100% no mercado profissional brasileiro.</div>
           <div class="ob-slide-tags">
             <span class="ob-tag">⚓ Marítimo</span>
@@ -72,7 +72,7 @@
           </div>
         </div>
         <div class="ob-slide-content">
-          <div class="ob-slide-title">Sua tela inicial</div>
+          <div class="ob-slide-title" data-i18n="ob_title_1">Sua tela inicial</div>
           <div class="ob-slide-sub">Missões diárias, XP, streak e badges. Tudo pensado pra te manter motivado todo dia.</div>
         </div>
       </div>
@@ -90,7 +90,7 @@
           </div>
         </div>
         <div class="ob-slide-content">
-          <div class="ob-slide-title">Seu perfil é seu</div>
+          <div class="ob-slide-title" data-i18n="ob_title_2">Seu perfil é seu</div>
           <div class="ob-slide-sub">Escolha um nome de usuário, acompanhe seu nível, seus badges e compare com outros no ranking.</div>
         </div>
       </div>
@@ -106,8 +106,8 @@
 
     <!-- Botões -->
     <div class="ob-actions">
-      <button class="ob-btn-next" id="ob-btn-next" onclick="obNext()">Próximo →</button>
-      <button class="ob-btn-skip" id="ob-btn-skip" onclick="obSkip()">Pular</button>
+      <button class="ob-btn-next" id="ob-btn-next" onclick="obNext()" data-i18n="next" id="ob-btn-next" data-i18n="ob_next">Próximo →</button>
+      <button class="ob-btn-skip" id="ob-btn-skip" onclick="obSkip()" id="ob-btn-skip" data-i18n="ob_skip">Pular</button>
     </div>
 
   </div>
@@ -146,8 +146,8 @@
 
       <!-- Tabs -->
       <div class="auth-tabs">
-        <button class="auth-tab active" id="tab-login">Entrar</button>
-        <button class="auth-tab"        id="tab-register">Criar Conta</button>
+        <button class="auth-tab active" id="tab-login" data-i18n="login" data-i18n="login">Entrar</button>
+        <button class="auth-tab"        id="tab-register" data-i18n="register" data-i18n="register">Criar Conta</button>
       </div>
 
       <!-- Error -->
@@ -196,7 +196,7 @@
           <div style="font-size:11px;color:var(--text-muted,#888);margin-top:4px;">Aparece no ranking. Só letras, números e _</div>
         </div>
         <div class="auth-field">
-          <label for="reg-name">Nome completo</label>
+          <label for="reg-name" data-i18n="name">Nome completo</label>
           <input type="text" id="reg-name" placeholder="Seu nome" autocomplete="name"/>
         </div>
         <div class="auth-field">
@@ -312,8 +312,8 @@
           <span class="diag-voice-status" id="diag-voice-status"></span>
         </div>
         <div class="diag-step-actions">
-          <button class="btn-primary" id="btn-finish-diag-note">Continuar →</button>
-          <button class="diag-skip-note" id="btn-skip-diag-note">Pular esta etapa</button>
+          <button class="btn-primary" id="btn-finish-diag-note" data-i18n="diag_continue">Continuar →</button>
+          <button class="diag-skip-note" id="btn-skip-diag-note" data-i18n="diag_skip">Pular esta etapa</button>
         </div>
       </div>
 
@@ -327,8 +327,8 @@
             <p>Agora vamos descobrir seu nível real com um <strong>teste adaptativo de 15 questões</strong></p>
             <p class="diag-next-sub">⚡ Começa fácil e ajusta automaticamente • Leva ~5 minutos</p>
           </div>
-          <button class="btn-primary" id="btn-finish-diag" style="margin-top:20px">Fazer o Teste de Nível →</button>
-          <button class="diag-skip-note" id="btn-skip-level-test-diag" style="margin-top:8px;display:block;text-align:center">Pular e ir para o app</button>
+          <button class="btn-primary" id="btn-finish-diag" style="margin-top:20px" data-i18n="diag_test_btn">Fazer o Teste de Nível →</button>
+          <button class="diag-skip-note" id="btn-skip-level-test-diag" style="margin-top:8px;display:block;text-align:center" data-i18n="diag_skip_test">Pular e ir para o app</button>
         </div>
       </div>
     </div>
@@ -419,6 +419,13 @@
           <span id="dash-avatar-icon">👤</span>
           <span class="dash-avatar-edit">✏️</span>
         </div>
+        <button id="lang-toggle" onclick="setLang(_lang==='pt'?'en':'pt')"
+          title="Switch language"
+          style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+                 border-radius:999px;padding:5px 12px;color:#fff;font-size:12px;font-weight:700;
+                 cursor:pointer;font-family:inherit;letter-spacing:.3px;">
+          🇺🇸 EN
+        </button>
         <button class="btn-logout-icon" id="btn-logout" title="Sair">⏻</button>
       </div>
     </div>
@@ -454,7 +461,7 @@
 
     <div class="xp-track">
       <div class="xp-track-header">
-        <span class="xp-track-label">Progresso XP</span>
+        <span class="xp-track-label" id="xp-track-label" data-i18n="xp_progress">Progresso XP</span>
         <span class="xp-track-next" id="dash-xp-next">100 XP</span>
       </div>
       <div class="xp-bar-wrapper">
@@ -493,7 +500,7 @@
           <div class="pro-banner-sub" id="pro-banner-sub">R$ 15/mês — todos os segmentos</div>
         </div>
       </div>
-      <button class="pro-banner-btn" id="btn-upgrade-dash">Assinar</button>
+      <button class="pro-banner-btn" id="btn-upgrade-dash" data-i18n="subscribe">Assinar</button>
     </div>
 
     <!-- Curiosity ticker — before Start Now -->
@@ -502,12 +509,12 @@
     </div>
 
     <!-- START NOW button — pink, below ticker -->
-    <button class="btn-start-now" id="btn-start-now">▶ Start Now!</button>
+    <button class="btn-start-now" id="btn-start-now" data-i18n="start_now">▶ Start Now!<//button>
 
     <!-- daily missions -->
     <div class="daily-block">
       <div class="daily-block-header">
-        <div class="daily-block-title">🎯 Daily Missions</div>
+        <div class="daily-block-title" id="dash-daily-title" data-i18n="daily_missions">🎯 Daily Missions</div>
         <div class="daily-overall-pct" id="daily-overall-pct">0% done today</div>
       </div>
       <div class="daily-overall-bar-wrap">
@@ -517,7 +524,7 @@
     </div>
 
     <!-- quick access -->
-    <div class="section-label">🎯 Acesso Rápido</div>
+    <div class="section-label" id="dash-quick-label" data-i18n="quick_access">🎯 Acesso Rápido</div>
     <div class="quick-grid">
       <button class="quick-btn" id="btn-goto-flashcards">🃏 Flashcards</button>
       <button class="quick-btn" id="btn-goto-memory">🧠 Memória</button>
@@ -525,7 +532,7 @@
       <button class="quick-btn" id="btn-goto-dialogue">💬 Diálogo</button>
     </div>
 
-    <div class="section-label" style="margin-top:20px">Segmentos</div>
+    <div class="section-label" style="margin-top:20px" id="dash-segments-label" data-i18n="segments">Segmentos</div>
     <div class="segments-grid" id="segments-grid"></div>
 
     <!-- Grammar Core Banner -->
@@ -675,7 +682,7 @@
         <div class="mission-header-name" id="mission-name"></div>
         <div class="phrase-counter" id="phrase-counter">1/1</div>
       </div>
-      <button class="btn-prev-exercise" id="btn-prev-exercise" title="Anterior" style="display:none">← Anterior</button>
+      <button class="btn-prev-exercise" id="btn-prev-exercise" title="Anterior" style="display:none" data-i18n="previous">← Anterior</button>
     </div>
 
     <div class="mission-progress-wrap">
@@ -787,7 +794,7 @@
     </div>
     <!-- deck selector -->
     <div id="fc-deck-selector">
-      <div class="section-label">Escolha um deck</div>
+      <div class="section-label" data-i18n="choose_deck">Escolha um deck</div>
       <div class="phases-list" id="fc-deck-list"></div>
     </div>
     <!-- flashcard player -->
@@ -828,7 +835,7 @@
     </div>
     <!-- theme selector -->
     <div id="mem-theme-selector">
-      <div class="section-label">Escolha um tema</div>
+      <div class="section-label" data-i18n="choose_theme">Escolha um tema</div>
       <div class="phases-list" id="mem-theme-list"></div>
     </div>
     <!-- memory board -->
@@ -853,7 +860,7 @@
     </div>
     <!-- category selector -->
     <div id="tf-selector">
-      <div class="section-label">Escolha uma categoria</div>
+      <div class="section-label" data-i18n="choose_category">Escolha uma categoria</div>
       <div class="phases-list" id="tf-category-list"></div>
     </div>
     <!-- game board -->
@@ -904,7 +911,7 @@
     </div>
     <!-- scenario selector -->
     <div id="dlg-selector">
-      <div class="section-label">Escolha um cenário</div>
+      <div class="section-label" data-i18n="choose_scenario">Escolha um cenário</div>
       <div class="phases-list" id="dlg-scenario-list"></div>
     </div>
     <!-- dialogue board -->
@@ -950,14 +957,14 @@
 <div class="view" id="view-complete">
   <div class="complete-inner">
     <div class="complete-icon">🏆</div>
-    <div class="complete-title">Missão Concluída!</div>
+    <div class="complete-title" data-i18n="mission_complete">Missão Concluída!</div>
     <div class="complete-subtitle">Você completou <strong id="complete-mission-name"></strong></div>
     <div class="complete-result-badge">
       <div class="complete-result-level" id="complete-result-level"></div>
       <div class="complete-result-text"  id="complete-result-text"></div>
       <div class="complete-xp-badge">⚡ <span id="complete-xp">0</span> XP</div>
     </div>
-    <button class="btn-primary" id="btn-back-complete">Voltar ao Dashboard</button>
+    <button class="btn-primary" id="btn-back-complete" data-i18n="back_dashboard">Voltar ao Dashboard</button>
     <button class="btn-next-mission" id="btn-next-mission" style="display:none"></button>
     <div class="powered-footer" style="margin-top:20px"><a href="https://www.viclanguage.com.br" target="_blank" class="vic-link"><img src="vic_lamp.png" alt="VIC Language" class="vic-logo-sm"><span>VIC Language</span></a></div>
     <a href="https://www.viclanguage.com.br" target="_blank" class="vic-site-link">viclanguage.com.br →</a>
@@ -973,13 +980,13 @@
     <!-- Header -->
     <div class="lb-header">
       <button class="lb-back-btn" id="btn-back-leaderboard">←</button>
-      <div class="lb-header-title">🏆 Ranking</div>
+      <div class="lb-header-title" data-i18n="leaderboard_title">🏆 Ranking</div>
       <div class="lb-header-sub">Top 10 da semana</div>
     </div>
 
     <!-- Meu ranking -->
     <div class="lb-my-rank" id="lb-my-rank" style="display:none">
-      <div class="lb-my-rank-label">Minha posição</div>
+      <div class="lb-my-rank-label" data-i18n="my_position">Minha posição</div>
       <div class="lb-my-rank-row">
         <div class="lb-my-pos" id="lb-my-pos">#—</div>
         <div class="lb-my-avatar" id="lb-my-avatar">?</div>
@@ -1020,8 +1027,8 @@
 
     <!-- Tabs: semanal / total -->
     <div class="lb-tabs" id="lb-tabs">
-      <button class="lb-tab active" id="lb-tab-week" onclick="loadLeaderboard('week')">Esta semana</button>
-      <button class="lb-tab" id="lb-tab-all" onclick="loadLeaderboard('all')">Todos os tempos</button>
+      <button class="lb-tab active" id="lb-tab-week" onclick="loadLeaderboard('week')" data-i18n="leaderboard_week">Esta semana</button>
+      <button class="lb-tab" id="lb-tab-all" onclick="loadLeaderboard('all')" data-i18n="leaderboard_all">Todos os tempos</button>
     </div>
 
   </div>
@@ -1040,7 +1047,7 @@
       </div>
       <div class="admin-header-btns">
         <button class="admin-preview-btn" id="btn-admin-preview" title="Ver como aluno Pro">👁️ Preview</button>
-        <button class="btn-logout" id="btn-admin-logout">Sair</button>
+        <button class="btn-logout" id="btn-admin-logout" data-i18n="logout">Sair</button>
       </div>
     </div>
 
@@ -1308,7 +1315,7 @@
 
     <!-- topic selector -->
     <div id="writing-selector">
-      <div class="section-label">Escolha um exercício</div>
+      <div class="section-label" data-i18n="choose_exercise">Escolha um exercício</div>
       <div class="phases-list" id="writing-topic-list"></div>
     </div>
 
@@ -1401,7 +1408,7 @@
 
     <div class="profile-header">
       <button class="btn-back" id="btn-back-profile">←</button>
-      <div class="profile-header-title">Meu Perfil</div>
+      <div class="profile-header-title" data-i18n="my_profile">Meu Perfil</div>
       <div style="width:40px"></div>
     </div>
 
@@ -1456,7 +1463,7 @@
 
     <!-- Weekly + Monthly progress chart -->
     <div class="profile-section">
-      <div class="profile-section-title">📊 Progresso de XP</div>
+      <div class="profile-section-title" data-i18n="xp_history">📊 Progresso de XP</div>
       <div class="chart-tabs">
         <button class="chart-tab active" data-period="week">Esta semana</button>
         <button class="chart-tab" data-period="week1">Semana passada</button>
@@ -1467,7 +1474,7 @@
 
     <!-- Badges -->
     <div class="profile-section">
-      <div class="profile-section-title">🏆 Conquistas</div>
+      <div class="profile-section-title" data-i18n="achievements">🏆 Conquistas</div>
       <div id="profile-badges-grid"></div>
     </div>
 
@@ -1543,6 +1550,16 @@
         </div>
       </div>
       <div class="settings-item">
+        <div class="settings-row settings-row-lang" style="flex-direction:column;align-items:flex-start;gap:10px;border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:16px;margin-bottom:4px;">
+          <span data-i18n="language">🌐 Idioma</span>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button onclick="setLang('pt')" id="lang-btn-pt" class="lang-btn">🇧🇷 PT</button>
+            <button onclick="setLang('en')" id="lang-btn-en" class="lang-btn">🇺🇸 EN</button>
+            <button onclick="setLang('es')" id="lang-btn-es" class="lang-btn">🇪🇸 ES</button>
+            <button onclick="setLang('de')" id="lang-btn-de" class="lang-btn">🇩🇪 DE</button>
+            <button onclick="setLang('it')" id="lang-btn-it" class="lang-btn">🇮🇹 IT</button>
+          </div>
+        </div>
         <span>🔔 Notificações</span>
         <label class="toggle-switch">
           <input type="checkbox" id="toggle-notif" checked/>
