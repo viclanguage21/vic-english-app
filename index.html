@@ -190,11 +190,28 @@
       <div class="auth-form" id="form-register">
         <div class="auth-field">
           <label for="reg-username">@ Nome de usuário</label>
-          <input type="text" id="reg-username" placeholder="Ex: capitao_silva" autocomplete="username"
+          <input type="text" id="reg-username" placeholder="Ex: capitao.silva ou vic-english" autocomplete="username"
             style="font-family:monospace;letter-spacing:.3px;" maxlength="20"
-            oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_.]/g,'')"/>
-          <div style="font-size:11px;color:var(--text-muted,#888);margin-top:4px;">Aparece no ranking. Só letras, números e _</div>
+            oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_.\-]/g,'')"/>
+          <div style="font-size:11px;color:var(--text-muted,#888);margin-top:4px;">Aparece no ranking. Letras, números, _ . -</div>
         </div>
+        <!-- Escolher avatar no cadastro -->
+        <div class="auth-field">
+          <label>Escolha um avatar <span style="color:rgba(255,255,255,0.4);font-weight:400;font-size:11px;">— você pode trocar depois</span></label>
+          <div class="reg-avatar-row" id="reg-avatar-row">
+            <button type="button" class="reg-avatar-opt selected" data-emoji="😎" onclick="selectRegAvatar(this)">😎</button>
+            <button type="button" class="reg-avatar-opt" data-emoji="⚓" onclick="selectRegAvatar(this)">⚓</button>
+            <button type="button" class="reg-avatar-opt" data-emoji="🌍" onclick="selectRegAvatar(this)">🌍</button>
+            <button type="button" class="reg-avatar-opt" data-emoji="🚢" onclick="selectRegAvatar(this)">🚢</button>
+            <button type="button" class="reg-avatar-opt" data-emoji="✈️" onclick="selectRegAvatar(this)">✈️</button>
+            <button type="button" class="reg-avatar-opt" data-emoji="🏨" onclick="selectRegAvatar(this)">🏨</button>
+            <button type="button" class="reg-avatar-opt" data-emoji="💼" onclick="selectRegAvatar(this)">💼</button>
+            <button type="button" class="reg-avatar-opt" data-emoji="🦁" onclick="selectRegAvatar(this)">🦁</button>
+            <button type="button" class="reg-avatar-opt" data-emoji="🔥" onclick="selectRegAvatar(this)">🔥</button>
+            <button type="button" class="reg-avatar-opt" data-emoji="🏆" onclick="selectRegAvatar(this)">🏆</button>
+          </div>
+        </div>
+
         <div class="auth-field">
           <label for="reg-name" data-i18n="name">Nome completo</label>
           <input type="text" id="reg-name" placeholder="Seu nome" autocomplete="name"/>
@@ -1425,14 +1442,41 @@
     <!-- Avatar picker modal -->
     <div class="avatar-picker-modal" id="avatar-picker-modal" style="display:none">
       <div class="avatar-picker-card">
-        <div class="avatar-picker-title">Escolha seu avatar</div>
-        <div class="avatar-emoji-grid" id="avatar-emoji-grid"></div>
-        <div class="avatar-picker-divider">ou escolha uma foto</div>
-        <label class="avatar-file-label">
-          📁 Escolher da galeria
-          <input type="file" id="avatar-file-input" accept="image/*" style="display:none"/>
-        </label>
-        <button class="btn-back-sm" style="margin-top:10px" id="btn-close-avatar-picker">Cancelar</button>
+
+        <!-- Header com preview -->
+        <div class="apc-header">
+          <button class="apc-close" id="btn-close-avatar-picker">✕</button>
+          <div class="apc-preview-wrap">
+            <div class="apc-preview" id="apc-preview">?</div>
+            <div class="apc-preview-label">Prévia</div>
+          </div>
+          <div class="apc-title">Escolha seu avatar</div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="apc-tabs">
+          <button class="apc-tab active" id="apc-tab-emoji" onclick="switchAvatarTab('emoji')">😄 Emoji</button>
+          <button class="apc-tab" id="apc-tab-photo" onclick="switchAvatarTab('photo')">📸 Foto</button>
+        </div>
+
+        <!-- Painel emoji -->
+        <div class="apc-panel" id="apc-panel-emoji">
+          <div class="avatar-emoji-grid" id="avatar-emoji-grid"></div>
+        </div>
+
+        <!-- Painel foto -->
+        <div class="apc-panel" id="apc-panel-photo" style="display:none">
+          <div class="apc-photo-info">
+            Escolha uma foto da sua galeria.<br/>
+            <span style="color:rgba(255,255,255,0.4);font-size:12px;">JPG, PNG · máx 2MB</span>
+          </div>
+          <label class="apc-photo-btn">
+            📁 Escolher foto
+            <input type="file" id="avatar-file-input" accept="image/*" style="display:none"/>
+          </label>
+          <button class="apc-remove-btn" onclick="removeAvatar()">🗑️ Remover foto</button>
+        </div>
+
       </div>
     </div>
 

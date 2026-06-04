@@ -774,6 +774,14 @@ function renderDailyMissions(){
 }
 
 // ── AUTH ──────────────────────────────────────────────────────────────────────
+// Avatar selecionado no cadastro
+let _regAvatar = "😎";
+function selectRegAvatar(btn){
+  document.querySelectorAll(".reg-avatar-opt").forEach(b=>b.classList.remove("selected"));
+  btn.classList.add("selected");
+  _regAvatar = btn.dataset.emoji;
+}
+
 async function handleRegister(){
   const username=document.getElementById("reg-username")?.value?.trim()||"";
   const name=document.getElementById("reg-name").value.trim();
@@ -794,6 +802,8 @@ async function handleRegister(){
   }, 10000);
   try{
     await registerUser(email,pw,name,username);
+    // Salvar avatar escolhido no cadastro
+    if(_regAvatar) localStorage.setItem("vic_avatar", _regAvatar);
     localStorage.setItem("vic_last_email",email);
     clearTimeout(timeout);
     // _handleAuth will be called automatically by onAuthChange
@@ -4237,6 +4247,39 @@ const AVATAR_CATEGORIES = [
 
 const AVATAR_EMOJIS = AVATAR_CATEGORIES.flatMap(c=>c.emojis);
 
+// ── AVATAR PICKER — tabs emoji/foto + preview ────────────────────────────────
+function switchAvatarTab(tab){
+  document.getElementById("apc-tab-emoji")?.classList.toggle("active", tab==="emoji");
+  document.getElementById("apc-tab-photo")?.classList.toggle("active", tab==="photo");
+  const emoji = document.getElementById("apc-panel-emoji");
+  const photo = document.getElementById("apc-panel-photo");
+  if(emoji) emoji.style.display = tab==="emoji" ? "block" : "none";
+  if(photo) photo.style.display = tab==="photo" ? "flex" : "none";
+}
+
+function updateAvatarPreview(value){
+  const preview = document.getElementById("apc-preview");
+  if(!preview) return;
+  if(value && value.startsWith("data:")){
+    preview.innerHTML = `<img src="${value}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;"/>`;
+  } else {
+    preview.innerHTML = value || "?";
+    preview.style.fontSize = "32px";
+  }
+}
+
+function removeAvatar(){
+  localStorage.removeItem("vic_avatar");
+  const av = document.getElementById("profile-avatar");
+  const dashAv = document.getElementById("dash-avatar-icon");
+  const name = userData?.name || "?";
+  if(av) av.textContent = name[0]?.toUpperCase() || "?";
+  if(dashAv) dashAv.textContent = name[0]?.toUpperCase() || "👤";
+  updateAvatarPreview(name[0]?.toUpperCase() || "?");
+  if(currentUser) saveProgress(currentUser.uid, {avatar: null}).catch(()=>{});
+  showXpToast("🗑️ Avatar removido");
+}
+
 function loadAvatarPicker(){
   const grid = document.getElementById("avatar-emoji-grid");
   if(!grid) return;
@@ -4251,18 +4294,25 @@ function loadAvatarPicker(){
 
   grid.querySelectorAll(".avatar-emoji-btn").forEach(btn=>{
     btn.addEventListener("click",()=>{
-      saveAvatar(btn.dataset.emoji);
-      document.getElementById("avatar-picker-modal").style.display="none";
+      // Mostrar preview antes de fechar
+      updateAvatarPreview(btn.dataset.emoji);
+      grid.querySelectorAll(".avatar-emoji-btn").forEach(b=>b.classList.remove("selected"));
+      btn.classList.add("selected");
+      setTimeout(()=>{
+        saveAvatar(btn.dataset.emoji);
+        document.getElementById("avatar-picker-modal").style.display="none";
+      }, 300);
     });
   });
 
-  // Destacar avatar atual
+  // Destacar avatar atual e mostrar preview
   const current = localStorage.getItem("vic_avatar");
   if(current){
     grid.querySelectorAll(".avatar-emoji-btn").forEach(btn=>{
       btn.classList.toggle("selected", btn.dataset.emoji===current);
     });
   }
+  updateAvatarPreview(current || userData?.name?.[0]?.toUpperCase() || "?");
 
   document.getElementById("avatar-picker-modal").style.display="flex";
 }
@@ -4281,6 +4331,7 @@ function openAvatarPicker(){
 
 function saveAvatar(value){
   localStorage.setItem("vic_avatar",value);
+  if(currentUser) saveProgress(currentUser.uid, {avatar: value}).catch(()=>{});
   // Update all avatar displays
   const pa=document.getElementById("profile-avatar");
   const dai=document.getElementById("dash-avatar-icon");
