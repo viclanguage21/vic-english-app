@@ -73,6 +73,25 @@ function getRandomTip(level){
   const tips = LEVEL_TIPS[Math.min(level,4)] || LEVEL_TIPS[4];
   return tips[Math.floor(Math.random()*tips.length)];
 }
+
+// ── SAFE DOM HELPERS ─────────────────────────────────────
+// Never crashes on null elements
+function el(id){ return document.getElementById(id); }
+function setText(id, val){ const e=el(id); if(e) e.textContent=val??''; }
+function setHTML(id, val){ const e=el(id); if(e) e.innerHTML=val??''; }
+function setStyle(id, prop, val){ const e=el(id); if(e) e.style[prop]=val; }
+function setDisplay(id, val){ const e=el(id); if(e) e.style.display=val; }
+function getValue(id){ const e=el(id); return e?e.value:''; }
+function setValue(id, val){ const e=el(id); if(e) e.value=val??''; }
+
+// Safe localStorage wrapper
+const Store = {
+  get(key, def=null){ try{ const v=localStorage.getItem(key); return v!==null?v:def; }catch(e){ return def; } },
+  set(key, val){ try{ localStorage.setItem(key, String(val)); }catch(e){} },
+  getJSON(key, def=null){ try{ const v=localStorage.getItem(key); return v?JSON.parse(v):def; }catch(e){ return def; } },
+  setJSON(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} },
+};
+
 function levelInfo(xp){
   const l=calcLevel(xp);
   if(l<=2) return {label:"Iniciante 🌱", msg:getRandomTip(1)};
@@ -162,7 +181,7 @@ async function updateStreak(){
   userData.xpToday=0;
   userData.streak=streak;
   userData.lastLoginDate=today;
-  await saveProgress(currentUser.uid,{streak,lastLoginDate:today,xpYesterday:userData.xpYesterday,xpToday:0});
+  await saveProgress(currentUser?.uid,{streak,lastLoginDate:today,xpYesterday:userData.xpYesterday,xpToday:0});
 }
 
 // ── GREETING ──────────────────────────────────────────────────────────────────
@@ -236,12 +255,12 @@ async function updateDailyProgress(type){
     dp.allComplete=true;
     const bonusXP=DAILY_DEF.reduce((a,dm)=>a+dm.xp,0);
     userData.xp=(userData.xp||0)+bonusXP;
-    await saveProgress(currentUser.uid,{xp:userData.xp,dailyProgress:dp});
+    await saveProgress(currentUser?.uid,{xp:userData.xp,dailyProgress:dp});
     userData.dailyProgress=dp;
     showDailyComplete(bonusXP);
   } else {
     userData.dailyProgress=dp;
-    await saveProgress(currentUser.uid,{dailyProgress:dp});
+    await saveProgress(currentUser?.uid,{dailyProgress:dp});
   }
   renderDailyMissions();
 }
@@ -299,7 +318,7 @@ async function handleRegister(){
   }, 10000);
   try{
     await registerUser(email,pw,name);
-    localStorage.setItem("vic_last_email",email);
+    Store.set("vic_last_email",email);
     clearTimeout(timeout);
     // _handleAuth will be called automatically by onAuthChange
   }
@@ -374,28 +393,49 @@ async function handleLogin(){
     const {browserLocalPersistence, browserSessionPersistence, setPersistence} = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
     await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
     await loginUser(email,pw);
-    localStorage.setItem("vic_last_email",email);
+    Store.set("vic_last_email",email);
     clearTimeout(timeout);
   }
   catch(e){clearTimeout(timeout);hideAuthLoading();showAuthError(translateErr(e.code));reset();}
 }
 async function handleGoogle(){
   const btn=document.getElementById("btn-google");
-  const reset=()=>{btn.disabled=false;btn.textContent="Entrar com Google";hideAuthLoading();};
-  btn.disabled=true; btn.textContent="Aguarde...";
-  showAuthLoading("Preparando tudo para você! ⭐");
-  const t=setTimeout(()=>{hideAuthLoading();reset();showAuthError("Tente novamente.");},5000);
-  try{await loginWithGoogle();clearTimeout(t);}
-  catch(e){clearTimeout(t);hideAuthLoading();showAuthError("Erro no login Google.");reset();}
+  const reset=()=>{if(btn){btn.disabled=false;btn.textContent="Entrar com Google";}hideAuthLoading();};
+  if(btn){btn.disabled=true;btn.textContent="Aguarde...";}
+  showAuthLoading("Abrindo login do Google... ⭐");
+  // 30s timeout for Google popup
+  const t=setTimeout(()=>{hideAuthLoading();reset();showAuthError("Tempo esgotado. Tente novamente.");},30000);
+  try{
+    await loginWithGoogle();
+    clearTimeout(t);
+    // _handleAuth will fire via onAuthChange
+  }catch(e){
+    clearTimeout(t);
+    hideAuthLoading();
+    reset();
+    if(e.code==="auth/popup-closed-by-user") showAuthError("Login cancelado.");
+    else if(e.code==="auth/popup-blocked") showAuthError("Popup bloqueado. Permita popups e tente novamente.");
+    else if(e.code==="auth/network-request-failed") showAuthError("Sem conexão. Verifique sua internet.");
+    else showAuthError("Erro no Google: "+e.message.slice(0,50));
+  }
 }
+
 async function handleAnon(){
   const btn=document.getElementById("btn-anon");
-  const reset=()=>{btn.disabled=false;btn.textContent="👤 Entrar sem cadastro";hideAuthLoading();};
-  btn.disabled=true; btn.textContent="Entrando...";
-  showAuthLoading("Pronto para evoluir? Vamos lá! 💪");
-  const t=setTimeout(()=>{hideAuthLoading();reset();showAuthError("Tente novamente.");},5000);
-  try{await loginAnonymous();clearTimeout(t);}
-  catch(e){clearTimeout(t);hideAuthLoading();showAuthError("Erro.");reset();}
+  const reset=()=>{if(btn){btn.disabled=false;btn.textContent="👤 Entrar sem cadastro";}hideAuthLoading();};
+  if(btn){btn.disabled=true;btn.textContent="Entrando...";}
+  showAuthLoading("Preparando seu acesso... 💪");
+  const t=setTimeout(()=>{hideAuthLoading();reset();showAuthError("Tente novamente.");},15000);
+  try{
+    await loginAnonymous();
+    clearTimeout(t);
+  }catch(e){
+    clearTimeout(t);
+    hideAuthLoading();
+    reset();
+    if(e.code==="auth/network-request-failed") showAuthError("Sem conexão. Verifique sua internet.");
+    else showAuthError("Erro ao entrar. Tente novamente.");
+  }
 }
 function showAuthError(msg){const e=document.getElementById("auth-error");e.textContent=msg;e.style.display="block";setTimeout(()=>e.style.display="none",4000);}
 function translateErr(c){return{"auth/email-already-in-use":"Email já cadastrado.","auth/invalid-email":"Email inválido.","auth/weak-password":"Senha muito fraca.","auth/user-not-found":"Usuário não encontrado.","auth/wrong-password":"Senha incorreta.","auth/invalid-credential":"Email ou senha incorretos.","auth/too-many-requests":"Muitas tentativas."}[c]||"Erro. Tente novamente.";}
@@ -453,7 +493,7 @@ async function finishDiagnosisNote(){
 }
 async function finishDiagnosis(){
   if(currentUser){
-    await saveProgress(currentUser.uid,{diagnosisAnswers:diagAnswers,currentMission:{segmentId:currentSegmentId,phaseId:"f1",missionId:getSegment(currentSegmentId)?.phases[0]?.missions[0]?.id||"",phraseIndex:0}});
+    await saveProgress(currentUser?.uid,{diagnosisAnswers:diagAnswers,currentMission:{segmentId:currentSegmentId,phaseId:"f1",missionId:getSegment(currentSegmentId)?.phases[0]?.missions[0]?.id||"",phraseIndex:0}});
     userData.diagnosisAnswers=diagAnswers;
   }
   startLevelTest();
@@ -585,7 +625,7 @@ function showLTResult(){
 }
 async function finishLevelTest(){
   if(currentUser){
-    await saveProgress(currentUser.uid,{diagnosisAnswers:diagAnswers,detectedLevel:diagAnswers.level,currentMission:{segmentId:currentSegmentId,phaseId:"f1",missionId:getSegment(currentSegmentId)?.phases[0]?.missions[0]?.id||"",phraseIndex:0}});
+    await saveProgress(currentUser?.uid,{diagnosisAnswers:diagAnswers,detectedLevel:diagAnswers.level,currentMission:{segmentId:currentSegmentId,phaseId:"f1",missionId:getSegment(currentSegmentId)?.phases[0]?.missions[0]?.id||"",phraseIndex:0}});
     userData.diagnosisAnswers=diagAnswers; userData.detectedLevel=diagAnswers.level;
   }
   renderDashboard(); showView("view-dashboard");
@@ -595,47 +635,72 @@ async function finishLevelTest(){
 async function loadDashboard(user){
   console.log("loadDashboard start:", user.uid);
   currentUser=user;
+
+  // Always build a fallback userData first — so we NEVER crash
+  const fallback={
+    uid:user.uid,
+    name:user.displayName||user.email?.split("@")[0]||"Aluno",
+    email:user.email||"",
+    xp:0, level:1, streak:0,
+    completedMissions:[], plan:"free",
+    badges:[]
+  };
+
+  // Try to get from Firestore — but never block on failure
   try{
-    console.log("Getting user data...");
-    userData=await getUserData(user.uid);
-    console.log("userData:", userData?"found":"null");
-    if(!userData){
-      console.log("Creating new user doc...");
-      const name=user.displayName||user.email?.split("@")[0]||"Aluno";
+    const remote=await Promise.race([
+      getUserData(user.uid),
+      new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),5000))
+    ]);
+    if(remote) userData=remote;
+    else{
+      // New user — try to create doc
       try{
         await saveProgress(user.uid,{
-          name, email:user.email||"", xp:0, level:1, streak:0,
-          completedMissions:[], plan:"free",
+          name:fallback.name, email:fallback.email,
+          xp:0, level:1, streak:0, completedMissions:[], plan:"free",
         });
-        userData=await getUserData(user.uid);
-      }catch(fsErr){
-        console.warn("Firestore write failed, using local data:", fsErr.message);
+        const created=await getUserData(user.uid);
+        userData=created||fallback;
+      }catch(e){
+        console.warn("Firestore write failed:", e.message);
+        userData=fallback;
       }
-      console.log("userData after create:", userData?"found":"still null");
     }
-    if(!userData){
-      userData={uid:user.uid,name:user.displayName||"Aluno",xp:0,streak:0,completedMissions:[],plan:"free"};
-    }
-    await updateStreak();
-    if(userData.currentMission){
-      currentSegmentId  =userData.currentMission.segmentId  ||"maritimo";
-      currentPhaseId    =userData.currentMission.phaseId    ||"f1";
-      currentMissionId  =userData.currentMission.missionId  ||"vocab_basico";
-      currentPhraseIndex=userData.currentMission.phraseIndex||0;
-    }
-    renderDashboard();
-    showView("view-dashboard");
-    // Show diagnosis to new users (no diagnosisAnswers yet)
-    if(!userData.diagnosisAnswers){
-      setTimeout(()=>startDiagnosis(),800);
-    }
-    console.log("Dashboard shown!");
   }catch(e){
-    console.error("loadDashboard error:",e.message, e);
-    if(!userData) userData={uid:user.uid,name:"Aluno",xp:0,streak:0,completedMissions:[],plan:"free"};
-    renderDashboard();
-    showView("view-dashboard");
+    console.warn("Firestore read failed, trying local backup:", e.message);
+    // Try local backup first
+    const localBackup = Store.getJSON("vic_userData_"+user.uid);
+    if(localBackup){
+      console.log("✅ Restored from local backup");
+      userData = localBackup;
+    } else {
+      userData=fallback;
+    }
   }
+
+  // Always proceed to dashboard — never block the user
+  try{ await updateStreak(); }catch(e){ console.warn("streak err:", e.message); }
+
+  // 💾 Save userData locally as backup
+  try{ Store.setJSON("vic_userData_"+user.uid, userData); }catch(e){}
+
+  if(userData.currentMission){
+    currentSegmentId  =userData.currentMission.segmentId  ||"maritimo";
+    currentPhaseId    =userData.currentMission.phaseId    ||"f1";
+    currentMissionId  =userData.currentMission.missionId  ||"vocab_basico";
+    currentPhraseIndex=userData.currentMission.phraseIndex||0;
+  }
+
+  try{ renderDashboard(); }catch(e){ console.error("renderDashboard error:", e.message, e); }
+  showView("view-dashboard");
+  hideAuthLoading();
+
+  // Diagnosis for new users
+  if(!userData.diagnosisAnswers){
+    setTimeout(()=>{ try{ startDiagnosis(); }catch(e){} }, 800);
+  }
+  console.log("✅ Dashboard shown for:", userData.name);
 }
 
 const PRO_MESSAGES=[
@@ -889,7 +954,7 @@ function renderDashboard(){
   // Update header avatar
   const avatarIcon=document.getElementById("dash-avatar-icon");
   if(avatarIcon){
-    const saved=localStorage.getItem("vic_avatar");
+    const saved=Store.get("vic_avatar");
     avatarIcon.textContent=saved||userData.name?.[0]?.toUpperCase()||"👤";
   }
 
@@ -998,9 +1063,9 @@ function renderMission(){
   exerciseAnswered=false; memSelected=null; memMatched=0; wordOrderPlaced=[]; matchSelected=null; matchCorrect=0;
   showLockedNextBtn(); // show locked next button
 
-  document.getElementById("mission-name").textContent        =stripEmoji(mission?.name||"");
-  document.getElementById("phrase-counter").textContent      =`${currentPhraseIndex+1}/${total}`;
-  document.getElementById("mission-progress-bar").style.width=`${Math.round(((currentPhraseIndex+1)/total)*100)}%`;
+  setText("mission-name",        =stripEmoji(mission?.name||"");
+  setText("phrase-counter",      =`${currentPhraseIndex+1}/${total}`;
+  setStyle("mission-progress-bar","width",=`${Math.round(((currentPhraseIndex+1)/total)*100)}%`;
   const ptEl=document.getElementById("phrase-pt");
   if(ptEl){
     if(phrase.pt&&phrase.type!=="translate_en_pt"&&phrase.type!=="translate_pt_en"){
@@ -1125,8 +1190,23 @@ function renderExerciseUI(phrase){
       bank.appendChild(btn);
     });
   }
-  if(phrase.type==="memory_match"){document.getElementById("memory-wrap").style.display="block";renderMemoryGrid(phrase.pairs,"memory-grid");}
-  if(phrase.type==="match_columns"){document.getElementById("match-wrap").style.display="block";renderMatchColumns(phrase.pairs);}
+  if(phrase.type==="memory_match"){
+    document.getElementById("memory-wrap").style.display="block";
+    renderMemoryGrid(phrase.pairs,"memory-grid");
+    // Memory auto-advances when complete — hide next button
+    document.querySelectorAll(".btn-next-exercise,.btn-next-exercise-main").forEach(b=>b.style.display="none");
+  }
+  if(phrase.type==="match_columns"){
+    document.getElementById("match-wrap").style.display="block";
+    renderMatchColumns(phrase.pairs);
+    // Match auto-advances when complete — hide next button
+    document.querySelectorAll(".btn-next-exercise,.btn-next-exercise-main").forEach(b=>b.style.display="none");
+  }
+
+  // Always call showLockedNextBtn at end to ensure button state is correct
+  if(!["memory_match","match_columns"].includes(phrase.type)){
+    showLockedNextBtn();
+  }
 }
 
 // ── MEMORY MATCH (in-mission) ─────────────────────────────────────────────────
@@ -1331,20 +1411,34 @@ function showScoreResult(score, spokenText){
 }
 
 async function autoAdvance(score){
-  const xpGain=10; const newXp=(userData.xp||0)+xpGain;
-  userData.xp=newXp; showXpToast(`+${xpGain} XP`);
-  trackDailyXP(xpGain);
-  trackAnswer(score>=5);
-  await updateDailyProgress("exercise");
-  if(score===10) await updateDailyProgress("perfect");
-  if(currentSegmentId==="maritimo") await updateDailyProgress("maritime");
-  const mission=getMission(currentSegmentId,currentPhaseId,currentMissionId);
-  const total=mission?.phrases.length||1;
-  if(currentPhraseIndex<total-1){
-    currentPhraseIndex++;
-    await saveProgress(currentUser.uid,{xp:newXp,currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:currentPhraseIndex}});
-    renderMission();
-  } else await completeMission(newXp);
+  try{
+    if(!currentUser?.uid){ console.warn("autoAdvance: no user"); return; }
+    const xpGain=10; const newXp=(userData.xp||0)+xpGain;
+    userData.xp=newXp; showXpToast(`+${xpGain} XP`);
+    try{ trackDailyXP(xpGain); }catch(e){}
+    try{ trackAnswer(score>=5); }catch(e){}
+    try{ await updateDailyProgress("exercise"); }catch(e){}
+    try{ if(score===10) await updateDailyProgress("perfect"); }catch(e){}
+    try{ if(currentSegmentId==="maritimo") await updateDailyProgress("maritime"); }catch(e){}
+    const mission=getMission(currentSegmentId,currentPhaseId,currentMissionId);
+    const total=mission?.phrases?.length||1;
+    if(currentPhraseIndex<total-1){
+      currentPhraseIndex++;
+      try{
+        await saveProgress(currentUser?.uid,{
+          xp:newXp,
+          currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:currentPhraseIndex}
+        });
+      }catch(e){ console.warn("saveProgress failed:", e.message); }
+      renderMission();
+    } else {
+      try{ await completeMission(newXp); }catch(e){ console.error("completeMission error:", e.message); }
+    }
+  }catch(e){
+    console.error("autoAdvance error:", e.message);
+    // Still try to advance even if something fails
+    try{ renderMission(); }catch(e2){}
+  }
 }
 
 function updateNavButtons(nextUnlocked, score){
@@ -1376,6 +1470,7 @@ function updateNavButtons(nextUnlocked, score){
 }
 
 function showNextBtn(btnId, score){
+  // Always unlock ALL next buttons regardless of specific btnId
   updateNavButtons(true, score);
 }
 
@@ -1387,31 +1482,40 @@ function showLockedNextBtn(){
 async function nextPhrase(){ await autoAdvance(10); }
 
 async function completeMission(xp){
-  const mission=getMission(currentSegmentId,currentPhaseId,currentMissionId);
-  const completed=userData.completedMissions||[];
-  const key=`${currentSegmentId}_${currentPhaseId}_${currentMissionId}`;
-  if(!completed.includes(key)) completed.push(key);
-  currentPhraseIndex=0;
-  await saveProgress(currentUser.uid,{xp:xp??userData.xp,completedMissions:completed,currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:0}});
-  userData.completedMissions=completed;
-  SoundFX.complete();
-  if(completed.length===1) showNotifBanner();
-  const lv=levelInfo(xp??userData.xp);
-  document.getElementById("complete-mission-name").textContent=stripEmoji(mission?.name||"");
-  document.getElementById("complete-xp").textContent=xp??userData.xp;
-  document.getElementById("complete-result-level").textContent=lv.label;
-  document.getElementById("complete-result-text").textContent=lv.msg;
-  const phase=getPhase(currentSegmentId,currentPhaseId);
-  const missions=phase?.missions||[];
-  const curIdx=missions.findIndex(m=>m.id===currentMissionId);
-  const nextMission=missions[curIdx+1];
-  const nextBtn=document.getElementById("btn-next-mission");
-  if(nextMission){nextBtn.style.display="block";nextBtn.textContent=`Próxima: ${stripEmoji(nextMission.name)} →`;nextBtn.onclick=()=>enterMission(currentSegmentId,currentPhaseId,nextMission.id);}
-  else nextBtn.style.display="none";
-  showView("view-complete");
-  // Show feedback popup after 2s on every 3rd mission
-  if(completed.length % 7 === 0){
-    setTimeout(()=>showPostMissionFeedback(), 1800);
+  try{
+    const mission=getMission(currentSegmentId,currentPhaseId,currentMissionId);
+    const completed=userData.completedMissions||[];
+    const key=`${currentSegmentId}_${currentPhaseId}_${currentMissionId}`;
+    if(!completed.includes(key)) completed.push(key);
+    currentPhraseIndex=0;
+    try{
+      await saveProgress(currentUser?.uid,{xp:xp??userData.xp,completedMissions:completed,currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:0}});
+    }catch(e){ console.warn("completeMission saveProgress failed:", e.message); }
+    userData.completedMissions=completed;
+    try{ SoundFX.complete(); }catch(e){}
+    if(completed.length===1) try{ showNotifBanner(); }catch(e){}
+    const lv=levelInfo(xp??userData.xp);
+    setText("complete-mission-name", stripEmoji(mission?.name||""));
+    setText("complete-xp", String(xp??userData.xp));
+    setText("complete-result-level", lv.label||"");
+    setText("complete-result-text", lv.msg||"");
+    const phase=getPhase(currentSegmentId,currentPhaseId);
+    const missions=phase?.missions||[];
+    const curIdx=missions.findIndex(m=>m.id===currentMissionId);
+    const nextMission=missions[curIdx+1];
+    const nextBtn=document.getElementById("btn-next-mission");
+    if(nextBtn){
+      if(nextMission){nextBtn.style.display="block";nextBtn.textContent=`Próxima: ${stripEmoji(nextMission.name)} →`;nextBtn.onclick=()=>enterMission(currentSegmentId,currentPhaseId,nextMission.id);}
+      else nextBtn.style.display="none";
+    }
+    showView("view-complete");
+    try{ checkBadges(); }catch(e){}
+    if(completed.length % 7 === 0){
+      setTimeout(()=>{ try{ showPostMissionFeedback(); }catch(e){} }, 1800);
+    }
+  }catch(e){
+    console.error("completeMission error:", e.message);
+    showView("view-dashboard");
   }
 }
 
@@ -1644,7 +1748,7 @@ function handleFreeMemCard(div,total){
       a.classList.add("matched");b.classList.add("matched");SoundFX.correct();freeMemMatched++;freeMemXP+=10;
       document.getElementById("mem-score-display").textContent=`XP: ${freeMemXP}`;
       freeMemSelected=[];
-      if(freeMemMatched===total){showXpToast(`🧠 +${freeMemXP} XP`);if(currentUser)saveProgress(currentUser.uid,{xp:(userData.xp||0)+freeMemXP}).then(()=>{userData.xp=(userData.xp||0)+freeMemXP;});setTimeout(()=>openMemoryFree(),1500);}
+      if(freeMemMatched===total){showXpToast(`🧠 +${freeMemXP} XP`);if(currentUser)saveProgress(currentUser?.uid,{xp:(userData.xp||0)+freeMemXP}).then(()=>{userData.xp=(userData.xp||0)+freeMemXP;});setTimeout(()=>openMemoryFree(),1500);}
     } else {SoundFX.wrong();setTimeout(()=>{a.classList.remove("flipped");b.classList.remove("flipped");freeMemSelected=[];},900);}
   }
 }
@@ -1717,7 +1821,7 @@ function showTFResult(){
   document.getElementById("tf-result-msg").textContent=pct>=80?"Excelente! 🌟":pct>=50?"Bom trabalho! 👍":"Continue praticando! 💪";
   document.getElementById("tf-result-bar").style.width=`${pct}%`;
   showXpToast(`✅ +${tfScore} XP`);
-  if(currentUser)saveProgress(currentUser.uid,{xp:(userData.xp||0)+tfScore}).then(()=>{userData.xp=(userData.xp||0)+tfScore;});
+  if(currentUser)saveProgress(currentUser?.uid,{xp:(userData.xp||0)+tfScore}).then(()=>{userData.xp=(userData.xp||0)+tfScore;});
   SoundFX.complete();
 }
 
@@ -1959,7 +2063,7 @@ function showDlgResult(){
   document.getElementById("dlg-result-score").textContent=`${dlgScore} / ${max} pts`;
   document.getElementById("dlg-result-msg").textContent=pct>=80?"Conversa fluente! 🌟":pct>=50?"Bom trabalho! 👍":"Pratique mais! 💪";
   showXpToast(`💬 +${dlgScore} XP`);
-  if(currentUser)saveProgress(currentUser.uid,{xp:(userData.xp||0)+dlgScore}).then(()=>{userData.xp=(userData.xp||0)+dlgScore;});
+  if(currentUser)saveProgress(currentUser?.uid,{xp:(userData.xp||0)+dlgScore}).then(()=>{userData.xp=(userData.xp||0)+dlgScore;});
   SoundFX.complete();
 }
 
@@ -2586,7 +2690,7 @@ function openProfile(){
 
     // avatar
     const av=document.getElementById("profile-avatar");
-    if(av){ loadAvatar(); if(!localStorage.getItem("vic_avatar")) av.textContent=name[0]?.toUpperCase()||"👤"; }
+    if(av){ loadAvatar(); if(!Store.get("vic_avatar")) av.textContent=name[0]?.toUpperCase()||"👤"; }
     const hn=document.getElementById("profile-hero-name"); if(hn) hn.textContent=name;
     const hl=document.getElementById("profile-hero-level"); if(hl) hl.textContent=lv.label;
     const pxp=document.getElementById("ps-xp"); if(pxp) pxp.textContent=xp;
@@ -2784,7 +2888,7 @@ async function trackDailyXP(amount){
   const history=userData.xpHistory||{};
   history[today]=(history[today]||0)+amount;
   userData.xpHistory=history;
-  await saveProgress(currentUser.uid,{xpHistory:history});
+  await saveProgress(currentUser?.uid,{xpHistory:history});
 }
 
 window.showSkillDetail=function(name, pct){
@@ -3003,7 +3107,7 @@ function applyFontSize(size){
   document.body.classList.remove("font-xs","font-small","font-medium","font-large","font-xl");
   document.body.classList.add(`font-${size}`);
   document.querySelectorAll(".font-size-btn").forEach(b=>b.classList.toggle("active",b.dataset.size===size));
-  localStorage.setItem("vic_fontSize",size);
+  Store.set("vic_fontSize",size);
 }
 
 function applyDarkMode(dark){
@@ -3014,7 +3118,7 @@ function applyDarkMode(dark){
 
 function applySounds(enabled){
   soundsEnabled=enabled;
-  localStorage.setItem("vic_sounds",enabled?"1":"0");
+  Store.set("vic_sounds",enabled?"1":"0");
 }
 
 function shareAppPanel(){
@@ -3057,9 +3161,9 @@ async function saveEdit(){
         await updateProfile(m.auth.currentUser,{displayName:val});
       });
       userData.name=val;
-      await saveProgress(currentUser.uid,{name:val});
+      await saveProgress(currentUser?.uid,{name:val});
       document.getElementById("profile-hero-name").textContent=val;
-      document.getElementById("dash-username").textContent=val;
+      setText("dash-username",=val;
     } else if(editField==="email"){
       msg.textContent="⚠️ Para mudar o email, faça logout e login novamente com o novo email.";
       return;
@@ -3074,9 +3178,9 @@ async function saveEdit(){
 
 // Load saved preferences on startup
 function loadPreferences(){
-  const fs=localStorage.getItem("vic_fontSize");
+  const fs=Store.get("vic_fontSize");
   const dm=localStorage.getItem("vic_darkMode");
-  const sn=localStorage.getItem("vic_sounds");
+  const sn=Store.get("vic_sounds");
   if(fs) applyFontSize(fs);
   if(dm==="0") applyDarkMode(false);
   if(sn==="0") applySounds(false);
@@ -3098,7 +3202,7 @@ function openAvatarPicker(){
 }
 
 function saveAvatar(value){
-  localStorage.setItem("vic_avatar",value);
+  Store.set("vic_avatar",value);
   // Update all avatar displays
   const pa=document.getElementById("profile-avatar");
   const dai=document.getElementById("dash-avatar-icon");
@@ -3107,7 +3211,7 @@ function saveAvatar(value){
 }
 
 function loadAvatar(){
-  const saved=localStorage.getItem("vic_avatar");
+  const saved=Store.get("vic_avatar");
   if(!saved) return;
   const pa=document.getElementById("profile-avatar");
   const dai=document.getElementById("dash-avatar-icon");
@@ -3280,7 +3384,7 @@ Maximum 5 errors. Focus on most important ones. If no errors, use empty array.`
     const xpGain=result.score>=8?30:result.score>=5?20:10;
     userData.xp=(userData.xp||0)+xpGain;
     showXpToast(`✍️ +${xpGain} XP`);
-    if(currentUser) saveProgress(currentUser.uid,{xp:userData.xp});
+    if(currentUser) saveProgress(currentUser?.uid,{xp:userData.xp});
     btn.textContent="✅ Corrigido!";
     document.getElementById("writing-feedback").scrollIntoView({behavior:"smooth",block:"start"});
 
@@ -3362,7 +3466,7 @@ function checkBadges(){
   // Save to userData
   const updated = [...earned, ...newBadges.map(b=>b.id)];
   userData.badges = updated;
-  if(currentUser) saveProgress(currentUser.uid, {badges:updated});
+  if(currentUser) saveProgress(currentUser?.uid, {badges:updated});
 
   // Show first new badge (queue others)
   newBadges.forEach((b,i) => setTimeout(()=>showBadgeUnlock(b), i*2500));
@@ -3390,7 +3494,7 @@ function showBadgeUnlock(badge){
 
   // Award XP
   userData.xp=(userData.xp||0)+badge.xp;
-  if(currentUser) saveProgress(currentUser.uid,{xp:userData.xp});
+  if(currentUser) saveProgress(currentUser?.uid,{xp:userData.xp});
   showXpToast(`${badge.icon} +${badge.xp} XP — ${badge.name}`);
 
   // Auto close after 6 seconds
@@ -3410,7 +3514,7 @@ function trackAnswer(isCorrect, isVoice=false){
   if(isVoice) _sessionStats.voiceUsed++;
   // Save stats periodically
   if(_sessionStats.totalAnswers%5===0&&currentUser){
-    saveProgress(currentUser.uid,{
+    saveProgress(currentUser?.uid,{
       totalAnswers:(userData.totalAnswers||0)+_sessionStats.totalAnswers,
       perfectAnswers:(userData.perfectAnswers||0)+_sessionStats.perfectAnswers,
       answerStreak:userData.answerStreak||0,
@@ -3466,11 +3570,11 @@ async function requestNotificationPermission(){
 
 function scheduleNotifications(){
   if(!("Notification" in window)||Notification.permission!=="granted") return;
-  if(localStorage.getItem("vic_notif_enabled")==="0") return;
+  if(Store.get("vic_notif_enabled")==="0") return;
 
-  const freq=parseInt(localStorage.getItem("vic_notif_freq")||"3");
+  const freq=parseInt(Store.get("vic_notif_freq")||"3");
   const minHours=24/freq; // e.g. 3x/day = every 8h
-  const last=parseInt(localStorage.getItem("vic_last_notif")||"0");
+  const last=parseInt(Store.get("vic_last_notif","0")||"0");
   const now=Date.now();
   const hoursSinceLast=(now-last)/(3600*1000);
 
@@ -3485,17 +3589,17 @@ function scheduleNotifications(){
         tag: "vic-english-"+idx,
         requireInteraction: false,
       });
-      localStorage.setItem("vic_last_notif", String(now));
+      Store.set("vic_last_notif", String(now));
     }catch(e){}
   }
-  localStorage.setItem("vic_last_visit", String(now));
+  Store.set("vic_last_visit", String(now));
 }
 
 // Ask for notifications with friendly banner after first mission
 function showNotifBanner(){
   if(!("Notification" in window)||Notification.permission!=="default") return;
-  if(localStorage.getItem("vic_notif_asked")) return;
-  localStorage.setItem("vic_notif_asked","1");
+  if(Store.get("vic_notif_asked")) return;
+  Store.set("vic_notif_asked","1");
   const banner=document.createElement("div");
   banner.className="notif-banner";
   banner.innerHTML=`<span style="font-size:22px">🔔</span><div style="flex:1"><div style="font-weight:800;color:#fff">Ativar lembretes?</div><div style="font-size:12px;opacity:0.6">Receba frases motivacionais de filmes + lembretes diários</div></div><button style="padding:8px 16px;background:var(--p);border:none;border-radius:999px;color:#fff;font-weight:800;cursor:pointer;font-family:var(--font)" onclick="requestNotificationPermission();this.closest('.notif-banner').remove()">Ativar</button><button style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:18px;padding:4px 8px" onclick="this.closest('.notif-banner').remove()">✕</button>`;
@@ -3549,7 +3653,7 @@ function init(){
   document.getElementById("tab-login").addEventListener("click",()=>switchTab("login"));
   document.getElementById("tab-register").addEventListener("click",()=>switchTab("register"));
   // Restore last email
-  const lastEmail=localStorage.getItem("vic_last_email");
+  const lastEmail=Store.get("vic_last_email");
   const emailIn=document.getElementById("login-email");
   if(lastEmail&&emailIn) emailIn.value=lastEmail;
 
@@ -3625,23 +3729,23 @@ function init(){
   document.getElementById("btn-profile-bug")?.addEventListener("click",()=>openFeedbackModal("🐛 Reportar bug","bug"));
 
   document.getElementById("toggle-notif")?.addEventListener("change",e=>{
-    localStorage.setItem("vic_notif_enabled", e.target.checked?"1":"0");
+    Store.set("vic_notif_enabled", e.target.checked?"1":"0");
     const freqRow=document.getElementById("notif-freq-row");
     if(freqRow) freqRow.style.display=e.target.checked?"flex":"none";
     if(e.target.checked) requestNotificationPermission();
   });
   document.getElementById("notif-freq")?.addEventListener("change",e=>{
-    localStorage.setItem("vic_notif_freq", e.target.value);
+    Store.set("vic_notif_freq", e.target.value);
   });
   // Restore notification settings
-  const notifEnabled=localStorage.getItem("vic_notif_enabled");
+  const notifEnabled=Store.get("vic_notif_enabled");
   const notifToggle=document.getElementById("toggle-notif");
   if(notifToggle&&notifEnabled==="0"){
     notifToggle.checked=false;
     const fr=document.getElementById("notif-freq-row");
     if(fr) fr.style.display="none";
   }
-  const notifFreq=localStorage.getItem("vic_notif_freq");
+  const notifFreq=Store.get("vic_notif_freq");
   const notifFreqEl=document.getElementById("notif-freq");
   if(notifFreqEl&&notifFreq) notifFreqEl.value=notifFreq;
   document.getElementById("btn-modal-close")?.addEventListener("click",()=>document.getElementById("admin-modal").style.display="none");
@@ -3696,7 +3800,7 @@ function init(){
   document.getElementById("btn-skip-diag")?.addEventListener("click",async()=>{
     // mark as skipped so banner doesn't show again
     document.getElementById("diag-invite-banner").style.display="none";
-    if(currentUser) await saveProgress(currentUser.uid,{diagnosisAnswers:{skipped:true}});
+    if(currentUser) await saveProgress(currentUser?.uid,{diagnosisAnswers:{skipped:true}});
     userData.diagnosisAnswers={skipped:true};
   });
   // Writing
