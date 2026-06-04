@@ -1,20 +1,18 @@
 // firebase.js — VIC English — reescrito do zero
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
   signInAnonymously,
   GoogleAuthProvider,
   signOut,
   onAuthStateChanged,
   updateProfile,
   browserLocalPersistence,
-  indexedDBLocalPersistence,
   setPersistence,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
@@ -44,35 +42,63 @@ const app  = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db   = getFirestore(app);
 
-// ── Safari/iOS: detectar se é WebKit/Safari ──────────────────────────────────
-export const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
-  || /iPad|iPhone|iPod/.test(navigator.userAgent);
+// ── Firebase Cloud Messaging ──────────────────────────────────────────────────
+// VAPID key — gere no Firebase Console → Project Settings → Cloud Messaging → Web Push certificates
+export const VAPID_KEY = "COLE_SUA_VAPID_KEY_AQUI";
 
-// Keep user logged in permanently — IndexedDB first (more stable on iOS), fallback localStorage
-setPersistence(auth, indexedDBLocalPersistence)
-  .catch(() => setPersistence(auth, browserLocalPersistence))
-  .catch(() => {});
+let _messaging = null;
+function getMsg() {
+  if (!_messaging) {
+    try { _messaging = getMessaging(app); } catch(e) {}
+  }
+  return _messaging;
+}
 
-// ── Handle redirect result (Safari Google Login) ─────────────────────────────
-export async function handleGoogleRedirectResult() {
+// Registra o token FCM do dispositivo e salva no Firestore do usuário
+export async function registerFCMToken(uid) {
   try {
-    const result = await getRedirectResult(auth);
-    if (result?.user) {
-      const snap = await getDoc(doc(db, "users", result.user.uid));
-      if (!snap.exists()) {
-        await createUserDoc(result.user.uid, {
-          name: result.user.displayName || "Usuário",
-          email: result.user.email || "",
-          provider: "google",
-        });
+    if (!("Notification" in window)) return null;
+    if (Notification.permission !== "granted") return null;
+    const msg = getMsg();
+    if (!msg) return null;
+
+    const token = await getToken(msg, {
+      vapidKey: VAPID_KEY,
+      serviceWorkerRegistration: await navigator.serviceWorker.ready,
+    });
+
+    if (token) {
+      // Salva token no Firestore — array para suportar múltiplos dispositivos
+      const userRef = doc(db, "users", uid);
+      const snap = await getDoc(userRef);
+      const existing = snap.data()?.fcmTokens || [];
+      if (!existing.includes(token)) {
+        await updateDoc(userRef, {
+          fcmTokens: [...existing, token],
+          lastTokenUpdate: serverTimestamp(),
+        }).catch(() => setDoc(userRef, {
+          fcmTokens: [token],
+          lastTokenUpdate: serverTimestamp(),
+        }, { merge: true }));
       }
-      return result.user;
+      console.log("✅ FCM token registrado");
+      return token;
     }
-  } catch (e) {
-    console.warn("getRedirectResult error:", e.message);
+  } catch(e) {
+    console.warn("FCM token error:", e.message);
   }
   return null;
 }
+
+// Receber notificação com app ABERTO (foreground)
+export function onForegroundMessage(callback) {
+  const msg = getMsg();
+  if (!msg) return () => {};
+  return onMessage(msg, callback);
+}
+
+// Keep user logged in permanently — even after closing the app
+setPersistence(auth, browserLocalPersistence).catch(()=>{});
 
 export const OWNER_UID = "BPj6R6IH5naAcW0SWcZglXL7pEy2";
 
@@ -92,11 +118,6 @@ export async function loginUser(email, password) {
 }
 
 export async function loginWithGoogle() {
-  // Safari/iOS: popup falha em WebViews e versões antigas — usar redirect
-  if (isSafari) {
-    await signInWithRedirect(auth, gProvider);
-    return null; // página vai recarregar, resultado capturado em handleGoogleRedirectResult
-  }
   const c = await signInWithPopup(auth, gProvider);
   const snap = await getDoc(doc(db, "users", c.user.uid));
   if (!snap.exists()) {

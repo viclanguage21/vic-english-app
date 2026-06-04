@@ -1,24 +1,32 @@
-// Service Worker — VIC English PWA v2
+// Service Worker — VIC English PWA v3 — FCM + Push
+// IMPORTANTE: Firebase Messaging precisa do importScripts abaixo
+
+importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js");
+importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js");
+
+// Mesma config do firebase.js
+firebase.initializeApp({
+  apiKey: "AIzaSyD1wmTcVhOFiR8xY3jBDb-mJbd1mDRuCgU",
+  authDomain: "victor-app-aef3c.firebaseapp.com",
+  projectId: "victor-app-aef3c",
+  storageBucket: "victor-app-aef3c.firebasestorage.app",
+  messagingSenderId: "313048271409",
+  appId: "1:313048271409:web:a01a5a25add0a5e7eee310",
+});
+
+const messaging = firebase.messaging();
+
 const CACHE = "vic-english-v3";
 const ASSETS = [
-  "/",
-  "/index.html",
-  "/style.css",
-  "/app.js",
-  "/data.js",
-  "/firebase.js",
-  "/sounds.js",
-  "/vic_logo.png",
-  "/vic_lamp.png",
-  "/vic_speech.png",
-  "/logo_full_2.png",
-  "/manifest.json"
+  "/", "/index.html", "/style.css", "/app.js", "/data.js",
+  "/firebase.js", "/sounds.js", "/vic_logo.png", "/vic_lamp.png",
+  "/vic_speech.png", "/logo_full_2.png", "/manifest.json"
 ];
 
 // ── INSTALL ───────────────────────────────────────────────────────────────────
 self.addEventListener("install", e => {
   e.waitUntil(
-    caches.open(CACHE).then(cache => cache.addAll(ASSETS).catch(()=>{}))
+    caches.open(CACHE).then(cache => cache.addAll(ASSETS).catch(() => {}))
   );
   self.skipWaiting();
 });
@@ -45,8 +53,7 @@ self.addEventListener("fetch", e => {
     fetch(e.request)
       .then(response => {
         if (response.ok) {
-          const clone = response.clone();
-          caches.open(CACHE).then(cache => cache.put(e.request, clone));
+          caches.open(CACHE).then(cache => cache.put(e.request, response.clone()));
         }
         return response;
       })
@@ -54,26 +61,23 @@ self.addEventListener("fetch", e => {
   );
 });
 
-// ── PUSH NOTIFICATIONS ────────────────────────────────────────────────────────
-// Recebe push do servidor Firebase Cloud Messaging
-self.addEventListener("push", e => {
-  let data = { title: "VIC English 📚", body: "Hora de praticar inglês!", icon: "/logo_full_2.png" };
-  try { data = { ...data, ...e.data.json() }; } catch(err) {}
-
-  e.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.body,
-      icon: data.icon || "/logo_full_2.png",
-      badge: "/vic_lamp.png",
-      tag: "vic-english-push",
-      requireInteraction: false,
-      vibrate: [200, 100, 200],
-      data: { url: data.url || "/" }
-    })
-  );
+// ── FCM: receber push com app FECHADO (background) ────────────────────────────
+// O Firebase Messaging SDK cuida disso automaticamente via messaging.onBackgroundMessage
+messaging.onBackgroundMessage(payload => {
+  console.log("📩 Push recebido em background:", payload);
+  const { title = "VIC English 📚", body = "Hora de praticar!", icon } = payload.notification || {};
+  return self.registration.showNotification(title, {
+    body,
+    icon: icon || "/logo_full_2.png",
+    badge: "/vic_lamp.png",
+    tag: "vic-push-" + Date.now(),
+    requireInteraction: false,
+    vibrate: [200, 100, 200],
+    data: { url: payload.data?.url || "/" },
+  });
 });
 
-// ── NOTIFICATION CLICK ────────────────────────────────────────────────────────
+// ── CLIQUE NA NOTIFICAÇÃO ─────────────────────────────────────────────────────
 self.addEventListener("notificationclick", e => {
   e.notification.close();
   const url = e.notification.data?.url || "/";
@@ -86,8 +90,7 @@ self.addEventListener("notificationclick", e => {
   );
 });
 
-// ── NOTIFICAÇÕES LOCAIS AGENDADAS (app fechado via SW) ─────────────────────────
-// O app envia mensagens para o SW agendar notificações locais
+// ── NOTIFICAÇÕES LOCAIS AGENDADAS (via postMessage do app) ────────────────────
 self.addEventListener("message", e => {
   if (e.data?.type === "SCHEDULE_NOTIF") {
     const { delay, title, body } = e.data;
@@ -102,4 +105,3 @@ self.addEventListener("message", e => {
     }, delay);
   }
 });
-

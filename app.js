@@ -1,6 +1,6 @@
 // app.js — VIC English v12 — Full fix
 
-import { auth, registerUser, loginUser, loginWithGoogle, loginAnonymous, logoutUser, onAuthChange, getUserData, saveProgress, getAllUsers, getUserById, OWNER_UID } from "./firebase.js";
+import { auth, registerUser, loginUser, loginWithGoogle, loginAnonymous, logoutUser, onAuthChange, getUserData, saveProgress, getAllUsers, getUserById, OWNER_UID, registerFCMToken, onForegroundMessage } from "./firebase.js";
 
 // Capture auth state before DOM ready
 let _pendingAuthUser = undefined;
@@ -1515,7 +1515,7 @@ function startFlashcardDeck(deckId){
   renderFlashcard();
 }
 function renderFlashcard(){
-  if(fcIndex>=fcCards.length){showXpToast(`🃏 +${fcXP} XP`);trackGame("flashcard");openFlashcards();return;}
+  if(fcIndex>=fcCards.length){showXpToast(`🃏 +${fcXP} XP`);openFlashcards();return;}
   const card=fcCards[fcIndex]; fcFlipped=false;
   document.getElementById("fc-counter").textContent=`${fcIndex+1} / ${fcCards.length}`;
   document.getElementById("fc-word").textContent=card.en;
@@ -1680,7 +1680,7 @@ function handleFreeMemCard(div,total){
       a.classList.add("matched");b.classList.add("matched");SoundFX.correct();freeMemMatched++;freeMemXP+=10;
       document.getElementById("mem-score-display").textContent=`XP: ${freeMemXP}`;
       freeMemSelected=[];
-      if(freeMemMatched===total){showXpToast(`🧠 +${freeMemXP} XP`);if(currentUser)saveProgress(currentUser.uid,{xp:(userData.xp||0)+freeMemXP}).then(()=>{userData.xp=(userData.xp||0)+freeMemXP;});trackGame("memory");setTimeout(()=>openMemoryFree(),1500);}
+      if(freeMemMatched===total){showXpToast(`🧠 +${freeMemXP} XP`);if(currentUser)saveProgress(currentUser.uid,{xp:(userData.xp||0)+freeMemXP}).then(()=>{userData.xp=(userData.xp||0)+freeMemXP;});setTimeout(()=>openMemoryFree(),1500);}
     } else {SoundFX.wrong();setTimeout(()=>{a.classList.remove("flipped");b.classList.remove("flipped");freeMemSelected=[];},900);}
   }
 }
@@ -1996,7 +1996,6 @@ function showDlgResult(){
   document.getElementById("dlg-result-msg").textContent=pct>=80?"Conversa fluente! 🌟":pct>=50?"Bom trabalho! 👍":"Pratique mais! 💪";
   showXpToast(`💬 +${dlgScore} XP`);
   if(currentUser)saveProgress(currentUser.uid,{xp:(userData.xp||0)+dlgScore}).then(()=>{userData.xp=(userData.xp||0)+dlgScore;});
-  trackGame("dialogue");
   SoundFX.complete();
 }
 
@@ -3316,10 +3315,8 @@ Maximum 5 errors. Focus on most important ones. If no errors, use empty array.`
     // XP reward
     const xpGain=result.score>=8?30:result.score>=5?20:10;
     userData.xp=(userData.xp||0)+xpGain;
-    userData.writingCompleted=(userData.writingCompleted||0)+1;
     showXpToast(`✍️ +${xpGain} XP`);
-    if(currentUser) saveProgress(currentUser.uid,{xp:userData.xp, writingCompleted:userData.writingCompleted});
-    trackGame("writing");
+    if(currentUser) saveProgress(currentUser.uid,{xp:userData.xp});
     btn.textContent="✅ Corrigido!";
     document.getElementById("writing-feedback").scrollIntoView({behavior:"smooth",block:"start"});
 
@@ -3332,153 +3329,31 @@ Maximum 5 errors. Focus on most important ones. If no errors, use empty array.`
 // ── BADGE SYSTEM ──────────────────────────────────────────────────────────────
 
 const BADGES = [
+  // ⚡ MOMENTO — Day 1
+  {id:"first_mission",  cat:"momento",    icon:"🕷️", name:"With Great Power Comes Great Responsibility",        desc:"Completou sua primeira missão.",             condition:s=>s.missionsCompleted>=1,       xp:30},
+  {id:"first_perfect",  cat:"momento",    icon:"🪄", name:"Wingardium Leviosa!",         desc:"Primeira resposta perfeita.",                condition:s=>s.perfectAnswers>=1,          xp:20},
+  {id:"first_voice",    cat:"momento",    icon:"🎙️", name:"May the Force Be With You",   desc:"Usou o microfone pela primeira vez.",        condition:s=>s.voiceUsed>=1,               xp:25},
 
-  // ══ MOMENTO — primeiros passos ══════════════════════════════════════════════
-  {id:"first_mission",  cat:"momento", icon:"⚓", name:"All Hands on Deck",
-   desc:"Completou sua primeira missão. O convés está pronto!", xp:30,
-   condition:s=>s.missionsCompleted>=1},
-  {id:"first_perfect",  cat:"momento", icon:"🪄", name:"Wingardium Leviosa!",
-   desc:"Primeira resposta perfeita. Magia pura!", xp:20,
-   condition:s=>s.perfectAnswers>=1},
-  {id:"first_voice",    cat:"momento", icon:"🎙️", name:"Speak Up, Sailor",
-   desc:"Usou o microfone pela primeira vez. Sua voz manda!", xp:25,
-   condition:s=>s.voiceUsed>=1},
-  {id:"first_game",     cat:"momento", icon:"🎮", name:"Welcome Aboard",
-   desc:"Jogou seu primeiro jogo (memória, flashcard ou diálogo).", xp:20,
-   condition:s=>s.gamesPlayed>=1},
-  {id:"first_writing",  cat:"momento", icon:"✍️", name:"Captain's Log",
-   desc:"Escreveu sua primeira redação em inglês. Isso é navegação real!", xp:25,
-   condition:s=>s.writingCompleted>=1},
+  // 🔥 PERFORMANCE — Days 2-6 (gradual)
+  {id:"streak3",        cat:"performance",icon:"💪", name:"Super Soldier",               desc:"3 acertos seguidos — digno do soro do Rogers.",condition:s=>s.answerStreak>=3,          xp:30},
+  {id:"streak5",        cat:"performance",icon:"🔥", name:"I Volunteer as Tribute",      desc:"5 acertos seguidos — Katniss aprovaria.",    condition:s=>s.answerStreak>=5,            xp:50},
+  {id:"xp100",          cat:"performance",icon:"🌩️","name":"Thor's Hammer",             desc:"100 XP — só os dignos chegam aqui!",         condition:s=>s.xp>=100,                    xp:20},
+  {id:"missions3",      cat:"performance",icon:"🟢", name:"Hulk Smash!",                 desc:"3 missões — HULK INGLÊS!",                   condition:s=>s.missionsCompleted>=3,       xp:40},
+  {id:"streak10",       cat:"performance",icon:"⚡", name:"I Am Iron Man",               desc:"10 seguidos — Tony Stark aprova.",           condition:s=>s.answerStreak>=10,           xp:100},
+  {id:"xp250",          cat:"performance",icon:"💰", name:"Show Me The Money!",          desc:"250 XP — Jerry Maguire ficaria feliz.",      condition:s=>s.xp>=250,                    xp:30},
 
-  // ══ JOGOS — a cada ~3 jogos ══════════════════════════════════════════════════
-  {id:"games3",  cat:"jogos", icon:"🃏", name:"Deck Officer",
-   desc:"3 jogos completos. Você está pegando o ritmo!", xp:30,
-   condition:s=>s.gamesPlayed>=3},
-  {id:"games6",  cat:"jogos", icon:"🧭", name:"Navigator",
-   desc:"6 jogos — você já sabe se virar em alto mar!", xp:40,
-   condition:s=>s.gamesPlayed>=6},
-  {id:"games10", cat:"jogos", icon:"🚢", name:"First Mate",
-   desc:"10 jogos — imparável! Oficializado como imediato.", xp:60,
-   condition:s=>s.gamesPlayed>=10},
-  {id:"games15", cat:"jogos", icon:"🌊", name:"Rough Sea Survivor",
-   desc:"15 jogos — mares agitados não te assustam mais.", xp:80,
-   condition:s=>s.gamesPlayed>=15},
-  {id:"games25", cat:"jogos", icon:"🏴‍☠️", name:"Seasoned Sailor",
-   desc:"25 jogos — veterano dos mares do inglês!", xp:120,
-   condition:s=>s.gamesPlayed>=25},
-  {id:"games40", cat:"jogos", icon:"👑", name:"Admiral",
-   desc:"40 jogos — você comanda a frota agora, Almirante!", xp:200,
-   condition:s=>s.gamesPlayed>=40},
-  {id:"memory5", cat:"jogos", icon:"🧠", name:"Cargo Manifest",
-   desc:"5 jogos de memória — cada par é um container organizado.", xp:50,
-   condition:s=>s.memoryPlayed>=5},
-  {id:"flashcard10", cat:"jogos", icon:"⚡", name:"Signal Officer",
-   desc:"10 decks de flashcard — sinais captados e respondidos!", xp:60,
-   condition:s=>s.flashcardsPlayed>=10},
-  {id:"dialogue5", cat:"jogos", icon:"💬", name:"Radio Operator",
-   desc:"5 diálogos — comunicação estabelecida com clareza!", xp:50,
-   condition:s=>s.dialoguesPlayed>=5},
+  // ⚔️ RESILIÊNCIA — Days 7-14
+  {id:"daily3",         cat:"resiliencia",icon:"🛡️", name:"Avengers, Assemble!",         desc:"3 dias seguidos — o time está se formando.", condition:s=>s.loginStreak>=3,             xp:50},
+  {id:"missions5",      cat:"resiliencia",icon:"🌀", name:"I'll Be Back",                desc:"5 missões — The Terminator não desiste.",    condition:s=>s.missionsCompleted>=5,       xp:60},
+  {id:"daily7",         cat:"resiliencia",icon:"🌟", name:"Wakanda Forever",             desc:"7 dias seguidos — T'Challa ficaria orgulhoso!",condition:s=>s.loginStreak>=7,          xp:100},
+  {id:"missions10",     cat:"resiliencia",icon:"🏆", name:"One Ring to Rule Them All",   desc:"10 missões — digno do Monte Doom!",          condition:s=>s.missionsCompleted>=10,      xp:120},
+  {id:"xp500",          cat:"resiliencia",icon:"🔱", name:"King of the Seven Seas",      desc:"500 XP — Aquaman reconhece seu domínio.",    condition:s=>s.xp>=500,                    xp:60},
 
-  // ══ PERFORMANCE — streak de acertos ═════════════════════════════════════════
-  {id:"streak3",  cat:"performance", icon:"💪", name:"Steady As She Goes",
-   desc:"3 acertos seguidos. Curso firme!", xp:30,
-   condition:s=>s.answerStreak>=3},
-  {id:"streak5",  cat:"performance", icon:"🔥", name:"Full Speed Ahead",
-   desc:"5 acertos seguidos — máquinas a toda!", xp:50,
-   condition:s=>s.answerStreak>=5},
-  {id:"streak10", cat:"performance", icon:"⚡", name:"I Am Iron Man",
-   desc:"10 seguidos — Tony Stark aprova.", xp:100,
-   condition:s=>s.answerStreak>=10},
-  {id:"xp100",    cat:"performance", icon:"🌩️", name:"Thor's Hammer",
-   desc:"100 XP — só os dignos chegam aqui!", xp:20,
-   condition:s=>s.xp>=100},
-  {id:"xp250",    cat:"performance", icon:"💰", name:"Freight Loaded",
-   desc:"250 XP — carga completa e pronta para embarcar!", xp:30,
-   condition:s=>s.xp>=250},
-  {id:"xp500",    cat:"performance", icon:"🔱", name:"Port Authority",
-   desc:"500 XP — você tem autoridade neste porto!", xp:60,
-   condition:s=>s.xp>=500},
-  {id:"missions3",  cat:"performance", icon:"🟢", name:"Bosun's Mate",
-   desc:"3 missões — tripulação aprovada!", xp:40,
-   condition:s=>s.missionsCompleted>=3},
-  {id:"missions10", cat:"performance", icon:"🏆", name:"One Ring to Rule Them All",
-   desc:"10 missões — digno do Monte Doom!", xp:120,
-   condition:s=>s.missionsCompleted>=10},
-
-  // ══ RESILIÊNCIA — streak de dias ═════════════════════════════════════════════
-  {id:"daily3",  cat:"resiliencia", icon:"🛡️", name:"Avengers, Assemble!",
-   desc:"3 dias seguidos — o time está se formando.", xp:50,
-   condition:s=>s.loginStreak>=3},
-  {id:"daily7",  cat:"resiliencia", icon:"🌟", name:"Wakanda Forever",
-   desc:"7 dias seguidos — T'Challa ficaria orgulhoso!", xp:100,
-   condition:s=>s.loginStreak>=7},
-  {id:"daily14", cat:"resiliencia", icon:"🌊", name:"The Tide Never Stops",
-   desc:"14 dias seguidos — como o mar, você não para!", xp:150,
-   condition:s=>s.loginStreak>=14},
-  {id:"daily30", cat:"resiliencia", icon:"🌍", name:"Around the World",
-   desc:"30 dias seguidos — você circunavegou o globo!", xp:300,
-   condition:s=>s.loginStreak>=30},
-  {id:"missions5",  cat:"resiliencia", icon:"🌀", name:"Boarding Completed",
-   desc:"5 missões — check-in feito, embarque autorizado!", xp:60,
-   condition:s=>s.missionsCompleted>=5},
-  {id:"xp1000", cat:"resiliencia", icon:"💎", name:"Infinity Gauntlet",
-   desc:"1000 XP — poder do universo nas mãos!", xp:150,
-   condition:s=>s.xp>=1000},
-
-  // ══ DOMÍNIO — por segmento ═══════════════════════════════════════════════════
-  {id:"dom_maritimo",   cat:"dominio", icon:"⚓", name:"Master Mariner",
-   desc:"Dominou o Marítimo — certificado de capitão!", xp:200,
-   condition:s=>s.segmentsDone.includes("maritimo")},
-  {id:"dom_comex",      cat:"dominio", icon:"🌍", name:"Global Trader",
-   desc:"Dominou COMEX — o mundo é seu mercado.", xp:200,
-   condition:s=>s.segmentsDone.includes("comex")},
-  {id:"dom_offshore",   cat:"dominio", icon:"🛢️", name:"Offshore Pro",
-   desc:"Dominou Offshore — plataformas não têm segredo!", xp:200,
-   condition:s=>s.segmentsDone.includes("offshore")},
-  {id:"dom_hotelaria",  cat:"dominio", icon:"🏨", name:"Concierge d'Excellence",
-   desc:"Dominou Hotelaria — hóspedes internacionais bem-recebidos!", xp:200,
-   condition:s=>s.segmentsDone.includes("hotelaria")},
-  {id:"dom_restaurante",cat:"dominio", icon:"🍽️", name:"Head Waiter",
-   desc:"Dominou Restaurantes — pedidos fluindo em inglês!", xp:200,
-   condition:s=>s.segmentsDone.includes("restaurantes")},
-  {id:"dom_aeroporto",  cat:"dominio", icon:"✈️", name:"Ground Control",
-   desc:"Dominou Aeroporto — passageiros atendidos com excelência!", xp:200,
-   condition:s=>s.segmentsDone.includes("aeroporto")},
-  {id:"dom_cruzeiro",   cat:"dominio", icon:"🛳️", name:"Cruise Director",
-   desc:"Dominou Cruzeiros — diversão a bordo garantida!", xp:200,
-   condition:s=>s.segmentsDone.includes("cruzeiros")},
-  {id:"dom_corporativo",cat:"dominio", icon:"💼", name:"C-Suite English",
-   desc:"Dominou o Corporativo — reuniões em inglês sem medo!", xp:200,
-   condition:s=>s.segmentsDone.includes("corporativo")},
-  {id:"dom_saude",      cat:"dominio", icon:"🏥", name:"Chief Medical Officer",
-   desc:"Dominou Saúde — comunicação precisa salva vidas!", xp:200,
-   condition:s=>s.segmentsDone.includes("saude")},
-  {id:"dom_transporte", cat:"dominio", icon:"🚛", name:"Road Commander",
-   desc:"Dominou Transporte — rota traçada em inglês!", xp:200,
-   condition:s=>s.segmentsDone.includes("transporte")},
-  {id:"dom_varejo",     cat:"dominio", icon:"🛍️", name:"Sales Champion",
-   desc:"Dominou Varejo — vendas internacionais desbloqueadas!", xp:200,
-   condition:s=>s.segmentsDone.includes("varejo")},
-  {id:"dom_santos",     cat:"dominio", icon:"🏖️", name:"Santos Expert",
-   desc:"Dominou Turismo Santos — cidade no mapa global!", xp:200,
-   condition:s=>s.segmentsDone.includes("turismo_santos")},
-
-  // ══ RARO — conquistas especiais ══════════════════════════════════════════════
-  {id:"polyglot",   cat:"raro", icon:"⭐", name:"The One",
-   desc:"3+ segmentos — 'There is no spoon.' — Neo", xp:400,
-   condition:s=>s.segmentsDone.length>=3},
-  {id:"fleet",      cat:"raro", icon:"🌐", name:"Fleet Commander",
-   desc:"6+ segmentos — você comanda frotas inteiras!", xp:600,
-   condition:s=>s.segmentsDone.length>=6},
-  {id:"all_games",  cat:"raro", icon:"🎯", name:"Complete Crew",
-   desc:"Jogou todos os tipos de jogo pelo menos uma vez.", xp:150,
-   condition:s=>s.memoryPlayed>=1&&s.flashcardsPlayed>=1&&s.dialoguesPlayed>=1&&s.writingCompleted>=1},
-  {id:"xp2500",     cat:"raro", icon:"🏅", name:"Maritime Legend",
-   desc:"2500 XP — lenda viva dos mares do inglês!", xp:300,
-   condition:s=>s.xp>=2500},
-  {id:"missions50", cat:"raro", icon:"🔱", name:"Odyssey Complete",
-   desc:"50 missões — Ulisses voltou para casa.", xp:500,
-   condition:s=>s.missionsCompleted>=50},
+  // 🧠 DOMÍNIO — Days 15+
+  {id:"maritime_dom",   cat:"dominio",    icon:"⚓", name:"The Name is Bond...",          desc:"Dominou o Marítimo — licença para navegar.", condition:s=>s.segmentsDone.includes("maritimo"),  xp:200},
+  {id:"comex_dom",      cat:"dominio",    icon:"🌍", name:"King of COMEX",               desc:"Dominou COMEX — o mundo é seu mercado.",     condition:s=>s.segmentsDone.includes("comex"),     xp:200},
+  {id:"xp1000",         cat:"dominio",    icon:"💎", name:"Infinity Gauntlet",           desc:"1000 XP — poder do universo nas mãos!",      condition:s=>s.xp>=1000,                   xp:150},
+  {id:"polyglot",       cat:"raro",       icon:"⭐", name:"The One",                     desc:"3+ segmentos — 'There is no spoon.' — Neo",  condition:s=>s.segmentsDone.length>=3,     xp:400},
 ];
 
 // Session stats tracker (resets per session, persisted cumulatively in userData)
@@ -3488,10 +3363,6 @@ let _sessionStats = {
   perfectAnswers: 0,
   voiceUsed: 0,
   retries: 0,
-  gamesPlayed: 0,
-  memoryPlayed: 0,
-  flashcardsPlayed: 0,
-  dialoguesPlayed: 0,
 };
 
 function getBadgeStats(){
@@ -3515,11 +3386,6 @@ function getBadgeStats(){
     segmentsDone: segDone,
     writingCompleted: userData?.writingCompleted||0,
     grammarCompleted: completed.filter(m=>m.startsWith("gramatica_")).length,
-    // Contadores de jogos
-    gamesPlayed:     (userData?.gamesPlayed||0)+_sessionStats.gamesPlayed,
-    memoryPlayed:    (userData?.memoryPlayed||0)+_sessionStats.memoryPlayed,
-    flashcardsPlayed:(userData?.flashcardsPlayed||0)+_sessionStats.flashcardsPlayed,
-    dialoguesPlayed: (userData?.dialoguesPlayed||0)+_sessionStats.dialoguesPlayed,
   };
 }
 
@@ -3590,24 +3456,6 @@ function trackAnswer(isCorrect, isVoice=false){
   checkBadges();
 }
 
-function trackGame(type){
-  // type: "memory" | "flashcard" | "dialogue" | "writing" | "generic"
-  _sessionStats.gamesPlayed++;
-  if(type==="memory")    _sessionStats.memoryPlayed++;
-  if(type==="flashcard") _sessionStats.flashcardsPlayed++;
-  if(type==="dialogue")  _sessionStats.dialoguesPlayed++;
-  // Persist a cada 3 jogos
-  if(_sessionStats.gamesPlayed%3===0 && currentUser){
-    saveProgress(currentUser.uid,{
-      gamesPlayed:    (userData?.gamesPlayed||0)+_sessionStats.gamesPlayed,
-      memoryPlayed:   (userData?.memoryPlayed||0)+_sessionStats.memoryPlayed,
-      flashcardsPlayed:(userData?.flashcardsPlayed||0)+_sessionStats.flashcardsPlayed,
-      dialoguesPlayed:(userData?.dialoguesPlayed||0)+_sessionStats.dialoguesPlayed,
-    });
-  }
-  checkBadges();
-}
-
 // ── VIBRATION ──────────────────────────────────────────
 function vibrate(ms=30){
   try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){}
@@ -3645,40 +3493,45 @@ const NOTIF_MESSAGES = [
 
 async function requestNotificationPermission(){
   if(!("Notification" in window)) return;
-  if(Notification.permission==="granted"){ scheduleNotifications(); return; }
+  if(Notification.permission==="granted"){
+    scheduleNotifications();
+    if(currentUser?.uid) registerFCMToken(currentUser.uid).catch(()=>{});
+    return;
+  }
   if(Notification.permission!=="denied"){
     const perm=await Notification.requestPermission();
-    if(perm==="granted") scheduleNotifications();
+    if(perm==="granted"){
+      scheduleNotifications();
+      if(currentUser?.uid) registerFCMToken(currentUser.uid).catch(()=>{});
+    }
   }
 }
 
 function scheduleNotifications(){
   if(!("Notification" in window)||Notification.permission!=="granted") return;
   if(localStorage.getItem("vic_notif_enabled")==="0") return;
+
   const freq=parseInt(localStorage.getItem("vic_notif_freq")||"3");
-  const minHours=24/freq;
+  const minHours=24/freq; // e.g. 3x/day = every 8h
   const last=parseInt(localStorage.getItem("vic_last_notif")||"0");
   const now=Date.now();
   const hoursSinceLast=(now-last)/(3600*1000);
+
   if(hoursSinceLast>=minHours){
     const idx=Math.floor(Math.random()*NOTIF_MESSAGES.length);
     const msg=NOTIF_MESSAGES[idx];
     try{
-      new Notification(msg.title,{body:msg.body,icon:"logo_full_2.png",badge:"vic_lamp.png",tag:"vic-english-"+idx,requireInteraction:false});
-      localStorage.setItem("vic_last_notif",String(now));
+      new Notification(msg.title,{
+        body: msg.body,
+        icon: "new_logo_big.png",
+        badge: "vic_lamp.png",
+        tag: "vic-english-"+idx,
+        requireInteraction: false,
+      });
+      localStorage.setItem("vic_last_notif", String(now));
     }catch(e){}
   }
-  if("serviceWorker" in navigator&&navigator.serviceWorker.controller){
-    const msPerNotif=(minHours*3600*1000);
-    [1,2,3].forEach(mult=>{
-      const delay=msPerNotif*mult;
-      const idx=Math.floor(Math.random()*NOTIF_MESSAGES.length);
-      const msg=NOTIF_MESSAGES[idx];
-      navigator.serviceWorker.controller.postMessage({type:"SCHEDULE_NOTIF",delay,title:msg.title,body:msg.body});
-    });
-  }
-  localStorage.setItem("vic_last_visit",String(now));
-}
+  localStorage.setItem("vic_last_visit", String(now));
 }
 
 // Ask for notifications with friendly banner after first mission
@@ -3693,6 +3546,42 @@ function showNotifBanner(){
   daily?.parentNode?.insertBefore(banner, daily);
 }
 
+// ── PUSH DO PAINEL ADMIN ─────────────────────────────────────────────────────
+const FCM_FUNCTION_URL = "https://us-central1-victor-app-aef3c.cloudfunctions.net/sendPushToAll";
+const FCM_SECRET = "COLE_SEU_SECRET_AQUI"; // mesmo valor que firebase functions:config:set vic.secret=XXX
+
+async function sendPushFromAdmin(){
+  const title = document.getElementById("push-title")?.value?.trim();
+  const body  = document.getElementById("push-body")?.value?.trim();
+  if(!title||!body){ showXpToast("❌ Preencha título e mensagem!"); return; }
+
+  const btn = document.getElementById("btn-send-push");
+  if(btn){ btn.disabled=true; btn.textContent="Enviando..."; }
+
+  try{
+    const res = await fetch(FCM_FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-vic-secret": FCM_SECRET,
+      },
+      body: JSON.stringify({ title, body }),
+    });
+    const data = await res.json();
+    if(data.success){
+      showXpToast(`✅ Push enviado para ${data.sent} dispositivos!`);
+      if(document.getElementById("push-title")) document.getElementById("push-title").value="";
+      if(document.getElementById("push-body"))  document.getElementById("push-body").value="";
+    } else {
+      showXpToast("❌ Erro: " + (data.error||"desconhecido"));
+    }
+  }catch(e){
+    showXpToast("❌ Erro ao enviar: " + e.message);
+  }finally{
+    if(btn){ btn.disabled=false; btn.textContent="📣 Enviar para todos"; }
+  }
+}
+
 // ── INIT ──────────────────────────────────────────────────────────────────────
 async function _handleAuth(user){
   console.log("_handleAuth called, user:", user?.uid||"null");
@@ -3702,6 +3591,10 @@ async function _handleAuth(user){
       console.log("User logged in:", user.uid);
       if(user.uid===OWNER_UID){ currentUser=user; await loadAdminDashboard(); }
       else await loadDashboard(user);
+      // Registrar token FCM após login
+      if(Notification.permission==="granted"){
+        registerFCMToken(user.uid).catch(()=>{});
+      }
     } else {
       console.log("No user — showing auth");
       currentUser=null; userData=null;
@@ -3760,7 +3653,7 @@ function init(){
       document.querySelectorAll(".admin-main-tab").forEach(t=>t.classList.remove("active"));
       tab.classList.add("active");
       const panel=tab.dataset.panel;
-      ["users","customize","feedback"].forEach(p=>{
+      ["users","customize","feedback","push"].forEach(p=>{
         const el=document.getElementById(`admin-panel-${p}`);
         if(el) el.style.display=p===panel?"block":"none";
       });
@@ -3769,6 +3662,7 @@ function init(){
     });
   });
   document.getElementById("btn-load-feedbacks")?.addEventListener("click",loadAdminFeedbacks);
+  document.getElementById("btn-send-push")?.addEventListener("click",sendPushFromAdmin);
   document.getElementById("btn-about-us")?.addEventListener("click",()=>{
     document.getElementById("about-modal").style.display="flex";
   });
@@ -3788,6 +3682,23 @@ function init(){
   startCuriosityTicker();
   requestNotificationPermission();
   scheduleNotifications();
+
+  // FCM: mostrar notificação quando app está aberto (foreground)
+  onForegroundMessage(payload => {
+    const {title="VIC English 📚", body="Nova mensagem!"} = payload.notification || {};
+    showXpToast(`🔔 ${title}: ${body}`);
+    // Mostrar notificação nativa mesmo com app aberto
+    if(Notification.permission==="granted"){
+      try{
+        new Notification(title, {
+          body,
+          icon: "logo_full_2.png",
+          badge: "vic_lamp.png",
+          tag: "vic-foreground-" + Date.now(),
+        });
+      }catch(e){}
+    }
+  });
 
   // Vibrate on all major buttons
   document.addEventListener("click",e=>{

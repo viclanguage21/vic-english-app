@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>VIC English — Inglês Operacional</title>
 
   <!-- PWA -->
@@ -13,18 +13,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="VIC English"/>
   <link rel="apple-touch-icon" href="app_icon.png"/>
-
-  <!-- SEO & Social -->
-  <meta name="description" content="VIC English — Inglês Operacional Profissional para trabalhadores brasileiros. Porto, Offshore, Hotelaria, COMEX e mais."/>
-  <meta property="og:title" content="VIC English"/>
-  <meta property="og:description" content="Inglês Operacional Profissional — R$15/mês"/>
-  <meta property="og:image" content="logo_full_2.png"/>
-  <meta property="og:url" content="https://app.viclanguage.com.br"/>
-
-  <!-- Preconnect Firebase for speed -->
-  <link rel="preconnect" href="https://www.gstatic.com" crossorigin/>
-  <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin/>
-  <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin/>
 
   <link rel="stylesheet" href="style.css"/>
 </head>
@@ -900,6 +888,7 @@
       <button class="admin-main-tab active" data-panel="users">👥 Alunos</button>
       <button class="admin-main-tab" data-panel="customize">🎨 Customizar</button>
       <button class="admin-main-tab" data-panel="feedback">💬 Feedbacks</button>
+      <button class="admin-main-tab" data-panel="push">📣 Push</button>
     </div>
 
     <!-- USERS PANEL -->
@@ -1009,6 +998,40 @@
     <div id="admin-panel-feedback" style="display:none">
       <div class="admin-refresh-btn" id="btn-load-feedbacks" style="margin-bottom:12px;width:100%;text-align:center;padding:10px;">↻ Carregar feedbacks</div>
       <div id="admin-feedbacks-list"></div>
+    </div>
+
+    <!-- PUSH PANEL -->
+    <div id="admin-panel-push" style="display:none;padding:16px 0;">
+      <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:16px;">📣 Enviar Push para Todos</div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:12px;color:var(--text-muted);font-weight:700;">Título</label>
+        <input id="push-title" type="text" placeholder="ex: Hora de praticar! 🚀"
+          style="width:100%;margin-top:6px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;font-family:var(--font);box-sizing:border-box;"/>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="font-size:12px;color:var(--text-muted);font-weight:700;">Mensagem</label>
+        <textarea id="push-body" placeholder="ex: Você tem uma nova missão disponível!"
+          style="width:100%;margin-top:6px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;font-family:var(--font);resize:none;height:80px;box-sizing:border-box;"></textarea>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
+        <button onclick="document.getElementById('push-title').value='⏰ Hora de praticar!';document.getElementById('push-body').value='Sua missão diária está esperando. Só 5 minutos hoje! 💪'"
+          style="padding:6px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;cursor:pointer;font-family:var(--font);">⏰ Lembrete</button>
+        <button onclick="document.getElementById('push-title').value='🔥 Não perca seu streak!';document.getElementById('push-body').value='Entre hoje para manter sua sequência. 🔥'"
+          style="padding:6px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;cursor:pointer;font-family:var(--font);">🔥 Streak</button>
+        <button onclick="document.getElementById('push-title').value='🆕 Novo conteúdo!';document.getElementById('push-body').value='Novas missões foram adicionadas. Venha conferir! 🚀'"
+          style="padding:6px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;cursor:pointer;font-family:var(--font);">🆕 Novidade</button>
+        <button onclick="document.getElementById('push-title').value='🌟 VIC Pro — R$15/mês!';document.getElementById('push-body').value='Acesse todos os segmentos. Aproveite agora! 💳'"
+          style="padding:6px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;cursor:pointer;font-family:var(--font);">💳 Oferta</button>
+      </div>
+      <button id="btn-send-push"
+        style="width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#6d28d9);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:var(--font);">
+        📣 Enviar para todos
+      </button>
+      <div style="margin-top:12px;padding:12px;background:var(--card);border-radius:10px;font-size:12px;color:var(--text-muted);line-height:1.6;">
+        ⚠️ Só recebem quem aceitou a permissão de notificação.<br>
+        📱 Android Chrome: funciona sem instalar o app.<br>
+        🍎 iPhone: só funciona com PWA instalado (iOS 16.4+).
+      </div>
     </div>
 
     <!-- user detail modal -->
@@ -1451,54 +1474,16 @@
 
 <script src="sounds.js"></script>
 <script src="data.js"></script>
-
-<!-- Compatibility check before loading app -->
-<script>
-  // Check ES module support
-  var supportsModules = false;
-  try {
-    new Function('import("")');
-    supportsModules = true;
-  } catch(e) {}
-
-  if(!supportsModules) {
-    document.body.innerHTML = '<div style="background:#1a0d2e;color:#f0d070;font-family:sans-serif;padding:40px;text-align:center;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center"><img src="logo_full_2.png" style="width:200px;border-radius:12px;margin-bottom:24px"/><h2>Navegador desatualizado</h2><p style="color:rgba(255,255,255,0.7);max-width:320px">Por favor, use o <strong>Google Chrome</strong> ou <strong>Safari</strong> atualizado para acessar o VIC English.</p><a href="https://www.google.com/chrome/" style="margin-top:20px;padding:14px 28px;background:#c9933a;color:#1a0d2e;border-radius:999px;text-decoration:none;font-weight:900">Baixar Chrome</a></div>';
-  }
-</script>
-
 <script type="module" src="app.js"></script>
-
-<!-- Global error handler -->
 <script>
-  window.addEventListener('error', function(e) {
-    console.error('Global error:', e.message, e.filename, e.lineno);
-  });
-  window.addEventListener('unhandledrejection', function(e) {
-    console.error('Unhandled promise rejection:', e.reason);
-  });
-
   if("serviceWorker" in navigator){
     window.addEventListener("load", () => {
-      // Use relative path for GitHub Pages compatibility
-      const swPath = location.pathname.includes('/vic-english-app/') 
-        ? '/vic-english-app/sw.js' 
-        : '/sw.js';
-      navigator.serviceWorker.register(swPath)
+      navigator.serviceWorker.register("/sw.js")
         .then(() => console.log("VIC English PWA ready ✅"))
-        .catch(e => console.log("SW:", e.message));
+        .catch(e => console.log("SW error:", e));
     });
   }
 </script>
-<!-- Loading splash for transitions -->
-<div id="loading-splash" style="display:none">
-  <div class="splash-inner">
-    <img src="vic_lamp.png" class="splash-lamp" alt="VIC"/>
-    <div class="splash-dots">
-      <span></span><span></span><span></span>
-    </div>
-  </div>
-</div>
-
 <!-- Global feedback modal - works from any view -->
 <div class="feedback-modal" id="feedback-modal" style="display:none">
   <div class="feedback-modal-card">
