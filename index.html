@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>VIC English — Inglês Operacional</title>
 
   <!-- PWA -->
@@ -13,6 +13,18 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="VIC English"/>
   <link rel="apple-touch-icon" href="app_icon.png"/>
+
+  <!-- SEO & Social -->
+  <meta name="description" content="VIC English — Inglês Operacional Profissional para trabalhadores brasileiros. Porto, Offshore, Hotelaria, COMEX e mais."/>
+  <meta property="og:title" content="VIC English"/>
+  <meta property="og:description" content="Inglês Operacional Profissional — R$15/mês"/>
+  <meta property="og:image" content="logo_full_2.png"/>
+  <meta property="og:url" content="https://app.viclanguage.com.br"/>
+
+  <!-- Preconnect Firebase for speed -->
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin/>
+  <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin/>
+  <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin/>
 
   <link rel="stylesheet" href="style.css"/>
 </head>
@@ -1439,13 +1451,41 @@
 
 <script src="sounds.js"></script>
 <script src="data.js"></script>
-<script type="module" src="app.js"></script>
+
+<!-- Compatibility check before loading app -->
 <script>
+  // Check ES module support
+  var supportsModules = false;
+  try {
+    new Function('import("")');
+    supportsModules = true;
+  } catch(e) {}
+
+  if(!supportsModules) {
+    document.body.innerHTML = '<div style="background:#1a0d2e;color:#f0d070;font-family:sans-serif;padding:40px;text-align:center;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center"><img src="logo_full_2.png" style="width:200px;border-radius:12px;margin-bottom:24px"/><h2>Navegador desatualizado</h2><p style="color:rgba(255,255,255,0.7);max-width:320px">Por favor, use o <strong>Google Chrome</strong> ou <strong>Safari</strong> atualizado para acessar o VIC English.</p><a href="https://www.google.com/chrome/" style="margin-top:20px;padding:14px 28px;background:#c9933a;color:#1a0d2e;border-radius:999px;text-decoration:none;font-weight:900">Baixar Chrome</a></div>';
+  }
+</script>
+
+<script type="module" src="app.js"></script>
+
+<!-- Global error handler -->
+<script>
+  window.addEventListener('error', function(e) {
+    console.error('Global error:', e.message, e.filename, e.lineno);
+  });
+  window.addEventListener('unhandledrejection', function(e) {
+    console.error('Unhandled promise rejection:', e.reason);
+  });
+
   if("serviceWorker" in navigator){
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js")
+      // Use relative path for GitHub Pages compatibility
+      const swPath = location.pathname.includes('/vic-english-app/') 
+        ? '/vic-english-app/sw.js' 
+        : '/sw.js';
+      navigator.serviceWorker.register(swPath)
         .then(() => console.log("VIC English PWA ready ✅"))
-        .catch(e => console.log("SW error:", e));
+        .catch(e => console.log("SW:", e.message));
     });
   }
 </script>
