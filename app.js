@@ -7101,6 +7101,8 @@ function init(){
     const words=document.getElementById("writing-textarea").value.trim().split(/\s+/).filter(w=>w).length;
     document.getElementById("writing-charcount").textContent=`${words} palavra${words!==1?"s":""}`;
   });
+  document.getElementById("btn-force-refresh")?.addEventListener("click", forceRefresh);
+
   document.getElementById("btn-reload-dashboard")?.addEventListener("click",async()=>{
     vibrate(30);
     showXpToast("🔄 Atualizando...");
