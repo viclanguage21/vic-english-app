@@ -1110,13 +1110,13 @@ function renderDashboardTexts() {
   // Botão anon
   const btnAnon = document.getElementById("btn-anon");
   if(btnAnon) btnAnon.textContent = t("login_anon");
-  // Onboarding
-  const obSlide0Title = document.getElementById("ob-slide-0")?.querySelector(".ob-slide-title");
-  const obSlide1Title = document.getElementById("ob-slide-1")?.querySelector(".ob-slide-title");
-  const obSlide2Title = document.getElementById("ob-slide-2")?.querySelector(".ob-slide-title");
-  if(obSlide0Title) obSlide0Title.textContent = t("ob_title_0");
-  if(obSlide1Title) obSlide1Title.textContent = t("ob_title_1");
-  if(obSlide2Title) obSlide2Title.textContent = t("ob_title_2");
+  // Onboarding — titles only translated when i18n key exists
+  const obTitles = ["ob_title_0","ob_title_1","ob_title_2","ob_title_3"];
+  obTitles.forEach((key,i) => {
+    const el = document.getElementById(`ob-slide-${i}`)?.querySelector(".ob-slide-title");
+    const tr = t(key);
+    if(el && tr && tr !== key) el.textContent = tr;
+  });
 
   // Quick access buttons
   const qa = id => document.getElementById(id);
@@ -1250,9 +1250,12 @@ function renderMissionTexts() {
 // Capture auth state before DOM ready
 let _pendingAuthUser = undefined;
 let _domReady = false;
+let _onboardingActive = false; // true while onboarding is showing — blocks all auto-navigation
+
 onAuthChange(user => {
   _pendingAuthUser = user;
-  if (_domReady) _handleAuth(user);
+  // Never auto-navigate while the user is going through onboarding
+  if(_domReady && !_onboardingActive) _handleAuth(user);
 });
 
 // ── STATE ──────────────────────────────────────────────────────────────────────
@@ -2019,195 +2022,161 @@ window.addEventListener("offline", () => {
 // Penalidade: erro em A1/A2 trava máximo em B1
 
 const LT_QUESTIONS = {
+  all: [
+    // ── A1 ──────────────────────────────────────────────────────────────────
+    {id:"q1", type:"mcq", level:"A1",
+     title:"Vocabulário — A1",
+     question:"What does 'deadline' mean?",
+     options:["Prazo","Reunião","Contrato","Relatório"], correct:0,
+     pts:{correct:1,wrong:0}},
 
-  // ══ NÍVEL A1-A2 — Básico ══════════════════════════════════════════════════
-  a1: [
-    {id:"a1_1", type:"mcq", level:"A1",
-     title:"Verbo To Be",
-     question:"She ___ a very good student.",
-     options:["is","are","am","be"], correct:0,
-     pts:{correct:2,wrong:0}},
+    {id:"q2", type:"mcq", level:"A1",
+     title:"Gramática — A1",
+     question:"Choose the correct sentence:",
+     options:["He works on an offshore platform.","I works in a ship.","She work every day.","They works together."], correct:0,
+     pts:{correct:1,wrong:0}},
 
-    {id:"a1_2", type:"mcq", level:"A1",
-     title:"Presente Simples",
-     question:"He ___ to work every day by bus.",
-     options:["goes","go","going","went"], correct:0,
-     pts:{correct:2,wrong:0}},
+    // ── A2 ──────────────────────────────────────────────────────────────────
+    {id:"q3", type:"mcq", level:"A2",
+     title:"Passado Simples — A2",
+     question:"She _____ the report before the meeting started.",
+     options:["sent","send","sends","was send"], correct:0,
+     pts:{correct:1,wrong:0}},
 
-    {id:"a1_3", type:"error_correction", level:"A1",
-     title:"Corrija o erro",
-     question:"He don't like coffee in the morning.",
-     placeholder:"Escreva a frase correta...",
-     answer:"He doesn't like coffee in the morning.",
-     pts:{correct:3,almost:1,wrong:0}},
-
-    {id:"a1_4", type:"mcq", level:"A2",
+    {id:"q4", type:"mcq", level:"A2",
      title:"Vocabulário — Trabalho",
-     question:"Your 'schedule' at work is:",
-     options:["Your plan with times and tasks","Your salary","Your uniform","Your office"],
-     correct:0, pts:{correct:2,wrong:0}},
+     question:"Your supervisor asks: 'Please send me the _____ with all the numbers from last month.' What does he want?",
+     options:["Report","Schedule","Receipt","Invoice"], correct:0,
+     pts:{correct:1,wrong:0}},
 
-    {id:"a1_5", type:"mcq", level:"A2",
-     title:"Passado Simples",
-     question:"Yesterday I ___ a very important meeting.",
-     options:["had","have","has","having"], correct:0,
-     pts:{correct:2,wrong:0}},
-  ],
+    // ── B1 ──────────────────────────────────────────────────────────────────
+    {id:"q5", type:"mcq", level:"B1",
+     title:"Present Perfect vs Simple Past",
+     question:"'We _____ this supplier for 10 years, but last year we changed to another one.'",
+     options:["used","have used","are using","use"], correct:0,
+     pts:{correct:1,wrong:0}},
 
-  // ══ NÍVEL B1-B2 — Intermediário ═══════════════════════════════════════════
-  b1: [
-    {id:"b1_1", type:"fill", level:"B1",
-     title:"Present Perfect",
-     question:"I have already ___ this report. (finish)",
-     placeholder:"Particípio passado de finish...",
-     answer:"finished",
-     pts:{correct:3,almost:1,wrong:0}},
+    {id:"q6", type:"reading", level:"B1",
+     title:"Compreensão — B1",
+     question:"Read: 'The shipment was delayed due to port congestion, but we expect it to arrive by Thursday.' — What is the main problem?",
+     options:["The shipment is late","The goods are damaged","The port is permanently closed","The supplier cancelled the order"], correct:0,
+     pts:{correct:1,wrong:0}},
 
-    {id:"b1_2", type:"mcq", level:"B1",
-     title:"Modal Verbs",
-     question:"You ___ wear a safety vest on the platform. It's mandatory.",
-     options:["must","can","may","would"], correct:0,
-     pts:{correct:2,wrong:0}},
+    {id:"q7", type:"mcq", level:"B1",
+     title:"Condicional Tipo 1",
+     question:"'If the client _____ by tomorrow, we will cancel the order.'",
+     options:["doesn't confirm","won't confirm","didn't confirm","wouldn't confirm"], correct:0,
+     pts:{correct:1,wrong:0}},
 
-    {id:"b1_3", type:"error_correction", level:"B1",
-     title:"Erro clássico — Collocations",
-     question:"I did a big mistake during the negotiation.",
-     placeholder:"Corrija usando o verbo certo...",
-     answer:"I made a big mistake during the negotiation.",
-     pts:{correct:3,almost:1,wrong:0}},
+    // ── B2 ──────────────────────────────────────────────────────────────────
+    {id:"q8", type:"mcq", level:"B2",
+     title:"Voz Passiva — B2",
+     question:"The safety report _____ before the inspection tomorrow.",
+     options:["must be submitted","must submit","must submitted","must have submit"], correct:0,
+     pts:{correct:1,wrong:0}},
 
-    {id:"b1_4", type:"word_order", level:"B2",
-     title:"Estrutura de Frase",
-     question:"Ordene as palavras corretamente:",
-     scrambled:["She","has","never","missed","a","deadline."],
-     answer:"She has never missed a deadline.",
-     pts:{correct:3,almost:1,wrong:0}},
-
-    {id:"b1_5", type:"translation", level:"B2",
-     title:"Tradução Profissional",
-     question:"Preciso confirmar o embarque para amanhã.",
-     placeholder:"Escreva em inglês...",
-     answer:"I need to confirm the shipment for tomorrow.",
-     pts:{correct:4,almost:2,wrong:0}},
-  ],
-
-  // ══ NÍVEL C1 — Avançado ═══════════════════════════════════════════════════
-  c1: [
-    {id:"c1_1", type:"mcq", level:"C1",
-     title:"Vocabulário Técnico — COMEX",
-     question:"The container is on hold due to a ___ discrepancy.",
-     options:["documentation","document","documental","documented"], correct:0,
-     pts:{correct:3,wrong:0}},
-
-    {id:"c1_2", type:"reading", level:"C1",
-     title:"Compreensão — Contexto Profissional",
-     question:"Read and answer: The vessel arrived at berth 12 ahead of schedule, but the port authority placed it on hold pending a full cargo inspection. The captain requested an ETA update for the release. — Why was the vessel placed on hold?",
+    {id:"q9", type:"mcq", level:"B2",
+     title:"Registro Formal — B2",
+     question:"Which sentence is correct for a professional email?",
      options:[
-       "It needed a cargo inspection before being released",
-       "The vessel arrived too late",
-       "The captain made a request to the port",
-       "There was a problem with the berth"
+       "I am writing with regard to your recent inquiry.",
+       "I am writing about your asking.",
+       "I write for your inquiry.",
+       "I am writing in regard of your question."
      ], correct:0,
-     pts:{correct:4,wrong:0}},
+     pts:{correct:1,wrong:0}},
 
-    {id:"c1_3", type:"fill", level:"C1",
-     title:"Condicional — Uso Profissional",
-     question:"If the shipment ___ (delay) any further, we will lose the contract.",
-     placeholder:"Forma correta do verbo...",
-     answer:"delays",
-     pts:{correct:4,almost:2,wrong:0}},
+    {id:"q10", type:"reading", level:"B2",
+     title:"Inferência — B2",
+     question:"Read: 'Although the quarterly figures exceeded projections, the board expressed concern about the sustainability of current growth rates.' — What is the board worried about?",
+     options:[
+       "The growth may not continue at this pace",
+       "The company lost money this quarter",
+       "The projections were wrong",
+       "The quarterly report had errors"
+     ], correct:0,
+     pts:{correct:1,wrong:0}},
 
-    {id:"c1_4", type:"error_correction", level:"C1",
-     title:"Precisão Gramatical",
-     question:"The team has been working in this project since three months.",
-     placeholder:"Corrija a preposição e o tempo verbal...",
-     answer:"The team has been working on this project for three months.",
-     pts:{correct:4,almost:2,wrong:0}},
+    // ── C1 ──────────────────────────────────────────────────────────────────
+    {id:"q11", type:"mcq", level:"C1",
+     title:"Condicional Misto — C1",
+     question:"'If they _____ the safety protocol last year, the accident _____ prevented.'",
+     options:[
+       "had followed / could have been",
+       "followed / could be",
+       "have followed / would be",
+       "would follow / might be"
+     ], correct:0,
+     pts:{correct:1,wrong:0}},
 
-    {id:"c1_5", type:"translation", level:"C1",
-     title:"Tradução Avançada",
-     question:"O prazo de entrega foi adiado devido a problemas alfandegários.",
-     placeholder:"Escreva em inglês profissional...",
-     answer:"The delivery deadline was postponed due to customs issues.",
-     pts:{correct:5,almost:2,wrong:0}},
-  ],
+    {id:"q12", type:"mcq", level:"C1",
+     title:"Expressão Idiomática — C1",
+     question:"The manager said: 'We need to take ownership of this project.' What does this mean?",
+     options:[
+       "Be fully responsible for the project's success or failure",
+       "Buy shares in the project",
+       "Submit a formal ownership document",
+       "Assign the project to another team"
+     ], correct:0,
+     pts:{correct:1,wrong:0}},
+
+    {id:"q13", type:"mcq", level:"C1",
+     title:"Registro Avançado — C1",
+     question:"Which sentence is most appropriate for a formal business proposal?",
+     options:[
+       "This initiative has the potential to significantly enhance operational efficiency.",
+       "We think this idea is really good and you should totally try it.",
+       "Doing this will make things way better for everyone.",
+       "The company would be a lot more efficient if they did this."
+     ], correct:0,
+     pts:{correct:1,wrong:0}},
+
+    // ── C2 ──────────────────────────────────────────────────────────────────
+    {id:"q14", type:"mcq", level:"C2",
+     title:"Nuance de Vocabulário — C2",
+     question:"What is the key difference between 'He refused to sign' and 'He declined to sign'?",
+     options:[
+       "'Refused' implies stronger resistance; 'declined' is more formal and polite",
+       "No difference — they mean exactly the same",
+       "'Declined' means he was unable to sign; 'refused' means unwilling",
+       "'Refused' is only used in legal documents"
+     ], correct:0,
+     pts:{correct:1,wrong:0}},
+
+    {id:"q15", type:"reading", level:"C2",
+     title:"Texto Técnico — C2",
+     question:"Read: 'The arbitration clause stipulates that any disputes arising from this agreement shall be resolved through binding arbitration rather than litigation.' — What does this mean for the parties?",
+     options:[
+       "Disputes must be resolved privately through arbitration, not courts",
+       "Disputes must go to court",
+       "Either party can choose to litigate",
+       "No disputes are allowed under the agreement"
+     ], correct:0,
+     pts:{correct:1,wrong:0}},
+  ]
 };
 
-// ── LÓGICA ADAPTATIVA ─────────────────────────────────────────────────────────
-let ltCurrentLevel = "a1";   // começa no A1
-let ltConsecutiveRight = 0;  // acertos seguidos
-let ltConsecutiveWrong = 0;  // erros seguidos
-let ltQueuedQuestions = [];  // fila de perguntas
-let ltAnsweredByLevel = {};  // rastrear perguntas já usadas
-let ltPenalized = false;     // errou A1/A2 → trava em B1
+// ── LÓGICA SEQUENCIAL — 15 questões A1→C2 ────────────────────────────────────
 let ltTotalQuestions = 15;
 let ltCurrentQ = 0;
 
 function buildAdaptiveQueue() {
-  // Começa com 5 questões A1, depois adapta
-  ltQueuedQuestions = [...LT_QUESTIONS.a1];
-  ltAnsweredByLevel = { a1: 0, b1: 0, c1: 0 };
-  ltCurrentLevel = "a1";
-  ltConsecutiveRight = 0;
-  ltConsecutiveWrong = 0;
-  ltPenalized = false;
+  ltIndex = 0;
 }
 
 function getNextAdaptiveQuestion() {
-  const pool = LT_QUESTIONS[ltCurrentLevel];
-  const used = ltAnsweredByLevel[ltCurrentLevel] || 0;
-  if (used < pool.length) {
-    ltAnsweredByLevel[ltCurrentLevel] = used + 1;
-    return pool[used];
-  }
-  // Pool esgotado — ir pro próximo nível
-  if (ltCurrentLevel === "a1") { ltCurrentLevel = "b1"; ltAnsweredByLevel.b1 = 0; }
-  else if (ltCurrentLevel === "b1") { ltCurrentLevel = "c1"; ltAnsweredByLevel.c1 = 0; }
-  const newPool = LT_QUESTIONS[ltCurrentLevel];
-  ltAnsweredByLevel[ltCurrentLevel] = 1;
-  return newPool[0];
+  return LT_QUESTIONS.all[ltIndex++];
 }
 
-function adaptLevel(wasCorrect) {
-  if (wasCorrect) {
-    ltConsecutiveWrong = 0;
-    ltConsecutiveRight++;
-    if (ltConsecutiveRight >= 3) {
-      // Sobe nível
-      ltConsecutiveRight = 0;
-      if (ltCurrentLevel === "a1") ltCurrentLevel = "b1";
-      else if (ltCurrentLevel === "b1" && !ltPenalized) ltCurrentLevel = "c1";
-    }
-  } else {
-    ltConsecutiveRight = 0;
-    ltConsecutiveWrong++;
-    // Penalidade: erro em A1 trava máximo em B1
-    if (ltCurrentLevel === "a1") ltPenalized = true;
-    if (ltConsecutiveWrong >= 2) {
-      ltConsecutiveWrong = 0;
-      if (ltCurrentLevel === "c1") ltCurrentLevel = "b1";
-      else if (ltCurrentLevel === "b1") ltCurrentLevel = "a1";
-    }
-  }
-}
+function adaptLevel() {} // sequencial — classificação por pontuação final
 
 function calcFinalLevel() {
-  const maxPts = ltTotalQuestions * 3; // aprox
-  const pct = Math.round((ltScore / Math.max(ltScore + 1, 1)) * 100);
-
-  // Basear no nível onde terminou + pontuação
-  if (ltPenalized && ltCurrentLevel !== "c1") {
-    // Errou básico — máximo B1
-    if (ltScore < 15) return { level:"a2", label:"A2 — Básico 📘", msg:"Você tem uma base! Vamos fortalecer o essencial.", color:"#60a5fa" };
-    return { level:"b1", label:"B1 — Intermediário ⭐", msg:"Bom nível! Você se vira bem. Foco em fluência profissional.", color:"#a78bfa" };
-  }
-  if (ltCurrentLevel === "c1") {
-    if (ltAnsweredByLevel.c1 >= 3) return { level:"c1", label:"C1 — Avançado 🏆", msg:"Impressionante! Vamos polir detalhes e naturalidade.", color:"#ffd700" };
-    return { level:"b2", label:"B2 — Intermediário Alto 🌟", msg:"Ótimo nível! Comunicação fluida com pequenos refinamentos.", color:"#e4b45c" };
-  }
-  if (ltCurrentLevel === "b1") return { level:"b1", label:"B1 — Intermediário ⭐", msg:"Bom nível! Você se vira bem. Foco em fluência profissional.", color:"#a78bfa" };
-  if (ltScore >= 8) return { level:"a2", label:"A2 — Básico Funcional 📘", msg:"Você tem base! Vamos fortalecer vocabulário e gramática.", color:"#60a5fa" };
-  return { level:"a1", label:"A1 — Iniciante 🌱", msg:"Sem problema! Todo expert já foi iniciante. Vamos juntos!", color:"#22c55e" };
+  if (ltScore >= 14) return { level:"c2", label:"C2 — Fluente 🎓", msg:"Inglês excepcional! Vocabulário, gramática e nuance sob controle total.", color:"#f97316" };
+  if (ltScore >= 12) return { level:"c1", label:"C1 — Avançado 🏆", msg:"Impressionante! Você domina inglês profissional com precisão e naturalidade.", color:"#ffd700" };
+  if (ltScore >= 10) return { level:"b2", label:"B2 — Intermediário Alto 🌟", msg:"Ótimo nível! Comunicação fluida — pequenos refinamentos para chegar ao topo.", color:"#e4b45c" };
+  if (ltScore >= 7)  return { level:"b1", label:"B1 — Intermediário ⭐", msg:"Bom nível! Você se vira bem. Foco em fluência e vocabulário profissional.", color:"#a78bfa" };
+  if (ltScore >= 4)  return { level:"a2", label:"A2 — Básico Funcional 📘", msg:"Você tem uma base sólida! Vamos fortalecer o vocabulário e a gramática.", color:"#60a5fa" };
+  return               { level:"a1", label:"A1 — Iniciante 🌱", msg:"Todo expert já foi iniciante! Vamos construir seu inglês do zero.", color:"#22c55e" };
 }
 
 function startLevelTest(){
@@ -2228,13 +2197,11 @@ function renderLTQuestion(){
   document.getElementById("lt-counter").textContent=`${ltCurrentQ} / ${total}`;
   document.getElementById("lt-progress-bar").style.width=`${Math.round((ltCurrentQ/total)*100)}%`;
 
-  // Badge de nível atual
-  const levelColors = {a1:"#22c55e",b1:"#a78bfa",c1:"#ffd700"};
-  const levelLabels = {a1:"A1-A2 • Básico",b1:"B1-B2 • Intermediário",c1:"C1 • Avançado"};
+  // Badge do nível da pergunta atual
+  const levelColors = {A1:"#22c55e",A2:"#4ade80",B1:"#a78bfa",B2:"#e4b45c",C1:"#ffd700",C2:"#f97316"};
   document.getElementById("lt-title").textContent = q.title;
-  document.getElementById("lt-title").style.color = levelColors[ltCurrentLevel]||"#e4b45c";
+  document.getElementById("lt-title").style.color = levelColors[q.level]||"#e4b45c";
 
-  // Label de nível
   let levelBadge = document.getElementById("lt-level-badge");
   if(!levelBadge){
     levelBadge = document.createElement("div");
@@ -2242,10 +2209,10 @@ function renderLTQuestion(){
     levelBadge.style.cssText="font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;display:inline-block;margin-bottom:8px;";
     document.getElementById("lt-title").parentNode.insertBefore(levelBadge, document.getElementById("lt-title"));
   }
-  levelBadge.textContent = levelLabels[ltCurrentLevel]||"";
-  levelBadge.style.background = (levelColors[ltCurrentLevel]||"#e4b45c")+"22";
-  levelBadge.style.color = levelColors[ltCurrentLevel]||"#e4b45c";
-  levelBadge.style.border = `1px solid ${levelColors[ltCurrentLevel]||"#e4b45c"}44`;
+  levelBadge.textContent = q.level;
+  levelBadge.style.background = (levelColors[q.level]||"#e4b45c")+"22";
+  levelBadge.style.color = levelColors[q.level]||"#e4b45c";
+  levelBadge.style.border = `1px solid ${levelColors[q.level]||"#e4b45c"}44`;
 
   document.getElementById("lt-question").textContent = q.question;
   document.getElementById("lt-feedback").style.display="none";
@@ -2335,24 +2302,33 @@ function showLTFeedback(feedback,correct,pts){
 function showLTResult(){
   const result = calcFinalLevel();
   diagAnswers.level = result.level;
+  diagAnswers.levelTestCompleted = true;
 
   document.getElementById("lt-questions-area").style.display="none";
   document.getElementById("lt-result").style.display="block";
-  document.getElementById("lt-result-score").textContent=`${ltScore} pts`;
+  document.getElementById("lt-result-score").textContent=`${ltScore} / ${ltTotalQuestions}`;
   document.getElementById("lt-result-pct").textContent=result.label;
   document.getElementById("lt-result-pct").style.color=result.color||"#e4b45c";
   document.getElementById("lt-result-level").textContent=result.label;
   document.getElementById("lt-result-msg").textContent=result.msg;
-  document.getElementById("lt-result-bar").style.width=
-    result.level==="c1"?"95%":result.level==="b2"?"80%":result.level==="b1"?"65%":result.level==="a2"?"40%":"20%";
+  const barPct = {c2:"100%",c1:"90%",b2:"75%",b1:"58%",a2:"38%",a1:"18%"};
+  document.getElementById("lt-result-bar").style.width = barPct[result.level]||"18%";
   document.getElementById("lt-result-bar").style.background=result.color||"#e4b45c";
   SoundFX.complete();
 }
 
 async function finishLevelTest(){
+  const completed = diagAnswers.levelTestCompleted || false;
   if(currentUser){
-    await saveProgress(currentUser.uid,{diagnosisAnswers:diagAnswers,detectedLevel:diagAnswers.level,currentMission:{segmentId:currentSegmentId,phaseId:"f1",missionId:getSegment(currentSegmentId)?.phases[0]?.missions[0]?.id||"",phraseIndex:0}});
-    userData.diagnosisAnswers=diagAnswers; userData.detectedLevel=diagAnswers.level;
+    await saveProgress(currentUser.uid,{
+      diagnosisAnswers:diagAnswers,
+      detectedLevel: completed ? diagAnswers.level : (userData.detectedLevel||null),
+      levelTestCompleted: completed,
+      currentMission:{segmentId:currentSegmentId,phaseId:"f1",missionId:getSegment(currentSegmentId)?.phases[0]?.missions[0]?.id||"",phraseIndex:0}
+    });
+    userData.diagnosisAnswers=diagAnswers;
+    userData.detectedLevel= completed ? diagAnswers.level : (userData.detectedLevel||null);
+    userData.levelTestCompleted=completed;
   }
   renderDashboard(); showView("view-dashboard");
 }
@@ -2418,6 +2394,125 @@ async function loadDashboard(user){
   }
   console.log("✅ Dashboard shown for:", userData.name);
 }
+
+// ── GLOSSARY DATA ─────────────────────────────────────────────────────────────
+const GLOSSARY = {
+  maritimo: { name:"Marítimo", icon:"⚓", terms:[
+    {en:"vessel",       pt:"navio / embarcação",              exEN:"The vessel arrived at port ahead of schedule.",                           exPT:"O navio chegou ao porto antes do previsto."},
+    {en:"cargo",        pt:"carga / mercadoria",              exEN:"The cargo must be loaded before departure.",                              exPT:"A carga deve ser embarcada antes da partida."},
+    {en:"anchor",       pt:"âncora",                          exEN:"Drop the anchor — we are staying here overnight.",                        exPT:"Solte a âncora — vamos ficar aqui esta noite."},
+    {en:"crew",         pt:"tripulação",                      exEN:"All crew members must attend the safety briefing.",                       exPT:"Todos os membros da tripulação devem assistir ao briefing de segurança."},
+    {en:"dock",         pt:"atracar / cais",                  exEN:"The ship will dock at berth number five.",                                exPT:"O navio vai atracar no berço número cinco."},
+    {en:"port",         pt:"porto",                           exEN:"The port handles over ten thousand containers per day.",                  exPT:"O porto movimenta mais de dez mil contêineres por dia."},
+    {en:"berth",        pt:"berço / vaga de atracação",       exEN:"There are no berths available until tomorrow morning.",                   exPT:"Não há berços disponíveis até amanhã de manhã."},
+    {en:"manifest",     pt:"manifesto de carga",              exEN:"Please submit the cargo manifest before arrival.",                        exPT:"Envie o manifesto de carga antes da chegada."},
+    {en:"bill of lading",pt:"conhecimento de embarque (B/L)", exEN:"The bill of lading is required to release the cargo.",                   exPT:"O conhecimento de embarque é necessário para liberar a carga."},
+    {en:"customs",      pt:"alfândega",                       exEN:"The shipment is currently being inspected by customs.",                   exPT:"A remessa está sendo inspecionada pela alfândega."},
+    {en:"draft",        pt:"calado do navio",                 exEN:"The vessel's draft is 12 meters — check the channel depth.",             exPT:"O calado do navio é 12 metros — verifique a profundidade do canal."},
+    {en:"starboard",    pt:"boreste (lado direito do navio)", exEN:"The pilot vessel is approaching from starboard.",                        exPT:"O barco do prático está se aproximando pelo boreste."},
+    {en:"port side",    pt:"bombordo (lado esquerdo)",        exEN:"Secure the mooring lines on the port side.",                             exPT:"Amarre as linhas de atracação no bombordo."},
+    {en:"gangway",      pt:"passarela de acesso",             exEN:"All visitors must use the gangway to board.",                            exPT:"Todos os visitantes devem usar a passarela para embarcar."},
+    {en:"ETA",          pt:"horário previsto de chegada",     exEN:"What is the ETA for the next vessel?",                                   exPT:"Qual é a ETA do próximo navio?"},
+    {en:"aboard",       pt:"a bordo",                         exEN:"Welcome aboard — please find your muster station.",                      exPT:"Bem-vindo a bordo — encontre seu ponto de abandono."},
+    {en:"pilot",        pt:"prático / piloto de porto",       exEN:"The harbor pilot will guide the ship into port.",                        exPT:"O prático vai guiar o navio para o porto."},
+    {en:"stern",        pt:"popa (parte traseira do navio)",  exEN:"The mooring line was secured at the stern.",                             exPT:"O cabo de amarração foi fixado na popa."},
+  ]},
+  hotelaria: { name:"Hotelaria", icon:"🏨", terms:[
+    {en:"reservation",   pt:"reserva",                        exEN:"I have a reservation under the name Silva.",                             exPT:"Tenho uma reserva no nome Silva."},
+    {en:"check-in",      pt:"entrada no hotel",               exEN:"Check-in starts at 3 PM.",                                              exPT:"O check-in começa às 15h."},
+    {en:"checkout",      pt:"saída do hotel",                 exEN:"Checkout is at 12 noon — please vacate your room.",                     exPT:"O checkout é ao meio-dia — por favor desocupe o quarto."},
+    {en:"amenities",     pt:"comodidades / facilidades",      exEN:"The room includes amenities such as a pool and gym access.",            exPT:"O quarto inclui comodidades como piscina e academia."},
+    {en:"concierge",     pt:"concierge / apoio ao hóspede",   exEN:"Ask the concierge for restaurant recommendations.",                     exPT:"Pergunte ao concierge por recomendações de restaurantes."},
+    {en:"housekeeping",  pt:"limpeza / governança",           exEN:"Housekeeping will clean your room while you are out.",                  exPT:"A limpeza vai arrumar seu quarto enquanto você sai."},
+    {en:"lobby",         pt:"saguão / hall de entrada",       exEN:"Please wait for your guest in the lobby.",                             exPT:"Aguarde seu hóspede no saguão."},
+    {en:"suite",         pt:"suíte",                          exEN:"The executive suite includes a separate living area.",                  exPT:"A suíte executiva tem uma sala de estar separada."},
+    {en:"complimentary", pt:"cortesia / gratuito",            exEN:"Breakfast is complimentary for all guests.",                            exPT:"O café da manhã é cortesia para todos os hóspedes."},
+    {en:"upgrade",       pt:"upgrade / melhoria de categoria",exEN:"Would you like an upgrade to a sea-view room?",                        exPT:"Gostaria de um upgrade para um quarto com vista para o mar?"},
+    {en:"room service",  pt:"serviço de quarto",              exEN:"Room service is available 24 hours a day.",                             exPT:"O serviço de quarto está disponível 24 horas por dia."},
+    {en:"front desk",    pt:"recepção",                       exEN:"Please collect your key card at the front desk.",                       exPT:"Por favor retire seu cartão na recepção."},
+    {en:"late checkout", pt:"saída tardia",                   exEN:"Can I request a late checkout until 2 PM?",                            exPT:"Posso pedir uma saída tardia até as 14h?"},
+    {en:"do not disturb",pt:"não perturbe",                   exEN:"The guest put the do not disturb sign on the door.",                    exPT:"O hóspede colocou a placa de não perturbe na porta."},
+    {en:"wake-up call",  pt:"chamada de despertar",           exEN:"Please arrange a wake-up call for 6 AM.",                              exPT:"Providencie uma chamada de despertar para as 6h."},
+    {en:"deposit",       pt:"depósito / caução",              exEN:"A security deposit is required at check-in.",                          exPT:"Um depósito de segurança é exigido no check-in."},
+    {en:"double room",   pt:"quarto duplo",                   exEN:"I would like to book a double room for two nights.",                    exPT:"Gostaria de reservar um quarto duplo por duas noites."},
+  ]},
+  comex: { name:"COMEX", icon:"🌍", terms:[
+    {en:"invoice",        pt:"fatura comercial",               exEN:"Please send the commercial invoice before shipment.",                    exPT:"Envie a fatura comercial antes do embarque."},
+    {en:"bill of lading", pt:"conhecimento de embarque (B/L)", exEN:"The original bill of lading must be presented at customs.",             exPT:"O B/L original deve ser apresentado na alfândega."},
+    {en:"customs",        pt:"alfândega / desembaraço",        exEN:"The goods are held by customs pending inspection.",                     exPT:"A mercadoria está retida na alfândega aguardando inspeção."},
+    {en:"tariff",         pt:"tarifa / imposto de importação", exEN:"A 20% tariff applies to this type of goods.",                          exPT:"Uma tarifa de 20% se aplica a este tipo de mercadoria."},
+    {en:"clearance",      pt:"desembaraço aduaneiro",          exEN:"We are waiting for customs clearance to release the cargo.",            exPT:"Aguardamos o desembaraço aduaneiro para liberar a carga."},
+    {en:"freight",        pt:"frete",                          exEN:"Freight costs have increased due to fuel prices.",                      exPT:"Os custos de frete aumentaram por causa dos preços do combustível."},
+    {en:"shipper",        pt:"embarcador / exportador",        exEN:"The shipper is responsible for packing and labeling.",                  exPT:"O embarcador é responsável pelo embalamento e etiquetagem."},
+    {en:"consignee",      pt:"destinatário / importador",      exEN:"The consignee must be present to receive the cargo.",                   exPT:"O destinatário deve estar presente para receber a carga."},
+    {en:"warehouse",      pt:"armazém / depósito",             exEN:"The goods are stored in our bonded warehouse.",                         exPT:"A mercadoria está no nosso armazém alfandegado."},
+    {en:"letter of credit",pt:"carta de crédito (L/C)",        exEN:"Payment will be made by irrevocable letter of credit.",                 exPT:"O pagamento será feito por carta de crédito irrevogável."},
+    {en:"HS code",        pt:"código NCM / classificação",     exEN:"You must declare the correct HS code for each product.",               exPT:"Você deve declarar o código NCM correto para cada produto."},
+    {en:"FOB",            pt:"livre a bordo (Free On Board)",  exEN:"The price is FOB Santos — the buyer covers ocean freight.",            exPT:"O preço é FOB Santos — o comprador cobre o frete marítimo."},
+    {en:"CIF",            pt:"custo, seguro e frete",          exEN:"The CIF value is used to calculate import duties.",                     exPT:"O valor CIF é usado para calcular os impostos de importação."},
+    {en:"packing list",   pt:"romaneio de embalagem",          exEN:"Attach the packing list to every carton.",                             exPT:"Anexe o romaneio em cada caixa."},
+    {en:"customs broker", pt:"despachante aduaneiro",          exEN:"Our customs broker handles all import documentation.",                  exPT:"Nosso despachante cuida de toda a documentação de importação."},
+    {en:"shipment",       pt:"remessa / envio",                exEN:"The shipment is expected to arrive in 15 days.",                       exPT:"A remessa deve chegar em 15 dias."},
+    {en:"proforma invoice",pt:"fatura proforma",               exEN:"Please send a proforma invoice for our approval.",                      exPT:"Envie uma fatura proforma para nossa aprovação."},
+  ]},
+  offshore: { name:"Offshore", icon:"🛢️", terms:[
+    {en:"platform",        pt:"plataforma offshore",                     exEN:"The platform operates 120 km from the coast.",                   exPT:"A plataforma opera a 120 km da costa."},
+    {en:"rig",             pt:"sonda / plataforma de perfuração",        exEN:"The drilling rig will be on location for six months.",            exPT:"A sonda ficará no local por seis meses."},
+    {en:"shift",           pt:"turno de trabalho",                       exEN:"The offshore shift is typically 12 hours on and 12 off.",         exPT:"O turno offshore é tipicamente 12 horas de trabalho e 12 de descanso."},
+    {en:"muster station",  pt:"ponto de abandono / mustering",           exEN:"All personnel must know their muster station.",                   exPT:"Todo pessoal deve conhecer seu ponto de abandono."},
+    {en:"crude oil",       pt:"petróleo bruto",                          exEN:"Crude oil is pumped from the well to the FPSO.",                  exPT:"O petróleo bruto é bombeado do poço para o FPSO."},
+    {en:"pipeline",        pt:"oleoduto / duto",                         exEN:"The pipeline runs from the platform to the refinery.",            exPT:"O oleoduto vai da plataforma até a refinaria."},
+    {en:"BOP",             pt:"preventor de explosão (Blowout Preventer)",exEN:"Test the BOP before drilling operations begin.",                  exPT:"Teste o BOP antes de iniciar as operações de perfuração."},
+    {en:"drillship",       pt:"navio-sonda",                             exEN:"The drillship is equipped for ultra-deep water.",                 exPT:"O navio-sonda é equipado para águas ultra-profundas."},
+    {en:"derrick",         pt:"torre de perfuração",                     exEN:"The derrick is 50 meters tall and weighs 300 tons.",              exPT:"A torre tem 50 metros de altura e pesa 300 toneladas."},
+    {en:"helideck",        pt:"heliporto da plataforma",                 exEN:"The helicopter landed safely on the helideck.",                   exPT:"O helicóptero pousou com segurança no heliporto."},
+    {en:"crew change",     pt:"troca de turno / rotatividade",           exEN:"Crew change is scheduled every 14 days.",                         exPT:"A troca de turno está programada a cada 14 dias."},
+    {en:"roughneck",       pt:"auxiliar de sonda",                       exEN:"The roughneck handles the heavy drill pipe connections.",          exPT:"O auxiliar de sonda manuseia as conexões do tubo de perfuração."},
+    {en:"safety briefing", pt:"briefing de segurança",                   exEN:"A safety briefing is mandatory before any offshore task.",         exPT:"Um briefing de segurança é obrigatório antes de qualquer tarefa offshore."},
+    {en:"wellbore",        pt:"poço de perfuração",                      exEN:"Monitor the wellbore pressure continuously.",                     exPT:"Monitore a pressão do poço continuamente."},
+    {en:"FPSO",            pt:"navio-plataforma de produção",            exEN:"The FPSO processes and stores oil before offloading.",            exPT:"O FPSO processa e armazena petróleo antes do descarregamento."},
+    {en:"subsea",          pt:"submarino / submerso",                    exEN:"The subsea equipment must be inspected by ROV.",                  exPT:"O equipamento submarino deve ser inspecionado por ROV."},
+    {en:"flare",           pt:"tocha / queimador de gás",                exEN:"The flare burns off excess gas safely.",                          exPT:"A tocha queima o excesso de gás com segurança."},
+  ]},
+  aeroporto: { name:"Aeroporto", icon:"✈️", terms:[
+    {en:"departure",        pt:"partida / saída",                  exEN:"Departure is from Terminal 2, Gate B12.",                         exPT:"A partida é do Terminal 2, Portão B12."},
+    {en:"arrival",          pt:"chegada",                          exEN:"The arrival hall is on the ground floor.",                        exPT:"O saguão de chegadas fica no térreo."},
+    {en:"boarding pass",    pt:"cartão de embarque",               exEN:"Please have your boarding pass ready at the gate.",               exPT:"Tenha seu cartão de embarque em mãos no portão."},
+    {en:"check-in",         pt:"check-in / despacho de bagagem",   exEN:"Online check-in opens 48 hours before departure.",               exPT:"O check-in online abre 48 horas antes da partida."},
+    {en:"gate",             pt:"portão de embarque",               exEN:"Boarding begins at Gate 14 in 20 minutes.",                      exPT:"O embarque começa no Portão 14 em 20 minutos."},
+    {en:"baggage / luggage",pt:"bagagem",                          exEN:"Each passenger is allowed one piece of carry-on baggage.",        exPT:"Cada passageiro tem direito a uma bagagem de mão."},
+    {en:"security check",   pt:"controle de segurança",            exEN:"Remove your laptop before going through security.",               exPT:"Retire o notebook antes de passar pelo controle de segurança."},
+    {en:"immigration",      pt:"imigração / controle de passaporte",exEN:"All non-citizens must clear immigration on arrival.",            exPT:"Todos os não-cidadãos passam pela imigração na chegada."},
+    {en:"connecting flight",pt:"voo de conexão",                   exEN:"I have a connecting flight in São Paulo.",                       exPT:"Tenho um voo de conexão em São Paulo."},
+    {en:"layover",          pt:"escala / conexão longa",           exEN:"We have a 6-hour layover in Lisbon.",                            exPT:"Temos uma escala de 6 horas em Lisboa."},
+    {en:"carry-on",         pt:"bagagem de mão",                   exEN:"Your carry-on must fit in the overhead bin.",                    exPT:"Sua bagagem de mão deve caber no compartimento superior."},
+    {en:"customs",          pt:"alfândega (aeroporto)",            exEN:"Declare all items over the duty-free limit at customs.",         exPT:"Declare todos os itens acima do limite isento na alfândega."},
+    {en:"transit",          pt:"trânsito / passageiro em escala",  exEN:"Passengers in transit do not need a visa.",                     exPT:"Passageiros em trânsito não precisam de visto."},
+    {en:"delay",            pt:"atraso de voo",                    exEN:"The flight is delayed by two hours due to weather.",             exPT:"O voo está atrasado duas horas por causa do tempo."},
+    {en:"baggage claim",    pt:"esteira de bagagem",               exEN:"Baggage claim for your flight is at carousel 5.",               exPT:"A esteira de bagagem do seu voo é a número 5."},
+    {en:"boarding",         pt:"embarque",                         exEN:"Boarding will begin 30 minutes before departure.",              exPT:"O embarque começará 30 minutos antes da partida."},
+    {en:"aisle seat",       pt:"assento no corredor",              exEN:"I prefer an aisle seat for easy access.",                       exPT:"Prefiro assento no corredor para facilitar o acesso."},
+  ]},
+  corporativo: { name:"Corporativo", icon:"💼", terms:[
+    {en:"meeting",      pt:"reunião",                              exEN:"We have a team meeting every Monday morning.",                   exPT:"Temos uma reunião de equipe toda segunda de manhã."},
+    {en:"deadline",     pt:"prazo final",                          exEN:"The deadline for this project is next Friday.",                  exPT:"O prazo final deste projeto é na próxima sexta."},
+    {en:"feedback",     pt:"retorno / avaliação",                  exEN:"Please send me your feedback by end of day.",                    exPT:"Por favor me envie seu feedback até o fim do dia."},
+    {en:"KPI",          pt:"indicador-chave de desempenho",        exEN:"Sales KPIs are reviewed every quarter.",                         exPT:"Os KPIs de vendas são revisados todo trimestre."},
+    {en:"stakeholder",  pt:"parte interessada / envolvido",        exEN:"All stakeholders must approve the final proposal.",              exPT:"Todas as partes interessadas devem aprovar a proposta final."},
+    {en:"follow-up",    pt:"acompanhamento / retorno",             exEN:"I will follow up on this email by Thursday.",                    exPT:"Farei um acompanhamento deste e-mail até quinta."},
+    {en:"agenda",       pt:"pauta / agenda da reunião",            exEN:"Please review the agenda before the meeting.",                   exPT:"Por favor revise a pauta antes da reunião."},
+    {en:"budget",       pt:"orçamento",                            exEN:"The project is over budget — we need to cut costs.",            exPT:"O projeto está acima do orçamento — precisamos cortar custos."},
+    {en:"proposal",     pt:"proposta",                             exEN:"I will send you the proposal by tomorrow morning.",              exPT:"Enviarei a proposta para você até amanhã de manhã."},
+    {en:"minutes",      pt:"ata de reunião",                       exEN:"Who is responsible for taking the minutes today?",               exPT:"Quem é responsável por fazer a ata hoje?"},
+    {en:"ROI",          pt:"retorno sobre investimento",           exEN:"The campaign showed a positive ROI of 30%.",                    exPT:"A campanha apresentou um ROI positivo de 30%."},
+    {en:"brief",        pt:"briefing / resumo de projeto",         exEN:"The client sent a detailed brief for the new campaign.",         exPT:"O cliente enviou um briefing detalhado para a nova campanha."},
+    {en:"quarterly",    pt:"trimestral",                           exEN:"Our quarterly results exceeded expectations.",                   exPT:"Nossos resultados trimestrais superaram as expectativas."},
+    {en:"benchmark",    pt:"referência / padrão do setor",         exEN:"Our pricing must stay competitive against industry benchmarks.", exPT:"Nosso preço deve ser competitivo em relação ao benchmark do setor."},
+    {en:"outsource",    pt:"terceirizar",                          exEN:"We decided to outsource the IT support team.",                   exPT:"Decidimos terceirizar a equipe de suporte de TI."},
+    {en:"workflow",     pt:"fluxo de trabalho",                    exEN:"We need to streamline the approval workflow.",                   exPT:"Precisamos otimizar o fluxo de aprovação."},
+    {en:"presentation", pt:"apresentação",                         exEN:"The board presentation is scheduled for Tuesday.",               exPT:"A apresentação para a diretoria está marcada para terça."},
+  ]},
+};
 
 const PRO_MESSAGES=[
   {title:"🚀 Acelere seu inglês",        sub:"Só R$ 15/mês — menos que um café por dia!"},
@@ -2683,9 +2778,19 @@ function renderDashboard(){
   const banner=document.getElementById("pro-banner");
   if(banner) banner.style.display=isPro()?"none":"flex";
 
-  // Show diagnosis banner only if never done
+  // Show banner: diagnosis not done OR level test not done yet
   const diagBanner=document.getElementById("diag-invite-banner");
-  if(diagBanner) diagBanner.style.display=userData.diagnosisAnswers?"none":"flex";
+  if(diagBanner){
+    const needsDiag = !userData.diagnosisAnswers;
+    const needsLevelTest = userData.diagnosisAnswers && !userData.levelTestCompleted;
+    diagBanner.style.display = (needsDiag || needsLevelTest) ? "flex" : "none";
+    if(needsLevelTest && !needsDiag){
+      const titleEl = diagBanner.querySelector(".diag-invite-title");
+      const subEl   = diagBanner.querySelector(".diag-invite-sub");
+      if(titleEl) titleEl.textContent = "Descubra seu nível de inglês";
+      if(subEl)   subEl.textContent   = "Teste rápido • 15 questões • ~5 min";
+    }
+  }
 
   renderSegments();
   }catch(e){ console.error("renderDashboard error:", e.message); }
@@ -2714,6 +2819,16 @@ function openSegmentPhases(segId){
   currentSegmentId=segId;
   document.getElementById("phases-title").textContent=`${seg.icon} ${seg.name}`;
   const list=document.getElementById("phases-list"); list.innerHTML="";
+
+  // Glossary button (only for segments that have glossary data)
+  if(GLOSSARY[segId]){
+    const glossBtn=document.createElement("button");
+    glossBtn.className="gloss-segment-btn";
+    glossBtn.innerHTML="📖 Glossário do Segmento";
+    glossBtn.addEventListener("click",()=>openGlossary(segId));
+    list.appendChild(glossBtn);
+  }
+
   const completed=userData.completedMissions||[];
   (seg.phases||[]).forEach((phase,pi)=>{
     // Grammar Core: all phases independent
@@ -2745,6 +2860,72 @@ function openSegmentPhases(segId){
     list.appendChild(div);
   });
   showView("view-phases");
+}
+
+// ── GLOSSARY ──────────────────────────────────────────────────────────────────
+function openGlossary(segId){
+  const data=GLOSSARY[segId]; if(!data) return;
+  const overlay=document.createElement("div");
+  overlay.id="glossary-overlay";
+  overlay.innerHTML=`
+    <div class="gloss-header">
+      <div class="gloss-header-row">
+        <button class="gloss-close-btn" onclick="closeGlossary()">← Voltar</button>
+        <h2 class="gloss-title">${data.icon} Glossário — ${data.name}</h2>
+      </div>
+      <input class="gloss-search" placeholder="Buscar termo em inglês ou português..." id="gloss-search-input" />
+    </div>
+    <div class="gloss-list" id="gloss-term-list"></div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelector("#gloss-search-input").addEventListener("input",e=>{
+    renderGlossaryTerms(segId, e.target.value.trim().toLowerCase());
+  });
+  renderGlossaryTerms(segId,"");
+}
+
+function closeGlossary(){
+  document.getElementById("glossary-overlay")?.remove();
+}
+
+function renderGlossaryTerms(segId, filter){
+  const data=GLOSSARY[segId]; if(!data) return;
+  const list=document.getElementById("gloss-term-list"); if(!list) return;
+  const terms=filter
+    ? data.terms.filter(t=>t.en.toLowerCase().includes(filter)||t.pt.toLowerCase().includes(filter))
+    : data.terms;
+  if(!terms.length){
+    list.innerHTML=`<p class="gloss-empty">Nenhum termo encontrado.</p>`;
+    return;
+  }
+  list.innerHTML="";
+  terms.forEach(term=>{
+    const card=document.createElement("div");
+    card.className="gloss-term-card";
+    card.innerHTML=`
+      <div class="gloss-term-row">
+        <span class="gloss-term-en">${term.en}</span>
+        <span class="gloss-term-pt">${term.pt}</span>
+        <button class="gloss-speak-btn" title="Ouvir pronúncia">🔊</button>
+      </div>
+      <div class="gloss-term-detail">
+        <div class="gloss-example-en">"${term.exEN}"</div>
+        <div class="gloss-example-pt">"${term.exPT}"</div>
+        <button class="gloss-speak-example">🔊 Ouvir exemplo</button>
+      </div>`;
+    card.querySelector(".gloss-term-row").addEventListener("click",e=>{
+      if(e.target.classList.contains("gloss-speak-btn")) return;
+      card.classList.toggle("open");
+    });
+    card.querySelector(".gloss-speak-btn").addEventListener("click",e=>{
+      e.stopPropagation();
+      try{ SoundFX.speakEN(term.en); }catch(_){}
+    });
+    card.querySelector(".gloss-speak-example").addEventListener("click",e=>{
+      e.stopPropagation();
+      try{ SoundFX.speakEN(term.exEN); }catch(_){}
+    });
+    list.appendChild(card);
+  });
 }
 
 function openMissionsList(segId,phaseId){
@@ -6183,12 +6364,10 @@ const LOADING_TIPS = [
 
 let _splashTimeout = null;
 
-function showLoadingSplash(onDone) {
-  // Escolher frase aleatória
+function showLoadingSplash(onDone, minMs = 2200) {
   const phrase = LOADING_PHRASES[Math.floor(Math.random() * LOADING_PHRASES.length)];
   const tip = LOADING_TIPS[Math.floor(Math.random() * LOADING_TIPS.length)];
 
-  // Remover overlay anterior
   document.getElementById("loading-splash-overlay")?.remove();
 
   const overlay = document.createElement("div");
@@ -6203,31 +6382,21 @@ function showLoadingSplash(onDone) {
 
   overlay.innerHTML = `
     <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 30%,rgba(201,147,58,0.1),transparent);pointer-events:none;"></div>
-
-    <!-- Logo animado -->
     <img src="logo_full_2.png" alt="VIC English"
       style="width:180px;margin-bottom:32px;filter:drop-shadow(0 4px 24px rgba(201,147,58,0.3));animation:pulse 2s ease infinite;"/>
-
-    <!-- Frase principal -->
     <div style="font-size:20px;font-weight:800;color:#fff;line-height:1.4;margin-bottom:10px;max-width:340px;font-style:italic;">
       "${phrase.en}"
     </div>
     <div style="font-size:13px;color:#e4b45c;font-weight:600;margin-bottom:36px;opacity:0.85;">
       ${phrase.sub}
     </div>
-
-    <!-- Barra de progresso animada -->
     <div style="width:200px;height:3px;background:rgba(255,255,255,0.1);border-radius:999px;margin-bottom:20px;overflow:hidden;">
       <div id="splash-progress-bar"
-        style="height:100%;background:linear-gradient(90deg,#c9933a,#e4b45c);border-radius:999px;width:0%;transition:width 1.8s ease;"></div>
+        style="height:100%;background:linear-gradient(90deg,#c9933a,#e4b45c);border-radius:999px;width:0%;transition:width ${(minMs/1000).toFixed(1)}s ease;"></div>
     </div>
-
-    <!-- Tip -->
     <div style="font-size:12px;color:rgba(255,255,255,0.35);max-width:280px;line-height:1.5;">
       💡 ${tip}
     </div>
-
-    <!-- Powered by -->
     <div style="position:absolute;bottom:32px;font-size:11px;color:rgba(255,255,255,0.2);font-weight:600;letter-spacing:.5px;text-transform:uppercase;">
       Powered by VIC Language
     </div>
@@ -6235,21 +6404,19 @@ function showLoadingSplash(onDone) {
 
   document.body.appendChild(overlay);
 
-  // Animar barra
   requestAnimationFrame(() => {
     const bar = document.getElementById("splash-progress-bar");
     if(bar) bar.style.width = "100%";
   });
 
-  // Remover após 2.2s e chamar callback
-  _splashTimeout = setTimeout(() => {
-    overlay.style.transition = "opacity .4s ease";
-    overlay.style.opacity = "0";
-    setTimeout(() => {
-      overlay.remove();
-      if(onDone) onDone();
-    }, 400);
-  }, 2200);
+  clearTimeout(_splashTimeout);
+  if(minMs > 0){
+    _splashTimeout = setTimeout(() => {
+      overlay.style.transition = "opacity .4s ease";
+      overlay.style.opacity = "0";
+      setTimeout(() => { overlay.remove(); if(onDone) onDone(); }, 400);
+    }, minMs);
+  }
 }
 
 function hideLoadingSplash() {
@@ -6264,54 +6431,68 @@ function hideLoadingSplash() {
 
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
+// Clean state machine:
+//   NEW USER  → onboarding → auth → (register) → splash → dashboard → diagnosis
+//   RETURNING → splash → dashboard
 async function _handleAuth(user){
-  console.log("_handleAuth called, user:", user?.uid||"null");
-  // Cancelar timeout de fallback de sessão
-  if(window._sessionTimeout){ clearTimeout(window._sessionTimeout); window._sessionTimeout = null; }
+  if(window._sessionTimeout){ clearTimeout(window._sessionTimeout); window._sessionTimeout=null; }
   hideAuthLoading();
+
+  // Hard block: NEVER navigate automatically while onboarding is active.
+  // Only the user's button clicks (obNext/obSkip) may change the screen.
+  if(_onboardingActive){
+    if(user) currentUser = user;
+    return;
+  }
+
+  // ── No user logged in ─────────────────────────────────────────────────────
+  if(!user){
+    currentUser=null; userData=null;
+    localStorage.removeItem("vic_has_session");
+    hideLoadingSplash();
+    showView("view-auth");
+    return;
+  }
+
+  // ── Returning user logged in ──────────────────────────────────────────────
+  // Ensure splash is visible (it may already be showing from init)
+  if(!document.getElementById("loading-splash-overlay")){
+    showLoadingSplash(null, 0); // show immediately, manual close
+  }
+  hideAuthLoading();
+
+  const t0 = Date.now();
   try{
-    if(user){
-      console.log("User logged in:", user.uid);
-      // Se já estava na tela de auth E tem onboarding feito = vem do login manual
-      // Se estava em loading splash = vem de sessão salva
-      const comingFromSplash = document.getElementById("loading-splash-overlay") !== null;
-      if(user.uid===OWNER_UID){ currentUser=user; await loadAdminDashboard(); }
-      else await loadDashboard(user);
-      // Registrar token FCM após login
-      if(Notification.permission==="granted"){
-        registerFCMToken(user.uid).catch(()=>{});
-      }
-    } else {
-      console.log("No user — showing auth");
-      currentUser=null; userData=null;
-      localStorage.removeItem("vic_has_session");
-      showView("view-auth");
-    }
+    if(user.uid===OWNER_UID){ currentUser=user; await loadAdminDashboard(); }
+    else{ await loadDashboard(user); }
+    if(Notification.permission==="granted") registerFCMToken(user.uid).catch(()=>{});
   }catch(e){
-    console.error("Auth error:",e.message, e);
-    // Don't show auth page on error if user exists — try again once
-    if(user){
-      console.log("Retrying loadDashboard...");
-      try{ await loadDashboard(user); }
-      catch(e2){
-        console.error("Retry failed:", e2.message);
-        hideAuthLoading();
-        showView("view-auth");
-        showAuthError("Erro ao carregar. Tente novamente.");
-      }
-    } else {
-      hideAuthLoading();
+    console.error("loadDashboard error:", e.message);
+    try{ await loadDashboard(user); }
+    catch(e2){
+      hideLoadingSplash();
       showView("view-auth");
+      showAuthError("Erro ao carregar. Tente novamente.");
+      return;
     }
   }
+
+  // Keep splash for at least 2.5 seconds so user can read the phrase
+  const elapsed = Date.now() - t0;
+  const remaining = Math.max(0, 2500 - elapsed);
+  await new Promise(r => setTimeout(r, remaining));
+  hideLoadingSplash();
 }
 
 // ── ONBOARDING ────────────────────────────────────────────────────────────────
 let obStep = 0;
-const OB_TOTAL = 3;
+const OB_TOTAL = 4;
+let _obLocked = false; // debounce: prevents double-fire on touch devices
 
 function startOnboarding(){
   obStep = 0;
+  _obLocked = false;
+  _onboardingActive = true; // block all automatic navigation
   renderObStep();
   showView("view-onboarding");
 }
@@ -6322,24 +6503,30 @@ function renderObStep(){
   document.getElementById(`ob-slide-${obStep}`)?.classList.add("active");
   document.getElementById(`ob-dot-${obStep}`)?.classList.add("active");
   const btn = document.getElementById("ob-btn-next");
-  if(btn) btn.textContent = obStep===OB_TOTAL-1 ? "Começar! 🚀" : "Próximo →";
+  if(btn){
+    const isLast = obStep === OB_TOTAL - 1;
+    btn.textContent = isLast ? "Começar! 🚀" : "Próximo →";
+    btn.setAttribute("onclick", isLast ? "obSkip()" : "obNext()");
+  }
 }
 
 function obNext(){
-  if(obStep < OB_TOTAL-1){
+  if(_obLocked) return;
+  _obLocked = true;
+  setTimeout(() => { _obLocked = false; }, 600);
+  if(obStep < OB_TOTAL - 1){
     obStep++;
     renderObStep();
-  } else {
-    obSkip();
   }
 }
 
 function obSkip(){
+  _onboardingActive = false; // release the block
   localStorage.setItem("vic_onboarding_done","1");
-  // Se já tem usuário logado, vai pro dashboard
   if(currentUser){
+    // User was already logged in — go straight to dashboard
     if(currentUser.uid === OWNER_UID) loadAdminDashboard();
-    else { renderDashboard(); showView("view-dashboard"); }
+    else _handleAuth(currentUser); // use normal flow with splash
   } else {
     showView("view-auth");
   }
@@ -6629,16 +6816,16 @@ function init(){
     handleGoogleRedirectResult().catch(()=>{});
   }
 
-  // ── Onboarding: mostrar só na primeira vez ──────────────────────────────────
+  // ── Routing inicial ──────────────────────────────────────────────────────────
   const onboardingDone = localStorage.getItem("vic_onboarding_done");
   if(!onboardingDone){
+    // First time: show onboarding. _onboardingActive=true blocks all auth navigation.
     startOnboarding();
   } else {
-    showView("view-auth");
+    // Returning user: splash immediately, then auth drives the rest.
+    showLoadingSplash(null, 0);
+    if(_pendingAuthUser !== undefined) _handleAuth(_pendingAuthUser);
   }
-
-  // If auth already fired before DOM was ready, handle it now
-  if(_pendingAuthUser !== undefined) _handleAuth(_pendingAuthUser);
 
   // auth buttons
   document.getElementById("tab-login").addEventListener("click",()=>switchTab("login"));
@@ -6795,11 +6982,11 @@ function init(){
   document.getElementById("btn-diag-voice")?.addEventListener("click",startDiagVoice);
   document.getElementById("btn-finish-diag-note")?.addEventListener("click",finishDiagnosisNote);
   document.getElementById("btn-skip-diag-note")?.addEventListener("click",finishDiagnosisNote);
-  document.getElementById("btn-skip-level-test-diag")?.addEventListener("click",async()=>{diagAnswers.level="a1";await finishLevelTest();});
+  document.getElementById("btn-skip-level-test-diag")?.addEventListener("click",async()=>{diagAnswers.levelTestCompleted=false;await finishLevelTest();});
 
   // level test
   document.getElementById("btn-finish-level-test")?.addEventListener("click",finishLevelTest);
-  document.getElementById("btn-skip-level-test")?.addEventListener("click",async()=>{diagAnswers.level="a1";await finishLevelTest();});
+  document.getElementById("btn-skip-level-test")?.addEventListener("click",async()=>{diagAnswers.levelTestCompleted=false;await finishLevelTest();});
 
   // profile
   document.getElementById("btn-open-profile")?.addEventListener("click",openProfile);
@@ -6828,7 +7015,11 @@ function init(){
 
   // dashboard
   document.getElementById("btn-upgrade-dash")?.addEventListener("click",showUpgradeScreen);
-  document.getElementById("btn-start-diag")?.addEventListener("click",()=>startDiagnosis());
+  document.getElementById("btn-start-diag")?.addEventListener("click",()=>{
+    document.getElementById("diag-invite-banner").style.display="none";
+    if(userData.diagnosisAnswers && !userData.levelTestCompleted){ startLevelTest(); }
+    else { startDiagnosis(); }
+  });
   document.getElementById("btn-skip-diag")?.addEventListener("click",async()=>{
     // mark as skipped so banner doesn't show again
     document.getElementById("diag-invite-banner").style.display="none";
@@ -7039,5 +7230,7 @@ if(typeof showReferralPanel !== 'undefined') window.showReferralPanel = showRefe
 if(typeof showReviewPanel !== 'undefined') window.showReviewPanel = showReviewPanel;
 if(typeof backToDashboard !== 'undefined') window.backToDashboard = backToDashboard;
 if(typeof showView !== 'undefined') window.showView = showView;
+if(typeof openGlossary !== 'undefined') window.openGlossary = openGlossary;
+if(typeof closeGlossary !== 'undefined') window.closeGlossary = closeGlossary;
 
 document.addEventListener("DOMContentLoaded",init);
