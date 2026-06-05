@@ -1119,7 +1119,6 @@ function renderDashboardTexts() {
   });
 
   // Quick access buttons
-  const qa = id => document.getElementById(id);
   if(qa("btn-goto-flashcards")) qa("btn-goto-flashcards").textContent = t("qa_flashcards");
   if(qa("btn-goto-memory"))     qa("btn-goto-memory").textContent     = t("qa_memory");
   if(qa("btn-goto-truefalse"))  qa("btn-goto-truefalse").textContent  = t("qa_truefalse");
