@@ -57,6 +57,11 @@ function getMsg() {
 // Registra o token FCM do dispositivo e salva no Firestore do usuário
 export async function registerFCMToken(uid) {
   try {
+    // Se VAPID key não foi configurada, pular silenciosamente
+    if (!VAPID_KEY || VAPID_KEY === "COLE_SUA_VAPID_KEY_AQUI") {
+      console.info("FCM: VAPID key não configurada — push notifications desativadas");
+      return null;
+    }
     if (!("Notification" in window)) return null;
     if (Notification.permission !== "granted") return null;
     const msg = getMsg();

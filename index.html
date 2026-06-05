@@ -104,10 +104,19 @@
       <div class="ob-dot" id="ob-dot-2"></div>
     </div>
 
+    <!-- Seletor de língua no onboarding -->
+    <div style="display:flex;gap:6px;justify-content:center;margin-bottom:12px;">
+      <button onclick="setLang('pt')" id="ob-lang-pt" class="auth-lang-btn">🇧🇷</button>
+      <button onclick="setLang('en')" id="ob-lang-en" class="auth-lang-btn">🇺🇸</button>
+      <button onclick="setLang('es')" id="ob-lang-es" class="auth-lang-btn">🇪🇸</button>
+      <button onclick="setLang('de')" id="ob-lang-de" class="auth-lang-btn">🇩🇪</button>
+      <button onclick="setLang('it')" id="ob-lang-it" class="auth-lang-btn">🇮🇹</button>
+    </div>
+
     <!-- Botões -->
     <div class="ob-actions">
-      <button class="ob-btn-next" id="ob-btn-next" onclick="obNext()" data-i18n="next" id="ob-btn-next" data-i18n="ob_next">Próximo →</button>
-      <button class="ob-btn-skip" id="ob-btn-skip" onclick="obSkip()" id="ob-btn-skip" data-i18n="ob_skip">Pular</button>
+      <button class="ob-btn-next" id="ob-btn-next" onclick="obNext()">Próximo →</button>
+      <button class="ob-btn-skip" id="ob-btn-skip" onclick="obSkip()">Pular tudo</button>
     </div>
 
   </div>
@@ -229,6 +238,19 @@
 
     </div><!-- end auth-box -->
 
+    <!-- Seletor de língua na tela de login -->
+    <div id="auth-lang-selector" style="
+      display:flex;align-items:center;justify-content:center;
+      gap:8px;flex-wrap:wrap;padding:16px 20px 4px;
+    ">
+      <span style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:.6px;width:100%;text-align:center;margin-bottom:4px;" id="auth-lang-label">Idioma / Language</span>
+      <button onclick="setLang('pt')" id="auth-lang-pt" class="auth-lang-btn">🇧🇷 PT</button>
+      <button onclick="setLang('en')" id="auth-lang-en" class="auth-lang-btn">🇺🇸 EN</button>
+      <button onclick="setLang('es')" id="auth-lang-es" class="auth-lang-btn">🇪🇸 ES</button>
+      <button onclick="setLang('de')" id="auth-lang-de" class="auth-lang-btn">🇩🇪 DE</button>
+      <button onclick="setLang('it')" id="auth-lang-it" class="auth-lang-btn">🇮🇹 IT</button>
+    </div>
+
     <!-- Footer link -->
     <div class="auth-page-footer">
       <a href="https://www.viclanguage.com.br" target="_blank" class="auth-footer-full">
@@ -257,6 +279,11 @@
     </div>
     <div class="diagnosis-card">
       <div class="diag-progress" id="diag-progress"></div>
+
+      <!-- Botão pular diagnóstico -->
+      <div style="text-align:right;margin-bottom:8px;">
+        <button onclick="skipDiagnosis()" style="background:none;border:none;color:rgba(255,255,255,0.35);font-size:13px;cursor:pointer;font-family:inherit;padding:4px 8px;">Pular →</button>
+      </div>
 
       <!-- Step 0: MOTIVO — profissional vs pessoal -->
       <div class="diag-step active" id="diag-step-0">
@@ -355,6 +382,14 @@
           <button class="diag-skip-note" id="btn-skip-level-test-diag" style="margin-top:8px;display:block;text-align:center" data-i18n="diag_skip_test">Pular e ir para o app</button>
         </div>
       </div>
+      <!-- Botão pular diagnóstico inteiro -->
+      <button onclick="skipDiagnosis()" style="
+        display:block;width:100%;margin-top:8px;
+        background:none;border:none;
+        color:rgba(255,255,255,0.3);font-size:13px;
+        cursor:pointer;font-family:inherit;padding:8px;
+        text-align:center;
+      ">Pular diagnóstico e ir para o app</button>
     </div>
   </div>
 </div>
@@ -1064,7 +1099,8 @@
       </div>
       <div class="admin-header-btns">
         <button class="admin-preview-btn" id="btn-admin-preview" title="Ver como aluno Pro">👁️ Preview</button>
-        <button class="btn-logout" id="btn-admin-logout" data-i18n="logout">Sair</button>
+        <button class="admin-header-btn" id="btn-admin-refresh-top" onclick="refreshAdminUsers()" title="Atualizar dados">↻</button>
+        <button class="btn-logout admin-back-btn" id="btn-admin-logout">🏠 Dashboard</button>
       </div>
     </div>
 
