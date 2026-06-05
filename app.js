@@ -6166,12 +6166,10 @@ const LOADING_TIPS = [
 
 let _splashTimeout = null;
 
-function showLoadingSplash(onDone) {
-  // Escolher frase aleatória
+function showLoadingSplash(onDone, minMs = 2200) {
   const phrase = LOADING_PHRASES[Math.floor(Math.random() * LOADING_PHRASES.length)];
   const tip = LOADING_TIPS[Math.floor(Math.random() * LOADING_TIPS.length)];
 
-  // Remover overlay anterior
   document.getElementById("loading-splash-overlay")?.remove();
 
   const overlay = document.createElement("div");
@@ -6186,31 +6184,21 @@ function showLoadingSplash(onDone) {
 
   overlay.innerHTML = `
     <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 30%,rgba(201,147,58,0.1),transparent);pointer-events:none;"></div>
-
-    <!-- Logo animado -->
     <img src="logo_full_2.png" alt="VIC English"
       style="width:180px;margin-bottom:32px;filter:drop-shadow(0 4px 24px rgba(201,147,58,0.3));animation:pulse 2s ease infinite;"/>
-
-    <!-- Frase principal -->
     <div style="font-size:20px;font-weight:800;color:#fff;line-height:1.4;margin-bottom:10px;max-width:340px;font-style:italic;">
       "${phrase.en}"
     </div>
     <div style="font-size:13px;color:#e4b45c;font-weight:600;margin-bottom:36px;opacity:0.85;">
       ${phrase.sub}
     </div>
-
-    <!-- Barra de progresso animada -->
     <div style="width:200px;height:3px;background:rgba(255,255,255,0.1);border-radius:999px;margin-bottom:20px;overflow:hidden;">
       <div id="splash-progress-bar"
-        style="height:100%;background:linear-gradient(90deg,#c9933a,#e4b45c);border-radius:999px;width:0%;transition:width 1.8s ease;"></div>
+        style="height:100%;background:linear-gradient(90deg,#c9933a,#e4b45c);border-radius:999px;width:0%;transition:width ${(minMs/1000).toFixed(1)}s ease;"></div>
     </div>
-
-    <!-- Tip -->
     <div style="font-size:12px;color:rgba(255,255,255,0.35);max-width:280px;line-height:1.5;">
       💡 ${tip}
     </div>
-
-    <!-- Powered by -->
     <div style="position:absolute;bottom:32px;font-size:11px;color:rgba(255,255,255,0.2);font-weight:600;letter-spacing:.5px;text-transform:uppercase;">
       Powered by VIC Language
     </div>
@@ -6218,21 +6206,19 @@ function showLoadingSplash(onDone) {
 
   document.body.appendChild(overlay);
 
-  // Animar barra
   requestAnimationFrame(() => {
     const bar = document.getElementById("splash-progress-bar");
     if(bar) bar.style.width = "100%";
   });
 
-  // Remover após 2.2s e chamar callback
-  _splashTimeout = setTimeout(() => {
-    overlay.style.transition = "opacity .4s ease";
-    overlay.style.opacity = "0";
-    setTimeout(() => {
-      overlay.remove();
-      if(onDone) onDone();
-    }, 400);
-  }, 2200);
+  clearTimeout(_splashTimeout);
+  if(minMs > 0){
+    _splashTimeout = setTimeout(() => {
+      overlay.style.transition = "opacity .4s ease";
+      overlay.style.opacity = "0";
+      setTimeout(() => { overlay.remove(); if(onDone) onDone(); }, 400);
+    }, minMs);
+  }
 }
 
 function hideLoadingSplash() {
@@ -6247,50 +6233,58 @@ function hideLoadingSplash() {
 
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
+// Clean state machine:
+//   NEW USER  → onboarding → auth → (register) → splash → dashboard → diagnosis
+//   RETURNING → splash → dashboard
 async function _handleAuth(user){
-  console.log("_handleAuth called, user:", user?.uid||"null");
-  if(window._sessionTimeout){ clearTimeout(window._sessionTimeout); window._sessionTimeout = null; }
+  if(window._sessionTimeout){ clearTimeout(window._sessionTimeout); window._sessionTimeout=null; }
   hideAuthLoading();
+
+  const onboardingDone = !!localStorage.getItem("vic_onboarding_done");
+
+  // ── Onboarding not finished yet ───────────────────────────────────────────
+  if(!onboardingDone){
+    if(user) currentUser = user; // save for obSkip() to use later
+    return; // onboarding is in control
+  }
+
+  // ── No user logged in ─────────────────────────────────────────────────────
+  if(!user){
+    currentUser=null; userData=null;
+    localStorage.removeItem("vic_has_session");
+    hideLoadingSplash();
+    showView("view-auth");
+    return;
+  }
+
+  // ── Returning user logged in ──────────────────────────────────────────────
+  // Ensure splash is visible (it may already be showing from init)
+  if(!document.getElementById("loading-splash-overlay")){
+    showLoadingSplash(null, 0); // show immediately, manual close
+  }
+  hideAuthLoading();
+
+  const t0 = Date.now();
   try{
-    if(user){
-      // If user hasn't seen onboarding yet, save them but don't skip to dashboard.
-      // obSkip() will handle routing when the user finishes onboarding.
-      if(!localStorage.getItem("vic_onboarding_done")){
-        currentUser = user;
-        return;
-      }
-      console.log("User logged in:", user.uid);
-      if(user.uid===OWNER_UID){ currentUser=user; await loadAdminDashboard(); }
-      else await loadDashboard(user);
-      if(Notification.permission==="granted"){
-        registerFCMToken(user.uid).catch(()=>{});
-      }
-    } else {
-      console.log("No user — showing auth");
-      currentUser=null; userData=null;
-      localStorage.removeItem("vic_has_session");
-      // Don't interrupt onboarding if user hasn't seen it yet
-      if(localStorage.getItem("vic_onboarding_done")){
-        showView("view-auth");
-      }
-    }
+    if(user.uid===OWNER_UID){ currentUser=user; await loadAdminDashboard(); }
+    else{ await loadDashboard(user); }
+    if(Notification.permission==="granted") registerFCMToken(user.uid).catch(()=>{});
   }catch(e){
-    console.error("Auth error:",e.message, e);
-    // Don't show auth page on error if user exists — try again once
-    if(user){
-      console.log("Retrying loadDashboard...");
-      try{ await loadDashboard(user); }
-      catch(e2){
-        console.error("Retry failed:", e2.message);
-        hideAuthLoading();
-        showView("view-auth");
-        showAuthError("Erro ao carregar. Tente novamente.");
-      }
-    } else {
-      hideAuthLoading();
+    console.error("loadDashboard error:", e.message);
+    try{ await loadDashboard(user); }
+    catch(e2){
+      hideLoadingSplash();
       showView("view-auth");
+      showAuthError("Erro ao carregar. Tente novamente.");
+      return;
     }
   }
+
+  // Keep splash for at least 2.5 seconds so user can read the phrase
+  const elapsed = Date.now() - t0;
+  const remaining = Math.max(0, 2500 - elapsed);
+  await new Promise(r => setTimeout(r, remaining));
+  hideLoadingSplash();
 }
 
 // ── ONBOARDING ────────────────────────────────────────────────────────────────
@@ -6625,15 +6619,17 @@ function init(){
     handleGoogleRedirectResult().catch(()=>{});
   }
 
-  // ── Onboarding: mostrar só na primeira vez ──────────────────────────────────
+  // ── Routing inicial ──────────────────────────────────────────────────────────
   const onboardingDone = localStorage.getItem("vic_onboarding_done");
   if(!onboardingDone){
+    // First time: show onboarding slides, don't touch auth
     startOnboarding();
   } else {
-    showView("view-auth");
+    // Returning user: show loading splash immediately while auth resolves
+    showLoadingSplash(null, 0); // manual close — _handleAuth will hide it
   }
 
-  // If auth already fired before DOM was ready, handle it now
+  // If auth already resolved before DOM was ready, process it now
   if(_pendingAuthUser !== undefined) _handleAuth(_pendingAuthUser);
 
   // auth buttons
