@@ -3,10 +3,28 @@
 import { auth, registerUser, loginUser, loginWithGoogle, loginAnonymous, logoutUser, onAuthChange, getUserData, saveProgress, getAllUsers, getUserById, OWNER_UID, registerFCMToken, onForegroundMessage } from "./firebase.js";
 
 // ══════════════════════════════════════════════════════════════════════════════
-// i18n — Sistema de idioma da interface (PT / EN)
-// Os exercícios sempre ficam em PT/EN como foram criados
-// Só a interface (botões, labels, menus) muda
+// ERROR LOGGING — centralised, non-blocking
 // ══════════════════════════════════════════════════════════════════════════════
+const _errLog = [];
+function vicLog(scope, msg, err) {
+  const entry = { scope, msg, err: err?.message || String(err||""), ts: Date.now() };
+  _errLog.push(entry);
+  if(_errLog.length > 50) _errLog.shift(); // keep last 50
+  console.warn(`[VIC:${scope}]`, msg, err || "");
+}
+
+// Global safety net — catches anything that slips past individual try/catch
+window.addEventListener("unhandledrejection", e => {
+  vicLog("unhandledRejection", e.reason?.message || String(e.reason), e.reason);
+});
+window.onerror = (msg, src, line, col, err) => {
+  vicLog("globalError", `${msg} @ ${src}:${line}`, err);
+  return false; // don't suppress default browser reporting
+};
+
+// Expose error log for debug (type window._vicLog in console)
+window._vicLog = _errLog;
+
 
 var I18N = {
   pt: {
@@ -783,7 +801,7 @@ function trackEvent(name, params={}){
     // Evitar tracking de dados pessoais
     const { getAnalytics, logEvent } = window._vicAnalyticsFns || {};
     if(logEvent && _analytics) logEvent(_analytics, name, params);
-  }catch(e){}
+  }catch(e){ vicLog("analytics", name, e); }
 }
 
 // Eventos principais
@@ -2389,7 +2407,7 @@ async function loadDashboard(user){
 
   // Diagnosis for new users
   if(!userData.diagnosisAnswers){
-    setTimeout(()=>{ try{ startDiagnosis(); }catch(e){} }, 800);
+    setTimeout(()=>{ try{ startDiagnosis(); }catch(e){ vicLog("diagnosis","startDiagnosis failed",e); } }, 800);
   }
   console.log("✅ Dashboard shown for:", userData.name);
 }
@@ -4153,7 +4171,7 @@ async function translateWord(word, el){
       el.appendChild(tip);
       setTimeout(()=>tip.remove(),2500);
     }
-  }catch(e){}
+  }catch(e){ vicLog("tooltip","renderTooltip failed",e); }
 }
 
 function makeClickableText(text){
@@ -4284,7 +4302,7 @@ function addChatBubble(role,text,correct=null){
           w.appendChild(tip);
           setTimeout(()=>tip.remove(),2500);
         }
-      }catch(e){}
+      }catch(e){ vicLog("tooltip","word click tooltip failed",e); }
     });
   });
 
@@ -4601,7 +4619,7 @@ async function loadAppConfig(){
     const snap=await getDoc(doc(db,"appConfig","settings"));
     if(snap.exists()) appConfig=snap.data();
     applyAppConfig();
-  }catch(e){}
+  }catch(e){ vicLog("config","loadAppConfig failed",e); }
 }
 
 async function saveAppConfig(updates){
@@ -6254,7 +6272,7 @@ function scheduleNotifications(){
         requireInteraction: false,
       });
       localStorage.setItem("vic_last_notif", String(now));
-    }catch(e){}
+    }catch(e){ vicLog("notif","local notification failed",e); }
   }
   localStorage.setItem("vic_last_visit", String(now));
 }
@@ -6757,7 +6775,7 @@ async function forceRefresh(){
       const regs=await navigator.serviceWorker.getRegistrations();
       await Promise.all(regs.map(r=>r.unregister()));
     }
-  }catch(e){}
+  }catch(e){ vicLog("forceRefresh","cache/SW clear failed",e); }
   window.location.reload(true);
 }
 
@@ -6917,7 +6935,7 @@ function init(){
           badge: "vic_lamp.png",
           tag: "vic-foreground-" + Date.now(),
         });
-      }catch(e){}
+      }catch(e){ vicLog("fcm","foreground notification failed",e); }
     }
   });
 

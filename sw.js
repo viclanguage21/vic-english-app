@@ -16,7 +16,7 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-const CACHE = "vic-english-v4";
+const CACHE = "vic-english-v5";
 const ASSETS = [
   "/", "/index.html", "/style.css", "/app.js", "/data.js",
   "/firebase.js", "/sounds.js", "/vic_logo.png", "/vic_lamp.png",
@@ -41,7 +41,18 @@ self.addEventListener("activate", e => {
   self.clients.claim();
 });
 
-// ── FETCH — network-first ─────────────────────────────────────────────────────
+// ── FETCH — network-first with 4s timeout ─────────────────────────────────────
+const FETCH_TIMEOUT = 4000;
+
+function fetchWithTimeout(request) {
+  return Promise.race([
+    fetch(request),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("sw-timeout")), FETCH_TIMEOUT)
+    )
+  ]);
+}
+
 self.addEventListener("fetch", e => {
   if (e.request.url.includes("firebase") ||
       e.request.url.includes("google") ||
@@ -50,11 +61,11 @@ self.addEventListener("fetch", e => {
       e.request.method !== "GET") return;
 
   e.respondWith(
-    fetch(e.request)
+    fetchWithTimeout(e.request)
       .then(response => {
         if (response.ok) {
           const clone = response.clone();
-          caches.open(CACHE).then(cache => cache.put(e.request, clone));
+          caches.open(CACHE).then(cache => cache.put(e.request, clone)).catch(() => {});
         }
         return response;
       })
