@@ -100,7 +100,17 @@ var I18N = {
     "pro_banner": "Desbloqueie todos os segmentos",
     "daily_complete": "Missões do dia concluídas!",
     "streak_record": "Novo recorde de streak!",
+    "next_conquest": "Próxima conquista",
+    "discover_level": "Descubra seu nível real",
+    "quick_test": "Teste rápido de 3 min — totalmente opcional",
+    "do_test": "Fazer →",
+    "grammar_core_title": "🧠 Grammar Core",
+    "grammar_core_sub": "Gramática profissional do zero ao avançado",
+    "writing_title": "✍️ Writing & Translation",
+    "difficulty_title": "Qual é sua maior dificuldade?",
   },
+
+
 
   en: {
     "login": "Sign In", "register": "Create Account", "logout": "Sign Out",
@@ -162,6 +172,14 @@ var I18N = {
     "feedback": "Feedback", "send_feedback": "Send Feedback",
     "pro_banner": "Unlock all segments",
     "daily_complete": "Daily missions complete!", "streak_record": "New streak record!",
+    "next_conquest": "Next achievement",
+    "discover_level": "Discover your real level",
+    "quick_test": "Quick 3-min test — totally optional",
+    "do_test": "Start →",
+    "grammar_core_title": "🧠 Grammar Core",
+    "grammar_core_sub": "Professional grammar from zero to advanced",
+    "writing_title": "✍️ Writing & Translation",
+    "difficulty_title": "What is your biggest challenge?",
 
     // Dashboard
     "lets_go": "Let's go!", "you_got_this": "You got this!",
@@ -303,6 +321,14 @@ var I18N = {
     "feedback": "Comentarios", "send_feedback": "Enviar comentarios",
     "pro_banner": "Desbloquea todos los segmentos",
     "daily_complete": "¡Misiones del día completadas!", "streak_record": "¡Nuevo récord de racha!",
+    "next_conquest": "Próximo logro",
+    "discover_level": "Descubre tu nivel real",
+    "quick_test": "Test rápido de 3 min — totalmente opcional",
+    "do_test": "Empezar →",
+    "grammar_core_title": "🧠 Grammar Core",
+    "grammar_core_sub": "Gramática profesional de cero a avanzado",
+    "writing_title": "✍️ Escritura y Traducción",
+    "difficulty_title": "¿Cuál es tu mayor dificultad?",
     "lets_go": "¡Vamos allá!", "you_got_this": "¡Tú puedes!",
     "every_word": "¡Cada palabra cuenta!", "hope_well": "¡Espero que estés bien!",
     "one_step": "¡Un paso a la vez!", "keep_going_strong": "¡Sigue adelante!",
@@ -501,6 +527,14 @@ var I18N = {
     "feedback": "Feedback", "send_feedback": "Feedback senden",
     "pro_banner": "Alle Bereiche freischalten",
     "daily_complete": "Tägliche Aufgaben abgeschlossen!", "streak_record": "Neuer Streak-Rekord!",
+    "next_conquest": "Nächste Errungenschaft",
+    "discover_level": "Entdecke dein echtes Niveau",
+    "quick_test": "Schneller 3-Min-Test — völlig optional",
+    "do_test": "Starten →",
+    "grammar_core_title": "🧠 Grammar Core",
+    "grammar_core_sub": "Professionelle Grammatik von null bis fortgeschritten",
+    "writing_title": "✍️ Schreiben & Übersetzen",
+    "difficulty_title": "Was ist deine größte Schwierigkeit?",
     "lets_go": "Los geht's!", "you_got_this": "Du schaffst das!",
     "every_word": "Jedes Wort zählt!", "hope_well": "Ich hoffe, es geht dir gut!",
     "one_step": "Schritt für Schritt!", "keep_going_strong": "Weiter so!",
@@ -640,6 +674,14 @@ var I18N = {
     "feedback": "Feedback", "send_feedback": "Invia feedback",
     "pro_banner": "Sblocca tutti i segmenti",
     "daily_complete": "Missioni del giorno completate!", "streak_record": "Nuovo record di streak!",
+    "next_conquest": "Prossimo traguardo",
+    "discover_level": "Scopri il tuo livello reale",
+    "quick_test": "Test rapido di 3 min — totalmente opzionale",
+    "do_test": "Inizia →",
+    "grammar_core_title": "🧠 Grammar Core",
+    "grammar_core_sub": "Grammatica professionale da zero ad avanzato",
+    "writing_title": "✍️ Scrittura e Traduzione",
+    "difficulty_title": "Qual è la tua difficoltà principale?",
     "lets_go": "Andiamo!", "you_got_this": "Ce la fai!",
     "every_word": "Ogni parola conta!", "hope_well": "Spero che tu stia bene!",
     "one_step": "Un passo alla volta!", "keep_going_strong": "Continua così!",
@@ -757,7 +799,7 @@ var SEG_NAMES = {
     maritimo:"Marítimo", comex:"COMEX", offshore:"Offshore",
     hotelaria:"Hotelaria", restaurantes:"Restaurantes", aeroporto:"Aeroporto",
     cruzeiros:"Cruzeiros", corporativo:"Corporativo", saude:"Saúde",
-    transporte:"Transporte", varejo:"Varejo", turismo_santos:"Turismo Santos",
+    transporte:"Transporte", varejo:"Varejo", turismo_santos:"Turismo Santos", turismo:"Turismo Santos",
     gramatica:"Gramática",
   },
   en: {
@@ -771,7 +813,7 @@ var SEG_NAMES = {
     maritimo:"Marítimo", comex:"COMEX", offshore:"Petróleo",
     hotelaria:"Hotelería", restaurantes:"Restaurantes", aeroporto:"Aeropuerto",
     cruzeiros:"Cruceros", corporativo:"Corporativo", saude:"Salud",
-    transporte:"Transporte", varejo:"Ventas", turismo_santos:"Turismo Santos",
+    transporte:"Transporte", varejo:"Ventas", turismo_santos:"Turismo Santos", turismo:"Turismo Santos",
     gramatica:"Gramática",
   },
   de: {
@@ -785,7 +827,7 @@ var SEG_NAMES = {
     maritimo:"Marittimo", comex:"Commercio", offshore:"Offshore",
     hotelaria:"Ospitalità", restaurantes:"Ristoranti", aeroporto:"Aeroporto",
     cruzeiros:"Crociere", corporativo:"Aziendale", saude:"Sanità",
-    transporte:"Trasporti", varejo:"Vendita", turismo_santos:"Turismo Santos",
+    transporte:"Trasporti", varejo:"Vendita", turismo_santos:"Turismo Santos", turismo:"Turismo Santos",
     gramatica:"Grammatica",
   },
 };
@@ -897,7 +939,53 @@ function renderDashboardTexts() {
   });
   // Próxima conquista
   const nbiLabel = document.querySelector(".nbi-label");
-  if(nbiLabel) nbiLabel.textContent = t("next_badge_label") || (_lang==="pt" ? "Próxima conquista" : "Next achievement");
+  if(nbiLabel) nbiLabel.textContent = t("next_conquest");
+  const nbiText = document.querySelector(".nbi-text");
+  if(nbiText){
+    const strong = nbiText.querySelector("strong");
+    const name = strong ? strong.textContent : "";
+    nbiText.innerHTML = `${t("next_conquest")}: <strong id="nbi-name">${name}</strong>`;
+  }
+
+  // Stat card labels — force re-apply by data attribute
+  document.querySelectorAll(".stat-label").forEach(el => {
+    const key = el.dataset.i18nStat;
+    if(key) { el.textContent = t(key); return; }
+    const txt = el.textContent;
+    if(txt.includes("XP") && !txt.includes("Ranking"))    { el.dataset.i18nStat="total_xp";      el.textContent = t("total_xp")+" 📊"; }
+    else if(txt.includes("ível")||txt.includes("Level")||txt.includes("Stufe")||txt.includes("Livello")||txt.includes("Nivel")) { el.dataset.i18nStat="level"; el.textContent = t("level")+" ⭐"; }
+    else if(txt.includes("Streak")||txt.includes("Racha")||txt.includes("Striscia")) { el.dataset.i18nStat="total_streak"; el.textContent = t("total_streak"); }
+    else if(txt.includes("Ranking")||txt.includes("Rangliste")||txt.includes("Classifica")) { el.dataset.i18nStat="ranking"; el.textContent = t("ranking"); }
+  });
+
+  // Diag invite banner
+  const diagInvTitle = document.querySelector(".diag-invite-title");
+  const diagInvSub   = document.querySelector(".diag-invite-sub");
+  const diagInvBtn   = document.getElementById("btn-start-diag");
+  if(diagInvTitle) diagInvTitle.textContent = t("discover_level");
+  if(diagInvSub)   diagInvSub.textContent   = t("quick_test");
+  if(diagInvBtn)   diagInvBtn.textContent   = t("do_test");
+
+  // Grammar Core banner title/sub
+  const gcTitle = document.querySelector(".grammar-core-banner .gc-title");
+  if(gcTitle) gcTitle.textContent = t("grammar_core_title");
+  const gcSubEl = document.querySelector(".grammar-core-banner .gc-sub");
+  if(gcSubEl) gcSubEl.textContent = t("gc_sub");
+
+  // Writing banner title
+  const wTitle = document.querySelector(".writing-core-banner .gc-title");
+  if(wTitle) wTitle.textContent = t("writing_title");
+
+  // Quick access game buttons
+  const qa = id => document.getElementById(id);
+  if(qa("btn-goto-flashcards")) qa("btn-goto-flashcards").textContent = t("qa_flashcards");
+  if(qa("btn-goto-memory"))     qa("btn-goto-memory").textContent     = t("qa_memory");
+  if(qa("btn-goto-truefalse"))  qa("btn-goto-truefalse").textContent  = t("qa_truefalse");
+  if(qa("btn-goto-dialogue"))   qa("btn-goto-dialogue").textContent   = t("qa_dialogue");
+
+  // Diagnosis step 2 title
+  const diagStep2Title = document.querySelector("#diag-step-2 .diag-step-title");
+  if(diagStep2Title) diagStep2Title.textContent = t("difficulty_title");
   // Pro banner
   const _pbt = document.getElementById("pro-banner-title");
   const _pbs = document.getElementById("pro-banner-sub");
@@ -1199,35 +1287,38 @@ const cleanEnunciado = t   => stripEmoji(t||"");
 function shuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 
 const LEVEL_TIPS = {
-  1: [
-    "Próximo passo: complete exercícios de vocabulário para construir sua base.",
-    "Chegou a hora de explorar seu primeiro segmento. Escolha o do seu trabalho!",
-    "Dica: leia as frases em voz alta — ajuda muito na fixação.",
-    "Vamos treinar vocabulário? Cada palavra nova abre uma porta.",
-  ],
-  2: [
-    "Próximo passo: pratique os diálogos do seu segmento para ganhar fluência.",
-    "Chegou a hora de treinar Listening — ouça as frases e tente entender sem tradução.",
-    "Experimente os exercícios de Speaking para melhorar sua pronúncia.",
-    "Vamos treinar tradução? Conecta PT e EN de forma natural.",
-    "Dica: repetição é tudo. Refaça as missões que errou.",
-  ],
-  3: [
-    "Próximo passo: foque em pronúncia — use o microfone nos exercícios.",
-    "Chegou a hora de explorar um novo segmento profissional.",
-    "Vamos treinar Writing? Escrever em inglês fixa o vocabulário 3x mais rápido.",
-    "Experimente os exercícios de Speaking com situações reais do seu trabalho.",
-    "Dica: pratique os diálogos completos — é o mais próximo da realidade.",
-  ],
-  4: [
-    "Próximo passo: domine um novo segmento profissional.",
-    "Chegou a hora de testar seus limites — tente as missões mais avançadas.",
-    "Vamos treinar os Phrasal Verbs? São essenciais para soar fluente.",
-    "Experimente o Grammar Core — consolida tudo que você já aprendeu.",
-  ],
+  1: {
+    pt:["Próximo passo: complete exercícios de vocabulário para construir sua base.","Chegou a hora de explorar seu primeiro segmento. Escolha o do seu trabalho!","Dica: leia as frases em voz alta — ajuda muito na fixação.","Vamos treinar vocabulário? Cada palavra nova abre uma porta."],
+    en:["Next step: complete vocabulary exercises to build your foundation.","Time to explore your first segment. Choose the one from your field!","Tip: read sentences aloud — it really helps retention.","Let's train vocabulary? Every new word opens a door."],
+    es:["Próximo paso: completa ejercicios de vocabulario para construir tu base.","Es hora de explorar tu primer segmento. ¡Elige el de tu trabajo!","Consejo: lee las frases en voz alta — ayuda mucho a fijar.","¿Entrenamos vocabulario? Cada palabra nueva abre una puerta."],
+    de:["Nächster Schritt: Mache Vokabelübungen, um deine Basis aufzubauen.","Zeit, dein erstes Segment zu erkunden. Wähle das aus deinem Bereich!","Tipp: Lies Sätze laut vor — das hilft sehr beim Einprägen.","Lass uns Vokabular trainieren? Jedes neue Wort öffnet eine Tür."],
+    it:["Prossimo passo: completa esercizi di vocabolario per costruire la tua base.","È tempo di esplorare il tuo primo segmento. Scegli quello del tuo lavoro!","Consiglio: leggi le frasi ad alta voce — aiuta molto a memorizzare.","Alleniamo il vocabolario? Ogni nuova parola apre una porta."],
+  },
+  2: {
+    pt:["Próximo passo: pratique os diálogos do seu segmento para ganhar fluência.","Chegou a hora de treinar Listening — ouça as frases e tente entender sem tradução.","Experimente os exercícios de Speaking para melhorar sua pronúncia.","Vamos treinar tradução? Conecta PT e EN de forma natural.","Dica: repetição é tudo. Refaça as missões que errou."],
+    en:["Next step: practice dialogues in your segment for fluency.","Time to train Listening — hear sentences and try without translating.","Try Speaking exercises to improve your pronunciation.","Let's train translation? It connects your languages naturally.","Tip: repetition is everything. Redo the missions you missed."],
+    es:["Próximo paso: practica los diálogos de tu segmento para ganar fluidez.","Hora de entrenar Listening — escucha las frases sin traducir.","Prueba los ejercicios de Speaking para mejorar tu pronunciación.","¿Entrenamos traducción? Conecta los idiomas de forma natural.","Consejo: la repetición lo es todo. Rehaz las misiones que fallaste."],
+    de:["Nächster Schritt: Übe Dialoge in deinem Segment für Flüssigkeit.","Zeit für Listening-Training — höre Sätze ohne Übersetzung.","Probiere Speaking-Übungen, um deine Aussprache zu verbessern.","Lass uns Übersetzung trainieren? Verbindet Sprachen natürlich.","Tipp: Wiederholung ist alles. Mache fehlgeschlagene Missionen nochmal."],
+    it:["Prossimo passo: pratica i dialoghi del tuo segmento per guadagnare fluidità.","Ora allena il Listening — ascolta le frasi senza tradurre.","Prova gli esercizi di Speaking per migliorare la pronuncia.","Alleniamo la traduzione? Collega le lingue in modo naturale.","Consiglio: la ripetizione è tutto. Rifai le missioni sbagliate."],
+  },
+  3: {
+    pt:["Próximo passo: foque em pronúncia — use o microfone nos exercícios.","Chegou a hora de explorar um novo segmento profissional.","Vamos treinar Writing? Escrever em inglês fixa o vocabulário 3x mais rápido.","Experimente os exercícios de Speaking com situações reais do seu trabalho.","Dica: pratique os diálogos completos — é o mais próximo da realidade."],
+    en:["Next step: focus on pronunciation — use the mic in exercises.","Time to explore a new professional segment.","Let's train Writing? Writing in English locks vocabulary 3x faster.","Try Speaking exercises with real situations from your work.","Tip: practice full dialogues — it's the closest to real life."],
+    es:["Próximo paso: enfócate en pronunciación — usa el micrófono.","Hora de explorar un nuevo segmento profesional.","¿Entrenamos Writing? Escribir en inglés fija el vocabulario 3x más rápido.","Prueba los ejercicios de Speaking con situaciones reales de tu trabajo.","Consejo: practica diálogos completos — es lo más cercano a la realidad."],
+    de:["Nächster Schritt: Fokus auf Aussprache — nutze das Mikrofon.","Zeit, ein neues professionelles Segment zu erkunden.","Lass uns Writing trainieren? Schreiben auf Englisch festigt Vokabeln 3x schneller.","Probiere Speaking-Übungen mit realen Situationen aus deiner Arbeit.","Tipp: Übe vollständige Dialoge — das ist der Realität am nächsten."],
+    it:["Prossimo passo: concentrati sulla pronuncia — usa il microfono.","È tempo di esplorare un nuovo segmento professionale.","Alleniamo il Writing? Scrivere in inglese fissa il vocabolario 3x più veloce.","Prova gli esercizi di Speaking con situazioni reali del tuo lavoro.","Consiglio: pratica dialoghi completi — è il più vicino alla realtà."],
+  },
+  4: {
+    pt:["Próximo passo: domine um novo segmento profissional.","Chegou a hora de testar seus limites — tente as missões mais avançadas.","Vamos treinar os Phrasal Verbs? São essenciais para soar fluente.","Experimente o Grammar Core — consolida tudo que você já aprendeu."],
+    en:["Next step: master a new professional segment.","Time to test your limits — try the most advanced missions.","Let's train Phrasal Verbs? They're essential to sound fluent.","Try Grammar Core — it consolidates everything you've already learned."],
+    es:["Próximo paso: domina un nuevo segmento profesional.","Hora de probar tus límites — intenta las misiones más avanzadas.","¿Entrenamos Phrasal Verbs? Son esenciales para sonar fluido.","Prueba Grammar Core — consolida todo lo que ya aprendiste."],
+    de:["Nächster Schritt: Meistere ein neues professionelles Segment.","Zeit, deine Grenzen zu testen — probiere die fortgeschrittensten Missionen.","Lass uns Phrasal Verbs trainieren? Sie sind essenziell für Flüssigkeit.","Probiere Grammar Core — es festigt alles, was du bereits gelernt hast."],
+    it:["Prossimo passo: padroneggia un nuovo segmento professionale.","È tempo di testare i tuoi limiti — prova le missioni più avanzate.","Alleniamo i Phrasal Verbs? Sono essenziali per sembrare fluente.","Prova Grammar Core — consolida tutto ciò che hai già imparato."],
+  },
 };
 function getRandomTip(level){
-  const tips = LEVEL_TIPS[Math.min(level,4)] || LEVEL_TIPS[4];
+  const group = LEVEL_TIPS[Math.min(level,4)] || LEVEL_TIPS[4];
+  const tips = group[_lang] || group["pt"];
   return tips[Math.floor(Math.random()*tips.length)];
 }
 function levelInfo(xp){
@@ -1675,7 +1766,7 @@ function skipDiagnosis(){
 
 function startDiagnosis(){
   diagStep=0; diagAnswers={};
-  _selectedSegments = []; // resetar seleção de segmentos
+  _selectedSegments = []; _selectedDifficulties = []; // resetar seleções
   // Esconder botões do step de segmentos
   const confirmBtn = document.getElementById("btn-confirm-segments");
   if(confirmBtn) confirmBtn.style.display = "none";
@@ -1756,13 +1847,26 @@ function confirmSegments(){
   }
 }
 
+let _selectedDifficulties = [];
+
 function handleDiagOption(val,stepEl){
-  // Step 1 = segmentos → múltipla seleção com botão confirmar
+  // Step 1 = segmentos → múltipla seleção
   if(stepEl && stepEl.id === "diag-step-1"){
-    // Encontrar o botão pelo data-value
     const btn = stepEl.querySelector(`.diag-option[data-value="${val}"]`);
     if(btn) handleDiagSegmentToggle(val, btn);
-    return; // não avança automaticamente
+    return;
+  }
+
+  // Step 2 = dificuldades → múltipla seleção
+  if(stepEl && stepEl.id === "diag-step-2"){
+    const btn = stepEl.querySelector(`.diag-option[data-value="${val}"]`);
+    if(!btn) return;
+    const idx = _selectedDifficulties.indexOf(val);
+    if(idx >= 0){ _selectedDifficulties.splice(idx,1); btn.classList.remove("selected"); }
+    else { _selectedDifficulties.push(val); btn.classList.add("selected"); }
+    const confirmBtn = document.getElementById("btn-confirm-difficulty");
+    if(confirmBtn) confirmBtn.style.display = _selectedDifficulties.length > 0 ? "block" : "none";
+    return;
   }
 
   stepEl.querySelectorAll(".diag-option").forEach(b=>b.classList.remove("selected"));
@@ -6676,6 +6780,16 @@ function init(){
   // diagnosis
   document.querySelectorAll(".diag-option").forEach(btn=>btn.addEventListener("click",()=>handleDiagOption(btn.dataset.value,btn.closest(".diag-step"))));
   document.getElementById("btn-confirm-segments")?.addEventListener("click", confirmSegments);
+  document.getElementById("btn-confirm-difficulty")?.addEventListener("click", ()=>{
+    if(_selectedDifficulties.length === 0) return;
+    diagAnswers.difficulty = _selectedDifficulties.join(",");
+    diagAnswers.difficulties = _selectedDifficulties;
+    const stepEl = document.getElementById("diag-step-2");
+    if(stepEl) stepEl.classList.remove("active");
+    diagStep++; renderDiagProgress();
+    const next = document.getElementById(`diag-step-${diagStep}`);
+    if(next){ next.classList.add("active"); next.scrollIntoView({behavior:"smooth",block:"start"}); }
+  });
   document.getElementById("btn-skip-segments")?.addEventListener("click", ()=>{ _selectedSegments=["maritimo"]; diagAnswers.segment="maritimo"; diagAnswers.segments=["maritimo"]; document.getElementById("diag-step-1")?.classList.remove("active"); diagStep=2; renderDiagProgress(); document.getElementById("diag-step-2")?.classList.add("active"); });
   document.getElementById("btn-finish-diag")?.addEventListener("click",finishDiagnosis);
   document.getElementById("btn-diag-voice")?.addEventListener("click",startDiagVoice);

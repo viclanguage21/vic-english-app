@@ -342,16 +342,20 @@
         </button>
       </div>
 
-      <!-- Step 2: DIFICULDADE -->
+      <!-- Step 2: DIFICULDADE — múltipla seleção -->
       <div class="diag-step" id="diag-step-2">
         <div class="diag-step-emoji">🤔</div>
         <div class="diag-step-title">Qual é sua maior dificuldade?</div>
-        <div class="diag-options">
-          <button class="diag-option" data-value="vocabulario">📝 Não sei as palavras certas</button>
-          <button class="diag-option" data-value="pronuncia">🗣️ Vergonha de falar / pronúncia</button>
-          <button class="diag-option" data-value="gramatica">📖 Não sei montar frases</button>
-          <button class="diag-option" data-value="escuta">👂 Não entendo quando falam comigo</button>
+        <div class="diag-step-sub">Pode escolher mais de uma!</div>
+        <div class="diag-options diag-options-grid">
+          <button class="diag-option diag-option-multi" data-value="vocabulario">📝 Não sei as palavras certas</button>
+          <button class="diag-option diag-option-multi" data-value="pronuncia">🗣️ Vergonha de falar / pronúncia</button>
+          <button class="diag-option diag-option-multi" data-value="gramatica">📖 Não sei montar frases</button>
+          <button class="diag-option diag-option-multi" data-value="escuta">👂 Não entendo quando falam comigo</button>
         </div>
+        <button class="btn-primary" id="btn-confirm-difficulty" style="margin-top:16px;width:100%;display:none;">
+          Confirmar →
+        </button>
       </div>
 
       <!-- Step 3: META pessoal (texto livre) -->
