@@ -2395,6 +2395,125 @@ async function loadDashboard(user){
   console.log("✅ Dashboard shown for:", userData.name);
 }
 
+// ── GLOSSARY DATA ─────────────────────────────────────────────────────────────
+const GLOSSARY = {
+  maritimo: { name:"Marítimo", icon:"⚓", terms:[
+    {en:"vessel",       pt:"navio / embarcação",              exEN:"The vessel arrived at port ahead of schedule.",                           exPT:"O navio chegou ao porto antes do previsto."},
+    {en:"cargo",        pt:"carga / mercadoria",              exEN:"The cargo must be loaded before departure.",                              exPT:"A carga deve ser embarcada antes da partida."},
+    {en:"anchor",       pt:"âncora",                          exEN:"Drop the anchor — we are staying here overnight.",                        exPT:"Solte a âncora — vamos ficar aqui esta noite."},
+    {en:"crew",         pt:"tripulação",                      exEN:"All crew members must attend the safety briefing.",                       exPT:"Todos os membros da tripulação devem assistir ao briefing de segurança."},
+    {en:"dock",         pt:"atracar / cais",                  exEN:"The ship will dock at berth number five.",                                exPT:"O navio vai atracar no berço número cinco."},
+    {en:"port",         pt:"porto",                           exEN:"The port handles over ten thousand containers per day.",                  exPT:"O porto movimenta mais de dez mil contêineres por dia."},
+    {en:"berth",        pt:"berço / vaga de atracação",       exEN:"There are no berths available until tomorrow morning.",                   exPT:"Não há berços disponíveis até amanhã de manhã."},
+    {en:"manifest",     pt:"manifesto de carga",              exEN:"Please submit the cargo manifest before arrival.",                        exPT:"Envie o manifesto de carga antes da chegada."},
+    {en:"bill of lading",pt:"conhecimento de embarque (B/L)", exEN:"The bill of lading is required to release the cargo.",                   exPT:"O conhecimento de embarque é necessário para liberar a carga."},
+    {en:"customs",      pt:"alfândega",                       exEN:"The shipment is currently being inspected by customs.",                   exPT:"A remessa está sendo inspecionada pela alfândega."},
+    {en:"draft",        pt:"calado do navio",                 exEN:"The vessel's draft is 12 meters — check the channel depth.",             exPT:"O calado do navio é 12 metros — verifique a profundidade do canal."},
+    {en:"starboard",    pt:"boreste (lado direito do navio)", exEN:"The pilot vessel is approaching from starboard.",                        exPT:"O barco do prático está se aproximando pelo boreste."},
+    {en:"port side",    pt:"bombordo (lado esquerdo)",        exEN:"Secure the mooring lines on the port side.",                             exPT:"Amarre as linhas de atracação no bombordo."},
+    {en:"gangway",      pt:"passarela de acesso",             exEN:"All visitors must use the gangway to board.",                            exPT:"Todos os visitantes devem usar a passarela para embarcar."},
+    {en:"ETA",          pt:"horário previsto de chegada",     exEN:"What is the ETA for the next vessel?",                                   exPT:"Qual é a ETA do próximo navio?"},
+    {en:"aboard",       pt:"a bordo",                         exEN:"Welcome aboard — please find your muster station.",                      exPT:"Bem-vindo a bordo — encontre seu ponto de abandono."},
+    {en:"pilot",        pt:"prático / piloto de porto",       exEN:"The harbor pilot will guide the ship into port.",                        exPT:"O prático vai guiar o navio para o porto."},
+    {en:"stern",        pt:"popa (parte traseira do navio)",  exEN:"The mooring line was secured at the stern.",                             exPT:"O cabo de amarração foi fixado na popa."},
+  ]},
+  hotelaria: { name:"Hotelaria", icon:"🏨", terms:[
+    {en:"reservation",   pt:"reserva",                        exEN:"I have a reservation under the name Silva.",                             exPT:"Tenho uma reserva no nome Silva."},
+    {en:"check-in",      pt:"entrada no hotel",               exEN:"Check-in starts at 3 PM.",                                              exPT:"O check-in começa às 15h."},
+    {en:"checkout",      pt:"saída do hotel",                 exEN:"Checkout is at 12 noon — please vacate your room.",                     exPT:"O checkout é ao meio-dia — por favor desocupe o quarto."},
+    {en:"amenities",     pt:"comodidades / facilidades",      exEN:"The room includes amenities such as a pool and gym access.",            exPT:"O quarto inclui comodidades como piscina e academia."},
+    {en:"concierge",     pt:"concierge / apoio ao hóspede",   exEN:"Ask the concierge for restaurant recommendations.",                     exPT:"Pergunte ao concierge por recomendações de restaurantes."},
+    {en:"housekeeping",  pt:"limpeza / governança",           exEN:"Housekeeping will clean your room while you are out.",                  exPT:"A limpeza vai arrumar seu quarto enquanto você sai."},
+    {en:"lobby",         pt:"saguão / hall de entrada",       exEN:"Please wait for your guest in the lobby.",                             exPT:"Aguarde seu hóspede no saguão."},
+    {en:"suite",         pt:"suíte",                          exEN:"The executive suite includes a separate living area.",                  exPT:"A suíte executiva tem uma sala de estar separada."},
+    {en:"complimentary", pt:"cortesia / gratuito",            exEN:"Breakfast is complimentary for all guests.",                            exPT:"O café da manhã é cortesia para todos os hóspedes."},
+    {en:"upgrade",       pt:"upgrade / melhoria de categoria",exEN:"Would you like an upgrade to a sea-view room?",                        exPT:"Gostaria de um upgrade para um quarto com vista para o mar?"},
+    {en:"room service",  pt:"serviço de quarto",              exEN:"Room service is available 24 hours a day.",                             exPT:"O serviço de quarto está disponível 24 horas por dia."},
+    {en:"front desk",    pt:"recepção",                       exEN:"Please collect your key card at the front desk.",                       exPT:"Por favor retire seu cartão na recepção."},
+    {en:"late checkout", pt:"saída tardia",                   exEN:"Can I request a late checkout until 2 PM?",                            exPT:"Posso pedir uma saída tardia até as 14h?"},
+    {en:"do not disturb",pt:"não perturbe",                   exEN:"The guest put the do not disturb sign on the door.",                    exPT:"O hóspede colocou a placa de não perturbe na porta."},
+    {en:"wake-up call",  pt:"chamada de despertar",           exEN:"Please arrange a wake-up call for 6 AM.",                              exPT:"Providencie uma chamada de despertar para as 6h."},
+    {en:"deposit",       pt:"depósito / caução",              exEN:"A security deposit is required at check-in.",                          exPT:"Um depósito de segurança é exigido no check-in."},
+    {en:"double room",   pt:"quarto duplo",                   exEN:"I would like to book a double room for two nights.",                    exPT:"Gostaria de reservar um quarto duplo por duas noites."},
+  ]},
+  comex: { name:"COMEX", icon:"🌍", terms:[
+    {en:"invoice",        pt:"fatura comercial",               exEN:"Please send the commercial invoice before shipment.",                    exPT:"Envie a fatura comercial antes do embarque."},
+    {en:"bill of lading", pt:"conhecimento de embarque (B/L)", exEN:"The original bill of lading must be presented at customs.",             exPT:"O B/L original deve ser apresentado na alfândega."},
+    {en:"customs",        pt:"alfândega / desembaraço",        exEN:"The goods are held by customs pending inspection.",                     exPT:"A mercadoria está retida na alfândega aguardando inspeção."},
+    {en:"tariff",         pt:"tarifa / imposto de importação", exEN:"A 20% tariff applies to this type of goods.",                          exPT:"Uma tarifa de 20% se aplica a este tipo de mercadoria."},
+    {en:"clearance",      pt:"desembaraço aduaneiro",          exEN:"We are waiting for customs clearance to release the cargo.",            exPT:"Aguardamos o desembaraço aduaneiro para liberar a carga."},
+    {en:"freight",        pt:"frete",                          exEN:"Freight costs have increased due to fuel prices.",                      exPT:"Os custos de frete aumentaram por causa dos preços do combustível."},
+    {en:"shipper",        pt:"embarcador / exportador",        exEN:"The shipper is responsible for packing and labeling.",                  exPT:"O embarcador é responsável pelo embalamento e etiquetagem."},
+    {en:"consignee",      pt:"destinatário / importador",      exEN:"The consignee must be present to receive the cargo.",                   exPT:"O destinatário deve estar presente para receber a carga."},
+    {en:"warehouse",      pt:"armazém / depósito",             exEN:"The goods are stored in our bonded warehouse.",                         exPT:"A mercadoria está no nosso armazém alfandegado."},
+    {en:"letter of credit",pt:"carta de crédito (L/C)",        exEN:"Payment will be made by irrevocable letter of credit.",                 exPT:"O pagamento será feito por carta de crédito irrevogável."},
+    {en:"HS code",        pt:"código NCM / classificação",     exEN:"You must declare the correct HS code for each product.",               exPT:"Você deve declarar o código NCM correto para cada produto."},
+    {en:"FOB",            pt:"livre a bordo (Free On Board)",  exEN:"The price is FOB Santos — the buyer covers ocean freight.",            exPT:"O preço é FOB Santos — o comprador cobre o frete marítimo."},
+    {en:"CIF",            pt:"custo, seguro e frete",          exEN:"The CIF value is used to calculate import duties.",                     exPT:"O valor CIF é usado para calcular os impostos de importação."},
+    {en:"packing list",   pt:"romaneio de embalagem",          exEN:"Attach the packing list to every carton.",                             exPT:"Anexe o romaneio em cada caixa."},
+    {en:"customs broker", pt:"despachante aduaneiro",          exEN:"Our customs broker handles all import documentation.",                  exPT:"Nosso despachante cuida de toda a documentação de importação."},
+    {en:"shipment",       pt:"remessa / envio",                exEN:"The shipment is expected to arrive in 15 days.",                       exPT:"A remessa deve chegar em 15 dias."},
+    {en:"proforma invoice",pt:"fatura proforma",               exEN:"Please send a proforma invoice for our approval.",                      exPT:"Envie uma fatura proforma para nossa aprovação."},
+  ]},
+  offshore: { name:"Offshore", icon:"🛢️", terms:[
+    {en:"platform",        pt:"plataforma offshore",                     exEN:"The platform operates 120 km from the coast.",                   exPT:"A plataforma opera a 120 km da costa."},
+    {en:"rig",             pt:"sonda / plataforma de perfuração",        exEN:"The drilling rig will be on location for six months.",            exPT:"A sonda ficará no local por seis meses."},
+    {en:"shift",           pt:"turno de trabalho",                       exEN:"The offshore shift is typically 12 hours on and 12 off.",         exPT:"O turno offshore é tipicamente 12 horas de trabalho e 12 de descanso."},
+    {en:"muster station",  pt:"ponto de abandono / mustering",           exEN:"All personnel must know their muster station.",                   exPT:"Todo pessoal deve conhecer seu ponto de abandono."},
+    {en:"crude oil",       pt:"petróleo bruto",                          exEN:"Crude oil is pumped from the well to the FPSO.",                  exPT:"O petróleo bruto é bombeado do poço para o FPSO."},
+    {en:"pipeline",        pt:"oleoduto / duto",                         exEN:"The pipeline runs from the platform to the refinery.",            exPT:"O oleoduto vai da plataforma até a refinaria."},
+    {en:"BOP",             pt:"preventor de explosão (Blowout Preventer)",exEN:"Test the BOP before drilling operations begin.",                  exPT:"Teste o BOP antes de iniciar as operações de perfuração."},
+    {en:"drillship",       pt:"navio-sonda",                             exEN:"The drillship is equipped for ultra-deep water.",                 exPT:"O navio-sonda é equipado para águas ultra-profundas."},
+    {en:"derrick",         pt:"torre de perfuração",                     exEN:"The derrick is 50 meters tall and weighs 300 tons.",              exPT:"A torre tem 50 metros de altura e pesa 300 toneladas."},
+    {en:"helideck",        pt:"heliporto da plataforma",                 exEN:"The helicopter landed safely on the helideck.",                   exPT:"O helicóptero pousou com segurança no heliporto."},
+    {en:"crew change",     pt:"troca de turno / rotatividade",           exEN:"Crew change is scheduled every 14 days.",                         exPT:"A troca de turno está programada a cada 14 dias."},
+    {en:"roughneck",       pt:"auxiliar de sonda",                       exEN:"The roughneck handles the heavy drill pipe connections.",          exPT:"O auxiliar de sonda manuseia as conexões do tubo de perfuração."},
+    {en:"safety briefing", pt:"briefing de segurança",                   exEN:"A safety briefing is mandatory before any offshore task.",         exPT:"Um briefing de segurança é obrigatório antes de qualquer tarefa offshore."},
+    {en:"wellbore",        pt:"poço de perfuração",                      exEN:"Monitor the wellbore pressure continuously.",                     exPT:"Monitore a pressão do poço continuamente."},
+    {en:"FPSO",            pt:"navio-plataforma de produção",            exEN:"The FPSO processes and stores oil before offloading.",            exPT:"O FPSO processa e armazena petróleo antes do descarregamento."},
+    {en:"subsea",          pt:"submarino / submerso",                    exEN:"The subsea equipment must be inspected by ROV.",                  exPT:"O equipamento submarino deve ser inspecionado por ROV."},
+    {en:"flare",           pt:"tocha / queimador de gás",                exEN:"The flare burns off excess gas safely.",                          exPT:"A tocha queima o excesso de gás com segurança."},
+  ]},
+  aeroporto: { name:"Aeroporto", icon:"✈️", terms:[
+    {en:"departure",        pt:"partida / saída",                  exEN:"Departure is from Terminal 2, Gate B12.",                         exPT:"A partida é do Terminal 2, Portão B12."},
+    {en:"arrival",          pt:"chegada",                          exEN:"The arrival hall is on the ground floor.",                        exPT:"O saguão de chegadas fica no térreo."},
+    {en:"boarding pass",    pt:"cartão de embarque",               exEN:"Please have your boarding pass ready at the gate.",               exPT:"Tenha seu cartão de embarque em mãos no portão."},
+    {en:"check-in",         pt:"check-in / despacho de bagagem",   exEN:"Online check-in opens 48 hours before departure.",               exPT:"O check-in online abre 48 horas antes da partida."},
+    {en:"gate",             pt:"portão de embarque",               exEN:"Boarding begins at Gate 14 in 20 minutes.",                      exPT:"O embarque começa no Portão 14 em 20 minutos."},
+    {en:"baggage / luggage",pt:"bagagem",                          exEN:"Each passenger is allowed one piece of carry-on baggage.",        exPT:"Cada passageiro tem direito a uma bagagem de mão."},
+    {en:"security check",   pt:"controle de segurança",            exEN:"Remove your laptop before going through security.",               exPT:"Retire o notebook antes de passar pelo controle de segurança."},
+    {en:"immigration",      pt:"imigração / controle de passaporte",exEN:"All non-citizens must clear immigration on arrival.",            exPT:"Todos os não-cidadãos passam pela imigração na chegada."},
+    {en:"connecting flight",pt:"voo de conexão",                   exEN:"I have a connecting flight in São Paulo.",                       exPT:"Tenho um voo de conexão em São Paulo."},
+    {en:"layover",          pt:"escala / conexão longa",           exEN:"We have a 6-hour layover in Lisbon.",                            exPT:"Temos uma escala de 6 horas em Lisboa."},
+    {en:"carry-on",         pt:"bagagem de mão",                   exEN:"Your carry-on must fit in the overhead bin.",                    exPT:"Sua bagagem de mão deve caber no compartimento superior."},
+    {en:"customs",          pt:"alfândega (aeroporto)",            exEN:"Declare all items over the duty-free limit at customs.",         exPT:"Declare todos os itens acima do limite isento na alfândega."},
+    {en:"transit",          pt:"trânsito / passageiro em escala",  exEN:"Passengers in transit do not need a visa.",                     exPT:"Passageiros em trânsito não precisam de visto."},
+    {en:"delay",            pt:"atraso de voo",                    exEN:"The flight is delayed by two hours due to weather.",             exPT:"O voo está atrasado duas horas por causa do tempo."},
+    {en:"baggage claim",    pt:"esteira de bagagem",               exEN:"Baggage claim for your flight is at carousel 5.",               exPT:"A esteira de bagagem do seu voo é a número 5."},
+    {en:"boarding",         pt:"embarque",                         exEN:"Boarding will begin 30 minutes before departure.",              exPT:"O embarque começará 30 minutos antes da partida."},
+    {en:"aisle seat",       pt:"assento no corredor",              exEN:"I prefer an aisle seat for easy access.",                       exPT:"Prefiro assento no corredor para facilitar o acesso."},
+  ]},
+  corporativo: { name:"Corporativo", icon:"💼", terms:[
+    {en:"meeting",      pt:"reunião",                              exEN:"We have a team meeting every Monday morning.",                   exPT:"Temos uma reunião de equipe toda segunda de manhã."},
+    {en:"deadline",     pt:"prazo final",                          exEN:"The deadline for this project is next Friday.",                  exPT:"O prazo final deste projeto é na próxima sexta."},
+    {en:"feedback",     pt:"retorno / avaliação",                  exEN:"Please send me your feedback by end of day.",                    exPT:"Por favor me envie seu feedback até o fim do dia."},
+    {en:"KPI",          pt:"indicador-chave de desempenho",        exEN:"Sales KPIs are reviewed every quarter.",                         exPT:"Os KPIs de vendas são revisados todo trimestre."},
+    {en:"stakeholder",  pt:"parte interessada / envolvido",        exEN:"All stakeholders must approve the final proposal.",              exPT:"Todas as partes interessadas devem aprovar a proposta final."},
+    {en:"follow-up",    pt:"acompanhamento / retorno",             exEN:"I will follow up on this email by Thursday.",                    exPT:"Farei um acompanhamento deste e-mail até quinta."},
+    {en:"agenda",       pt:"pauta / agenda da reunião",            exEN:"Please review the agenda before the meeting.",                   exPT:"Por favor revise a pauta antes da reunião."},
+    {en:"budget",       pt:"orçamento",                            exEN:"The project is over budget — we need to cut costs.",            exPT:"O projeto está acima do orçamento — precisamos cortar custos."},
+    {en:"proposal",     pt:"proposta",                             exEN:"I will send you the proposal by tomorrow morning.",              exPT:"Enviarei a proposta para você até amanhã de manhã."},
+    {en:"minutes",      pt:"ata de reunião",                       exEN:"Who is responsible for taking the minutes today?",               exPT:"Quem é responsável por fazer a ata hoje?"},
+    {en:"ROI",          pt:"retorno sobre investimento",           exEN:"The campaign showed a positive ROI of 30%.",                    exPT:"A campanha apresentou um ROI positivo de 30%."},
+    {en:"brief",        pt:"briefing / resumo de projeto",         exEN:"The client sent a detailed brief for the new campaign.",         exPT:"O cliente enviou um briefing detalhado para a nova campanha."},
+    {en:"quarterly",    pt:"trimestral",                           exEN:"Our quarterly results exceeded expectations.",                   exPT:"Nossos resultados trimestrais superaram as expectativas."},
+    {en:"benchmark",    pt:"referência / padrão do setor",         exEN:"Our pricing must stay competitive against industry benchmarks.", exPT:"Nosso preço deve ser competitivo em relação ao benchmark do setor."},
+    {en:"outsource",    pt:"terceirizar",                          exEN:"We decided to outsource the IT support team.",                   exPT:"Decidimos terceirizar a equipe de suporte de TI."},
+    {en:"workflow",     pt:"fluxo de trabalho",                    exEN:"We need to streamline the approval workflow.",                   exPT:"Precisamos otimizar o fluxo de aprovação."},
+    {en:"presentation", pt:"apresentação",                         exEN:"The board presentation is scheduled for Tuesday.",               exPT:"A apresentação para a diretoria está marcada para terça."},
+  ]},
+};
+
 const PRO_MESSAGES=[
   {title:"🚀 Acelere seu inglês",        sub:"Só R$ 15/mês — menos que um café por dia!"},
   {title:"💼 Para sua carreira",         sub:"Todo conteúdo profissional por apenas R$ 15"},
@@ -2700,6 +2819,16 @@ function openSegmentPhases(segId){
   currentSegmentId=segId;
   document.getElementById("phases-title").textContent=`${seg.icon} ${seg.name}`;
   const list=document.getElementById("phases-list"); list.innerHTML="";
+
+  // Glossary button (only for segments that have glossary data)
+  if(GLOSSARY[segId]){
+    const glossBtn=document.createElement("button");
+    glossBtn.className="gloss-segment-btn";
+    glossBtn.innerHTML="📖 Glossário do Segmento";
+    glossBtn.addEventListener("click",()=>openGlossary(segId));
+    list.appendChild(glossBtn);
+  }
+
   const completed=userData.completedMissions||[];
   (seg.phases||[]).forEach((phase,pi)=>{
     // Grammar Core: all phases independent
@@ -2731,6 +2860,72 @@ function openSegmentPhases(segId){
     list.appendChild(div);
   });
   showView("view-phases");
+}
+
+// ── GLOSSARY ──────────────────────────────────────────────────────────────────
+function openGlossary(segId){
+  const data=GLOSSARY[segId]; if(!data) return;
+  const overlay=document.createElement("div");
+  overlay.id="glossary-overlay";
+  overlay.innerHTML=`
+    <div class="gloss-header">
+      <div class="gloss-header-row">
+        <button class="gloss-close-btn" onclick="closeGlossary()">← Voltar</button>
+        <h2 class="gloss-title">${data.icon} Glossário — ${data.name}</h2>
+      </div>
+      <input class="gloss-search" placeholder="Buscar termo em inglês ou português..." id="gloss-search-input" />
+    </div>
+    <div class="gloss-list" id="gloss-term-list"></div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelector("#gloss-search-input").addEventListener("input",e=>{
+    renderGlossaryTerms(segId, e.target.value.trim().toLowerCase());
+  });
+  renderGlossaryTerms(segId,"");
+}
+
+function closeGlossary(){
+  document.getElementById("glossary-overlay")?.remove();
+}
+
+function renderGlossaryTerms(segId, filter){
+  const data=GLOSSARY[segId]; if(!data) return;
+  const list=document.getElementById("gloss-term-list"); if(!list) return;
+  const terms=filter
+    ? data.terms.filter(t=>t.en.toLowerCase().includes(filter)||t.pt.toLowerCase().includes(filter))
+    : data.terms;
+  if(!terms.length){
+    list.innerHTML=`<p class="gloss-empty">Nenhum termo encontrado.</p>`;
+    return;
+  }
+  list.innerHTML="";
+  terms.forEach(term=>{
+    const card=document.createElement("div");
+    card.className="gloss-term-card";
+    card.innerHTML=`
+      <div class="gloss-term-row">
+        <span class="gloss-term-en">${term.en}</span>
+        <span class="gloss-term-pt">${term.pt}</span>
+        <button class="gloss-speak-btn" title="Ouvir pronúncia">🔊</button>
+      </div>
+      <div class="gloss-term-detail">
+        <div class="gloss-example-en">"${term.exEN}"</div>
+        <div class="gloss-example-pt">"${term.exPT}"</div>
+        <button class="gloss-speak-example">🔊 Ouvir exemplo</button>
+      </div>`;
+    card.querySelector(".gloss-term-row").addEventListener("click",e=>{
+      if(e.target.classList.contains("gloss-speak-btn")) return;
+      card.classList.toggle("open");
+    });
+    card.querySelector(".gloss-speak-btn").addEventListener("click",e=>{
+      e.stopPropagation();
+      try{ SoundFX.speakEN(term.en); }catch(_){}
+    });
+    card.querySelector(".gloss-speak-example").addEventListener("click",e=>{
+      e.stopPropagation();
+      try{ SoundFX.speakEN(term.exEN); }catch(_){}
+    });
+    list.appendChild(card);
+  });
 }
 
 function openMissionsList(segId,phaseId){
@@ -7035,5 +7230,7 @@ if(typeof showReferralPanel !== 'undefined') window.showReferralPanel = showRefe
 if(typeof showReviewPanel !== 'undefined') window.showReviewPanel = showReviewPanel;
 if(typeof backToDashboard !== 'undefined') window.backToDashboard = backToDashboard;
 if(typeof showView !== 'undefined') window.showView = showView;
+if(typeof openGlossary !== 'undefined') window.openGlossary = openGlossary;
+if(typeof closeGlossary !== 'undefined') window.closeGlossary = closeGlossary;
 
 document.addEventListener("DOMContentLoaded",init);
