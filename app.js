@@ -2019,195 +2019,161 @@ window.addEventListener("offline", () => {
 // Penalidade: erro em A1/A2 trava máximo em B1
 
 const LT_QUESTIONS = {
+  all: [
+    // ── A1 ──────────────────────────────────────────────────────────────────
+    {id:"q1", type:"mcq", level:"A1",
+     title:"Vocabulário — A1",
+     question:"What does 'deadline' mean?",
+     options:["Prazo","Reunião","Contrato","Relatório"], correct:0,
+     pts:{correct:1,wrong:0}},
 
-  // ══ NÍVEL A1-A2 — Básico ══════════════════════════════════════════════════
-  a1: [
-    {id:"a1_1", type:"mcq", level:"A1",
-     title:"Verbo To Be",
-     question:"She ___ a very good student.",
-     options:["is","are","am","be"], correct:0,
-     pts:{correct:2,wrong:0}},
+    {id:"q2", type:"mcq", level:"A1",
+     title:"Gramática — A1",
+     question:"Choose the correct sentence:",
+     options:["He works on an offshore platform.","I works in a ship.","She work every day.","They works together."], correct:0,
+     pts:{correct:1,wrong:0}},
 
-    {id:"a1_2", type:"mcq", level:"A1",
-     title:"Presente Simples",
-     question:"He ___ to work every day by bus.",
-     options:["goes","go","going","went"], correct:0,
-     pts:{correct:2,wrong:0}},
+    // ── A2 ──────────────────────────────────────────────────────────────────
+    {id:"q3", type:"mcq", level:"A2",
+     title:"Passado Simples — A2",
+     question:"She _____ the report before the meeting started.",
+     options:["sent","send","sends","was send"], correct:0,
+     pts:{correct:1,wrong:0}},
 
-    {id:"a1_3", type:"error_correction", level:"A1",
-     title:"Corrija o erro",
-     question:"He don't like coffee in the morning.",
-     placeholder:"Escreva a frase correta...",
-     answer:"He doesn't like coffee in the morning.",
-     pts:{correct:3,almost:1,wrong:0}},
-
-    {id:"a1_4", type:"mcq", level:"A2",
+    {id:"q4", type:"mcq", level:"A2",
      title:"Vocabulário — Trabalho",
-     question:"Your 'schedule' at work is:",
-     options:["Your plan with times and tasks","Your salary","Your uniform","Your office"],
-     correct:0, pts:{correct:2,wrong:0}},
+     question:"Your supervisor asks: 'Please send me the _____ with all the numbers from last month.' What does he want?",
+     options:["Report","Schedule","Receipt","Invoice"], correct:0,
+     pts:{correct:1,wrong:0}},
 
-    {id:"a1_5", type:"mcq", level:"A2",
-     title:"Passado Simples",
-     question:"Yesterday I ___ a very important meeting.",
-     options:["had","have","has","having"], correct:0,
-     pts:{correct:2,wrong:0}},
-  ],
+    // ── B1 ──────────────────────────────────────────────────────────────────
+    {id:"q5", type:"mcq", level:"B1",
+     title:"Present Perfect vs Simple Past",
+     question:"'We _____ this supplier for 10 years, but last year we changed to another one.'",
+     options:["used","have used","are using","use"], correct:0,
+     pts:{correct:1,wrong:0}},
 
-  // ══ NÍVEL B1-B2 — Intermediário ═══════════════════════════════════════════
-  b1: [
-    {id:"b1_1", type:"fill", level:"B1",
-     title:"Present Perfect",
-     question:"I have already ___ this report. (finish)",
-     placeholder:"Particípio passado de finish...",
-     answer:"finished",
-     pts:{correct:3,almost:1,wrong:0}},
+    {id:"q6", type:"reading", level:"B1",
+     title:"Compreensão — B1",
+     question:"Read: 'The shipment was delayed due to port congestion, but we expect it to arrive by Thursday.' — What is the main problem?",
+     options:["The shipment is late","The goods are damaged","The port is permanently closed","The supplier cancelled the order"], correct:0,
+     pts:{correct:1,wrong:0}},
 
-    {id:"b1_2", type:"mcq", level:"B1",
-     title:"Modal Verbs",
-     question:"You ___ wear a safety vest on the platform. It's mandatory.",
-     options:["must","can","may","would"], correct:0,
-     pts:{correct:2,wrong:0}},
+    {id:"q7", type:"mcq", level:"B1",
+     title:"Condicional Tipo 1",
+     question:"'If the client _____ by tomorrow, we will cancel the order.'",
+     options:["doesn't confirm","won't confirm","didn't confirm","wouldn't confirm"], correct:0,
+     pts:{correct:1,wrong:0}},
 
-    {id:"b1_3", type:"error_correction", level:"B1",
-     title:"Erro clássico — Collocations",
-     question:"I did a big mistake during the negotiation.",
-     placeholder:"Corrija usando o verbo certo...",
-     answer:"I made a big mistake during the negotiation.",
-     pts:{correct:3,almost:1,wrong:0}},
+    // ── B2 ──────────────────────────────────────────────────────────────────
+    {id:"q8", type:"mcq", level:"B2",
+     title:"Voz Passiva — B2",
+     question:"The safety report _____ before the inspection tomorrow.",
+     options:["must be submitted","must submit","must submitted","must have submit"], correct:0,
+     pts:{correct:1,wrong:0}},
 
-    {id:"b1_4", type:"word_order", level:"B2",
-     title:"Estrutura de Frase",
-     question:"Ordene as palavras corretamente:",
-     scrambled:["She","has","never","missed","a","deadline."],
-     answer:"She has never missed a deadline.",
-     pts:{correct:3,almost:1,wrong:0}},
-
-    {id:"b1_5", type:"translation", level:"B2",
-     title:"Tradução Profissional",
-     question:"Preciso confirmar o embarque para amanhã.",
-     placeholder:"Escreva em inglês...",
-     answer:"I need to confirm the shipment for tomorrow.",
-     pts:{correct:4,almost:2,wrong:0}},
-  ],
-
-  // ══ NÍVEL C1 — Avançado ═══════════════════════════════════════════════════
-  c1: [
-    {id:"c1_1", type:"mcq", level:"C1",
-     title:"Vocabulário Técnico — COMEX",
-     question:"The container is on hold due to a ___ discrepancy.",
-     options:["documentation","document","documental","documented"], correct:0,
-     pts:{correct:3,wrong:0}},
-
-    {id:"c1_2", type:"reading", level:"C1",
-     title:"Compreensão — Contexto Profissional",
-     question:"Read and answer: The vessel arrived at berth 12 ahead of schedule, but the port authority placed it on hold pending a full cargo inspection. The captain requested an ETA update for the release. — Why was the vessel placed on hold?",
+    {id:"q9", type:"mcq", level:"B2",
+     title:"Registro Formal — B2",
+     question:"Which sentence is correct for a professional email?",
      options:[
-       "It needed a cargo inspection before being released",
-       "The vessel arrived too late",
-       "The captain made a request to the port",
-       "There was a problem with the berth"
+       "I am writing with regard to your recent inquiry.",
+       "I am writing about your asking.",
+       "I write for your inquiry.",
+       "I am writing in regard of your question."
      ], correct:0,
-     pts:{correct:4,wrong:0}},
+     pts:{correct:1,wrong:0}},
 
-    {id:"c1_3", type:"fill", level:"C1",
-     title:"Condicional — Uso Profissional",
-     question:"If the shipment ___ (delay) any further, we will lose the contract.",
-     placeholder:"Forma correta do verbo...",
-     answer:"delays",
-     pts:{correct:4,almost:2,wrong:0}},
+    {id:"q10", type:"reading", level:"B2",
+     title:"Inferência — B2",
+     question:"Read: 'Although the quarterly figures exceeded projections, the board expressed concern about the sustainability of current growth rates.' — What is the board worried about?",
+     options:[
+       "The growth may not continue at this pace",
+       "The company lost money this quarter",
+       "The projections were wrong",
+       "The quarterly report had errors"
+     ], correct:0,
+     pts:{correct:1,wrong:0}},
 
-    {id:"c1_4", type:"error_correction", level:"C1",
-     title:"Precisão Gramatical",
-     question:"The team has been working in this project since three months.",
-     placeholder:"Corrija a preposição e o tempo verbal...",
-     answer:"The team has been working on this project for three months.",
-     pts:{correct:4,almost:2,wrong:0}},
+    // ── C1 ──────────────────────────────────────────────────────────────────
+    {id:"q11", type:"mcq", level:"C1",
+     title:"Condicional Misto — C1",
+     question:"'If they _____ the safety protocol last year, the accident _____ prevented.'",
+     options:[
+       "had followed / could have been",
+       "followed / could be",
+       "have followed / would be",
+       "would follow / might be"
+     ], correct:0,
+     pts:{correct:1,wrong:0}},
 
-    {id:"c1_5", type:"translation", level:"C1",
-     title:"Tradução Avançada",
-     question:"O prazo de entrega foi adiado devido a problemas alfandegários.",
-     placeholder:"Escreva em inglês profissional...",
-     answer:"The delivery deadline was postponed due to customs issues.",
-     pts:{correct:5,almost:2,wrong:0}},
-  ],
+    {id:"q12", type:"mcq", level:"C1",
+     title:"Expressão Idiomática — C1",
+     question:"The manager said: 'We need to take ownership of this project.' What does this mean?",
+     options:[
+       "Be fully responsible for the project's success or failure",
+       "Buy shares in the project",
+       "Submit a formal ownership document",
+       "Assign the project to another team"
+     ], correct:0,
+     pts:{correct:1,wrong:0}},
+
+    {id:"q13", type:"mcq", level:"C1",
+     title:"Registro Avançado — C1",
+     question:"Which sentence is most appropriate for a formal business proposal?",
+     options:[
+       "This initiative has the potential to significantly enhance operational efficiency.",
+       "We think this idea is really good and you should totally try it.",
+       "Doing this will make things way better for everyone.",
+       "The company would be a lot more efficient if they did this."
+     ], correct:0,
+     pts:{correct:1,wrong:0}},
+
+    // ── C2 ──────────────────────────────────────────────────────────────────
+    {id:"q14", type:"mcq", level:"C2",
+     title:"Nuance de Vocabulário — C2",
+     question:"What is the key difference between 'He refused to sign' and 'He declined to sign'?",
+     options:[
+       "'Refused' implies stronger resistance; 'declined' is more formal and polite",
+       "No difference — they mean exactly the same",
+       "'Declined' means he was unable to sign; 'refused' means unwilling",
+       "'Refused' is only used in legal documents"
+     ], correct:0,
+     pts:{correct:1,wrong:0}},
+
+    {id:"q15", type:"reading", level:"C2",
+     title:"Texto Técnico — C2",
+     question:"Read: 'The arbitration clause stipulates that any disputes arising from this agreement shall be resolved through binding arbitration rather than litigation.' — What does this mean for the parties?",
+     options:[
+       "Disputes must be resolved privately through arbitration, not courts",
+       "Disputes must go to court",
+       "Either party can choose to litigate",
+       "No disputes are allowed under the agreement"
+     ], correct:0,
+     pts:{correct:1,wrong:0}},
+  ]
 };
 
-// ── LÓGICA ADAPTATIVA ─────────────────────────────────────────────────────────
-let ltCurrentLevel = "a1";   // começa no A1
-let ltConsecutiveRight = 0;  // acertos seguidos
-let ltConsecutiveWrong = 0;  // erros seguidos
-let ltQueuedQuestions = [];  // fila de perguntas
-let ltAnsweredByLevel = {};  // rastrear perguntas já usadas
-let ltPenalized = false;     // errou A1/A2 → trava em B1
+// ── LÓGICA SEQUENCIAL — 15 questões A1→C2 ────────────────────────────────────
 let ltTotalQuestions = 15;
 let ltCurrentQ = 0;
 
 function buildAdaptiveQueue() {
-  // Começa com 5 questões A1, depois adapta
-  ltQueuedQuestions = [...LT_QUESTIONS.a1];
-  ltAnsweredByLevel = { a1: 0, b1: 0, c1: 0 };
-  ltCurrentLevel = "a1";
-  ltConsecutiveRight = 0;
-  ltConsecutiveWrong = 0;
-  ltPenalized = false;
+  ltIndex = 0;
 }
 
 function getNextAdaptiveQuestion() {
-  const pool = LT_QUESTIONS[ltCurrentLevel];
-  const used = ltAnsweredByLevel[ltCurrentLevel] || 0;
-  if (used < pool.length) {
-    ltAnsweredByLevel[ltCurrentLevel] = used + 1;
-    return pool[used];
-  }
-  // Pool esgotado — ir pro próximo nível
-  if (ltCurrentLevel === "a1") { ltCurrentLevel = "b1"; ltAnsweredByLevel.b1 = 0; }
-  else if (ltCurrentLevel === "b1") { ltCurrentLevel = "c1"; ltAnsweredByLevel.c1 = 0; }
-  const newPool = LT_QUESTIONS[ltCurrentLevel];
-  ltAnsweredByLevel[ltCurrentLevel] = 1;
-  return newPool[0];
+  return LT_QUESTIONS.all[ltIndex++];
 }
 
-function adaptLevel(wasCorrect) {
-  if (wasCorrect) {
-    ltConsecutiveWrong = 0;
-    ltConsecutiveRight++;
-    if (ltConsecutiveRight >= 3) {
-      // Sobe nível
-      ltConsecutiveRight = 0;
-      if (ltCurrentLevel === "a1") ltCurrentLevel = "b1";
-      else if (ltCurrentLevel === "b1" && !ltPenalized) ltCurrentLevel = "c1";
-    }
-  } else {
-    ltConsecutiveRight = 0;
-    ltConsecutiveWrong++;
-    // Penalidade: erro em A1 trava máximo em B1
-    if (ltCurrentLevel === "a1") ltPenalized = true;
-    if (ltConsecutiveWrong >= 2) {
-      ltConsecutiveWrong = 0;
-      if (ltCurrentLevel === "c1") ltCurrentLevel = "b1";
-      else if (ltCurrentLevel === "b1") ltCurrentLevel = "a1";
-    }
-  }
-}
+function adaptLevel() {} // sequencial — classificação por pontuação final
 
 function calcFinalLevel() {
-  const maxPts = ltTotalQuestions * 3; // aprox
-  const pct = Math.round((ltScore / Math.max(ltScore + 1, 1)) * 100);
-
-  // Basear no nível onde terminou + pontuação
-  if (ltPenalized && ltCurrentLevel !== "c1") {
-    // Errou básico — máximo B1
-    if (ltScore < 15) return { level:"a2", label:"A2 — Básico 📘", msg:"Você tem uma base! Vamos fortalecer o essencial.", color:"#60a5fa" };
-    return { level:"b1", label:"B1 — Intermediário ⭐", msg:"Bom nível! Você se vira bem. Foco em fluência profissional.", color:"#a78bfa" };
-  }
-  if (ltCurrentLevel === "c1") {
-    if (ltAnsweredByLevel.c1 >= 3) return { level:"c1", label:"C1 — Avançado 🏆", msg:"Impressionante! Vamos polir detalhes e naturalidade.", color:"#ffd700" };
-    return { level:"b2", label:"B2 — Intermediário Alto 🌟", msg:"Ótimo nível! Comunicação fluida com pequenos refinamentos.", color:"#e4b45c" };
-  }
-  if (ltCurrentLevel === "b1") return { level:"b1", label:"B1 — Intermediário ⭐", msg:"Bom nível! Você se vira bem. Foco em fluência profissional.", color:"#a78bfa" };
-  if (ltScore >= 8) return { level:"a2", label:"A2 — Básico Funcional 📘", msg:"Você tem base! Vamos fortalecer vocabulário e gramática.", color:"#60a5fa" };
-  return { level:"a1", label:"A1 — Iniciante 🌱", msg:"Sem problema! Todo expert já foi iniciante. Vamos juntos!", color:"#22c55e" };
+  if (ltScore >= 14) return { level:"c2", label:"C2 — Fluente 🎓", msg:"Inglês excepcional! Vocabulário, gramática e nuance sob controle total.", color:"#f97316" };
+  if (ltScore >= 12) return { level:"c1", label:"C1 — Avançado 🏆", msg:"Impressionante! Você domina inglês profissional com precisão e naturalidade.", color:"#ffd700" };
+  if (ltScore >= 10) return { level:"b2", label:"B2 — Intermediário Alto 🌟", msg:"Ótimo nível! Comunicação fluida — pequenos refinamentos para chegar ao topo.", color:"#e4b45c" };
+  if (ltScore >= 7)  return { level:"b1", label:"B1 — Intermediário ⭐", msg:"Bom nível! Você se vira bem. Foco em fluência e vocabulário profissional.", color:"#a78bfa" };
+  if (ltScore >= 4)  return { level:"a2", label:"A2 — Básico Funcional 📘", msg:"Você tem uma base sólida! Vamos fortalecer o vocabulário e a gramática.", color:"#60a5fa" };
+  return               { level:"a1", label:"A1 — Iniciante 🌱", msg:"Todo expert já foi iniciante! Vamos construir seu inglês do zero.", color:"#22c55e" };
 }
 
 function startLevelTest(){
@@ -2228,13 +2194,11 @@ function renderLTQuestion(){
   document.getElementById("lt-counter").textContent=`${ltCurrentQ} / ${total}`;
   document.getElementById("lt-progress-bar").style.width=`${Math.round((ltCurrentQ/total)*100)}%`;
 
-  // Badge de nível atual
-  const levelColors = {a1:"#22c55e",b1:"#a78bfa",c1:"#ffd700"};
-  const levelLabels = {a1:"A1-A2 • Básico",b1:"B1-B2 • Intermediário",c1:"C1 • Avançado"};
+  // Badge do nível da pergunta atual
+  const levelColors = {A1:"#22c55e",A2:"#4ade80",B1:"#a78bfa",B2:"#e4b45c",C1:"#ffd700",C2:"#f97316"};
   document.getElementById("lt-title").textContent = q.title;
-  document.getElementById("lt-title").style.color = levelColors[ltCurrentLevel]||"#e4b45c";
+  document.getElementById("lt-title").style.color = levelColors[q.level]||"#e4b45c";
 
-  // Label de nível
   let levelBadge = document.getElementById("lt-level-badge");
   if(!levelBadge){
     levelBadge = document.createElement("div");
@@ -2242,10 +2206,10 @@ function renderLTQuestion(){
     levelBadge.style.cssText="font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;display:inline-block;margin-bottom:8px;";
     document.getElementById("lt-title").parentNode.insertBefore(levelBadge, document.getElementById("lt-title"));
   }
-  levelBadge.textContent = levelLabels[ltCurrentLevel]||"";
-  levelBadge.style.background = (levelColors[ltCurrentLevel]||"#e4b45c")+"22";
-  levelBadge.style.color = levelColors[ltCurrentLevel]||"#e4b45c";
-  levelBadge.style.border = `1px solid ${levelColors[ltCurrentLevel]||"#e4b45c"}44`;
+  levelBadge.textContent = q.level;
+  levelBadge.style.background = (levelColors[q.level]||"#e4b45c")+"22";
+  levelBadge.style.color = levelColors[q.level]||"#e4b45c";
+  levelBadge.style.border = `1px solid ${levelColors[q.level]||"#e4b45c"}44`;
 
   document.getElementById("lt-question").textContent = q.question;
   document.getElementById("lt-feedback").style.display="none";
@@ -2335,24 +2299,33 @@ function showLTFeedback(feedback,correct,pts){
 function showLTResult(){
   const result = calcFinalLevel();
   diagAnswers.level = result.level;
+  diagAnswers.levelTestCompleted = true;
 
   document.getElementById("lt-questions-area").style.display="none";
   document.getElementById("lt-result").style.display="block";
-  document.getElementById("lt-result-score").textContent=`${ltScore} pts`;
+  document.getElementById("lt-result-score").textContent=`${ltScore} / ${ltTotalQuestions}`;
   document.getElementById("lt-result-pct").textContent=result.label;
   document.getElementById("lt-result-pct").style.color=result.color||"#e4b45c";
   document.getElementById("lt-result-level").textContent=result.label;
   document.getElementById("lt-result-msg").textContent=result.msg;
-  document.getElementById("lt-result-bar").style.width=
-    result.level==="c1"?"95%":result.level==="b2"?"80%":result.level==="b1"?"65%":result.level==="a2"?"40%":"20%";
+  const barPct = {c2:"100%",c1:"90%",b2:"75%",b1:"58%",a2:"38%",a1:"18%"};
+  document.getElementById("lt-result-bar").style.width = barPct[result.level]||"18%";
   document.getElementById("lt-result-bar").style.background=result.color||"#e4b45c";
   SoundFX.complete();
 }
 
 async function finishLevelTest(){
+  const completed = diagAnswers.levelTestCompleted || false;
   if(currentUser){
-    await saveProgress(currentUser.uid,{diagnosisAnswers:diagAnswers,detectedLevel:diagAnswers.level,currentMission:{segmentId:currentSegmentId,phaseId:"f1",missionId:getSegment(currentSegmentId)?.phases[0]?.missions[0]?.id||"",phraseIndex:0}});
-    userData.diagnosisAnswers=diagAnswers; userData.detectedLevel=diagAnswers.level;
+    await saveProgress(currentUser.uid,{
+      diagnosisAnswers:diagAnswers,
+      detectedLevel: completed ? diagAnswers.level : (userData.detectedLevel||null),
+      levelTestCompleted: completed,
+      currentMission:{segmentId:currentSegmentId,phaseId:"f1",missionId:getSegment(currentSegmentId)?.phases[0]?.missions[0]?.id||"",phraseIndex:0}
+    });
+    userData.diagnosisAnswers=diagAnswers;
+    userData.detectedLevel= completed ? diagAnswers.level : (userData.detectedLevel||null);
+    userData.levelTestCompleted=completed;
   }
   renderDashboard(); showView("view-dashboard");
 }
@@ -2683,9 +2656,19 @@ function renderDashboard(){
   const banner=document.getElementById("pro-banner");
   if(banner) banner.style.display=isPro()?"none":"flex";
 
-  // Show diagnosis banner only if never done
+  // Show banner: diagnosis not done OR level test not done yet
   const diagBanner=document.getElementById("diag-invite-banner");
-  if(diagBanner) diagBanner.style.display=userData.diagnosisAnswers?"none":"flex";
+  if(diagBanner){
+    const needsDiag = !userData.diagnosisAnswers;
+    const needsLevelTest = userData.diagnosisAnswers && !userData.levelTestCompleted;
+    diagBanner.style.display = (needsDiag || needsLevelTest) ? "flex" : "none";
+    if(needsLevelTest && !needsDiag){
+      const titleEl = diagBanner.querySelector(".diag-invite-title");
+      const subEl   = diagBanner.querySelector(".diag-invite-sub");
+      if(titleEl) titleEl.textContent = "Descubra seu nível de inglês";
+      if(subEl)   subEl.textContent   = "Teste rápido • 15 questões • ~5 min";
+    }
+  }
 
   renderSegments();
   }catch(e){ console.error("renderDashboard error:", e.message); }
@@ -6795,11 +6778,11 @@ function init(){
   document.getElementById("btn-diag-voice")?.addEventListener("click",startDiagVoice);
   document.getElementById("btn-finish-diag-note")?.addEventListener("click",finishDiagnosisNote);
   document.getElementById("btn-skip-diag-note")?.addEventListener("click",finishDiagnosisNote);
-  document.getElementById("btn-skip-level-test-diag")?.addEventListener("click",async()=>{diagAnswers.level="a1";await finishLevelTest();});
+  document.getElementById("btn-skip-level-test-diag")?.addEventListener("click",async()=>{diagAnswers.levelTestCompleted=false;await finishLevelTest();});
 
   // level test
   document.getElementById("btn-finish-level-test")?.addEventListener("click",finishLevelTest);
-  document.getElementById("btn-skip-level-test")?.addEventListener("click",async()=>{diagAnswers.level="a1";await finishLevelTest();});
+  document.getElementById("btn-skip-level-test")?.addEventListener("click",async()=>{diagAnswers.levelTestCompleted=false;await finishLevelTest();});
 
   // profile
   document.getElementById("btn-open-profile")?.addEventListener("click",openProfile);
@@ -6828,7 +6811,11 @@ function init(){
 
   // dashboard
   document.getElementById("btn-upgrade-dash")?.addEventListener("click",showUpgradeScreen);
-  document.getElementById("btn-start-diag")?.addEventListener("click",()=>startDiagnosis());
+  document.getElementById("btn-start-diag")?.addEventListener("click",()=>{
+    document.getElementById("diag-invite-banner").style.display="none";
+    if(userData.diagnosisAnswers && !userData.levelTestCompleted){ startLevelTest(); }
+    else { startDiagnosis(); }
+  });
   document.getElementById("btn-skip-diag")?.addEventListener("click",async()=>{
     // mark as skipped so banner doesn't show again
     document.getElementById("diag-invite-banner").style.display="none";
