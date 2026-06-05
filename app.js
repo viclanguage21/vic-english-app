@@ -1250,9 +1250,12 @@ function renderMissionTexts() {
 // Capture auth state before DOM ready
 let _pendingAuthUser = undefined;
 let _domReady = false;
+let _onboardingActive = false; // true while onboarding is showing — blocks all auto-navigation
+
 onAuthChange(user => {
   _pendingAuthUser = user;
-  if (_domReady) _handleAuth(user);
+  // Never auto-navigate while the user is going through onboarding
+  if(_domReady && !_onboardingActive) _handleAuth(user);
 });
 
 // ── STATE ──────────────────────────────────────────────────────────────────────
@@ -6240,12 +6243,11 @@ async function _handleAuth(user){
   if(window._sessionTimeout){ clearTimeout(window._sessionTimeout); window._sessionTimeout=null; }
   hideAuthLoading();
 
-  const onboardingDone = !!localStorage.getItem("vic_onboarding_done");
-
-  // ── Onboarding not finished yet ───────────────────────────────────────────
-  if(!onboardingDone){
-    if(user) currentUser = user; // save for obSkip() to use later
-    return; // onboarding is in control
+  // Hard block: NEVER navigate automatically while onboarding is active.
+  // Only the user's button clicks (obNext/obSkip) may change the screen.
+  if(_onboardingActive){
+    if(user) currentUser = user;
+    return;
   }
 
   // ── No user logged in ─────────────────────────────────────────────────────
@@ -6295,6 +6297,7 @@ let _obLocked = false; // debounce: prevents double-fire on touch devices
 function startOnboarding(){
   obStep = 0;
   _obLocked = false;
+  _onboardingActive = true; // block all automatic navigation
   renderObStep();
   showView("view-onboarding");
 }
@@ -6308,7 +6311,6 @@ function renderObStep(){
   if(btn){
     const isLast = obStep === OB_TOTAL - 1;
     btn.textContent = isLast ? "Começar! 🚀" : "Próximo →";
-    // On last slide the button calls obSkip directly — never obNext
     btn.setAttribute("onclick", isLast ? "obSkip()" : "obNext()");
   }
 }
@@ -6321,15 +6323,15 @@ function obNext(){
     obStep++;
     renderObStep();
   }
-  // Never calls obSkip — last slide button does that directly
 }
 
 function obSkip(){
+  _onboardingActive = false; // release the block
   localStorage.setItem("vic_onboarding_done","1");
-  // Se já tem usuário logado, vai pro dashboard
   if(currentUser){
+    // User was already logged in — go straight to dashboard
     if(currentUser.uid === OWNER_UID) loadAdminDashboard();
-    else { renderDashboard(); showView("view-dashboard"); }
+    else _handleAuth(currentUser); // use normal flow with splash
   } else {
     showView("view-auth");
   }
@@ -6622,15 +6624,13 @@ function init(){
   // ── Routing inicial ──────────────────────────────────────────────────────────
   const onboardingDone = localStorage.getItem("vic_onboarding_done");
   if(!onboardingDone){
-    // First time: show onboarding slides, don't touch auth
+    // First time: show onboarding. _onboardingActive=true blocks all auth navigation.
     startOnboarding();
   } else {
-    // Returning user: show loading splash immediately while auth resolves
-    showLoadingSplash(null, 0); // manual close — _handleAuth will hide it
+    // Returning user: splash immediately, then auth drives the rest.
+    showLoadingSplash(null, 0);
+    if(_pendingAuthUser !== undefined) _handleAuth(_pendingAuthUser);
   }
-
-  // If auth already resolved before DOM was ready, process it now
-  if(_pendingAuthUser !== undefined) _handleAuth(_pendingAuthUser);
 
   // auth buttons
   document.getElementById("tab-login").addEventListener("click",()=>switchTab("login"));
