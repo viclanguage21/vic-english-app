@@ -6296,9 +6296,11 @@ async function _handleAuth(user){
 // ── ONBOARDING ────────────────────────────────────────────────────────────────
 let obStep = 0;
 const OB_TOTAL = 4;
+let _obLocked = false; // debounce: prevents double-fire on touch devices
 
 function startOnboarding(){
   obStep = 0;
+  _obLocked = false;
   renderObStep();
   showView("view-onboarding");
 }
@@ -6309,16 +6311,23 @@ function renderObStep(){
   document.getElementById(`ob-slide-${obStep}`)?.classList.add("active");
   document.getElementById(`ob-dot-${obStep}`)?.classList.add("active");
   const btn = document.getElementById("ob-btn-next");
-  if(btn) btn.textContent = obStep===OB_TOTAL-1 ? "Começar! 🚀" : "Próximo →";
+  if(btn){
+    const isLast = obStep === OB_TOTAL - 1;
+    btn.textContent = isLast ? "Começar! 🚀" : "Próximo →";
+    // On last slide the button calls obSkip directly — never obNext
+    btn.setAttribute("onclick", isLast ? "obSkip()" : "obNext()");
+  }
 }
 
 function obNext(){
-  if(obStep < OB_TOTAL-1){
+  if(_obLocked) return;
+  _obLocked = true;
+  setTimeout(() => { _obLocked = false; }, 600);
+  if(obStep < OB_TOTAL - 1){
     obStep++;
     renderObStep();
-  } else {
-    obSkip();
   }
+  // Never calls obSkip — last slide button does that directly
 }
 
 function obSkip(){
