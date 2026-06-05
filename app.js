@@ -6249,18 +6249,19 @@ function hideLoadingSplash() {
 // ── INIT ──────────────────────────────────────────────────────────────────────
 async function _handleAuth(user){
   console.log("_handleAuth called, user:", user?.uid||"null");
-  // Cancelar timeout de fallback de sessão
   if(window._sessionTimeout){ clearTimeout(window._sessionTimeout); window._sessionTimeout = null; }
   hideAuthLoading();
   try{
     if(user){
+      // If user hasn't seen onboarding yet, save them but don't skip to dashboard.
+      // obSkip() will handle routing when the user finishes onboarding.
+      if(!localStorage.getItem("vic_onboarding_done")){
+        currentUser = user;
+        return;
+      }
       console.log("User logged in:", user.uid);
-      // Se já estava na tela de auth E tem onboarding feito = vem do login manual
-      // Se estava em loading splash = vem de sessão salva
-      const comingFromSplash = document.getElementById("loading-splash-overlay") !== null;
       if(user.uid===OWNER_UID){ currentUser=user; await loadAdminDashboard(); }
       else await loadDashboard(user);
-      // Registrar token FCM após login
       if(Notification.permission==="granted"){
         registerFCMToken(user.uid).catch(()=>{});
       }
