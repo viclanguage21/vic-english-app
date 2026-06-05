@@ -1110,13 +1110,13 @@ function renderDashboardTexts() {
   // Botão anon
   const btnAnon = document.getElementById("btn-anon");
   if(btnAnon) btnAnon.textContent = t("login_anon");
-  // Onboarding
-  const obSlide0Title = document.getElementById("ob-slide-0")?.querySelector(".ob-slide-title");
-  const obSlide1Title = document.getElementById("ob-slide-1")?.querySelector(".ob-slide-title");
-  const obSlide2Title = document.getElementById("ob-slide-2")?.querySelector(".ob-slide-title");
-  if(obSlide0Title) obSlide0Title.textContent = t("ob_title_0");
-  if(obSlide1Title) obSlide1Title.textContent = t("ob_title_1");
-  if(obSlide2Title) obSlide2Title.textContent = t("ob_title_2");
+  // Onboarding — titles only translated when i18n key exists
+  const obTitles = ["ob_title_0","ob_title_1","ob_title_2","ob_title_3"];
+  obTitles.forEach((key,i) => {
+    const el = document.getElementById(`ob-slide-${i}`)?.querySelector(".ob-slide-title");
+    const tr = t(key);
+    if(el && tr && tr !== key) el.textContent = tr;
+  });
 
   // Quick access buttons
   const qa = id => document.getElementById(id);
@@ -6268,7 +6268,10 @@ async function _handleAuth(user){
       console.log("No user — showing auth");
       currentUser=null; userData=null;
       localStorage.removeItem("vic_has_session");
-      showView("view-auth");
+      // Don't interrupt onboarding if user hasn't seen it yet
+      if(localStorage.getItem("vic_onboarding_done")){
+        showView("view-auth");
+      }
     }
   }catch(e){
     console.error("Auth error:",e.message, e);
@@ -6291,7 +6294,7 @@ async function _handleAuth(user){
 
 // ── ONBOARDING ────────────────────────────────────────────────────────────────
 let obStep = 0;
-const OB_TOTAL = 3;
+const OB_TOTAL = 4;
 
 function startOnboarding(){
   obStep = 0;
