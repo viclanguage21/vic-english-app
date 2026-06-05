@@ -1656,25 +1656,6 @@
         </label>
       </div>
       <div class="settings-item">
-        <span>🔤 Tamanho da letra</span>
-        <div class="font-size-buttons">
-          <button class="font-size-btn" data-size="xs" style="font-size:10px">A</button>
-          <button class="font-size-btn" data-size="small" style="font-size:12px">A</button>
-          <button class="font-size-btn active" data-size="medium" style="font-size:15px">A</button>
-          <button class="font-size-btn" data-size="large" style="font-size:20px">A</button>
-        </div>
-      </div>
-      <div class="settings-item">
-        <div class="settings-row settings-row-lang" style="flex-direction:column;align-items:flex-start;gap:10px;border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:16px;margin-bottom:4px;">
-          <span id="lang-section-label">Língua do App</span>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;">
-            <button onclick="setLang('pt')" id="lang-btn-pt" class="lang-btn">🇧🇷 Português</button>
-            <button onclick="setLang('en')" id="lang-btn-en" class="lang-btn">🇺🇸 English</button>
-            <button onclick="setLang('es')" id="lang-btn-es" class="lang-btn">🇪🇸 Español</button>
-            <button onclick="setLang('de')" id="lang-btn-de" class="lang-btn">🇩🇪 Deutsch</button>
-            <button onclick="setLang('it')" id="lang-btn-it" class="lang-btn">🇮🇹 Italiano</button>
-          </div>
-        </div>
         <span id="notif-label">🔔 Notificações</span>
         <label class="toggle-switch">
           <input type="checkbox" id="toggle-notif" checked/>
@@ -1688,6 +1669,25 @@
           <option value="2">2x por dia</option>
           <option value="3" selected>3x por dia</option>
         </select>
+      </div>
+      <div class="settings-item">
+        <span>🔤 Tamanho da letra</span>
+        <div class="font-size-buttons">
+          <button class="font-size-btn" data-size="xs" style="font-size:10px">A</button>
+          <button class="font-size-btn" data-size="small" style="font-size:12px">A</button>
+          <button class="font-size-btn active" data-size="medium" style="font-size:15px">A</button>
+          <button class="font-size-btn" data-size="large" style="font-size:20px">A</button>
+        </div>
+      </div>
+      <div class="settings-item settings-item-lang">
+        <span id="lang-section-label">🌐 Língua do App</span>
+        <div class="lang-btn-group">
+          <button onclick="setLang('pt')" id="lang-btn-pt" class="lang-btn">🇧🇷 Português</button>
+          <button onclick="setLang('en')" id="lang-btn-en" class="lang-btn">🇺🇸 English</button>
+          <button onclick="setLang('es')" id="lang-btn-es" class="lang-btn">🇪🇸 Español</button>
+          <button onclick="setLang('de')" id="lang-btn-de" class="lang-btn">🇩🇪 Deutsch</button>
+          <button onclick="setLang('it')" id="lang-btn-it" class="lang-btn">🇮🇹 Italiano</button>
+        </div>
       </div>
     </div>
 
