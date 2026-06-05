@@ -51,7 +51,7 @@ const VICTOR_DATA = {
     { id:"numeros", name:"🔢 Números", pairs:[
       {en:"1️⃣ one",pt:"um"},{en:"2️⃣ two",pt:"dois"},{en:"3️⃣ three",pt:"três"},
       {en:"4️⃣ four",pt:"quatro"},{en:"5️⃣ five",pt:"cinco"},{en:"🔟 ten",pt:"dez"},
-      {en:"💯 hundred",pt:"cem"},{en:"✌️ two",pt:"dois"},
+      {en:"💯 hundred",pt:"cem"},{en:"🔢 thousand",pt:"mil"},
     ]},
     { id:"saudacoes", name:"👋 Saudações", pairs:[
       {en:"☀️ Good morning",pt:"Bom dia"},{en:"🌤️ Good afternoon",pt:"Boa tarde"},

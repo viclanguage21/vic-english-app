@@ -897,7 +897,7 @@ function renderDashboardTexts() {
   });
   // Próxima conquista
   const nbiLabel = document.querySelector(".nbi-label");
-  if(nbiLabel) nbiLabel.textContent = t("next_badge_label")||_lang==="pt"?"Próxima conquista":"Next achievement";
+  if(nbiLabel) nbiLabel.textContent = t("next_badge_label") || (_lang==="pt" ? "Próxima conquista" : "Next achievement");
   // Pro banner
   const _pbt = document.getElementById("pro-banner-title");
   const _pbs = document.getElementById("pro-banner-sub");
@@ -1253,7 +1253,7 @@ function showView(id){
   if(current===next) return;
 
   // Determine direction
-  const views=["view-onboarding","view-auth","view-dashboard","view-phases","view-missions-list","view-mission","view-complete","view-flashcards","view-memory-free","view-truefalse","view-dialogue","view-writing","view-profile","view-upgrade","view-admin","view-diagnosis","view-leveltest"];
+  const views=["view-onboarding","view-auth","view-dashboard","view-phases","view-missions-list","view-mission","view-complete","view-flashcards","view-memory-free","view-truefalse","view-dialogue","view-writing","view-profile","view-upgrade","view-admin","view-diagnosis","view-level-test"];
 // view-leaderboard foi substituída por bottom sheet — não usa showView()
   const ci=views.indexOf(current?.id||"");
   const ni=views.indexOf(id);
@@ -1676,9 +1676,11 @@ function skipDiagnosis(){
 function startDiagnosis(){
   diagStep=0; diagAnswers={};
   _selectedSegments = []; // resetar seleção de segmentos
-  // Esconder botão confirmar
+  // Esconder botões do step de segmentos
   const confirmBtn = document.getElementById("btn-confirm-segments");
   if(confirmBtn) confirmBtn.style.display = "none";
+  const skipSegBtn = document.getElementById("btn-skip-segments");
+  if(skipSegBtn) skipSegBtn.style.display = "none";
   // Limpar seleções anteriores
   document.querySelectorAll(".diag-option-multi").forEach(b=>b.classList.remove("selected"));
   document.querySelectorAll(".diag-step").forEach(s=>s.classList.remove("active"));
@@ -1710,12 +1712,14 @@ function handleDiagSegmentToggle(val, btn){
   }
   // Mostrar botão confirmar quando tem pelo menos 1 selecionado
   const confirmBtn = document.getElementById("btn-confirm-segments");
+  const skipSegBtn = document.getElementById("btn-skip-segments");
   if(confirmBtn){
     confirmBtn.style.display = _selectedSegments.length > 0 ? "block" : "none";
     confirmBtn.textContent = _selectedSegments.length > 1
       ? `Confirmar ${_selectedSegments.length} segmentos →`
       : "Confirmar →";
   }
+  if(skipSegBtn) skipSegBtn.style.display = _selectedSegments.length > 0 ? "block" : "none";
 }
 
 function confirmSegments(){
@@ -2107,7 +2111,7 @@ function startLevelTest(){
   buildAdaptiveQueue();
   document.getElementById("lt-result").style.display="none";
   document.getElementById("lt-questions-area").style.display="block";
-  showView("view-leveltest");
+  showView("view-level-test");
   renderLTQuestion();
 }
 
@@ -3008,6 +3012,22 @@ function showScoreResult(score, spokenText){
 }
 
 async function autoAdvance(score){
+  const mission=getMission(currentSegmentId,currentPhaseId,currentMissionId);
+  const total=mission?.phrases.length||1;
+
+  if(_reviewMode){
+    // Modo revisão — sem XP, sem salvar progresso
+    if(currentPhraseIndex<total-1){
+      currentPhraseIndex++;
+      renderMission();
+    } else {
+      _reviewMode = false;
+      showXpToast("✅ Revisão concluída!");
+      backToDashboard();
+    }
+    return;
+  }
+
   const xpGain=10; const newXp=(userData.xp||0)+xpGain;
   userData.xp=newXp; showXpToast(`+${xpGain} XP`);
   trackDailyXP(xpGain);
@@ -3015,8 +3035,6 @@ async function autoAdvance(score){
   await updateDailyProgress("exercise");
   if(score===10) await updateDailyProgress("perfect");
   if(currentSegmentId==="maritimo") await updateDailyProgress("maritime");
-  const mission=getMission(currentSegmentId,currentPhaseId,currentMissionId);
-  const total=mission?.phrases.length||1;
   if(currentPhraseIndex<total-1){
     currentPhraseIndex++;
     await saveProgress(currentUser.uid,{xp:newXp,currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:currentPhraseIndex}});
@@ -3078,8 +3096,8 @@ async function completeMission(xp){
   checkLevelUp(xp??userData.xp);
 
   // Verificar se completou o segmento inteiro
-  const wasComplete = (completed.filter(m=>m.startsWith(currentSegmentId+"_")).length - 1) ===
-    (getSegment(currentSegmentId)?.phases||[]).reduce((a,p)=>(p.missions||[]).length+a, 0) - 1;
+  const totalSegMissions = (getSegment(currentSegmentId)?.phases||[]).reduce((a,p)=>(p.missions||[]).length+a, 0);
+  const wasComplete = (completed.filter(m=>m.startsWith(currentSegmentId+"_")).length - 1) >= totalSegMissions;
   if(!wasComplete && checkSegmentComplete(currentSegmentId)){
     setTimeout(()=>showSegmentCelebration(currentSegmentId), 800);
   }
@@ -6657,6 +6675,8 @@ function init(){
 
   // diagnosis
   document.querySelectorAll(".diag-option").forEach(btn=>btn.addEventListener("click",()=>handleDiagOption(btn.dataset.value,btn.closest(".diag-step"))));
+  document.getElementById("btn-confirm-segments")?.addEventListener("click", confirmSegments);
+  document.getElementById("btn-skip-segments")?.addEventListener("click", ()=>{ _selectedSegments=["maritimo"]; diagAnswers.segment="maritimo"; diagAnswers.segments=["maritimo"]; document.getElementById("diag-step-1")?.classList.remove("active"); diagStep=2; renderDiagProgress(); document.getElementById("diag-step-2")?.classList.add("active"); });
   document.getElementById("btn-finish-diag")?.addEventListener("click",finishDiagnosis);
   document.getElementById("btn-diag-voice")?.addEventListener("click",startDiagVoice);
   document.getElementById("btn-finish-diag-note")?.addEventListener("click",finishDiagnosisNote);
@@ -6858,15 +6878,15 @@ Object.assign(window, {
   // Avatar
   selectRegAvatar, removeAvatar, switchAvatarTab, loadAvatarPicker,
   // Perfil
-  showCommitmentTips, showServiceDetail, showSkillDetail: window.showSkillDetail,
+  showSkillDetail: window.showSkillDetail,
   showBadgeDetail: window.showBadgeDetail,
   // Update
   applyUpdate,
   // Misc
   switchModalTab: window.switchModalTab,
   backToDashboard, backToDashboard,
-  showUpgradeScreen, openPhases,
-  openFlashcards, openMemoryFree, openTrueFalse, openDialogue, startWriting,
+  showUpgradeScreen,
+  openFlashcards, openMemoryFree, openTrueFalse, openDialogue,
   showReviewPanel, showReferralPanel,
   handleGoogle, handleLogin, handleRegister,
   // Preview

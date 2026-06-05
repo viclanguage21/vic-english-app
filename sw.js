@@ -16,7 +16,7 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-const CACHE = "vic-english-v3";
+const CACHE = "vic-english-v4";
 const ASSETS = [
   "/", "/index.html", "/style.css", "/app.js", "/data.js",
   "/firebase.js", "/sounds.js", "/vic_logo.png", "/vic_lamp.png",
