@@ -6739,6 +6739,24 @@ function applyUpdate(){
   }
 }
 
+async function forceRefresh(){
+  const btn=document.getElementById("btn-force-refresh");
+  if(btn){ btn.style.opacity="0.4"; btn.style.pointerEvents="none"; btn.textContent="⏳"; }
+  try{
+    // Delete all SW caches
+    if("caches" in window){
+      const keys=await caches.keys();
+      await Promise.all(keys.map(k=>caches.delete(k)));
+    }
+    // Unregister all service workers so they reinstall fresh
+    if("serviceWorker" in navigator){
+      const regs=await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r=>r.unregister()));
+    }
+  }catch(e){}
+  window.location.reload(true);
+}
+
 // ── MERCADO PAGO — verificar retorno ─────────────────────────────────────────
 async function checkMercadoPagoReturn(){
   const params = new URLSearchParams(window.location.search);
@@ -7217,6 +7235,7 @@ if(typeof exitPreviewMode !== 'undefined') window.exitPreviewMode = exitPreviewM
 if(typeof showPreviewUserPicker !== 'undefined') window.showPreviewUserPicker = showPreviewUserPicker;
 if(typeof exportAdminCSV !== 'undefined') window.exportAdminCSV = exportAdminCSV;
 if(typeof applyUpdate !== 'undefined') window.applyUpdate = applyUpdate;
+if(typeof forceRefresh !== 'undefined') window.forceRefresh = forceRefresh;
 if(typeof showCommitmentTips !== 'undefined') window.showCommitmentTips = showCommitmentTips;
 if(typeof showServiceDetail !== 'undefined') window.showServiceDetail = showServiceDetail;
 if(typeof switchModalTab !== 'undefined') window.switchModalTab = switchModalTab;
