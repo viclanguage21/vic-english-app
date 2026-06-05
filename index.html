@@ -229,19 +229,6 @@
 
     </div><!-- end auth-box -->
 
-    <!-- Seletor de língua na tela de login -->
-    <div id="auth-lang-selector" style="
-      display:flex;align-items:center;justify-content:center;
-      gap:8px;flex-wrap:wrap;padding:16px 20px 4px;
-    ">
-      <span style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:.6px;width:100%;text-align:center;margin-bottom:4px;" id="auth-lang-label">Idioma / Language</span>
-      <button onclick="setLang('pt')" id="auth-lang-pt" class="auth-lang-btn">🇧🇷 PT</button>
-      <button onclick="setLang('en')" id="auth-lang-en" class="auth-lang-btn">🇺🇸 EN</button>
-      <button onclick="setLang('es')" id="auth-lang-es" class="auth-lang-btn">🇪🇸 ES</button>
-      <button onclick="setLang('de')" id="auth-lang-de" class="auth-lang-btn">🇩🇪 DE</button>
-      <button onclick="setLang('it')" id="auth-lang-it" class="auth-lang-btn">🇮🇹 IT</button>
-    </div>
-
     <!-- Footer link -->
     <div class="auth-page-footer">
       <a href="https://www.viclanguage.com.br" target="_blank" class="auth-footer-full">
@@ -1077,8 +1064,7 @@
       </div>
       <div class="admin-header-btns">
         <button class="admin-preview-btn" id="btn-admin-preview" title="Ver como aluno Pro">👁️ Preview</button>
-        <button class="admin-header-btn" id="btn-admin-refresh-top" onclick="refreshAdminUsers()" title="Atualizar dados">↻</button>
-        <button class="btn-logout admin-back-btn" id="btn-admin-logout">🏠 Dashboard</button>
+        <button class="btn-logout" id="btn-admin-logout" data-i18n="logout">Sair</button>
       </div>
     </div>
 

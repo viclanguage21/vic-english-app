@@ -816,22 +816,15 @@ function applyLang() {
 
   // Botão no header removido — seletor só no perfil agora
 
-  // Destacar botão ativo — configurações E tela de login
+  // Destacar botão ativo nas configurações
   ["pt","en","es","de","it"].forEach(lang => {
-    const active = _lang === lang;
-    // Botões no perfil/configurações
     const btn = document.getElementById(`lang-btn-${lang}`);
-    if (btn) {
-      btn.style.background  = active ? "rgba(201,147,58,0.25)" : "rgba(255,255,255,0.05)";
-      btn.style.borderColor = active ? "rgba(201,147,58,0.5)"  : "rgba(255,255,255,0.15)";
-      btn.style.color       = active ? "#e4b45c" : "#fff";
-      btn.style.transform   = active ? "scale(1.08)" : "scale(1)";
-    }
-    // Botões na tela de login
-    const authBtn = document.getElementById(`auth-lang-${lang}`);
-    if (authBtn) {
-      authBtn.classList.toggle("active", active);
-    }
+    if (!btn) return;
+    const active = _lang === lang;
+    btn.style.background    = active ? "rgba(201,147,58,0.25)" : "rgba(255,255,255,0.05)";
+    btn.style.borderColor   = active ? "rgba(201,147,58,0.5)"  : "rgba(255,255,255,0.15)";
+    btn.style.color         = active ? "#e4b45c" : "#fff";
+    btn.style.transform     = active ? "scale(1.08)" : "scale(1)";
   });
 
   // Atualizar todos os elementos marcados com data-i18n
@@ -1587,12 +1580,6 @@ const DIAG_KEYS = ["motivo","segment","difficulty"]; // 3 steps de opções + 1 
 
 function startDiagnosis(){
   diagStep=0; diagAnswers={};
-  _selectedSegments = []; // resetar seleção de segmentos
-  // Esconder botão confirmar
-  const confirmBtn = document.getElementById("btn-confirm-segments");
-  if(confirmBtn) confirmBtn.style.display = "none";
-  // Limpar seleções anteriores
-  document.querySelectorAll(".diag-option-multi").forEach(b=>b.classList.remove("selected"));
   document.querySelectorAll(".diag-step").forEach(s=>s.classList.remove("active"));
   document.getElementById("diag-step-0")?.classList.add("active");
   renderDiagProgress(); showView("view-diagnosis");
@@ -1657,19 +1644,13 @@ function confirmSegments(){
   if(stepEl) stepEl.classList.remove("active");
   diagStep++; renderDiagProgress();
   const next = document.getElementById(`diag-step-${diagStep}`);
-  if(next){
-    next.classList.add("active");
-    // Scroll para o topo do step
-    next.scrollIntoView({behavior:"smooth", block:"start"});
-  }
+  if(next) next.classList.add("active");
 }
 
 function handleDiagOption(val,stepEl){
   // Step 1 = segmentos → múltipla seleção com botão confirmar
-  if(stepEl && stepEl.id === "diag-step-1"){
-    // Encontrar o botão pelo data-value
-    const btn = stepEl.querySelector(`.diag-option[data-value="${val}"]`);
-    if(btn) handleDiagSegmentToggle(val, btn);
+  if(diagStep === 1 && stepEl.id === "diag-step-1"){
+    handleDiagSegmentToggle(val, [...stepEl.querySelectorAll(".diag-option")].find(b=>b.dataset.value===val));
     return; // não avança automaticamente
   }
 
@@ -3997,115 +3978,19 @@ async function activatePro(isActive){
   renderAdminUsers();
 }
 
-// ── PREVIEW MODE — visualizar como qualquer usuário ─────────────────────────
-let _previewOriginalData = null; // guarda dados reais do owner
-
-function enterPreviewMode(targetUid=null){
-  // Guardar estado real do owner
-  _previewOriginalData = JSON.parse(JSON.stringify(userData));
-
-  if(targetUid && targetUid !== currentUser.uid){
-    // Visualizar como usuário específico
-    const target = adminUsers.find(u=>u.uid===targetUid);
-    if(!target){ showXpToast("Usuário não encontrado"); return; }
-    userData = { ...target, _adminPreview:true, _previewUid: targetUid };
-    showXpToast(`👁️ Visualizando como: ${target.name||"Aluno"}`);
-  } else {
-    // Visualizar como Pro genérico
-    userData = { ...userData, plan:"pro", _adminPreview:true, _previewUid:null };
-    showXpToast("👁️ Modo preview — acesso Pro total");
-  }
-
+// Preview mode — admin sees app as full Pro user
+function enterPreviewMode(){
+  const prev={...userData};
+  userData={...userData, plan:"pro", _adminPreview:true};
   renderDashboard();
   showView("view-dashboard");
-  showAdminPreviewBar();
-}
-
-function showAdminPreviewBar(){
-  document.getElementById("admin-preview-bar")?.remove();
-  const bar = document.createElement("div");
-  bar.id = "admin-preview-bar";
-  const isSpecific = userData._previewUid;
-  const userName = isSpecific ? (adminUsers.find(u=>u.uid===userData._previewUid)?.name||"Aluno") : "Pro";
-  bar.style.cssText = `
-    position:fixed;top:0;left:0;right:0;z-index:9999;
-    background:linear-gradient(90deg,#7c3aed,#5b21b6);
-    padding:8px 16px;display:flex;align-items:center;justify-content:space-between;
-    font-size:12px;font-weight:700;color:#fff;
-    box-shadow:0 2px 12px rgba(124,58,237,0.5);
-  `;
-  bar.innerHTML = `
-    <div style="display:flex;align-items:center;gap:8px;">
-      <span>👁️ PREVIEW</span>
-      <span style="background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:999px;font-size:11px;">
-        ${isSpecific ? `como ${userName}` : "como usuário Pro"}
-      </span>
-    </div>
-    <div style="display:flex;gap:8px;">
-      <button onclick="showPreviewUserPicker()" style="
-        background:rgba(255,255,255,0.2);border:none;border-radius:999px;
-        padding:4px 10px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;
-      ">Trocar usuário</button>
-      <button onclick="exitPreviewMode()" style="
-        background:rgba(255,255,255,0.9);border:none;border-radius:999px;
-        padding:4px 10px;color:#5b21b6;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;
-      ">← Voltar ao painel</button>
-    </div>
-  `;
-  document.body.prepend(bar);
-
-  // Ajustar padding do app para não ficar atrás da barra
-  document.querySelector(".view.active")?.style?.setProperty("padding-top","48px","");
-}
-
-function exitPreviewMode(){
-  document.getElementById("admin-preview-bar")?.remove();
-  if(_previewOriginalData){
-    userData = _previewOriginalData;
-    _previewOriginalData = null;
-  }
-  // Remover padding extra
-  document.querySelectorAll(".view").forEach(v=>v.style.removeProperty("padding-top"));
-  loadAdminDashboard();
-}
-
-function showPreviewUserPicker(){
-  document.getElementById("preview-picker-modal")?.remove();
-  const modal = document.createElement("div");
-  modal.id = "preview-picker-modal";
-  modal.style.cssText = "position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.88);display:flex;align-items:flex-end;justify-content:center;";
-
-  const users = adminUsers.slice(0,20);
-  const list = users.map(u => `
-    <div onclick="document.getElementById('preview-picker-modal').remove();enterPreviewMode('${u.uid}')"
-      style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:background .15s;"
-      onmouseover="this.style.background='rgba(124,58,237,0.15)'" onmouseout="this.style.background=''">
-      ${renderUserAvatar(u, 38)}
-      <div style="flex:1;min-width:0;">
-        <div style="font-weight:700;font-size:13px;">${u.provider==="anonymous"?"👤 Visitante":u.name||"—"} ${u.username?`<span style="font-size:11px;color:rgba(255,255,255,0.4);">@${u.username}</span>`:""}</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.4);">${u.xp||0} XP · Nv${calcLevel(u.xp||0)} · ${u.plan==="pro"?"🟡 Pro":"⬜ Free"}</div>
-      </div>
-    </div>
-  `).join("");
-
-  modal.innerHTML = `
-    <div style="background:#1a0d2e;border:1px solid rgba(255,255,255,0.1);border-radius:24px 24px 0 0;width:100%;max-width:480px;max-height:80vh;overflow-y:auto;">
-      <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#1a0d2e;">
-        <div style="font-size:16px;font-weight:800;">Visualizar como...</div>
-        <button onclick="document.getElementById('preview-picker-modal').remove()" style="background:none;border:none;color:rgba(255,255,255,0.4);font-size:20px;cursor:pointer;">✕</button>
-      </div>
-      <div onclick="document.getElementById('preview-picker-modal').remove();enterPreviewMode(null)"
-        style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.06);cursor:pointer;background:rgba(201,147,58,0.08);">
-        <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#c9933a,#e4b45c);display:flex;align-items:center;justify-content:center;font-size:18px;">⭐</div>
-        <div>
-          <div style="font-weight:700;font-size:13px;">Usuário Pro genérico</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.4);">Ver acesso completo sem dados específicos</div>
-        </div>
-      </div>
-      ${list}
-    </div>
-  `;
-  document.body.appendChild(modal);
+  showXpToast("👁️ Modo preview — acesso total");
+  // Add return button
+  const retBtn=document.createElement("button");
+  retBtn.className="btn-back"; retBtn.textContent="← Voltar ao painel";
+  retBtn.style.cssText="position:fixed;top:80px;right:16px;z-index:999;padding:8px 14px;background:#7c3aed;border:none;border-radius:999px;color:#fff;font-weight:700;cursor:pointer;";
+  retBtn.onclick=()=>{userData=prev;retBtn.remove();loadAdminDashboard();};
+  document.body.appendChild(retBtn);
 }
 
 // ── ACCESS CONTROL ────────────────────────────────────────────────────────────
@@ -6056,8 +5941,6 @@ function hideLoadingSplash() {
 // ── INIT ──────────────────────────────────────────────────────────────────────
 async function _handleAuth(user){
   console.log("_handleAuth called, user:", user?.uid||"null");
-  // Cancelar timeout de fallback de sessão
-  if(window._sessionTimeout){ clearTimeout(window._sessionTimeout); window._sessionTimeout = null; }
   hideAuthLoading();
   try{
     if(user){
@@ -6132,148 +6015,78 @@ function obSkip(){
 // ── LEADERBOARD ────────────────────────────────────────────────────────────────
 let _lbMode = "week";
 
-// ── LEADERBOARD BOTTOM SHEET ─────────────────────────────────────────────────
-function openLeaderboard(){
-  const sheet = document.getElementById("lb-sheet");
-  const overlay = document.getElementById("lb-sheet-overlay");
-  if(!sheet || !overlay) return;
-
-  sheet.style.display = "flex";
-  overlay.style.display = "block";
-
-  // Animação de entrada
-  sheet.style.transform = "translateY(100%)";
-  sheet.style.transition = "transform .35s cubic-bezier(0.22,1,0.36,1)";
-  requestAnimationFrame(()=>{ sheet.style.transform = "translateY(0)"; });
-
-  loadLeaderboard("week");
+async function openLeaderboard(){
+  showView("view-leaderboard");
+  await loadLeaderboard("week");
 }
 
-function closeLeaderboard(){
-  const sheet = document.getElementById("lb-sheet");
-  const overlay = document.getElementById("lb-sheet-overlay");
-  if(!sheet) return;
-  sheet.style.transform = "translateY(100%)";
-  setTimeout(()=>{
-    sheet.style.display = "none";
-    overlay.style.display = "none";
-  }, 350);
-}
-
-async function loadLeaderboard(mode, tabEl){
+async function loadLeaderboard(mode){
   _lbMode = mode;
   // Atualizar tabs
-  document.querySelectorAll(".lb-tab").forEach(t=>t.classList.remove("active"));
-  if(tabEl) tabEl.classList.add("active");
-  else document.getElementById(`lb-tab-${mode}`)?.classList.add("active");
+  document.getElementById("lb-tab-week")?.classList.toggle("active", mode==="week");
+  document.getElementById("lb-tab-all")?.classList.toggle("active", mode==="all");
 
   const listEl = document.getElementById("lb-list");
-  if(listEl) listEl.innerHTML = `<div style="text-align:center;padding:32px;color:rgba(255,255,255,0.4);font-size:14px;">${t("loading")} ⏳</div>`;
+  if(listEl) listEl.innerHTML = '<div class="lb-loading">Carregando... ⏳</div>';
 
-  try{
+  try {
     const all = await getAllUsers();
+    // Ordenar por XP (all time) ou XP da semana
     let sorted = [...all].sort((a,b)=>(b.xp||0)-(a.xp||0)).slice(0,10);
 
-    // Encontrar badge principal de cada usuário
-    const topBadge = (u) => {
-      const completed = u.completedMissions||[];
-      const segs = VICTOR_DATA?.segments||[];
-      // Badge de domínio de segmento
-      for(const seg of segs){
-        const total = (seg.phases||[]).reduce((a,p)=>(p.missions||[]).length+a,0);
-        const done  = completed.filter(m=>m.startsWith(seg.id+"_")).length;
-        if(total>0 && done/total>=0.6) return seg.icon||"🏅";
-      }
-      // Badge por XP
-      const xp = u.xp||0;
-      if(xp>=2500) return "🏅"; if(xp>=1000) return "💎";
-      if(xp>=500)  return "🔱"; if(xp>=250)  return "⚡";
-      if(xp>=100)  return "🌟"; return "🌱";
+    // Podium (top 3)
+    const renderAvatar = (u) => {
+      if(u.photoURL) return `<img src="${u.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;"/>`;
+      const username = u.username||u.name||"?";
+      return (username[0]||"?").toUpperCase();
     };
 
-    // Renderizar avatar
-    const avHtml = (u, size=52) => {
-      const av = u.avatar||null;
-      const name = u.provider==="anonymous"?"👤":(u.name||"?");
-      if(av && av.startsWith("data:"))
-        return `<img src="${av}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;display:block;"/>`;
-      if(av && av.length<=4)
-        return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,#2d1b4e,#1a0d2e);display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*.55)}px;">${av}</div>`;
-      if(u.photoURL)
-        return `<img src="${u.photoURL}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;display:block;"/>`;
-      return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*.42)}px;font-weight:800;color:#fff;">${name[0]?.toUpperCase()||"?"}</div>`;
-    };
+    [1,2,3].forEach(pos => {
+      const u = sorted[pos-1];
+      if(!u) return;
+      const avEl = document.getElementById(`lb-p${pos}-av`);
+      const nameEl = document.getElementById(`lb-p${pos}-name`);
+      const xpEl = document.getElementById(`lb-p${pos}-xp`);
+      if(avEl) avEl.innerHTML = renderAvatar(u);
+      if(nameEl) nameEl.textContent = "@"+(u.username||u.name||"Aluno").slice(0,12);
+      if(xpEl) xpEl.textContent = (u.xp||0)+" XP";
+    });
 
-    // Montar lista completa (sem pódio separado — clean e simples)
+    // Lista 4-10
+    const list = sorted.slice(3);
     if(listEl){
-      listEl.innerHTML = sorted.map((u,i)=>{
-        const isMe = currentUser?.uid === u.uid;
-        const pos = i+1;
-        const medal = pos===1?"🥇":pos===2?"🥈":pos===3?"🥉":`#${pos}`;
-        const badge = topBadge(u);
-        const level = calcLevel(u.xp||0);
-        const levelLabel = level<=2?"A1":level<=4?"A2":level<=6?"B1":level<=8?"B2":level<=10?"C1":"C2";
-        const username = "@"+(u.username||u.name||"Aluno").slice(0,18);
-        const streak = u.streak||0;
-
-        return `
-          <div style="
-            display:flex;align-items:center;gap:12px;
-            padding:12px 4px;
-            border-bottom:1px solid rgba(255,255,255,${pos<sorted.length?".05":"0"});
-            ${isMe?"background:rgba(201,147,58,0.06);border-radius:14px;padding:12px 10px;margin:-2px -4px;":""}
-          ">
-            <!-- Posição -->
-            <div style="font-size:${pos<=3?"22px":"16px"};font-weight:900;min-width:32px;text-align:center;color:${pos===1?"#ffd700":pos===2?"#c0c0c0":pos===3?"#cd7f32":"rgba(255,255,255,0.35)"};">
-              ${medal}
-            </div>
-
-            <!-- Avatar -->
-            <div style="position:relative;flex-shrink:0;">
-              ${avHtml(u, pos<=3?56:46)}
-              <!-- Badge principal no canto -->
-              <div style="position:absolute;bottom:-2px;right:-4px;font-size:${pos<=3?"16px":"13px"};line-height:1;">${badge}</div>
-            </div>
-
-            <!-- Info -->
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:${pos<=3?"15px":"13px"};font-weight:${pos<=3?"800":"700"};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:${isMe?"#e4b45c":"#fff"};">
-                ${username}${isMe?' <span style="font-size:10px;background:rgba(201,147,58,0.2);border-radius:999px;padding:1px 6px;color:#e4b45c;font-weight:700;">você</span>':""}
-              </div>
-              <div style="display:flex;gap:6px;align-items:center;margin-top:3px;flex-wrap:wrap;">
-                <span style="font-size:11px;color:rgba(255,255,255,0.45);">${u.xp||0} XP</span>
-                <span style="font-size:10px;background:rgba(124,58,237,0.2);color:#a78bfa;padding:1px 6px;border-radius:4px;font-weight:700;">${levelLabel}</span>
-                ${streak>0?`<span style="font-size:11px;color:#f97316;">🔥${streak}</span>`:""}
-              </div>
+      listEl.innerHTML = list.map((u,i)=>`
+        <div class="lb-item ${currentUser?.uid===u.uid?"lb-item-me":""}">
+          <div class="lb-item-pos">#${i+4}</div>
+          <div class="lb-item-avatar">${u.photoURL?`<img src="${u.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;"/>`:(u.username||u.name||"?")[0].toUpperCase()}</div>
+          <div class="lb-item-info">
+            <div class="lb-item-name">@${(u.username||u.name||"Aluno").slice(0,16)}</div>
+            <div class="lb-item-meta">
+              <span>${u.xp||0} XP</span>
+              ${u.detectedLevel?`<span class="lb-item-level">${u.detectedLevel.toUpperCase()}</span>`:""}
+              ${u.streak?`<span>🔥${u.streak}</span>`:""}
             </div>
           </div>
-        `;
-      }).join("") || `<div style="text-align:center;padding:32px;color:rgba(255,255,255,0.4);">Nenhum dado ainda.</div>`;
+        </div>
+      `).join("");
     }
 
-    // Minha posição no topo
+    // Minha posição
     if(currentUser){
       const myPos = sorted.findIndex(u=>u.uid===currentUser.uid);
       const myRankEl = document.getElementById("lb-my-rank");
-      if(myRankEl && myPos === -1){ // Só mostrar se não está no top 10
-        myRankEl.style.display = "block";
-        document.getElementById("lb-my-pos").textContent = `#${sorted.length+1}+`;
-        const myAv = document.getElementById("lb-my-avatar");
-        if(myAv) myAv.innerHTML = avHtml(userData||{}, 36).replace(/width:\d+px;height:\d+px/,"width:36px;height:36px");
+      if(myRankEl){
+        myRankEl.style.display = "flex";
+        const myUser = sorted[myPos]||userData;
+        document.getElementById("lb-my-pos").textContent = myPos>=0 ? `#${myPos+1}` : "#—";
+        document.getElementById("lb-my-avatar").textContent = (userData?.username||userData?.name||"?")[0].toUpperCase();
         document.getElementById("lb-my-name").textContent = "@"+(userData?.username||userData?.name||"Aluno");
         document.getElementById("lb-my-xp").textContent = (userData?.xp||0)+" XP";
-      } else if(myRankEl){
-        myRankEl.style.display = "none";
       }
     }
-
-    // Subtítulo com contagem
-    const sub = document.getElementById("lb-sheet-sub");
-    if(sub) sub.textContent = `Top ${sorted.length} · ${t("leaderboard_"+(mode==="week"?"week":"all"))}`;
-
-  }catch(e){
-    if(listEl) listEl.innerHTML = `<div style="text-align:center;padding:32px;color:rgba(255,255,255,0.4);">Erro ao carregar.</div>`;
-    console.error("Leaderboard:", e);
+  } catch(e) {
+    if(listEl) listEl.innerHTML = '<div class="lb-loading">Erro ao carregar ranking.</div>';
+    console.error("Leaderboard error:", e);
   }
 }
 
@@ -6544,17 +6357,6 @@ function init(){
   document.getElementById("btn-modal-close")?.addEventListener("click",()=>document.getElementById("admin-modal").style.display="none");
   document.getElementById("admin-search")?.addEventListener("input",e=>{adminSearchTerm=e.target.value;renderAdminUsers();});
   document.getElementById("btn-admin-preview")?.addEventListener("click",enterPreviewMode);
-
-  // ── Admin logout — voltar ao dashboard do owner ───────────────────────────
-  document.getElementById("btn-admin-logout")?.addEventListener("click", () => {
-    // Não faz logout real — só volta pro dashboard do owner
-    renderDashboard();
-    showView("view-dashboard");
-  });
-  // Também registrar o botão flutuante do admin
-  document.getElementById("btn-admin-float")?.addEventListener("click", () => {
-    loadAdminDashboard();
-  });
   document.getElementById("btn-activate-pro")?.addEventListener("click",()=>activatePro(true));
   document.getElementById("btn-deactivate-pro")?.addEventListener("click",()=>activatePro(false));
   document.getElementById("btn-save-edit-admin")?.addEventListener("click",saveAdminEdit);
@@ -6699,7 +6501,7 @@ function init(){
 
   // upgrade
   document.getElementById("btn-back-upgrade")?.addEventListener("click",backToDashboard);
-  // lb-sheet usa closeLeaderboard() diretamente
+  document.getElementById("btn-back-leaderboard")?.addEventListener("click",()=>showView("view-dashboard"));
   document.getElementById("btn-leaderboard")?.addEventListener("click",openLeaderboard);
   const mpBtn=document.getElementById("btn-pay-mp"); if(mpBtn) mpBtn.href=MP_LINK;
 
