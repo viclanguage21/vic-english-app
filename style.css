@@ -3568,14 +3568,14 @@ body.light-mode .dlg-card * { color: inherit; }
 }
 .btn-reload:hover { background: var(--p); transform: rotate(180deg); }
 .btn-force-refresh {
-  position: fixed; bottom: 20px; right: 20px;
-  width: 38px; height: 38px;
-  background: rgba(13,124,114,0.82);
+  position: fixed; bottom: 84px; right: 20px;
+  width: 36px; height: 36px;
+  background: rgba(13,124,114,0.78);
   border: none; border-radius: 50%;
-  color: #fff; font-size: 17px; cursor: pointer;
+  color: #fff; font-size: 16px; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   z-index: 9989;
-  box-shadow: 0 2px 14px rgba(0,0,0,0.35);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
   backdrop-filter: blur(6px);
   transition: transform .35s ease, background .2s, opacity .2s;
 }

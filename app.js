@@ -6409,6 +6409,10 @@ function showLoadingSplash(onDone, minMs = 2200) {
     if(bar) bar.style.width = "100%";
   });
 
+  // Safety net: never stay stuck more than 8 seconds regardless of what happens
+  clearTimeout(window._splashSafetyTimeout);
+  window._splashSafetyTimeout = setTimeout(() => hideLoadingSplash(), 8000);
+
   clearTimeout(_splashTimeout);
   if(minMs > 0){
     _splashTimeout = setTimeout(() => {
@@ -6420,6 +6424,7 @@ function showLoadingSplash(onDone, minMs = 2200) {
 }
 
 function hideLoadingSplash() {
+  clearTimeout(window._splashSafetyTimeout);
   clearTimeout(_splashTimeout);
   const overlay = document.getElementById("loading-splash-overlay");
   if(overlay) {
