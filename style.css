@@ -1,3 +1,28 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   VIC English — style.css
+   ──────────────────────────────────────────────────────────────────────────────
+   TABLE OF CONTENTS
+   ──────────────────────────────────────────────────────────────────────────────
+   1.  CSS Variables & Color System ........... ~L1
+   2.  Base Reset & Layout .................... ~L65
+   3.  Auth View .............................. ~L96
+   4.  Diagnosis & Onboarding ................. ~L126
+   5.  Dashboard .............................. ~L147
+   6.  Mission / Exercise ..................... ~L223
+   7.  Mission Complete ....................... ~L355
+   8.  Phases & Missions List ................. ~L379
+   9.  Games (Flashcards, Memory, T/F, Dialogue) ~L417
+   10. Level Test ............................. ~L975
+   11. V11 Visual Refresh (theme overrides) ... ~L1256
+   12. Settings & Notifications ............... ~L4549
+   13. Contact Float & Admin Float ............ ~L4827
+   14. Badges, XP, Streak ..................... ~L4772
+   15. Avatar Picker .......................... ~L6085
+   16. Glossary ............................... ~L6274
+   17. Leaderboard ............................ ~L5896
+   18. Light Mode overrides ................... ~L2750
+   ══════════════════════════════════════════════════════════════════════════════ */
+
 /* VICTOR v10 — VIC Language Color System */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap');
 
@@ -1538,9 +1563,6 @@ input { color: #ffffff !important; }
   align-items:center; transition:var(--t);
 }
 .admin-user-row:hover { background:rgba(201,147,58,0.04); }
-.adm-col { font-size:13px; color:#fff !important; }
-.adm-name { font-weight:600; }
-.adm-xp { color:var(--p-light) !important; font-family:var(--mono); }
 .adm-view-btn {
   padding:5px 12px; background:var(--p-dim);
   border:1px solid var(--rim2); border-radius:var(--rsm);
@@ -2765,7 +2787,7 @@ body.light-mode .dlg-option { background: #fff !important; color: #1e0f50 !impor
 body.light-mode .diag-option { background: #fff !important; color: #1e0f50 !important; border-color: rgba(91,33,182,0.20) !important; }
 body.light-mode .tf-btn.tf-true { color: #166534 !important; }
 body.light-mode .tf-btn.tf-false { color: #991b1b !important; }
-body.light-mode .adm-col { color: #1e0f50 !important; }
+
 body.light-mode .admin-modal-name { color: #1e0f50 !important; }
 body.light-mode .lt-type-badge { color: #f0d070 !important; }
 body.light-mode .tf-category-tag { color: #f0d070 !important; }
@@ -3859,24 +3881,6 @@ body.light-mode .dlg-card * { color: inherit; }
   overflow-x: hidden;
 }
 
-/* ══ AUTH REFRESH BUTTON ════════════════════════════════ */
-.btn-reload-auth {
-  position: fixed; bottom: 20px; right: 20px;
-  width: 48px; height: 48px;
-  background: rgba(201,147,58,0.15);
-  border: 1px solid rgba(201,147,58,0.3);
-  border-radius: 50%;
-  color: #e4b45c !important;
-  font-size: 20px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  z-index: 50; transition: var(--t);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-  font-weight: 700;
-}
-.btn-reload-auth:hover {
-  background: rgba(201,147,58,0.3);
-  transform: rotate(180deg);
-}
 
 /* ══ AUTH INPUTS — bigger bolder text ══════════════════ */
 .auth-field input {
@@ -4744,30 +4748,6 @@ body.light-mode .daily-mission-item {
   box-shadow: 0 6px 20px rgba(91,33,182,0.6) !important;
 }
 
-/* ══ WHATSAPP FLOATING ══════════════════════════════════ */
-.whatsapp-float {
-  position: fixed;
-  bottom: 72px; right: 16px;
-  width: 50px; height: 50px;
-  background: linear-gradient(135deg, #25d366, #128c7e);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 24px;
-  box-shadow: 0 4px 20px rgba(37,211,102,0.45);
-  z-index: 40;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  animation: waBounce 2s ease infinite;
-}
-.whatsapp-float:hover {
-  transform: scale(1.12);
-  box-shadow: 0 6px 28px rgba(37,211,102,0.6);
-  animation: none;
-}
-@keyframes waBounce {
-  0%,100%{ transform: translateY(0); }
-  50%{ transform: translateY(-4px); }
-}
 
 /* ══ NEXT BADGE STRIP ═══════════════════════════════════ */
 .next-badge-strip {
@@ -5533,18 +5513,10 @@ body.light-mode .phrase-option.wrong { background: rgba(239,68,68,0.15) !importa
 
 /* ══ ADMIN PANEL — white text ═══════════════════════════ */
 #view-admin { color: #fff !important; }
-.admin-student-name { color: #fff !important; font-weight: 700 !important; }
-.admin-student-level { color: rgba(255,255,255,0.7) !important; }
-.admin-student-xp { color: #f0d070 !important; font-weight: 700 !important; }
-.admin-tab-btn { color: #fff !important; font-weight: 700 !important; }
-.admin-tab-btn.active { color: #f0d070 !important; border-color: #c9933a !important; }
-.admin-feedback-text { color: #fff !important; }
 .admin-preview-btn { background: #2a1060 !important; color: #f0d070 !important; border-color: rgba(201,147,58,0.4) !important; }
 #admin-panel-users *, #admin-panel-customize *, #admin-panel-feedback * { color: #fff !important; }
 .admin-tab { color: #fff !important; }
 .admin-user-row { border-color: rgba(255,255,255,0.1) !important; }
-.admin-user-name { color: #fff !important; }
-.student-row td, .student-row th { color: #fff !important; }
 
 /* ══ NOTIFICATION SETTINGS ══════════════════════════════ */
 .notif-freq-select {
