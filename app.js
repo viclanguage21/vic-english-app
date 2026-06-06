@@ -290,55 +290,11 @@ function renderDashboardTexts() {
     const confirmLabels = {pt:"Confirmar →",en:"Confirm →",es:"Confirmar →",de:"Bestätigen →",it:"Conferma →"};
     confirmSegsBtn.textContent = (confirmLabels[_lang]||"Confirmar →").replace("→", `${_selectedSegments.length > 1 ? " ("+_selectedSegments.length+")" : ""} →`);
   }
-  // Onboarding textos
-  const obSubtitles = {
-    0: {pt:"O único app de inglês focado 100% no mercado profissional brasileiro.", en:"The only English app 100% focused on Brazilian professional market.", es:"La única app de inglés 100% enfocada en el mercado profesional brasileño.", de:"Die einzige Englisch-App zu 100% auf den brasilianischen Berufsmarkt ausgerichtet.", it:"L'unica app di inglese focalizzata al 100% sul mercato professionale brasiliano."},
-    1: {pt:"Missões diárias, XP, streak e badges. Tudo pensado pra te manter motivado todo dia.", en:"Daily missions, XP, streak and badges. All designed to keep you motivated every day.", es:"Misiones diarias, XP, racha y logros. Todo pensado para mantenerte motivado cada día.", de:"Tägliche Aufgaben, XP, Streak und Errungenschaften. Alles um dich täglich zu motivieren.", it:"Missioni giornaliere, XP, striscia e badge. Tutto pensato per mantenerti motivato ogni giorno."},
-    2: {pt:"Escolha um nome de usuário, acompanhe seu nível, seus badges e compare com outros no ranking.", en:"Choose a username, track your level, badges and compare with others in the ranking.", es:"Elige un nombre de usuario, sigue tu nivel, logros y compárate con otros en el ranking.", de:"Wähle einen Benutzernamen, verfolge dein Level, Abzeichen und vergleiche dich mit anderen.", it:"Scegli un nome utente, monitora il tuo livello, badge e confrontati con gli altri nel ranking."},
-  };
-  [0,1,2].forEach(i => {
-    const slide = document.getElementById(`ob-slide-${i}`);
-    if(slide){
-      const subEl = slide.querySelector(".ob-slide-sub");
-      if(subEl) subEl.textContent = obSubtitles[i]?.[_lang]||obSubtitles[i]?.pt||"";
-    }
-  });
-  // Botão pular onboarding
-  const obSkipBtn = document.getElementById("ob-btn-skip");
-  if(obSkipBtn) obSkipBtn.textContent = {pt:"Pular introdução",en:"Skip intro",es:"Saltar intro",de:"Intro überspringen",it:"Salta intro"}[_lang]||"Pular introdução";
-
-  // Onboarding language buttons
-  ["pt","en","es","de","it"].forEach(lang => {
+  // Onboarding language buttons active state
+  ["pt","en"].forEach(lang => {
     const obBtn = document.getElementById(`ob-lang-${lang}`);
     if(obBtn) obBtn.classList.toggle("active", _lang===lang);
   });
-  // Onboarding subtítulos
-  const obSubs = [
-    {pt:"O único app de inglês focado 100% no mercado profissional brasileiro.",
-     en:"The only English app 100% focused on the Brazilian professional market.",
-     es:"La única app de inglés enfocada 100% en el mercado profesional brasileño.",
-     de:"Die einzige Englisch-App, die sich 100% auf den brasilianischen Berufsmarkt konzentriert.",
-     it:"L'unica app di inglese focalizzata al 100% sul mercato professionale brasiliano."},
-    {pt:"Missões diárias, XP, streak e badges. Tudo pensado pra te manter motivado todo dia.",
-     en:"Daily missions, XP, streak and badges. Everything designed to keep you motivated every day.",
-     es:"Misiones diarias, XP, racha y logros. Todo diseñado para mantenerte motivado.",
-     de:"Tägliche Aufgaben, XP, Streak und Errungenschaften. Alles, um dich täglich motiviert zu halten.",
-     it:"Missioni quotidiane, XP, striscia e badge. Tutto pensato per mantenerti motivato ogni giorno."},
-    {pt:"Escolha um nome de usuário, acompanhe seu nível, seus badges e compare com outros no ranking.",
-     en:"Choose a username, track your level, badges and compare with others in the ranking.",
-     es:"Elige un nombre de usuario, sigue tu nivel, logros y compite en el ranking.",
-     de:"Wähle einen Benutzernamen, verfolge dein Level, Errungenschaften und vergleiche dich im Ranking.",
-     it:"Scegli un username, monitora il tuo livello, badge e confrontati nel ranking."},
-  ];
-  obSubs.forEach((sub, i) => {
-    const el = document.querySelector(`#ob-slide-${i} .ob-slide-sub`);
-    if(el) el.textContent = sub[_lang] || sub.pt;
-  });
-  // Onboarding botões
-  const obNext = document.getElementById("ob-btn-next");
-  const obSkip = document.getElementById("ob-btn-skip");
-  if(obNext) obNext.textContent = _lang==="pt"?"Próximo →":_lang==="es"?"Siguiente →":_lang==="de"?"Weiter →":_lang==="it"?"Avanti →":"Next →";
-  if(obSkip) obSkip.textContent = _lang==="pt"?"Pular tudo":_lang==="es"?"Omitir todo":_lang==="de"?"Alles überspringen":_lang==="it"?"Salta tutto":"Skip all";
 
   // Auth labels (login e cadastro)
   const authLabels = {
@@ -365,14 +321,6 @@ function renderDashboardTexts() {
   // Botão anon
   const btnAnon = document.getElementById("btn-anon");
   if(btnAnon) btnAnon.textContent = t("login_anon");
-  // Onboarding — titles only translated when i18n key exists
-  const obTitles = ["ob_title_0","ob_title_1","ob_title_2","ob_title_3"];
-  obTitles.forEach((key,i) => {
-    const el = document.getElementById(`ob-slide-${i}`)?.querySelector(".ob-slide-title");
-    const tr = t(key);
-    if(el && tr && tr !== key) el.textContent = tr;
-  });
-
   // Quick access buttons
   if(qa("btn-goto-flashcards")) qa("btn-goto-flashcards").textContent = t("qa_flashcards");
   if(qa("btn-goto-memory"))     qa("btn-goto-memory").textContent     = t("qa_memory");
@@ -5376,10 +5324,9 @@ async function _handleAuth(user){
   }
 
   // ── Returning user logged in ──────────────────────────────────────────────
-  // Ensure splash is visible (it may already be showing from init)
-  if(!document.getElementById("loading-splash-overlay")){
-    showLoadingSplash(null, 0); // show immediately, manual close
-  }
+  // Only keep/use the splash if it was already showing (initial app load).
+  // After a manual login the auth-loading spinner was already shown — don't add a second screen.
+  const splashWasShowing = !!document.getElementById("loading-splash-overlay");
   hideAuthLoading();
 
   const t0 = Date.now();
@@ -5398,11 +5345,13 @@ async function _handleAuth(user){
     }
   }
 
-  // Keep splash for at least 2.5 seconds so user can read the phrase
-  const elapsed = Date.now() - t0;
-  const remaining = Math.max(0, 2500 - elapsed);
-  await new Promise(r => setTimeout(r, remaining));
-  hideLoadingSplash();
+  if(splashWasShowing){
+    // Keep splash for at least 2.5 seconds so user can read the phrase
+    const elapsed = Date.now() - t0;
+    const remaining = Math.max(0, 2500 - elapsed);
+    await new Promise(r => setTimeout(r, remaining));
+    hideLoadingSplash();
+  }
 }
 
 // ── ONBOARDING ────────────────────────────────────────────────────────────────
@@ -5426,7 +5375,9 @@ function renderObStep(){
   const btn = document.getElementById("ob-btn-next");
   if(btn){
     const isLast = obStep === OB_TOTAL - 1;
-    btn.textContent = isLast ? "Começar! 🚀" : "Próximo →";
+    const key = isLast ? "ob_start" : "ob_next";
+    btn.setAttribute("data-i18n", key);
+    btn.textContent = t(key);
     btn.setAttribute("onclick", isLast ? "obSkip()" : "obNext()");
   }
 }
