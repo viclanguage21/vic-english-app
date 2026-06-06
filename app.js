@@ -29,6 +29,28 @@ window._vicLog = _errLog;
 let _dashAC = null;
 let _phraseAC = null;
 
+// ── SETTINGS CACHE — single synchronous localStorage read per key at startup ──
+const _LS = {
+  avatar:       "vic_avatar",
+  darkMode:     "vic_darkMode",
+  sounds:       "vic_sounds",
+  fontSize:     "vic_fontSize",
+  notifEnabled: "vic_notif_enabled",
+  notifFreq:    "vic_notif_freq",
+  lastNotif:    "vic_last_notif",
+  notifAsked:   "vic_notif_asked",
+};
+const _cfg = Object.fromEntries(
+  Object.entries(_LS).map(([k, lsKey]) => [k, localStorage.getItem(lsKey)])
+);
+function _setCfg(key, value) {
+  _cfg[key] = value;
+  const lsKey = _LS[key];
+  if(!lsKey) return;
+  if(value === null) localStorage.removeItem(lsKey);
+  else localStorage.setItem(lsKey, value);
+}
+
 var I18N = {
   pt: {
     // Auth
@@ -1653,7 +1675,7 @@ async function handleRegister(){
   try{
     await registerUser(email,pw,name,username);
     // Salvar avatar escolhido no cadastro
-    if(_regAvatar) localStorage.setItem("vic_avatar", _regAvatar);
+    if(_regAvatar) _setCfg("avatar", _regAvatar);
     localStorage.setItem("vic_last_email",email);
     clearTimeout(timeout);
     // _handleAuth will be called automatically by onAuthChange
@@ -2788,8 +2810,7 @@ function renderDashboard(){
   // Update header avatar
   const avatarIcon=document.getElementById("dash-avatar-icon");
   if(avatarIcon){
-    const saved=localStorage.getItem("vic_avatar");
-    avatarIcon.textContent=saved||userData.name?.[0]?.toUpperCase()||"👤";
+    avatarIcon.textContent=_cfg.avatar||userData.name?.[0]?.toUpperCase()||"👤";
   }
 
   // User level in header
@@ -5141,7 +5162,7 @@ function openProfile(){
 
     // avatar
     const av=document.getElementById("profile-avatar");
-    if(av){ loadAvatar(); if(!localStorage.getItem("vic_avatar")) av.textContent=name[0]?.toUpperCase()||"👤"; }
+    if(av){ loadAvatar(); if(!_cfg.avatar) av.textContent=name[0]?.toUpperCase()||"👤"; }
     const hn=document.getElementById("profile-hero-name"); if(hn) hn.textContent=name;
     const hl=document.getElementById("profile-hero-level"); if(hl) hl.textContent=lv.label;
     const pxp=document.getElementById("ps-xp"); if(pxp) pxp.textContent=xp;
@@ -5558,18 +5579,18 @@ function applyFontSize(size){
   document.body.classList.remove("font-xs","font-small","font-medium","font-large","font-xl");
   document.body.classList.add(`font-${size}`);
   document.querySelectorAll(".font-size-btn").forEach(b=>b.classList.toggle("active",b.dataset.size===size));
-  localStorage.setItem("vic_fontSize",size);
+  _setCfg("fontSize",size);
 }
 
 function applyDarkMode(dark){
   darkMode=dark;
   document.body.classList.toggle("light-mode",!dark);
-  localStorage.setItem("vic_darkMode",dark?"1":"0");
+  _setCfg("darkMode",dark?"1":"0");
 }
 
 function applySounds(enabled){
   soundsEnabled=enabled;
-  localStorage.setItem("vic_sounds",enabled?"1":"0");
+  _setCfg("sounds",enabled?"1":"0");
 }
 
 function shareAppPanel(){
@@ -5629,12 +5650,9 @@ async function saveEdit(){
 
 // Load saved preferences on startup
 function loadPreferences(){
-  const fs=localStorage.getItem("vic_fontSize");
-  const dm=localStorage.getItem("vic_darkMode");
-  const sn=localStorage.getItem("vic_sounds");
-  if(fs) applyFontSize(fs);
-  if(dm==="0") applyDarkMode(false);
-  if(sn==="0") applySounds(false);
+  if(_cfg.fontSize) applyFontSize(_cfg.fontSize);
+  if(_cfg.darkMode==="0") applyDarkMode(false);
+  if(_cfg.sounds==="0") applySounds(false);
 }
 
 // ── AVATAR SYSTEM ─────────────────────────────────────────────────────────────
@@ -5675,7 +5693,7 @@ function updateAvatarPreview(value){
 }
 
 function removeAvatar(){
-  localStorage.removeItem("vic_avatar");
+  _setCfg("avatar", null);
   const av = document.getElementById("profile-avatar");
   const dashAv = document.getElementById("dash-avatar-icon");
   const name = userData?.name || "?";
@@ -5712,13 +5730,12 @@ function loadAvatarPicker(){
   });
 
   // Destacar avatar atual e mostrar preview
-  const current = localStorage.getItem("vic_avatar");
-  if(current){
+  if(_cfg.avatar){
     grid.querySelectorAll(".avatar-emoji-btn").forEach(btn=>{
-      btn.classList.toggle("selected", btn.dataset.emoji===current);
+      btn.classList.toggle("selected", btn.dataset.emoji===_cfg.avatar);
     });
   }
-  updateAvatarPreview(current || userData?.name?.[0]?.toUpperCase() || "?");
+  updateAvatarPreview(_cfg.avatar || userData?.name?.[0]?.toUpperCase() || "?");
 
   document.getElementById("avatar-picker-modal").style.display="flex";
 }
@@ -5736,7 +5753,7 @@ function openAvatarPicker(){
 }
 
 function saveAvatar(value){
-  localStorage.setItem("vic_avatar",value);
+  _setCfg("avatar",value);
   if(currentUser) saveProgressSafe(currentUser.uid, {avatar: value}).catch(()=>{});
   // Update all avatar displays
   const pa=document.getElementById("profile-avatar");
@@ -5746,7 +5763,7 @@ function saveAvatar(value){
 }
 
 function loadAvatar(){
-  const saved=localStorage.getItem("vic_avatar");
+  const saved=_cfg.avatar;
   if(!saved) return;
   const pa=document.getElementById("profile-avatar");
   const dai=document.getElementById("dash-avatar-icon");
@@ -6260,11 +6277,11 @@ async function requestNotificationPermission(){
 
 function scheduleNotifications(){
   if(!("Notification" in window)||Notification.permission!=="granted") return;
-  if(localStorage.getItem("vic_notif_enabled")==="0") return;
+  if(_cfg.notifEnabled==="0") return;
 
-  const freq=parseInt(localStorage.getItem("vic_notif_freq")||"3");
+  const freq=parseInt(_cfg.notifFreq||"3");
   const minHours=24/freq; // e.g. 3x/day = every 8h
-  const last=parseInt(localStorage.getItem("vic_last_notif")||"0");
+  const last=parseInt(_cfg.lastNotif||"0");
   const now=Date.now();
   const hoursSinceLast=(now-last)/(3600*1000);
 
@@ -6279,7 +6296,7 @@ function scheduleNotifications(){
         tag: "vic-english-"+idx,
         requireInteraction: false,
       });
-      localStorage.setItem("vic_last_notif", String(now));
+      _setCfg("lastNotif", String(now));
     }catch(e){ vicLog("notif","local notification failed",e); }
   }
   localStorage.setItem("vic_last_visit", String(now));
@@ -6288,8 +6305,8 @@ function scheduleNotifications(){
 // Ask for notifications with friendly banner after first mission
 function showNotifBanner(){
   if(!("Notification" in window)||Notification.permission!=="default") return;
-  if(localStorage.getItem("vic_notif_asked")) return;
-  localStorage.setItem("vic_notif_asked","1");
+  if(_cfg.notifAsked) return;
+  _setCfg("notifAsked","1");
   const banner=document.createElement("div");
   banner.className="notif-banner";
   banner.innerHTML=`<span style="font-size:22px">🔔</span><div style="flex:1"><div style="font-weight:800;color:#fff">Ativar lembretes?</div><div style="font-size:12px;opacity:0.6">Receba frases motivacionais de filmes + lembretes diários</div></div><button style="padding:8px 16px;background:var(--p);border:none;border-radius:999px;color:#fff;font-weight:800;cursor:pointer;font-family:var(--font)" onclick="requestNotificationPermission();this.closest('.notif-banner').remove()">Ativar</button><button style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:18px;padding:4px 8px" onclick="this.closest('.notif-banner').remove()">✕</button>`;
@@ -6973,25 +6990,23 @@ function init(){
   document.getElementById("btn-profile-bug")?.addEventListener("click",()=>openFeedbackModal("🐛 Reportar bug","bug"));
 
   document.getElementById("toggle-notif")?.addEventListener("change",e=>{
-    localStorage.setItem("vic_notif_enabled", e.target.checked?"1":"0");
+    _setCfg("notifEnabled", e.target.checked?"1":"0");
     const freqRow=document.getElementById("notif-freq-row");
     if(freqRow) freqRow.style.display=e.target.checked?"flex":"none";
     if(e.target.checked) requestNotificationPermission();
   });
   document.getElementById("notif-freq")?.addEventListener("change",e=>{
-    localStorage.setItem("vic_notif_freq", e.target.value);
+    _setCfg("notifFreq", e.target.value);
   });
   // Restore notification settings
-  const notifEnabled=localStorage.getItem("vic_notif_enabled");
   const notifToggle=document.getElementById("toggle-notif");
-  if(notifToggle&&notifEnabled==="0"){
+  if(notifToggle&&_cfg.notifEnabled==="0"){
     notifToggle.checked=false;
     const fr=document.getElementById("notif-freq-row");
     if(fr) fr.style.display="none";
   }
-  const notifFreq=localStorage.getItem("vic_notif_freq");
   const notifFreqEl=document.getElementById("notif-freq");
-  if(notifFreqEl&&notifFreq) notifFreqEl.value=notifFreq;
+  if(notifFreqEl&&_cfg.notifFreq) notifFreqEl.value=_cfg.notifFreq;
   document.getElementById("btn-modal-close")?.addEventListener("click",()=>document.getElementById("admin-modal").style.display="none");
   document.getElementById("admin-search")?.addEventListener("input",e=>{adminSearchTerm=e.target.value;renderAdminUsers();});
   document.getElementById("btn-admin-preview")?.addEventListener("click",enterPreviewMode);
