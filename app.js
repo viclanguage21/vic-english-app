@@ -51,7 +51,7 @@ function _setCfg(key, value) {
   else localStorage.setItem(lsKey, value);
 }
 
-var I18N = {
+const I18N = {
   pt: {
     // Auth
     "login": "Entrar", "register": "Criar Conta", "logout": "Sair",
@@ -837,7 +837,7 @@ function analyticsTrackUpgrade(){ trackEvent("begin_checkout", {currency:"BRL", 
 function analyticsTrackScreen(name){ trackEvent("screen_view", {screen_name:name}); }
 
 // Nomes dos segmentos por idioma
-var SEG_NAMES = {
+const SEG_NAMES = {
   pt: {
     maritimo:"Marítimo", comex:"COMEX", offshore:"Offshore",
     hotelaria:"Hotelaria", restaurantes:"Restaurantes", aeroporto:"Aeroporto",
@@ -880,7 +880,7 @@ function segName(segId){
 }
 
 // Idioma atual — padrão PT, salvo no localStorage
-var _lang = localStorage.getItem("vic_lang") || "pt";
+let _lang = localStorage.getItem("vic_lang") || "pt";
 
 // Função principal de tradução
 function t(key) {
