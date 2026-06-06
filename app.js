@@ -554,6 +554,8 @@ let _lastView = null;
 function showView(id){
   // view-leaderboard é bottom sheet — usar openLeaderboard()
   if(id === "view-leaderboard"){ openLeaderboard(); return; }
+  // Remove admin return btn when leaving dashboard
+  if(id !== "view-dashboard") document.getElementById("admin-return-btn")?.remove();
   // Aplicar idioma quando trocar de view (garante tradução em auth também)
   if(id === "view-auth" || id === "view-onboarding") {
     setTimeout(applyLang, 50);
@@ -3536,6 +3538,27 @@ function showAdminPreviewBar(){
   document.querySelector(".view.active")?.style?.setProperty("padding-top","48px","");
 }
 
+function showAdminReturnBtn(){
+  document.getElementById("admin-return-btn")?.remove();
+  const btn = document.createElement("button");
+  btn.id = "admin-return-btn";
+  btn.textContent = "← Painel do Professor";
+  btn.style.cssText = `
+    position:fixed;bottom:84px;left:16px;z-index:500;
+    background:linear-gradient(135deg,#5b21b6,#7c3aed);
+    border:none;border-radius:999px;
+    padding:10px 18px;color:#fff;font-size:13px;font-weight:800;
+    cursor:pointer;font-family:inherit;
+    box-shadow:0 4px 20px rgba(91,33,182,0.5);
+    transition:all 0.2s ease;
+  `;
+  btn.addEventListener("click",()=>{
+    btn.remove();
+    loadAdminDashboard();
+  });
+  document.body.appendChild(btn);
+}
+
 function exitPreviewMode(){
   document.getElementById("admin-preview-bar")?.remove();
   if(_previewOriginalData){
@@ -4677,6 +4700,11 @@ async function saveEdit(){
       await saveProgress(currentUser.uid,{name:val});
       document.getElementById("profile-hero-name").textContent=val;
       document.getElementById("dash-username").textContent=val;
+    } else if(editField==="username"){
+      if(val.length<3){msg.textContent="❌ Mínimo 3 caracteres.";return;}
+      if(!/^[a-zA-Z0-9_.]+$/.test(val)){msg.textContent="❌ Só letras, números, _ e .";return;}
+      userData.username=val;
+      await saveProgress(currentUser.uid,{username:val});
     } else if(editField==="email"){
       msg.textContent="⚠️ Para mudar o email, faça logout e login novamente com o novo email.";
       return;
@@ -5458,40 +5486,38 @@ function closeLeaderboard(){
 
 async function loadLeaderboard(mode, tabEl){
   _lbMode = mode;
-  // Atualizar tabs
   document.querySelectorAll(".lb-tab").forEach(t=>t.classList.remove("active"));
   if(tabEl) tabEl.classList.add("active");
   else document.getElementById(`lb-tab-${mode}`)?.classList.add("active");
 
   const listEl = document.getElementById("lb-list");
-  if(listEl) listEl.innerHTML = `<div style="text-align:center;padding:32px;color:rgba(255,255,255,0.4);font-size:14px;">${t("loading")} ⏳</div>`;
+  const podiumEl = document.getElementById("lb-podium");
+  if(listEl) listEl.innerHTML = `<div class="lb-loading">${t("loading")} ⏳</div>`;
+  if(podiumEl) podiumEl.style.opacity = "0.4";
 
   try{
     const all = await getAllUsers();
-    let sorted = [...all].sort((a,b)=>(b.xp||0)-(a.xp||0)).slice(0,10);
+    const sorted = [...all].sort((a,b)=>(b.xp||0)-(a.xp||0));
+    const top10 = sorted.slice(0,10);
 
-    // Encontrar badge principal de cada usuário
     const topBadge = (u) => {
       const completed = u.completedMissions||[];
       const segs = VICTOR_DATA?.segments||[];
-      // Badge de domínio de segmento
       for(const seg of segs){
         const total = (seg.phases||[]).reduce((a,p)=>(p.missions||[]).length+a,0);
         const done  = completed.filter(m=>m.startsWith(seg.id+"_")).length;
         if(total>0 && done/total>=0.6) return seg.icon||"🏅";
       }
-      // Badge por XP
       const xp = u.xp||0;
       if(xp>=2500) return "🏅"; if(xp>=1000) return "💎";
       if(xp>=500)  return "🔱"; if(xp>=250)  return "⚡";
       if(xp>=100)  return "🌟"; return "🌱";
     };
 
-    // Renderizar avatar
     const avHtml = (u, size=52) => {
       const av = u.avatar||null;
       const name = u.provider==="anonymous"?"👤":(u.name||"?");
-      if(av && av.startsWith("data:"))
+      if(av && (av.startsWith("data:")||av.startsWith("http")))
         return `<img src="${av}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;display:block;"/>`;
       if(av && av.length<=4)
         return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,#2d1b4e,#1a0d2e);display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*.55)}px;">${av}</div>`;
@@ -5500,75 +5526,81 @@ async function loadLeaderboard(mode, tabEl){
       return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*.42)}px;font-weight:800;color:#fff;">${name[0]?.toUpperCase()||"?"}</div>`;
     };
 
-    // Montar lista completa (sem pódio separado — clean e simples)
+    // ── Populate podium (top 3) ──────────────────────────────
+    if(podiumEl){
+      podiumEl.style.opacity = "1";
+      podiumEl.style.display = top10.length ? "flex" : "none";
+    }
+    [1,2,3].forEach(pos => {
+      const u = top10[pos-1];
+      const avEl   = document.getElementById(`lb-p${pos}-av`);
+      const nameEl = document.getElementById(`lb-p${pos}-name`);
+      const xpEl   = document.getElementById(`lb-p${pos}-xp`);
+      if(!u){
+        if(avEl)   avEl.innerHTML = "?";
+        if(nameEl) nameEl.textContent = "—";
+        if(xpEl)   xpEl.textContent  = "";
+        return;
+      }
+      const avatarSize = pos===1 ? 64 : 52;
+      if(avEl)   avEl.innerHTML  = avHtml(u, avatarSize);
+      if(nameEl) nameEl.textContent = "@"+(u.username||u.name||"?").slice(0,14);
+      if(xpEl)   xpEl.textContent  = (u.xp||0)+" XP";
+    });
+
+    // ── List positions 4-10 ──────────────────────────────────
     if(listEl){
-      listEl.innerHTML = sorted.map((u,i)=>{
+      const remaining = top10.slice(3);
+      listEl.innerHTML = remaining.map((u, i) => {
+        const pos = i+4;
         const isMe = currentUser?.uid === u.uid;
-        const pos = i+1;
-        const medal = pos===1?"🥇":pos===2?"🥈":pos===3?"🥉":`#${pos}`;
         const badge = topBadge(u);
         const level = calcLevel(u.xp||0);
-        const levelLabel = `Nv ${level}`;
         const username = "@"+(u.username||u.name||"Aluno").slice(0,18);
         const streak = u.streak||0;
-
         return `
-          <div style="
-            display:flex;align-items:center;gap:12px;
-            padding:12px 4px;
-            border-bottom:1px solid rgba(255,255,255,${pos<sorted.length?".05":"0"});
-            ${isMe?"background:rgba(201,147,58,0.06);border-radius:14px;padding:12px 10px;margin:-2px -4px;":""}
-          ">
-            <!-- Posição -->
-            <div style="font-size:${pos<=3?"22px":"16px"};font-weight:900;min-width:32px;text-align:center;color:${pos===1?"#ffd700":pos===2?"#c0c0c0":pos===3?"#cd7f32":"rgba(255,255,255,0.35)"};">
-              ${medal}
-            </div>
-
-            <!-- Avatar -->
+          <div class="lb-item${isMe?" lb-item-me":""}">
+            <div class="lb-item-pos">#${pos}</div>
             <div style="position:relative;flex-shrink:0;">
-              ${avHtml(u, pos<=3?56:46)}
-              <!-- Badge principal no canto -->
-              <div style="position:absolute;bottom:-2px;right:-4px;font-size:${pos<=3?"16px":"13px"};line-height:1;">${badge}</div>
+              <div class="lb-item-avatar">${avHtml(u, 38)}</div>
+              <div style="position:absolute;bottom:-2px;right:-4px;font-size:12px;line-height:1;">${badge}</div>
             </div>
-
-            <!-- Info -->
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:${pos<=3?"15px":"13px"};font-weight:${pos<=3?"800":"700"};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:${isMe?"#e4b45c":"#fff"};">
-                ${username}${isMe?' <span style="font-size:10px;background:rgba(201,147,58,0.2);border-radius:999px;padding:1px 6px;color:#e4b45c;font-weight:700;">você</span>':""}
-              </div>
-              <div style="display:flex;gap:6px;align-items:center;margin-top:3px;flex-wrap:wrap;">
-                <span style="font-size:11px;color:rgba(255,255,255,0.45);">${u.xp||0} XP</span>
-                <span style="font-size:10px;background:rgba(124,58,237,0.2);color:#a78bfa;padding:1px 6px;border-radius:4px;font-weight:700;">${levelLabel}</span>
-                ${streak>0?`<span style="font-size:11px;color:#f97316;">🔥${streak}</span>`:""}
+            <div class="lb-item-info">
+              <div class="lb-item-name">${username}${isMe?' <span style="font-size:10px;background:rgba(201,147,58,0.2);border-radius:999px;padding:1px 6px;color:#e4b45c;font-weight:700;">você</span>':""}</div>
+              <div class="lb-item-meta">
+                <span>${u.xp||0} XP</span>
+                <span class="lb-item-level">Nv ${level}</span>
+                ${streak>0?`<span style="color:#f97316">🔥${streak}</span>`:""}
               </div>
             </div>
-          </div>
-        `;
-      }).join("") || `<div style="text-align:center;padding:32px;color:rgba(255,255,255,0.4);">Nenhum dado ainda.</div>`;
+          </div>`;
+      }).join("") || "";
     }
 
-    // Minha posição no topo
+    // ── My real position (only shown if outside top 10) ──────
     if(currentUser){
-      const myPos = sorted.findIndex(u=>u.uid===currentUser.uid);
+      const myRealIdx = sorted.findIndex(u=>u.uid===currentUser.uid);
       const myRankEl = document.getElementById("lb-my-rank");
-      if(myRankEl && myPos === -1){ // Só mostrar se não está no top 10
-        myRankEl.style.display = "block";
-        document.getElementById("lb-my-pos").textContent = `#${sorted.length+1}+`;
-        const myAv = document.getElementById("lb-my-avatar");
-        if(myAv) myAv.innerHTML = avHtml(userData||{}, 36).replace(/width:\d+px;height:\d+px/,"width:36px;height:36px");
-        document.getElementById("lb-my-name").textContent = "@"+(userData?.username||userData?.name||"Aluno");
-        document.getElementById("lb-my-xp").textContent = (userData?.xp||0)+" XP";
-      } else if(myRankEl){
-        myRankEl.style.display = "none";
+      if(myRankEl){
+        if(myRealIdx === -1 || myRealIdx >= 10){
+          myRankEl.style.display = "block";
+          const displayPos = myRealIdx === -1 ? sorted.length+1 : myRealIdx+1;
+          document.getElementById("lb-my-pos").textContent = `#${displayPos}`;
+          const myAv = document.getElementById("lb-my-avatar");
+          if(myAv) myAv.innerHTML = avHtml(userData||{}, 36);
+          document.getElementById("lb-my-name").textContent = "@"+(userData?.username||userData?.name||"Aluno");
+          document.getElementById("lb-my-xp").textContent = (userData?.xp||0)+" XP";
+        } else {
+          myRankEl.style.display = "none";
+        }
       }
     }
 
-    // Subtítulo com contagem
     const sub = document.getElementById("lb-sheet-sub");
-    if(sub) sub.textContent = `Top ${sorted.length} · ${t("leaderboard_"+(mode==="week"?"week":"all"))}`;
+    if(sub) sub.textContent = `Top ${Math.min(sorted.length,10)} · ${t("leaderboard_"+(mode==="week"?"week":"all"))}`;
 
   }catch(e){
-    if(listEl) listEl.innerHTML = `<div style="text-align:center;padding:32px;color:rgba(255,255,255,0.4);">Erro ao carregar.</div>`;
+    if(listEl) listEl.innerHTML = `<div class="lb-loading">Erro ao carregar.</div>`;
     console.error("Leaderboard:", e);
   }
 }
@@ -5750,8 +5782,13 @@ function init(){
   document.getElementById("btn-register").addEventListener("click",handleRegister);
   document.getElementById("btn-google")?.addEventListener("click",handleGoogle);
   document.getElementById("btn-anon")?.addEventListener("click",handleAnon);
-  document.getElementById("btn-logout").addEventListener("click",()=>logoutUser());
+  document.getElementById("btn-logout").addEventListener("click",()=>{
+    if(confirm("Tem certeza que quer sair? Você precisará fazer login novamente."))
+      logoutUser();
+  });
   ["login-email","login-password"].forEach(id=>document.getElementById(id)?.addEventListener("keydown",e=>{if(e.key==="Enter")handleLogin();}));
+
+  initContactFloat();
 
   // admin
   initFeedback();
@@ -5859,9 +5896,9 @@ function init(){
 
   // ── Admin logout — voltar ao dashboard do owner ───────────────────────────
   document.getElementById("btn-admin-logout")?.addEventListener("click", () => {
-    // Não faz logout real — só volta pro dashboard do owner
     renderDashboard();
     showView("view-dashboard");
+    showAdminReturnBtn();
   });
   // Também registrar o botão flutuante do admin
   document.getElementById("btn-admin-float")?.addEventListener("click", () => {
@@ -5912,6 +5949,7 @@ function init(){
     document.getElementById("daily-complete-overlay").style.display="none";
   });
   document.getElementById("btn-edit-name")?.addEventListener("click",()=>openEditModal("name","Novo nome",userData?.name||"","text"));
+  document.getElementById("btn-edit-username")?.addEventListener("click",()=>openEditModal("username","Novo username (@)",userData?.username||"","text"));
   document.getElementById("btn-edit-email")?.addEventListener("click",()=>openEditModal("email","Novo email",userData?.email||"","email"));
   document.getElementById("btn-edit-password")?.addEventListener("click",()=>openEditModal("password","Nova senha","","password"));
   document.getElementById("btn-save-edit")?.addEventListener("click",saveEdit);

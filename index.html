@@ -133,12 +133,9 @@
     </div>
 
     <!-- Seletor de língua no onboarding -->
-    <div style="display:flex;gap:6px;justify-content:center;margin-bottom:12px;">
-      <button onclick="setLang('pt')" id="ob-lang-pt" class="auth-lang-btn">🇧🇷</button>
-      <button onclick="setLang('en')" id="ob-lang-en" class="auth-lang-btn">🇺🇸</button>
-      <button onclick="setLang('es')" id="ob-lang-es" class="auth-lang-btn">🇪🇸</button>
-      <button onclick="setLang('de')" id="ob-lang-de" class="auth-lang-btn">🇩🇪</button>
-      <button onclick="setLang('it')" id="ob-lang-it" class="auth-lang-btn">🇮🇹</button>
+    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:12px;">
+      <button onclick="setLang('pt')" id="ob-lang-pt" class="auth-lang-btn">🇧🇷 PT</button>
+      <button onclick="setLang('en')" id="ob-lang-en" class="auth-lang-btn">🇺🇸 EN</button>
     </div>
 
     <!-- Botões -->
@@ -274,9 +271,6 @@
       <span style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:.6px;width:100%;text-align:center;margin-bottom:4px;" id="auth-lang-label">Idioma / Language</span>
       <button onclick="setLang('pt')" id="auth-lang-pt" class="auth-lang-btn">🇧🇷 PT</button>
       <button onclick="setLang('en')" id="auth-lang-en" class="auth-lang-btn">🇺🇸 EN</button>
-      <button onclick="setLang('es')" id="auth-lang-es" class="auth-lang-btn">🇪🇸 ES</button>
-      <button onclick="setLang('de')" id="auth-lang-de" class="auth-lang-btn">🇩🇪 DE</button>
-      <button onclick="setLang('it')" id="auth-lang-it" class="auth-lang-btn">🇮🇹 IT</button>
     </div>
 
     <!-- Footer link -->
@@ -1058,15 +1052,16 @@
 
 <!-- ══ ADMIN DASHBOARD ════════════════════════════════════ -->
 
-<!-- ══ LEADERBOARD ══════════════════════════════════════════ -->
-<div class="view" id="view-leaderboard">
+<!-- ══ LEADERBOARD — Bottom Sheet ═══════════════════════════ -->
+<div id="lb-sheet-overlay" onclick="closeLeaderboard()"></div>
+<div id="lb-sheet">
   <div class="lb-wrapper">
 
     <!-- Header -->
     <div class="lb-header">
-      <button class="lb-back-btn" id="btn-back-leaderboard">←</button>
       <div class="lb-header-title" data-i18n="leaderboard_title">🏆 Ranking</div>
-      <div class="lb-header-sub">Top 10 da semana</div>
+      <div id="lb-sheet-sub" class="lb-header-sub">Top 10</div>
+      <button class="lb-close-btn" onclick="closeLeaderboard()">✕</button>
     </div>
 
     <!-- Meu ranking -->
@@ -1118,6 +1113,7 @@
 
   </div>
 </div>
+<!-- end lb-sheet -->
 
 <div class="view" id="view-admin">
   <div class="admin-wrapper">
@@ -1131,7 +1127,6 @@
         </div>
       </div>
       <div class="admin-header-btns">
-        <button class="admin-preview-btn" id="btn-admin-preview" title="Ver como aluno Pro">👁️ Preview</button>
         <button class="admin-header-btn" id="btn-admin-refresh-top" onclick="refreshAdminUsers()" title="Atualizar dados">↻</button>
         <button class="btn-logout admin-back-btn" id="btn-admin-logout">🏠 Dashboard</button>
       </div>
@@ -1608,6 +1603,7 @@
       <div class="profile-section-title" id="prof-title-account">👤 Conta</div>
       <div class="settings-big-btns">
         <button class="settings-big-btn" id="btn-edit-name">✏️ Mudar Nome</button>
+        <button class="settings-big-btn" id="btn-edit-username">🏷️ Mudar Username</button>
         <button class="settings-big-btn" id="btn-edit-email">📧 Mudar Email</button>
         <button class="settings-big-btn" id="btn-edit-password">🔒 Mudar Senha</button>
       </div>
@@ -1682,9 +1678,6 @@
         <div class="lang-btn-group">
           <button onclick="setLang('pt')" id="lang-btn-pt" class="lang-btn">🇧🇷 Português</button>
           <button onclick="setLang('en')" id="lang-btn-en" class="lang-btn">🇺🇸 English</button>
-          <button onclick="setLang('es')" id="lang-btn-es" class="lang-btn">🇪🇸 Español</button>
-          <button onclick="setLang('de')" id="lang-btn-de" class="lang-btn">🇩🇪 Deutsch</button>
-          <button onclick="setLang('it')" id="lang-btn-it" class="lang-btn">🇮🇹 Italiano</button>
         </div>
       </div>
     </div>
