@@ -92,7 +92,7 @@ function segName(segId){
 }
 
 // Idioma atual — padrão PT, salvo no localStorage
-let _lang = localStorage.getItem("vic_lang") || "pt";
+let _lang = (()=>{ const l=localStorage.getItem("vic_lang"); return(l==="pt"||l==="en")?l:"pt"; })();
 
 // Função principal de tradução
 function t(key) {
@@ -1570,6 +1570,13 @@ async function loadDashboard(user){
     userData=fallback;
   }
 
+  // Sync Google profile photo to Firestore so it appears in leaderboard/admin
+  if(user.photoURL && !userData.avatar){
+    userData.avatar = user.photoURL;
+    _setCfg("avatar", user.photoURL);
+    saveProgress(user.uid, { avatar: user.photoURL }).catch(()=>{});
+  }
+
   // Always proceed to dashboard — never block the user
   try{ await updateStreak(); }catch(e){ console.warn("streak err:", e.message); }
 
@@ -1839,7 +1846,11 @@ function renderDashboard(){
   // Update header avatar
   const avatarIcon=document.getElementById("dash-avatar-icon");
   if(avatarIcon){
-    avatarIcon.textContent=_cfg.avatar||userData.name?.[0]?.toUpperCase()||"👤";
+    const _av=_cfg.avatar||userData.avatar||null;
+    if(_av && (_av.startsWith("data:")||_av.startsWith("http")))
+      avatarIcon.innerHTML=`<img src="${_av}" style="width:100%;height:100%;object-fit:cover;display:block;"/>`;
+    else
+      avatarIcon.textContent=_av||userData.name?.[0]?.toUpperCase()||"👤";
   }
 
   // User level in header
@@ -1866,6 +1877,7 @@ function renderDashboard(){
   }
 
   renderSegments();
+  try{ renderDashboardTexts(); }catch(e){}
   }catch(e){ console.error("renderDashboard error:", e.message); }
 }
 
@@ -1882,7 +1894,7 @@ function renderSegments(){
   });
   if(grammarSeg){
     const gc=document.getElementById("grammar-core-banner");
-    if(gc){gc.style.display="block";gc.onclick=()=>openSegmentPhases(grammarSeg.id);}
+    if(gc){gc.style.display="flex";gc.onclick=()=>openSegmentPhases(grammarSeg.id);}
   }
 }
 
@@ -3902,13 +3914,13 @@ function renderAdminMetrics(){
 function renderUserAvatar(u, size=36){
   const av = u.avatar || null;
   const name = u.provider==="anonymous" ? "👤" : (u.name||"?");
-  if(av && av.startsWith("data:")){
-    return `<div style="width:${size}px;height:${size}px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#2a1a4e;"><img src="${av}" style="width:100%;height:100%;object-fit:cover;"/></div>`;
+  const photoSrc = (av && (av.startsWith("data:")||av.startsWith("http"))) ? av : (u.photoURL||null);
+  if(photoSrc){
+    return `<div style="width:${size}px;height:${size}px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#2a1a4e;"><img src="${photoSrc}" style="width:100%;height:100%;object-fit:cover;display:block;"/></div>`;
   }
   if(av && av.length <= 4){ // emoji
     return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,#2d1b4e,#1a0d2e);display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*0.5)}px;flex-shrink:0;">${av}</div>`;
   }
-  // Inicial do nome
   return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*0.4)}px;font-weight:800;color:#fff;flex-shrink:0;">${name[0]?.toUpperCase()||"?"}</div>`;
 }
 
@@ -4787,8 +4799,13 @@ function saveAvatar(value){
   // Update all avatar displays
   const pa=document.getElementById("profile-avatar");
   const dai=document.getElementById("dash-avatar-icon");
-  if(pa) pa.innerHTML=value.length>2?`<img src="${value}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`:`<span style="font-size:28px">${value}</span>`;
-  if(dai) dai.textContent=value.length<=2?value:(userData.name?.[0]?.toUpperCase()||"👤");
+  if(pa) pa.innerHTML=(value.startsWith("data:")||value.startsWith("http"))?`<img src="${value}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;"/>`:`<span style="font-size:28px">${value}</span>`;
+  if(dai){
+    if(value.startsWith("data:")||value.startsWith("http"))
+      dai.innerHTML=`<img src="${value}" style="width:100%;height:100%;object-fit:cover;display:block;"/>`;
+    else
+      dai.textContent=value;
+  }
 }
 
 function loadAvatar(){
@@ -4798,12 +4815,17 @@ function loadAvatar(){
   const dai=document.getElementById("dash-avatar-icon");
   if(pa){
     if(saved.startsWith("data:")||saved.startsWith("http")){
-      pa.innerHTML=`<img src="${saved}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;
+      pa.innerHTML=`<img src="${saved}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;"/>`;
     } else {
       pa.innerHTML=`<span style="font-size:28px">${saved}</span>`;
     }
   }
-  if(dai&&saved.length<=2) dai.textContent=saved;
+  if(dai){
+    if(saved.startsWith("data:")||saved.startsWith("http"))
+      dai.innerHTML=`<img src="${saved}" style="width:100%;height:100%;object-fit:cover;display:block;"/>`;
+    else
+      dai.textContent=saved;
+  }
 }
 
 // ── WRITING & TRANSLATION ─────────────────────────────────────────────────────
