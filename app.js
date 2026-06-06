@@ -25,6 +25,9 @@ window.onerror = (msg, src, line, col, err) => {
 // Expose error log for debug (type window._vicLog in console)
 window._vicLog = _errLog;
 
+// ── VIEW / PHRASE LIFECYCLE — AbortControllers prevent listener accumulation ──
+let _dashAC = null;
+let _phraseAC = null;
 
 var I18N = {
   pt: {
@@ -2729,6 +2732,9 @@ function shareApp(){
 }
 
 function renderDashboard(){
+  _dashAC?.abort();
+  _dashAC = new AbortController();
+  const { signal: _dSig } = _dashAC;
   try{
   const xp=userData.xp||0, lv=levelInfo(xp), level=calcLevel(xp);
   buildDate(); buildGreeting(userData.name||"Aluno");
@@ -2750,7 +2756,7 @@ function renderDashboard(){
   const earned2=userData.badges||[];
   const nextBadge2=BADGES.find(b=>!earned2.includes(b.id));
   const nbiEl=document.getElementById("next-badge-inline");
-  nbiEl?.addEventListener("click",()=>{ vibrate(30); openProfile(); setTimeout(()=>document.getElementById("profile-badges-grid")?.scrollIntoView({behavior:"smooth"}),400); });
+  nbiEl?.addEventListener("click",()=>{ vibrate(30); openProfile(); setTimeout(()=>document.getElementById("profile-badges-grid")?.scrollIntoView({behavior:"smooth"}),400); },{ signal: _dSig });
   if(nbiEl&&nextBadge2){
     nbiEl.style.display="flex";
     document.getElementById("nbi-icon").textContent=nextBadge2.icon;
@@ -2973,6 +2979,8 @@ function enterMission(segId,phaseId,misId){
 }
 
 function renderMission(){
+  _phraseAC?.abort();
+  _phraseAC = new AbortController();
   const mission=getMission(currentSegmentId,currentPhaseId,currentMissionId);
   const phrase=getPhrase();
   const total=mission?.phrases.length||1;
@@ -3026,7 +3034,7 @@ function renderPhraseEN(phrase,spoken){
     let cls=spokenClean.includes(clean)?"word-said":wtype==="noun"?"w-noun":wtype==="verb"?"w-verb":wtype==="adj"?"w-adj":"";
     return `<span class="phrase-word ${cls}" data-word="${clean}">${token}</span>`;
   }).join("");
-  container.querySelectorAll(".phrase-word").forEach(s=>s.addEventListener("click",()=>{const w=s.dataset.word;if(w)SoundFX.speakEN(w);}));
+  container.querySelectorAll(".phrase-word").forEach(s=>s.addEventListener("click",()=>{const w=s.dataset.word;if(w)SoundFX.speakEN(w);},{ signal: _phraseAC?.signal }));
 }
 
 function renderVocab(phrase){
@@ -3035,9 +3043,9 @@ function renderVocab(phrase){
   el.style.display="flex";
   el.innerHTML=phrase.words.map(w=>`<div class="vocab-item" data-word="${w.w}" data-tr="${w.tr}"><span class="vocab-word">${w.w}</span><span class="vocab-class ${w.cls}">${w.cls}</span><span class="vocab-translation">= ${w.tr}</span><span class="vocab-speaker">🔊</span></div>`).join("");
   el.querySelectorAll(".vocab-item").forEach(item=>{
-    item.querySelector(".vocab-word")?.addEventListener("click",()=>SoundFX.speakEN(item.dataset.word));
-    item.querySelector(".vocab-translation")?.addEventListener("click",()=>SoundFX.speakPT(item.dataset.tr));
-    item.querySelector(".vocab-speaker")?.addEventListener("click",()=>SoundFX.speakEN(item.dataset.word));
+    item.querySelector(".vocab-word")?.addEventListener("click",()=>SoundFX.speakEN(item.dataset.word),{ signal: _phraseAC?.signal });
+    item.querySelector(".vocab-translation")?.addEventListener("click",()=>SoundFX.speakPT(item.dataset.tr),{ signal: _phraseAC?.signal });
+    item.querySelector(".vocab-speaker")?.addEventListener("click",()=>SoundFX.speakEN(item.dataset.word),{ signal: _phraseAC?.signal });
   });
 }
 
@@ -3087,7 +3095,7 @@ function renderExerciseUI(phrase){
     document.getElementById("fill-input-hidden").value="";
     document.getElementById("fill-wrap").style.display="block";
     document.getElementById("answer-feedback-fill").style.display="none";
-    setTimeout(()=>{const b=document.getElementById("fill-blank-input");if(b){b.textContent="";b.addEventListener("input",()=>document.getElementById("fill-input-hidden").value=b.textContent);b.focus();}},100);
+    setTimeout(()=>{const b=document.getElementById("fill-blank-input");if(b){b.textContent="";b.addEventListener("input",()=>document.getElementById("fill-input-hidden").value=b.textContent,{ signal: _phraseAC?.signal });b.focus();}},100);
   }
 
   if(phrase.type==="word_order"){
