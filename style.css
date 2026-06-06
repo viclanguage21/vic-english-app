@@ -98,6 +98,20 @@ body::before{
 /* grain */
 body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.022'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
 
+/* ── TOUCH PRECISION: remove 300ms tap delay on all interactive elements ── */
+button, a, [onclick], input[type="button"], input[type="submit"],
+input[type="checkbox"], input[type="radio"], select, label,
+.stat-card, .mission-card, .phase-card, .phase-item, .phase-btn,
+.segment-card, .segment-item, .quest-option, .settings-big-btn,
+.settings-item, .auth-lang-btn, .lang-btn, .auth-tab, .lb-tab, .lb-item,
+.mem-card, .fc-card, .tf-btn, .diag-opt, .nav-btn, .score-btn,
+.dia-opt, .qa-btn, .badge-item, .gloss-btn, .dialog-opt,
+.ob-btn-next, .ob-btn-skip, .ranking-cta-btn, .auth-btn-primary,
+.auth-btn-google, .auth-btn-anon {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
 .view{
   position:fixed !important;
   top:0 !important; left:0 !important;

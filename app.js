@@ -4,6 +4,11 @@ import { auth, registerUser, loginUser, loginWithGoogle, loginAnonymous, logoutU
 import { I18N, SEG_NAMES, LEVEL_TIPS, LOADING_QUOTES, GLOSSARY, PRO_MESSAGES, BADGES, NOTIF_MESSAGES, MP_LINK } from "./constants.js";
 import { calcLevel, stripEmoji, cleanEnunciado, shuffle, vibrate } from "./utils.js";
 
+// Global haptic: every button tap gets a short buzz (capture fires before onclick)
+document.addEventListener("click", e => {
+  if(e.target.closest("button") || e.target.closest("[role='button']")) vibrate(22);
+}, true);
+
 // ══════════════════════════════════════════════════════════════════════════════
 // ERROR LOGGING — centralised, non-blocking
 // ══════════════════════════════════════════════════════════════════════════════
@@ -2579,7 +2584,7 @@ function showLevelUp(level){
   `;
   document.body.appendChild(overlay);
   SoundFX.complete();
-  vibrate([50,30,50,30,150]);
+  vibrate([100,50,200,50,100,50,300]);
   setTimeout(()=>document.getElementById("lvlup-overlay")?.remove(), 5000);
 }
 
@@ -5043,6 +5048,7 @@ function showBadgeUnlock(badge){
     </div>`;
   document.body.appendChild(overlay);
   SoundFX.complete();
+  vibrate([60,30,60,30,200]);
 
   // Award XP
   userData.xp=(userData.xp||0)+badge.xp;
