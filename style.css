@@ -4446,13 +4446,16 @@ body.light-mode .quick-btn:hover {
   margin-bottom: 4px !important;
 }
 .auth-tagline-pt {
-  font-size: 13px !important;
-  font-weight: 400 !important;
-  color: rgba(242,200,122,0.55) !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: rgba(242,200,122,0.88) !important;
   font-style: italic !important;
-  letter-spacing: 0.9px !important;
+  letter-spacing: 0.4px !important;
   text-align: center;
-  text-shadow: 0 0 12px rgba(228,180,92,0.15) !important;
+  text-shadow:
+    0 0 16px rgba(242,200,122,0.65),
+    0 0 32px rgba(228,180,92,0.35),
+    0 0 56px rgba(201,147,58,0.18) !important;
   margin-bottom: 14px !important;
 }
 

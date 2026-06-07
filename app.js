@@ -6237,6 +6237,7 @@ if(typeof obSkip !== 'undefined') window.obSkip = obSkip;
 if(typeof obBack !== 'undefined') window.obBack = obBack;
 if(typeof showInstallOS !== 'undefined') window.showInstallOS = showInstallOS;
 if(typeof toggleDailyBlock !== 'undefined') window.toggleDailyBlock = toggleDailyBlock;
+if(typeof startOnboarding !== 'undefined') window.startOnboarding = startOnboarding;
 if(typeof openLeaderboard !== 'undefined') window.openLeaderboard = openLeaderboard;
 if(typeof closeLeaderboard !== 'undefined') window.closeLeaderboard = closeLeaderboard;
 if(typeof loadLeaderboard !== 'undefined') window.loadLeaderboard = loadLeaderboard;
