@@ -5392,6 +5392,16 @@ function renderObStep(){
     btn.textContent = t(key);
     btn.setAttribute("onclick", isLast ? "obSkip()" : "obNext()");
   }
+  const backBtn = document.getElementById("ob-btn-back");
+  if(backBtn) backBtn.style.display = obStep > 0 ? "block" : "none";
+}
+
+function obBack(){
+  if(_obLocked || obStep === 0) return;
+  _obLocked = true;
+  setTimeout(() => { _obLocked = false; }, 600);
+  obStep--;
+  renderObStep();
 }
 
 function obNext(){
