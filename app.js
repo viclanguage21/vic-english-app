@@ -5368,7 +5368,7 @@ async function _handleAuth(user){
 
 // ── ONBOARDING ────────────────────────────────────────────────────────────────
 let obStep = 0;
-const OB_TOTAL = 4;
+const OB_TOTAL = 5;
 let _obLocked = false; // debounce: prevents double-fire on touch devices
 
 function startOnboarding(){
