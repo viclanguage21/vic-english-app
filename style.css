@@ -6499,20 +6499,49 @@ a.settings-big-btn:active {
   text-align: left !important;
 }
 
-/* ── Grammar/Writing banners — ensure full width and comfortable height ── */
+/* ── Grammar/Writing banners — spacious, content never clipped ── */
 .grammar-core-banner,
 .writing-core-banner {
   width: 100% !important;
-  min-height: 80px !important;
   box-sizing: border-box !important;
+  padding: 22px 20px !important;
+  align-items: flex-start !important;   /* let content grow down freely */
+  min-height: unset !important;
+}
+.grammar-core-banner .gc-left,
+.writing-core-banner .gc-left {
+  align-items: flex-start !important;
+}
+.grammar-core-banner .gc-icon,
+.writing-core-banner .gc-icon {
+  font-size: 36px !important;
+  line-height: 1 !important;
+  margin-top: 2px !important;
 }
 .grammar-core-banner .gc-title,
 .writing-core-banner .gc-title {
-  font-size: 17px !important;
+  font-size: 18px !important;
+  margin-bottom: 4px !important;
 }
 .grammar-core-banner .gc-sub,
 .writing-core-banner .gc-sub {
   font-size: 12px !important;
+  margin-bottom: 10px !important;
+}
+.grammar-core-banner .gc-tags,
+.writing-core-banner .gc-tags {
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+}
+.grammar-core-banner .gc-tags span,
+.writing-core-banner .gc-tags span {
+  font-size: 11px !important;
+  padding: 3px 10px !important;
+}
+.grammar-core-banner .gc-arrow,
+.writing-core-banner .gc-arrow {
+  margin-top: 4px !important;
+  font-size: 22px !important;
 }
 
 /* ── Quick access section label — always visible ── */
