@@ -910,8 +910,8 @@ async function handleAnon(){
     else showAuthError("Erro ao entrar. Tente novamente.");
   }
 }
-function showAuthError(msg){const e=document.getElementById("auth-error");e.textContent=msg;e.style.display="block";setTimeout(()=>e.style.display="none",4000);}
-function translateErr(c){return{"auth/email-already-in-use":"Email já cadastrado.","auth/invalid-email":"Email inválido.","auth/weak-password":"Senha muito fraca.","auth/user-not-found":"Usuário não encontrado.","auth/wrong-password":"Senha incorreta.","auth/invalid-credential":"Email ou senha incorretos.","auth/too-many-requests":"Muitas tentativas."}[c]||"Erro. Tente novamente.";}
+function showAuthError(msg){const e=document.getElementById("auth-error");e.textContent=msg;e.style.display="block";setTimeout(()=>e.style.display="none",7000);}
+function translateErr(c){return{"auth/email-already-in-use":"Email já cadastrado. Tente fazer login.","auth/invalid-email":"Email inválido. Verifique e tente novamente.","auth/weak-password":"Senha muito fraca. Use pelo menos 6 caracteres.","auth/user-not-found":"Usuário não encontrado.","auth/wrong-password":"Senha incorreta.","auth/invalid-credential":"Email ou senha incorretos.","auth/too-many-requests":"Muitas tentativas. Aguarde alguns minutos.","auth/network-request-failed":"Sem conexão. Verifique sua internet e tente novamente.","auth/operation-not-allowed":"Cadastro por email desativado. Contate o suporte.","auth/internal-error":"Erro interno. Tente novamente em instantes."}[c]||`Erro ao criar conta. Tente novamente. (${c||"desconhecido"})`;}
 function switchTab(t){document.querySelectorAll(".auth-tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".auth-form").forEach(x=>x.classList.remove("active"));document.getElementById(`tab-${t}`).classList.add("active");document.getElementById(`form-${t}`).classList.add("active");document.getElementById("auth-error").style.display="none";}
 
 // ── DIAGNOSIS ─────────────────────────────────────────────────────────────────
