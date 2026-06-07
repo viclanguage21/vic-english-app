@@ -3321,6 +3321,19 @@ body.light-mode .dlg-card * { color: inherit; }
   width: 22px; height: 22px; object-fit: contain; opacity: 0.7;
 }
 
+/* ══ WRITING TIP ITEMS ══════════════════════════════════ */
+.wf-tip-item {
+  background: rgba(99,102,241,0.08);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-left: 3px solid #6366f1;
+  border-radius: var(--r);
+  padding: 11px 14px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink) !important;
+}
+
 /* ══ WRITING ERROR ITEMS ════════════════════════════════ */
 .wf-error-item {
   background: rgba(239,68,68,0.07);

@@ -4889,6 +4889,14 @@ async function checkWriting(){
   const text=document.getElementById("writing-textarea").value.trim();
   if(!text||text.length<20) return showXpToast("✍️ Escreva mais antes de corrigir!");
 
+  let apiKey=localStorage.getItem("vic_anthropic_key")||"";
+  if(!apiKey){
+    apiKey=prompt("Cole sua chave da API Anthropic para ativar a correção com IA (será salva no dispositivo):");
+    if(!apiKey) return;
+    localStorage.setItem("vic_anthropic_key",apiKey.trim());
+    apiKey=apiKey.trim();
+  }
+
   const btn=document.getElementById("btn-check-writing");
   btn.disabled=true; btn.textContent="🤖 Analisando...";
 
@@ -4904,9 +4912,14 @@ async function checkWriting(){
 
     const response=await fetch("https://api.anthropic.com/v1/messages",{
       method:"POST",
-      headers:{"Content-Type":"application/json"},
+      headers:{
+        "Content-Type":"application/json",
+        "x-api-key":apiKey,
+        "anthropic-version":"2023-06-01",
+        "anthropic-dangerous-direct-browser-access":"true"
+      },
       body:JSON.stringify({
-        model:"claude-sonnet-4-20250514",
+        model:"claude-sonnet-4-5",
         max_tokens:1500,
         messages:[{
           role:"user",
@@ -4921,25 +4934,28 @@ Respond ONLY in this exact JSON (no markdown, no backticks):
 {
   "score": <1-10>,
   "good": "<2-3 sentences in Portuguese about what was done well>",
-  "errors": [
-    {
-      "original": "<exact wrong phrase from student text>",
-      "corrected": "<how it should be written>",
-      "explanation": "<1 sentence in Portuguese: why wrong and what the rule is>"
-    }
-  ],
-  "corrected": "<full natural corrected version in English, appropriate for ${t.level} level>"
+  "corrected": "<full corrected version: same content as student's text, only fix grammar/spelling/phrasing, keep the same ideas, appropriate for ${t.level} level>",
+  "tips": [
+    "<personalized actionable tip in Portuguese, e.g. 'Tente começar com...' or 'Use mais...' or 'Escreva frases mais...' — based on THIS specific text>",
+    "<second personalized tip based on THIS text>",
+    "<third personalized tip based on THIS text>"
+  ]
 }
-Maximum 5 errors. Focus on most important ones. If no errors, use empty array.`
+Tips must be specific to the student's actual text, not generic advice.`
         }]
       })
     });
 
+    if(response.status===401){
+      localStorage.removeItem("vic_anthropic_key");
+      btn.disabled=false; btn.textContent="🤖 Corrigir com IA";
+      return showXpToast("❌ Chave inválida. Tente novamente.");
+    }
     const data=await response.json();
     const raw=data.content?.[0]?.text||"{}";
     let result;
     try{ result=JSON.parse(raw.replace(/```json|```/g,"").trim()); }
-    catch(e){ result={score:7,good:"Bom esforço!",errors:[],corrected:text}; }
+    catch(e){ result={score:7,good:"Bom esforço!",tips:[],corrected:text}; }
 
     // Show inline corrected text below textarea
     const inlineEl=document.getElementById("writing-correction-inline");
@@ -4955,20 +4971,16 @@ Maximum 5 errors. Focus on most important ones. If no errors, use empty array.`
     document.getElementById("wf-score").style.color=result.score>=7?"#22c55e":result.score>=5?"#f59e0b":"#ef4444";
     document.getElementById("wf-good").textContent=result.good||"Bom trabalho!";
 
-    // Show errors with explanations
+    // Show personalized tips
     const errorsEl=document.getElementById("wf-errors");
     if(errorsEl){
-      if(result.errors&&result.errors.length>0){
-        errorsEl.innerHTML=result.errors.map(e=>`
-          <div class="wf-error-item">
-            <div class="wf-error-original">❌ <span>${e.original}</span></div>
-            <div class="wf-error-corrected">✅ ${e.corrected}</div>
-            <div class="wf-error-explanation">💡 ${e.explanation}</div>
-          </div>
+      if(result.tips&&result.tips.length>0){
+        errorsEl.innerHTML=result.tips.map(tip=>`
+          <div class="wf-tip-item">💡 ${tip}</div>
         `).join("");
         errorsEl.style.display="block";
       } else {
-        errorsEl.innerHTML=`<div class="wf-no-errors">🎉 Nenhum erro encontrado!</div>`;
+        errorsEl.innerHTML=`<div class="wf-no-errors">🎉 Texto excelente!</div>`;
         errorsEl.style.display="block";
       }
     }
