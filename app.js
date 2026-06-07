@@ -1949,8 +1949,10 @@ function renderGlossaryTerms(segId, filter){
     card.className="gloss-term-card";
     card.innerHTML=`
       <div class="gloss-term-row">
-        <span class="gloss-term-en">${term.en}</span>
-        <span class="gloss-term-pt">${term.pt}</span>
+        <div class="gloss-term-text">
+          <span class="gloss-term-en">${term.en}</span>
+          <span class="gloss-term-pt">${term.pt}</span>
+        </div>
         <button class="gloss-speak-btn" title="Ouvir pronúncia">🔊</button>
       </div>
       <div class="gloss-term-detail">

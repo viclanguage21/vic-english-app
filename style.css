@@ -6369,17 +6369,19 @@ body.light-mode .notif-freq-select { background: #1e0a50 !important; color: #fff
 .gloss-term-card.open{border-color:#0d7c72;}
 .gloss-term-row{
   display:flex;align-items:center;
-  padding:14px 16px;cursor:pointer;gap:10px;
+  padding:12px 16px;cursor:pointer;gap:10px;
+}
+.gloss-term-text{
+  flex:1;min-width:0;
+  display:flex;flex-direction:column;gap:2px;
 }
 .gloss-term-en{
-  font-size:15px;font-weight:600;
-  color:var(--txt,#fff);flex:1;
-  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:14px;font-weight:700;
+  color:var(--txt,#fff);display:block;
 }
 .gloss-term-pt{
-  font-size:13px;color:var(--muted,#a0a0b0);
-  flex:1;text-align:right;min-width:0;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:12px;color:var(--muted,#a0a0b0);
+  display:block;line-height:1.4;
 }
 .gloss-speak-btn{
   background:none;border:none;
