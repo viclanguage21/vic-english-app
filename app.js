@@ -3920,8 +3920,8 @@ function renderUserAvatar(u, size=36){
   if(photoSrc){
     return `<div style="width:${size}px;height:${size}px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#2a1a4e;"><img src="${photoSrc}" style="width:100%;height:100%;object-fit:cover;display:block;"/></div>`;
   }
-  if(av && av.length <= 4){ // emoji
-    return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,#2d1b4e,#1a0d2e);display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*0.5)}px;flex-shrink:0;">${av}</div>`;
+  if(av && !av.startsWith("data:") && !av.startsWith("http") && av.length <= 12){ // emoji (incl. ZWJ sequences)
+    return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,#2d1b4e,#1a0d2e);display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*0.5)}px;line-height:1;flex-shrink:0;">${av}</div>`;
   }
   return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*0.4)}px;font-weight:800;color:#fff;flex-shrink:0;">${name[0]?.toUpperCase()||"?"}</div>`;
 }
@@ -5537,13 +5537,22 @@ async function loadLeaderboard(mode, tabEl){
       if(xp>=100)  return "🌟"; return "🌱";
     };
 
+    // Sync current user's local avatar into the fetched list so it renders immediately
+    const myEntry = all.find(u => u.uid === currentUser?.uid);
+    const localAv = _cfg.avatar || localStorage.getItem("vic_avatar");
+    if(myEntry && !myEntry.avatar && localAv){
+      myEntry.avatar = localAv;
+      saveProgress(currentUser.uid, { avatar: localAv }).catch(()=>{});
+    }
+
     const avHtml = (u, size=52) => {
       const av = u.avatar||null;
       const name = u.provider==="anonymous"?"👤":(u.name||"?");
       if(av && (av.startsWith("data:")||av.startsWith("http")))
         return `<img src="${av}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;display:block;"/>`;
-      if(av && av.length<=4)
-        return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,#2d1b4e,#1a0d2e);display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*.55)}px;">${av}</div>`;
+      // Emoji: anything that isn't a URL (handles ZWJ sequences like 👨‍🍳 which have length > 4)
+      if(av && !av.startsWith("data:") && !av.startsWith("http") && av.length <= 12)
+        return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,#2d1b4e,#1a0d2e);display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*.52)}px;line-height:1;">${av}</div>`;
       if(u.photoURL)
         return `<img src="${u.photoURL}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;display:block;"/>`;
       return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*.42)}px;font-weight:800;color:#fff;">${name[0]?.toUpperCase()||"?"}</div>`;
