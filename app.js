@@ -5419,6 +5419,24 @@ function obNext(){
   }
 }
 
+function showInstallOS(os){
+  const ios=document.getElementById("ob-install-ios");
+  const android=document.getElementById("ob-install-android");
+  const btnIos=document.getElementById("ob-os-ios");
+  const btnAndroid=document.getElementById("ob-os-android");
+  if(os==="ios"){
+    if(ios) ios.style.display="flex";
+    if(android) android.style.display="none";
+    if(btnIos) btnIos.classList.add("active");
+    if(btnAndroid) btnAndroid.classList.remove("active");
+  } else {
+    if(ios) ios.style.display="none";
+    if(android) android.style.display="flex";
+    if(btnIos) btnIos.classList.remove("active");
+    if(btnAndroid) btnAndroid.classList.add("active");
+  }
+}
+
 function obSkip(){
   _onboardingActive = false; // release the block
   localStorage.setItem("vic_onboarding_done","1");

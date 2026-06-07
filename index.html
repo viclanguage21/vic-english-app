@@ -126,28 +126,49 @@
       <div class="ob-slide" id="ob-slide-4">
         <div class="ob-slide-content">
           <div class="ob-slide-title">📲 Instale na sua tela!</div>
-          <div class="ob-slide-sub">3 toques e o VIC English fica na sua tela inicial — como um app de verdade, sem baixar nada.</div>
-          <div class="ob-install-photos">
+          <div class="ob-slide-sub">Como um app de verdade — sem baixar nada.</div>
 
+          <!-- OS toggle -->
+          <div class="ob-install-toggle">
+            <button class="ob-install-os-btn active" id="ob-os-ios" onclick="showInstallOS('ios')">🍎 iPhone</button>
+            <button class="ob-install-os-btn" id="ob-os-android" onclick="showInstallOS('android')">🤖 Android</button>
+          </div>
+
+          <!-- iPhone / Safari -->
+          <div class="ob-install-photos" id="ob-install-ios">
             <div class="ob-install-photo-item">
               <div class="ob-install-badge">1</div>
               <img src="install_step1.jpg" alt="Passo 1" class="ob-install-photo"/>
               <div class="ob-install-caption">Toque em <strong>···</strong> no canto do Safari</div>
             </div>
-
             <div class="ob-install-photo-item">
               <div class="ob-install-badge">2</div>
               <img src="install_step2.jpg" alt="Passo 2" class="ob-install-photo"/>
               <div class="ob-install-caption">Selecione <strong>Compartilhar</strong> no menu</div>
             </div>
-
             <div class="ob-install-photo-item">
               <div class="ob-install-badge">3</div>
               <img src="install_step3.jpg" alt="Passo 3" class="ob-install-photo"/>
               <div class="ob-install-caption">Toque em <strong>Adicionar à Tela de Início</strong></div>
             </div>
-
           </div>
+
+          <!-- Android / Chrome -->
+          <div class="ob-install-android" id="ob-install-android" style="display:none">
+            <div class="ob-android-step">
+              <div class="ob-install-badge">1</div>
+              <div class="ob-android-step-text">Toque em <strong>⋮</strong> no canto superior do Chrome</div>
+            </div>
+            <div class="ob-android-step">
+              <div class="ob-install-badge">2</div>
+              <div class="ob-android-step-text">Selecione <strong>Adicionar à tela inicial</strong></div>
+            </div>
+            <div class="ob-android-step">
+              <div class="ob-install-badge">3</div>
+              <div class="ob-android-step-text">Confirme tocando em <strong>Adicionar</strong></div>
+            </div>
+          </div>
+
         </div>
       </div>
 

@@ -6612,10 +6612,34 @@ a.settings-big-btn:active {
 }
 
 /* ── Install slide photo steps ── */
+/* OS toggle */
+.ob-install-toggle {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 14px 0 6px;
+}
+.ob-install-os-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(255,255,255,0.15);
+  border-radius: 999px;
+  color: rgba(255,255,255,0.6);
+  font-size: 13px; font-weight: 700;
+  padding: 6px 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.ob-install-os-btn.active {
+  background: linear-gradient(135deg,#c9933a,#e4b45c);
+  border-color: #c9933a;
+  color: #1a0d2e;
+}
+
+/* iPhone photos */
 .ob-install-photos {
   display: flex;
-  gap: 10px;
-  margin-top: 18px;
+  gap: 8px;
+  margin-top: 14px;
   justify-content: center;
   align-items: flex-start;
 }
@@ -6625,10 +6649,10 @@ a.settings-big-btn:active {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  max-width: 100px;
+  max-width: 115px;
 }
 .ob-install-badge {
-  width: 24px; height: 24px;
+  width: 26px; height: 26px;
   border-radius: 50%;
   background: linear-gradient(135deg,#c9933a,#e4b45c);
   color: #1a0d2e;
@@ -6638,9 +6662,9 @@ a.settings-big-btn:active {
 }
 .ob-install-photo {
   width: 100%;
-  border-radius: 10px;
-  border: 1.5px solid rgba(201,147,58,0.30);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  border-radius: 12px;
+  border: 1.5px solid rgba(201,147,58,0.35);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
   object-fit: cover;
 }
 .ob-install-caption {
@@ -6650,6 +6674,33 @@ a.settings-big-btn:active {
   line-height: 1.4;
 }
 .ob-install-caption strong { color: #fff; }
+
+/* Android steps */
+.ob-install-android {
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.ob-android-step {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+.ob-android-step-text {
+  font-size: 14px;
+  color: rgba(255,255,255,0.80);
+  line-height: 1.4;
+  text-align: left;
+}
+.ob-android-step-text strong { color: #fff; }
 
 /* ── New logo (landscape) — auth login + loading screen ── */
 .auth-logo-img {
