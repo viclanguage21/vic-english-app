@@ -6669,3 +6669,15 @@ a.settings-big-btn:active {
   margin: 0 auto 24px;
   filter: drop-shadow(0 6px 24px rgba(201,147,58,0.4));
 }
+
+/* ── About modal — landscape logo fix ── */
+.about-logos {
+  flex-wrap: wrap !important;
+  gap: 16px !important;
+}
+.about-logos .about-logo-eq:first-child {
+  width: 160px !important;
+  height: auto !important;
+  border-radius: 12px !important;
+  filter: drop-shadow(0 4px 16px rgba(201,147,58,0.3));
+}
