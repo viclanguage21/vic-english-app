@@ -6549,6 +6549,14 @@ a.settings-big-btn:active {
   display: block !important;
 }
 
+/* ── Quick access grid — 2×2, full width, aligned with segments ── */
+.quick-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+  width: 100% !important;
+  margin-bottom: 4px !important;
+}
 /* ── Quick buttons — uniform height ── */
 .quick-btn {
   min-height: 52px !important;
@@ -6556,6 +6564,7 @@ a.settings-big-btn:active {
   align-items: center !important;
   justify-content: center !important;
   text-align: center !important;
+  width: 100% !important;
 }
 
 /* ── Ranking CTA button — larger ── */
