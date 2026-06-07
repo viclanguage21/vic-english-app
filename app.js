@@ -5502,7 +5502,9 @@ async function loadLeaderboard(mode, tabEl){
   if(podiumEl) podiumEl.style.opacity = "0.4";
 
   try{
-    const all = await getAllUsers();
+    let all = await getAllUsers();
+    // Fallback: at minimum include the current user so ranking is never fully empty
+    if(all.length===0 && userData) all = [userData];
     const sorted = [...all].sort((a,b)=>(b.xp||0)-(a.xp||0));
     const top10 = sorted.slice(0,10);
 

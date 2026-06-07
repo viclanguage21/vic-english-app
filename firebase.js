@@ -205,9 +205,22 @@ export async function saveProgress(uid, updates) {
 }
 
 export async function getAllUsers() {
-  const q = query(collection(db, "users"), orderBy("lastSeen", "desc"), limit(200));
-  const snap = await getDocs(q);
-  return snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+  // Try ordered query first; fall back to unordered if index/rules block it
+  try {
+    const q = query(collection(db, "users"), orderBy("lastSeen", "desc"), limit(200));
+    const snap = await getDocs(q);
+    return snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+  } catch(e) {
+    console.warn("getAllUsers ordered query failed, trying unordered:", e.code);
+    try {
+      const q2 = query(collection(db, "users"), limit(200));
+      const snap2 = await getDocs(q2);
+      return snap2.docs.map(d => ({ uid: d.id, ...d.data() }));
+    } catch(e2) {
+      console.error("getAllUsers failed entirely:", e2.code, e2.message);
+      return [];
+    }
+  }
 }
 
 export async function getUserById(uid) {
