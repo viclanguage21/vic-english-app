@@ -1724,8 +1724,8 @@ input { color: #ffffff !important; }
 
 /* ══ RANKING CTA BUTTON ════════════════════════════════ */
 @keyframes ranking-pulse {
-  0%,100%{ box-shadow:0 4px 20px rgba(201,147,58,0.55),0 0 0 0 rgba(201,147,58,0.35); }
-  50%{ box-shadow:0 6px 30px rgba(201,147,58,0.8),0 0 0 8px rgba(201,147,58,0); }
+  0%,100%{ box-shadow:0 4px 22px rgba(249,115,22,0.60),0 0 0 0 rgba(249,115,22,0.40); }
+  50%{ box-shadow:0 6px 36px rgba(249,115,22,0.90),0 0 0 10px rgba(249,115,22,0); }
 }
 @keyframes ranking-shine {
   0%{ transform:translateX(-100%) skewX(-20deg); }
@@ -1734,17 +1734,18 @@ input { color: #ffffff !important; }
 .ranking-cta-btn {
   position:relative; overflow:hidden;
   width:100%; border:none; border-radius:var(--r);
-  background:linear-gradient(135deg,#b8860b,#d4a017,#f0c040,#d4a017,#b8860b);
+  background:linear-gradient(135deg,#c2410c,#ea580c,#fb923c,#f97316,#ea580c,#c2410c);
   background-size:200% 100%;
   padding:14px 18px; margin-bottom:16px; cursor:pointer;
   animation:ranking-pulse 2.4s ease-in-out infinite;
   transition:transform 0.15s ease;
   font-family:inherit;
+  border:1px solid rgba(251,146,60,0.4);
 }
 .ranking-cta-btn:active { transform:scale(0.97); }
 .ranking-cta-shine {
   position:absolute; top:0; left:0; width:40%; height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.35),transparent);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.40),transparent);
   animation:ranking-shine 2.8s ease-in-out infinite;
   pointer-events:none;
 }
@@ -1752,15 +1753,15 @@ input { color: #ffffff !important; }
   display:flex; align-items:center; gap:12px;
   position:relative; z-index:1;
 }
-.ranking-cta-crown { font-size:26px; flex-shrink:0; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4)); }
+.ranking-cta-crown { font-size:26px; flex-shrink:0; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
 .ranking-cta-copy { flex:1; text-align:left; }
 .ranking-cta-title {
-  font-size:15px; font-weight:900; color:#1a0d2e;
-  text-shadow:0 1px 2px rgba(255,255,255,0.3);
+  font-size:15px; font-weight:900; color:#fff;
+  text-shadow:0 1px 4px rgba(0,0,0,0.35);
   line-height:1.2; margin-bottom:2px;
 }
-.ranking-cta-sub { font-size:12px; font-weight:600; color:rgba(26,13,46,0.72); }
-.ranking-cta-trophy { font-size:26px; flex-shrink:0; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4)); }
+.ranking-cta-sub { font-size:12px; font-weight:600; color:rgba(255,255,255,0.82); }
+.ranking-cta-trophy { font-size:26px; flex-shrink:0; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
 
 /* ══ PHASE PRO TAG ══════════════════════════════════════ */
 .phase-pro-tag {
