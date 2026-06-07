@@ -1969,11 +1969,14 @@ function renderGlossaryTerms(segId, filter){
           <span class="gloss-term-pt">${term.pt}</span>
         </div>
         <button class="gloss-speak-btn" title="Ouvir pronúncia">🔊</button>
+        <span class="gloss-chevron">▼</span>
       </div>
       <div class="gloss-term-detail">
-        <div class="gloss-example-en">"${term.exEN}"</div>
-        <div class="gloss-example-pt">"${term.exPT}"</div>
-        <button class="gloss-speak-example">🔊 Ouvir exemplo</button>
+        <div class="gloss-detail-inner">
+          <div class="gloss-example-en">"${term.exEN}"</div>
+          <div class="gloss-example-pt">"${term.exPT}"</div>
+          <button class="gloss-speak-example">🔊 Ouvir exemplo</button>
+        </div>
       </div>`;
     card.querySelector(".gloss-term-row").addEventListener("click",e=>{
       if(e.target.classList.contains("gloss-speak-btn")) return;
