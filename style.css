@@ -1290,7 +1290,7 @@ input { color: #ffffff !important; }
 .dlg-feedback.wrong   { background:var(--red-dim);   color:#fca5a5 !important; }
 
 /* ══ QUICK GRID — 4 buttons ════════════════════════════ */
-.quick-grid { grid-template-columns:1fr 1fr !important; }
+.quick-grid { display:grid !important; grid-template-columns:1fr 1fr !important; width:100% !important; }
 
 /* ══ VIC ENGLISH v11 — VISUAL REFRESH ══════════════════ */
 
