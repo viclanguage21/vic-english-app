@@ -1,6 +1,6 @@
 // app.js — VIC English v12 — Full fix
 
-import { auth, registerUser, loginUser, loginWithGoogle, loginAnonymous, logoutUser, onAuthChange, getUserData, saveProgress, getAllUsers, getUserById, OWNER_UID, registerFCMToken, onForegroundMessage } from "./firebase.js";
+import { auth, registerUser, loginUser, loginWithGoogle, loginAnonymous, logoutUser, onAuthChange, getUserData, saveProgress, getAllUsers, getUserById, OWNER_UID, registerFCMToken, onForegroundMessage, resetPassword } from "./firebase.js";
 import { I18N, SEG_NAMES, LEVEL_TIPS, LOADING_QUOTES, GLOSSARY, PRO_MESSAGES, BADGES, NOTIF_MESSAGES, MP_LINK } from "./constants.js";
 import { calcLevel, stripEmoji, cleanEnunciado, shuffle, vibrate } from "./utils.js";
 
@@ -5788,6 +5788,16 @@ function init(){
   document.getElementById("btn-register").addEventListener("click",handleRegister);
   document.getElementById("btn-google")?.addEventListener("click",handleGoogle);
   document.getElementById("btn-anon")?.addEventListener("click",handleAnon);
+  document.getElementById("btn-forgot-password")?.addEventListener("click",async()=>{
+    const email=document.getElementById("login-email").value.trim();
+    if(!email) return showAuthError("Digite seu email no campo acima primeiro.");
+    try{
+      await resetPassword(email);
+      showAuthError("✅ Email de redefinição enviado! Verifique sua caixa de entrada.");
+    }catch(e){
+      showAuthError(translateErr(e.code));
+    }
+  });
   document.getElementById("btn-logout").addEventListener("click",()=>{
     if(confirm("Tem certeza que quer sair? Você precisará fazer login novamente."))
       logoutUser();

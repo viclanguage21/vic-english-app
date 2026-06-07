@@ -14,6 +14,7 @@ import {
   updateProfile,
   browserLocalPersistence,
   setPersistence,
+  sendPasswordResetEmail,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
   getFirestore,
@@ -152,6 +153,10 @@ export async function loginAnonymous() {
 
 export async function logoutUser() {
   await signOut(auth);
+}
+
+export async function resetPassword(email) {
+  await sendPasswordResetEmail(auth, email);
 }
 
 export function onAuthChange(callback) {
