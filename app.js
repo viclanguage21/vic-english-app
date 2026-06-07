@@ -6032,10 +6032,8 @@ function init(){
   });
   document.getElementById("btn-force-refresh")?.addEventListener("click", forceRefresh);
 
-  document.getElementById("btn-reload-dashboard")?.addEventListener("click",async()=>{
+  async function hardReloadWithCacheClear(){
     vibrate(30);
-    showXpToast("🔄 Atualizando...");
-    // Clear service worker cache then hard reload
     try{
       if('serviceWorker' in navigator){
         const regs=await navigator.serviceWorker.getRegistrations();
@@ -6047,6 +6045,13 @@ function init(){
       }
     }catch(e){}
     setTimeout(()=>window.location.reload(true), 300);
+  }
+  document.getElementById("btn-reload-dashboard")?.addEventListener("click",()=>{
+    showXpToast("🔄 Atualizando...");
+    hardReloadWithCacheClear();
+  });
+  document.getElementById("btn-reload-auth")?.addEventListener("click",()=>{
+    hardReloadWithCacheClear();
   });
   document.getElementById("btn-start-now")?.addEventListener("click",()=>openSegmentPhases(currentSegmentId));
   document.getElementById("btn-goto-flashcards")?.addEventListener("click",openFlashcards);
