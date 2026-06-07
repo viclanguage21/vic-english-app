@@ -742,6 +742,8 @@ async function updateDailyProgress(type){
     userData.xp=(userData.xp||0)+bonusXP;
     await saveProgress(currentUser.uid,{xp:userData.xp,dailyProgress:dp});
     userData.dailyProgress=dp;
+    // Cancel the 7pm reminder since user already practiced
+    navigator.serviceWorker?.ready.then(reg => reg.active?.postMessage({type:"CANCEL_NOTIF"})).catch(()=>{});
     if(!alreadyDoneBeforeUpdate) showDailyComplete(bonusXP);
   } else {
     userData.dailyProgress=dp;

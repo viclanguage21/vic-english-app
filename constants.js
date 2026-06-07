@@ -1350,6 +1350,24 @@ export const NOTIF_MESSAGES = [
   {title:"🦇 \"Why do we fall? So we can learn to pick ourselves up.\"", body:"Não importa onde parou — volta agora e sobe seu streak! 🔥"},
   {title:"🔥 \"Power lies where men believe it lies.\"", body:"O poder do inglês tá onde você acreditar. Começa agora!"},
 
+  // ── Breaking Bad ─────────────────────────────────────────────────────────────
+  {title:"⚗️ Walter White: \"Say my name.\"", body:"No mercado de trabalho, faça seu nome ser lembrado. Inglês fluente! 💼"},
+  {title:"⚗️ Walter White: \"I am not in danger — I AM the danger.\"", body:"Você não tá em desvantagem no mercado, você É a ameaça. Pratica! 🔥"},
+  {title:"⚗️ Walter White: \"Stay out of my territory.\"", body:"Território de inglês fluente é seu agora. Defende! 🧪"},
+  {title:"⚗️ Saul Goodman: \"Better call Saul!\"", body:"Melhor abrir o VIC English. Agora. Missão te espera! ⚖️"},
+  {title:"⚗️ Jesse Pinkman: \"Yeah, science!\"", body:"A ciência do aprendizado diz: consistência vence talento. Bora treinar! 🔬"},
+  {title:"⚗️ Walter White: \"I did it for me. I liked it. And I was good at it.\"", body:"Aprenda inglês por você. Você vai ser bom nisso. Começa agora! ⚡"},
+
+  // ── Harry Potter ─────────────────────────────────────────────────────────────
+  {title:"🪄 Dumbledore: \"Happiness can be found in the darkest of times...\"", body:"...if one only remembers to turn on the light. Acende o app! 💡"},
+  {title:"🪄 Dumbledore: \"It does not do to dwell on dreams and forget to live.\"", body:"Para de só sonhar com o inglês fluente. Vive ele. Agora! 🌟"},
+  {title:"🪄 Dumbledore: \"Words are our most inexhaustible source of magic.\"", body:"Palavras em inglês são mágicas. Aprenda mais hoje! ✨"},
+  {title:"🪄 Hermione: \"It's LeviOsa, not LeviosA.\"", body:"Pronúncia importa. Vai treinar o modo Fala agora! 📢"},
+  {title:"🪄 Dobby: \"Dobby is free!\"", body:"Se liberte da barreira do idioma. Uma missão já muda tudo! 🏆"},
+  {title:"🪄 Snape: \"Always.\"", body:"Sempre praticando. Sempre evoluindo. Seu streak agradece! 🔥"},
+  {title:"🪄 Hagrid: \"You're a wizard, Harry!\"", body:"Você é um profissional bilíngue em formação. Falta só mais treino! 🧙"},
+  {title:"🪄 Sirius Black: \"The ones who love us never really leave us.\"", body:"E o inglês que você aprende nunca te deixa. Bora aprender mais! 📚"},
+
   // ── Harvey Specter — Suits ────────────────────────────────────────────────────
   {title:"⚖️ Harvey Specter: \"I don't have dreams, I have goals.\"", body:"Sua meta hoje: completar as missões. Simples assim. Bora! 💼"},
   {title:"⚖️ Harvey Specter: \"Win the moment right in front of you.\"", body:"O momento é agora. Uma missão. Sem desculpa. 🎯"},
@@ -1376,9 +1394,55 @@ export const NOTIF_MESSAGES = [
   {title:"💊 Morpheus: \"You have to let it all go, Neo. Fear, doubt, disbelief.\"", body:"Larga o medo de errar. O erro é o aprendizado. Abre o app! 🔵"},
   {title:"💊 Morpheus: \"I'm trying to free your mind.\"", body:"O inglês libera portas que você nem imagina. Uma missão hoje? 🧠"},
 
-  // ── Breaking Bad ─────────────────────────────────────────────────────────────
+  // ── Breaking Bad (mais) ───────────────────────────────────────────────────────
   {title:"⚗️ Walter White: \"I am the one who knocks.\"", body:"No mercado bilíngue de Santos, você bate na porta ou abre? Pratica! 💼"},
   {title:"⚗️ Jesse Pinkman: \"Yeah, science!\"", body:"A ciência do aprendizado diz: consistência > intensidade. Hoje conta! 🔬"},
+  {title:"⚗️ Walter White: \"Say my name.\"", body:"No mercado de trabalho, faça seu nome ser lembrado. Inglês fluente! 💼"},
+  {title:"⚗️ Walter White: \"I am not in danger — I AM the danger.\"", body:"Você não tá em desvantagem no mercado, você É a ameaça. Pratica! 🔥"},
+  {title:"⚗️ Walter White: \"Stay out of my territory.\"", body:"Território de inglês fluente é seu agora. Defende! 🧪"},
+  {title:"⚗️ Saul Goodman: \"Better call Saul!\"", body:"Melhor abrir o VIC English. Agora. Missão te espera! ⚖️"},
+  {title:"⚗️ Walter White: \"I did it for me. I liked it. And I was good at it.\"", body:"Aprenda inglês por você. Você vai ser bom nisso. Começa agora! ⚡"},
+
+  // ── Harry Potter ─────────────────────────────────────────────────────────────
+  {title:"🪄 Dumbledore: \"Happiness can be found in the darkest of times...\"", body:"...if one only remembers to turn on the light. Acende o app! 💡"},
+  {title:"🪄 Dumbledore: \"It does not do to dwell on dreams and forget to live.\"", body:"Para de só sonhar com o inglês fluente. Vive ele. Agora! 🌟"},
+  {title:"🪄 Dumbledore: \"Words are our most inexhaustible source of magic.\"", body:"Palavras em inglês são mágicas. Aprenda mais hoje! ✨"},
+  {title:"🪄 Hermione: \"It's LeviOsa, not LeviosA.\"", body:"Pronúncia importa. Vai treinar o modo Fala agora! 📢"},
+  {title:"🪄 Dobby: \"Dobby is free!\"", body:"Se liberte da barreira do idioma. Uma missão já muda tudo! 🏆"},
+  {title:"🪄 Snape: \"Always.\"", body:"Sempre praticando. Sempre evoluindo. Seu streak agradece! 🔥"},
+  {title:"🪄 Hagrid: \"You're a wizard, Harry!\"", body:"Você é um profissional bilíngue em formação. Falta só mais treino! 🧙"},
+  {title:"🪄 Sirius Black: \"The ones who love us never really leave us.\"", body:"E o inglês que você aprende nunca te deixa. Bora aprender mais! 📚"},
+
+  // ── Spider-Man / Marvel ───────────────────────────────────────────────────────
+  {title:"🕷️ Tony Stark: \"I am Iron Man.\"", body:"Seja o Iron Man do inglês. Nada te para! Abre o app! 💪"},
+  {title:"🕷️ Tony Stark: \"Part of the journey is the end.\"", body:"Mas você ainda tá no começo. Muito XP pela frente! 🚀"},
+  {title:"🕷️ Tony Stark: \"I love you 3000.\"", body:"Quantas palavras em inglês você já sabe? Aprende mais hoje! ❤️"},
+  {title:"🕷️ Captain America: \"I can do this all day.\"", body:"Treinar inglês? Todo dia. Você também pode. Bora! 🛡️"},
+  {title:"🕷️ T'Challa: \"Wakanda forever.\"", body:"Sua evolução, forever. Não para mais! 🌍"},
+  {title:"🕷️ Thanos: \"I am inevitable.\"", body:"O inglês fluente é inevitável pra quem pratica todo dia. Você é? ⚡"},
+  {title:"🕷️ Doctor Strange: \"Dormammu, I've come to bargain.\"", body:"Venha negociar com o futuro. Fale inglês. Missão aberta! 🔵"},
+  {title:"🕷️ Nick Fury: \"I'm gonna need a bigger team.\"", body:"No mercado de Santos, inglês te coloca no time certo! 🌍"},
+  {title:"🕷️ Black Widow: \"Whatever it takes.\"", body:"Inglês fluente: o que for preciso. Hoje é o dia! 🔥"},
+  {title:"🕷️ Miles Morales: \"Anyone can wear the mask.\"", body:"Qualquer um pode aprender inglês. E você já começou! 🕸️"},
+  {title:"🕷️ Thor: \"I'm still worthy.\"", body:"Você ainda merece o inglês fluente que você quer. Vai buscar! ⚡"},
+
+  // ── Músicas famosas ───────────────────────────────────────────────────────────
+  {title:"🎵 Eminem — Lose Yourself: \"You only get one shot.\"", body:"Não perde a chance de praticar hoje. Bora! 🎤"},
+  {title:"🎵 Survivor — Eye of the Tiger: \"Rising up, back on the streets...\"", body:"Sobe, bate no peito, e vai treinar! Você é o campeão! 🐯"},
+  {title:"🎵 Queen — We Are the Champions: \"No time for losers.\"", body:"Campeões praticam todo dia. Sua missão de hoje? 👑"},
+  {title:"🎵 Journey — Don't Stop Believin': \"Hold on to the feeling!\"", body:"Não para de acreditar no seu inglês. Bora treinar! 🎸"},
+  {title:"🎵 Katy Perry — Roar: \"I got the eye of the tiger, a fighter.\"", body:"Você tem espírito de lutador. Mostre no app hoje! 🦁"},
+  {title:"🎵 Kanye West — Stronger: \"That that don't kill me can only make me stronger.\"", body:"Cada erro em inglês te faz mais forte. Bora errar e aprender! 💪"},
+  {title:"🎵 Imagine Dragons — Believer: \"Pain! You made me a believer.\"", body:"Cada dificuldade te faz crer mais. Pratica hoje! 🔥"},
+  {title:"🎵 The Script — Hall of Fame: \"You could be the greatest.\"", body:"Bilíngues chegam ao topo do mercado de Santos! 🏆"},
+  {title:"🎵 Sia — Titanium: \"I am titanium.\"", body:"Sua consistência é de titânio. Mantém o streak! 🔥"},
+  {title:"🎵 Dua Lipa — Levitating: \"I believe that we're gonna fly away.\"", body:"VIC English te eleva. Bora decolar hoje! 🚀"},
+  {title:"🎵 Taylor Swift — Shake It Off: \"The haters gonna hate, hate, hate.\"", body:"Ignora o que te trava e pratica. Shake it off! ✨"},
+  {title:"🎵 Lady Gaga — Born This Way: \"You were born to be brave.\"", body:"Você nasceu pra aprender idiomas. É ciência! Bora! 🎤"},
+  {title:"🎵 Frank Sinatra — My Way: \"I did it my way.\"", body:"Aprende inglês do seu jeito, no seu ritmo. Mas aprende! 🎷"},
+  {title:"🎵 Coldplay — A Sky Full of Stars: \"'Cause you're a sky full of stars.\"", body:"Você tem potencial enorme. Brilha mais com inglês! ⭐"},
+  {title:"🎵 Alicia Keys — Empire State of Mind: \"Concrete jungle where dreams are made of.\"", body:"No Porto de Santos, as oportunidades são feitas de inglês! 🌆"},
+  {title:"🎵 Queen — Don't Stop Me Now: \"I'm having such a good time!\"", body:"Missões VIC assim: um baile de aprendizado. Vem! 🎉"},
 
   // ── Game of Thrones ───────────────────────────────────────────────────────────
   {title:"🐉 Tyrion Lannister: \"A mind needs books as a sword needs a whetstone.\"", body:"Afie a sua mente com inglês. Missão rápida hoje! 📚"},

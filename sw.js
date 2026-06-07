@@ -1,10 +1,7 @@
-// Service Worker — VIC English PWA v3 — FCM + Push
-// IMPORTANTE: Firebase Messaging precisa do importScripts abaixo
-
+// Service Worker — VIC English PWA v4 — FCM + Persistent Push
 importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js");
 
-// Mesma config do firebase.js
 firebase.initializeApp({
   apiKey: "AIzaSyD1wmTcVhOFiR8xY3jBDb-mJbd1mDRuCgU",
   authDomain: "victor-app-aef3c.firebaseapp.com",
@@ -17,6 +14,9 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 const CACHE = "vic-english-v5";
+const NOTIF_CACHE = "vic-notif-v1";         // separate cache — never deleted on SW update
+const NOTIF_KEY   = "/vic-pending-notif";   // synthetic key for the scheduled payload
+
 const ASSETS = [
   "/", "/index.html", "/style.css", "/app.js", "/data.js",
   "/firebase.js", "/sounds.js", "/vic_logo.png", "/vic_lamp.png",
@@ -31,15 +31,55 @@ self.addEventListener("install", e => {
   self.skipWaiting();
 });
 
-// ── ACTIVATE ──────────────────────────────────────────────────────────────────
+// ── ACTIVATE — keep NOTIF_CACHE intact across SW updates ─────────────────────
 self.addEventListener("activate", e => {
   e.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+      Promise.all(
+        keys
+          .filter(k => k !== CACHE && k !== NOTIF_CACHE)
+          .map(k => caches.delete(k))
+      )
     )
   );
   self.clients.claim();
 });
+
+// ── PERSISTENT NOTIF HELPERS ──────────────────────────────────────────────────
+// Stores scheduled notification in Cache Storage so it survives SW termination.
+// Checked on every fetch and on every push event — fires as soon as the SW
+// wakes up for any reason after the target time.
+
+async function savePendingNotif(fireAt, title, body) {
+  const c = await caches.open(NOTIF_CACHE);
+  await c.put(
+    NOTIF_KEY,
+    new Response(JSON.stringify({ fireAt, title, body }), {
+      headers: { "Content-Type": "application/json" },
+    })
+  );
+}
+
+async function checkPendingNotif() {
+  try {
+    const c = await caches.open(NOTIF_CACHE);
+    const r = await c.match(NOTIF_KEY);
+    if (!r) return;
+    const data = await r.json();
+    if (Date.now() >= data.fireAt) {
+      await c.delete(NOTIF_KEY);   // fire only once
+      await self.registration.showNotification(data.title, {
+        body:  data.body,
+        icon:  "/logo_full_2.png",
+        badge: "/vic_lamp.png",
+        tag:   "vic-scheduled-" + Date.now(),
+        requireInteraction: false,
+        vibrate: [100, 50, 100],
+        data: { url: "/" },
+      });
+    }
+  } catch (_) {}
+}
 
 // ── FETCH — network-first with 4s timeout ─────────────────────────────────────
 const FETCH_TIMEOUT = 4000;
@@ -54,6 +94,11 @@ function fetchWithTimeout(request) {
 }
 
 self.addEventListener("fetch", e => {
+  // Every fetch wakes the SW — use it to check if a notification is due.
+  // This fires the 7pm reminder even when the app was closed and re-opened later,
+  // or when any background network request restarts the SW.
+  checkPendingNotif();
+
   if (e.request.url.includes("firebase") ||
       e.request.url.includes("google") ||
       e.request.url.includes("gstatic") ||
@@ -74,9 +119,9 @@ self.addEventListener("fetch", e => {
 });
 
 // ── FCM: receber push com app FECHADO (background) ────────────────────────────
-// O Firebase Messaging SDK cuida disso automaticamente via messaging.onBackgroundMessage
 messaging.onBackgroundMessage(payload => {
-  console.log("📩 Push recebido em background:", payload);
+  // FCM push also wakes the SW — check pending local notif too
+  checkPendingNotif();
   const { title = "VIC English 📚", body = "Hora de praticar!", icon } = payload.notification || {};
   return self.registration.showNotification(title, {
     body,
@@ -102,18 +147,35 @@ self.addEventListener("notificationclick", e => {
   );
 });
 
-// ── NOTIFICAÇÕES LOCAIS AGENDADAS (via postMessage do app) ────────────────────
+// ── NOTIFICAÇÕES AGENDADAS (via postMessage do app) ───────────────────────────
+// Dual strategy: setTimeout fires if SW stays alive; Cache fires on next SW wake.
 self.addEventListener("message", e => {
   if (e.data?.type === "SCHEDULE_NOTIF") {
     const { delay, title, body } = e.data;
-    setTimeout(() => {
+    const fireAt = Date.now() + delay;
+
+    // 1) Persist to Cache Storage — survives SW termination
+    savePendingNotif(fireAt, title, body);
+
+    // 2) setTimeout — fires immediately if SW is still alive at target time
+    setTimeout(async () => {
+      // Clear Cache so the check on fetch doesn't double-fire
+      const c = await caches.open(NOTIF_CACHE);
+      await c.delete(NOTIF_KEY);
       self.registration.showNotification(title, {
         body,
-        icon: "/logo_full_2.png",
+        icon:  "/logo_full_2.png",
         badge: "/vic_lamp.png",
-        tag: "vic-scheduled-" + Date.now(),
+        tag:   "vic-scheduled-" + Date.now(),
+        requireInteraction: false,
         vibrate: [100, 50, 100],
+        data: { url: "/" },
       });
     }, delay);
+  }
+
+  // Cancel a scheduled notification (e.g. user completed all missions after scheduling)
+  if (e.data?.type === "CANCEL_NOTIF") {
+    caches.open(NOTIF_CACHE).then(c => c.delete(NOTIF_KEY));
   }
 });
