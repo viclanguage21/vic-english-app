@@ -725,9 +725,15 @@ async function updateDailyProgress(type){
   // Check if missions were ALREADY all done before this update (carry-forward false positive)
   const alreadyDoneBeforeUpdate=!wasComplete&&todayMissions.every(dm=>(dp[dm.key]||0)>=(dm.target));
 
-  if(type==="exercise") dp.dailyExercises=Math.min((dp.dailyExercises||0)+1,99);
-  if(type==="perfect")  dp.dailyPerfect  =Math.min((dp.dailyPerfect||0)+1,  99);
-  if(type==="maritime") dp.dailyMaritime =Math.min((dp.dailyMaritime||0)+1,  99);
+  if(type==="exercise")  dp.dailyExercises = Math.min((dp.dailyExercises||0)+1, 99);
+  if(type==="perfect")   dp.dailyPerfect   = Math.min((dp.dailyPerfect||0)+1,   99);
+  if(type==="segment")   dp.dailySegment   = Math.min((dp.dailySegment||0)+1,   99);
+  if(type==="flashcard") dp.dailyFlashcard = Math.min((dp.dailyFlashcard||0)+1, 99);
+  if(type==="memory")    dp.dailyMemory    = Math.min((dp.dailyMemory||0)+1,    99);
+  if(type==="dialogue")  dp.dailyDialogue  = Math.min((dp.dailyDialogue||0)+1,  99);
+  if(type==="writing")   dp.dailyWriting   = Math.min((dp.dailyWriting||0)+1,   99);
+  if(type==="voice")     dp.dailyVoice     = Math.min((dp.dailyVoice||0)+1,     99);
+  if(type==="streak")    dp.dailyStreak    = 5;
 
   const allDone=todayMissions.every(dm=>(dp[dm.key]||0)>=(dm.target));
   if(allDone&&!wasComplete){
@@ -2418,10 +2424,10 @@ async function autoAdvance(score){
   const xpGain=10; const newXp=(userData.xp||0)+xpGain;
   userData.xp=newXp; showXpToast(`+${xpGain} XP`);
   trackDailyXP(xpGain);
-  trackAnswer(score>=5);
+  trackAnswer(score>=5, true);
   await updateDailyProgress("exercise");
   if(score===10) await updateDailyProgress("perfect");
-  if(currentSegmentId==="maritimo") await updateDailyProgress("maritime");
+  await updateDailyProgress("segment");
   if(currentPhraseIndex<total-1){
     currentPhraseIndex++;
     await saveProgress(currentUser.uid,{xp:newXp,currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:currentPhraseIndex}});
@@ -2934,7 +2940,7 @@ window.flipCard=()=>{const fc=document.getElementById("flashcard");fc.classList.
 window.speakFC=()=>SoundFX.speakEN(fcCards[fcIndex].en);
 window.speakFCSlow=()=>SoundFX.speakEN(fcCards[fcIndex].en,0.5);
 window.speakFCPT=()=>SoundFX.speakPT(fcCards[fcIndex].pt);
-function fcRight(){SoundFX.correct();fcXP+=10;fcIndex++;renderFlashcard();}
+function fcRight(){SoundFX.correct();fcXP+=10;fcIndex++;renderFlashcard();updateDailyProgress("flashcard");}
 function fcWrong(){SoundFX.wrong();fcCards.push(fcCards[fcIndex]);fcIndex++;renderFlashcard();}
 
 // ── FREE MEMORY GAME ──────────────────────────────────────────────────────────
@@ -3087,7 +3093,7 @@ function handleFreeMemCard(div,total){
       a.classList.add("matched");b.classList.add("matched");SoundFX.correct();freeMemMatched++;freeMemXP+=10;
       document.getElementById("mem-score-display").textContent=`XP: ${freeMemXP}`;
       freeMemSelected=[];
-      if(freeMemMatched===total){showXpToast(`🧠 +${freeMemXP} XP`);if(currentUser)saveProgress(currentUser.uid,{xp:(userData.xp||0)+freeMemXP}).then(()=>{userData.xp=(userData.xp||0)+freeMemXP;});setTimeout(()=>openMemoryFree(),1500);}
+      if(freeMemMatched===total){showXpToast(`🧠 +${freeMemXP} XP`);if(currentUser)saveProgress(currentUser.uid,{xp:(userData.xp||0)+freeMemXP}).then(()=>{userData.xp=(userData.xp||0)+freeMemXP;});updateDailyProgress("memory");setTimeout(()=>openMemoryFree(),1500);}
     } else {SoundFX.wrong();setTimeout(()=>{a.classList.remove("flipped");b.classList.remove("flipped");freeMemSelected=[];},900);}
   }
 }
@@ -3403,6 +3409,7 @@ function showDlgResult(){
   document.getElementById("dlg-result-msg").textContent=pct>=80?"Conversa fluente! 🌟":pct>=50?"Bom trabalho! 👍":"Pratique mais! 💪";
   showXpToast(`💬 +${dlgScore} XP`);
   if(currentUser)saveProgress(currentUser.uid,{xp:(userData.xp||0)+dlgScore}).then(()=>{userData.xp=(userData.xp||0)+dlgScore;});
+  updateDailyProgress("dialogue");
   SoundFX.complete();
 }
 
@@ -5039,6 +5046,7 @@ Tips must be specific to the student's actual text, not generic advice.`
     userData.xp=(userData.xp||0)+xpGain;
     showXpToast(`✍️ +${xpGain} XP`);
     if(currentUser) saveProgress(currentUser.uid,{xp:userData.xp});
+    updateDailyProgress("writing");
     btn.textContent="✅ Corrigido!";
     document.getElementById("writing-feedback").scrollIntoView({behavior:"smooth",block:"start"});
 
@@ -5129,17 +5137,27 @@ function showBadgeUnlock(badge){
   setTimeout(()=>overlay.remove(), 6000);
 }
 
+let _streakMissionTriggered = false;
 function trackAnswer(isCorrect, isVoice=false){
   _sessionStats.totalAnswers++;
   if(isCorrect){
     _sessionStats.perfectAnswers++;
     _sessionStats.answerStreak = (userData?.answerStreak||0)+1;
     userData.answerStreak = _sessionStats.answerStreak;
+    // Streak mission: 5 consecutive correct answers
+    if(userData.answerStreak >= 5 && !_streakMissionTriggered){
+      _streakMissionTriggered = true;
+      updateDailyProgress("streak");
+    }
   } else {
     _sessionStats.retries++;
     userData.answerStreak = 0;
+    _streakMissionTriggered = false;
   }
-  if(isVoice) _sessionStats.voiceUsed++;
+  if(isVoice){
+    _sessionStats.voiceUsed++;
+    updateDailyProgress("voice");
+  }
   // Save stats periodically
   if(_sessionStats.totalAnswers%5===0&&currentUser){
     saveProgress(currentUser.uid,{
