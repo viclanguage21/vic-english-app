@@ -700,7 +700,7 @@ const DAILY_DEF = getDailyMissions("maritimo"); // fallback inicial
 function getTodayKey(){ return new Date().toISOString().slice(0,10); }
 function getDailyProgress(){
   const today=getTodayKey();
-  const saved=userData.dailyProgress||{};
+  const saved=(userData?.dailyProgress)||{};
   // Only reset if it's a new day
   if(saved.date!==today){
     // Keep missions if not completed yesterday (they persist)
@@ -752,7 +752,7 @@ function renderDailyMissions(){
   const container=document.getElementById("daily-missions-list"); if(!container) return;
   container.innerHTML="";
   let totalDone=0,totalTarget=0;
-  const todayMissions=getDailyDef();
+  const todayMissions=getDailyDef().filter(Boolean);
   todayMissions.forEach(dm=>{
     const current=dp[dm.key]||0, done=current>=dm.target;
     totalDone+=Math.min(current,dm.target); totalTarget+=dm.target;
@@ -809,8 +809,11 @@ async function handleRegister(){
     showAuthError("Tempo esgotado. Verifique sua internet e tente novamente.");
   }, 12000);
   try{
-    await registerUser(email,pw,name,username);
-    if(_regAvatar) _setCfg("avatar", _regAvatar);
+    const newUser = await registerUser(email,pw,name,username);
+    if(_regAvatar){
+      _setCfg("avatar", _regAvatar);
+      saveProgress(newUser.uid, {avatar: _regAvatar}).catch(()=>{});
+    }
     localStorage.setItem("vic_last_email",email);
     clearTimeout(timeout);
     // _handleAuth will be called automatically by onAuthChange
@@ -1541,6 +1544,13 @@ async function loadDashboard(user){
     saveProgress(user.uid, { avatar: user.photoURL }).catch(()=>{});
   }
 
+  // Sync local avatar to Firestore if it's missing there (for existing users)
+  const localAvatar = _cfg.avatar || localStorage.getItem("vic_avatar");
+  if(localAvatar && !userData.avatar){
+    userData.avatar = localAvatar;
+    saveProgress(user.uid, { avatar: localAvatar }).catch(()=>{});
+  }
+
   // Always proceed to dashboard — never block the user
   try{ await updateStreak(); }catch(e){ console.warn("streak err:", e.message); }
 
@@ -1552,6 +1562,8 @@ async function loadDashboard(user){
   }
 
   try{ renderDashboard(); }catch(e){ console.error("renderDashboard error:", e.message, e); }
+  // Guarantee daily missions render even if renderDashboard's try-catch swallowed an error
+  try{ renderDailyMissions(); }catch(e){ console.error("renderDailyMissions error:", e.message, e); }
   showView("view-dashboard");
   hideAuthLoading();
 
