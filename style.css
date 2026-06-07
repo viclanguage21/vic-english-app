@@ -6817,12 +6817,35 @@ a.settings-big-btn:active {
   filter: drop-shadow(0 6px 24px rgba(201,147,58,0.35)) !important;
 }
 .auth-loading-logo {
-  width: 200px;
-  height: auto;
-  border-radius: 14px;
-  display: block;
-  margin: 0 auto 24px;
-  filter: drop-shadow(0 6px 24px rgba(201,147,58,0.4));
+  width: 200px !important;
+  height: 200px !important;
+  object-fit: contain !important;
+  border-radius: 28px !important;
+  display: block !important;
+  margin: 0 auto 20px !important;
+  filter: drop-shadow(0 0 30px rgba(201,147,58,0.55)) drop-shadow(0 0 60px rgba(124,58,237,0.35)) !important;
+  -webkit-mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 60%, transparent 100%) !important;
+  mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 60%, transparent 100%) !important;
+}
+.auth-loading-powered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 28px;
+  opacity: 0.55;
+}
+.auth-loading-powered span {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7) !important;
+  letter-spacing: 0.3px;
+}
+.auth-loading-lamp {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  opacity: 0.8;
 }
 
 /* ── About modal — landscape logo fix ── */
