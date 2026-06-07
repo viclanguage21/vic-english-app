@@ -6618,3 +6618,43 @@ a.settings-big-btn:active {
 .ob-install-divider {
   height: 1px; background: rgba(255,255,255,0.08); margin: 12px 0;
 }
+
+/* ── Install slide photo steps ── */
+.ob-install-photos {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+  justify-content: center;
+  align-items: flex-start;
+}
+.ob-install-photo-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  max-width: 100px;
+}
+.ob-install-badge {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#c9933a,#e4b45c);
+  color: #1a0d2e;
+  font-size: 13px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.ob-install-photo {
+  width: 100%;
+  border-radius: 10px;
+  border: 1.5px solid rgba(201,147,58,0.30);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  object-fit: cover;
+}
+.ob-install-caption {
+  font-size: 11px;
+  color: rgba(255,255,255,0.70);
+  text-align: center;
+  line-height: 1.4;
+}
+.ob-install-caption strong { color: #fff; }
