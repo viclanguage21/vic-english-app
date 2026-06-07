@@ -761,11 +761,17 @@ function renderDailyMissions(){
     div.className=`daily-mission-item${done?" completed":""}`;
     div.innerHTML=`<span class="dmi-icon">${dm.icon}</span><div class="dmi-text"><div class="dmi-title">${dm.en}</div><div class="dmi-sub">${dm.pt}</div><div class="dmi-bar-wrap"><div class="dmi-bar" style="width:${pct}%"></div></div><div class="dmi-count">${current}/${dm.target}</div></div><span class="dmi-xp">${done?"✅":"+"+dm.xp+" XP"}</span>`;
     div.addEventListener("click",()=>{
-      if(done) return; // already completed
-      // Go to the segment phases so person can choose mission
-      currentSegmentId=dm.segmentId||"maritimo";
-      if(dm.phaseId) currentPhaseId=dm.phaseId;
-      openSegmentPhases(dm.segmentId||"maritimo");
+      if(done) return;
+      vibrate(22);
+      // Route to the right destination based on mission type
+      if(dm.key==="dailyFlashcard") { showView("view-flashcards"); initFlashcards && initFlashcards(); return; }
+      if(dm.key==="dailyMemory")    { showView("view-memory-free"); initMemoryFree && initMemoryFree(); return; }
+      if(dm.key==="dailyDialogue")  { showView("view-dialogue"); return; }
+      if(dm.key==="dailyWriting")   { showView("view-writing"); return; }
+      // For segment/exercise missions — go to segment phases
+      const seg = dm.segmentId || userData?.diagnosisAnswers?.segment || currentSegmentId || "maritimo";
+      currentSegmentId = seg;
+      openSegmentPhases(seg);
     });
     container.appendChild(div);
   });
@@ -5025,8 +5031,8 @@ function checkBadges(){
   userData.badges = updated;
   if(currentUser) saveProgress(currentUser.uid, {badges:updated});
 
-  // Show first new badge (queue others)
-  newBadges.forEach((b,i) => setTimeout(()=>showBadgeUnlock(b), i*2500));
+  // Show only 1 badge per session — avoid badge flooding
+  showBadgeUnlock(newBadges[0]);
 }
 
 function showBadgeUnlock(badge){

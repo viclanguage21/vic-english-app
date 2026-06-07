@@ -6417,3 +6417,138 @@ body.light-mode .gloss-search{background:rgba(0,0,0,.04);color:#1a1a2e;}
 body.light-mode .gloss-search::placeholder{color:#999;}
 body.light-mode .gloss-term-card{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.1);}
 body.light-mode .gloss-term-card.open{border-color:#0d7c72;}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   PENDING FIXES — reload, streak, header, banners, press-down, quick access
+══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Reload button — fixed ABOVE contact float ── */
+.btn-reload {
+  position: fixed !important;
+  bottom: 84px !important; right: 16px !important;
+  top: auto !important;
+  width: 46px !important; height: 46px !important;
+  background: rgba(124,58,237,0.25) !important;
+  border: 1.5px solid rgba(124,58,237,0.45) !important;
+  border-radius: 50% !important;
+  color: #c4b5fd !important;
+  font-size: 20px !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  z-index: 51 !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3) !important;
+}
+.btn-reload:hover { background: var(--p) !important; transform: rotate(180deg) !important; color: #fff !important; }
+
+/* ── Contact float button — stays at bottom ── */
+.contact-float {
+  bottom: 20px !important; right: 16px !important;
+  z-index: 40 !important;
+}
+
+/* ── Contact float menu — moves up above reload button ── */
+.contact-float-menu {
+  bottom: 148px !important; right: 16px !important;
+  z-index: 45 !important;
+}
+
+/* ── Streak card fire glow ── */
+#stat-streak-card {
+  background: linear-gradient(145deg, #3d1a00, #5c2800) !important;
+  border-color: rgba(249,115,22,0.45) !important;
+  animation: streakFire 2.5s ease-in-out infinite !important;
+}
+@keyframes streakFire {
+  0%,100% { box-shadow: 0 0 8px rgba(249,115,22,0.3), 0 0 0 0 rgba(249,115,22,0); }
+  50%      { box-shadow: 0 0 22px rgba(249,115,22,0.6), 0 0 36px rgba(234,88,12,0.25); }
+}
+#stat-streak-card .stat-label { color: #fb923c !important; }
+#stat-streak-card .stat-value { color: #fdba74 !important; }
+
+/* ── Global button press-down ── */
+button:not(.btn-logout-icon):not(.btn-reload):active,
+a.settings-big-btn:active {
+  transform: scale(0.95) translateY(1px) !important;
+  transition: transform 0.06s ease !important;
+}
+
+/* ── Header: bigger avatar, bolder logout ── */
+.dash-avatar-wrap {
+  width: 52px !important; height: 52px !important;
+  font-size: 24px !important;
+  border: 2px solid rgba(201,147,58,0.5) !important;
+}
+.dash-avatar-edit {
+  width: 20px !important; height: 20px !important;
+  font-size: 12px !important;
+  bottom: -3px !important; right: -3px !important;
+}
+.btn-logout-icon {
+  background: rgba(239,68,68,0.30) !important;
+  border: 1.5px solid rgba(239,68,68,0.55) !important;
+  color: #fca5a5 !important;
+  width: 36px !important; height: 36px !important;
+}
+.dash-logo {
+  gap: 6px !important;
+}
+.dash-date {
+  margin-left: 0 !important;
+  text-align: left !important;
+}
+
+/* ── Grammar/Writing banners — ensure full width and comfortable height ── */
+.grammar-core-banner,
+.writing-core-banner {
+  width: 100% !important;
+  min-height: 80px !important;
+  box-sizing: border-box !important;
+}
+.grammar-core-banner .gc-title,
+.writing-core-banner .gc-title {
+  font-size: 17px !important;
+}
+.grammar-core-banner .gc-sub,
+.writing-core-banner .gc-sub {
+  font-size: 12px !important;
+}
+
+/* ── Quick access section label — always visible ── */
+#dash-quick-label.section-label {
+  opacity: 1 !important;
+  color: rgba(255,255,255,0.75) !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  margin-top: 24px !important;
+  margin-bottom: 12px !important;
+  display: block !important;
+}
+
+/* ── Quick buttons — uniform height ── */
+.quick-btn {
+  min-height: 52px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+/* ── Ranking CTA button — larger ── */
+.ranking-cta-btn {
+  width: 100% !important;
+  padding: 18px 24px !important;
+  margin: 14px 0 !important;
+}
+.ranking-cta-title {
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.3px !important;
+}
+.ranking-cta-sub {
+  font-size: 13px !important;
+}
+.ranking-cta-crown,
+.ranking-cta-trophy {
+  font-size: 32px !important;
+}
