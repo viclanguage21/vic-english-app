@@ -1343,28 +1343,91 @@ export const BADGES = [
 ];
 
 export const NOTIF_MESSAGES = [
-  // Movie/character quotes + CTA
+  // ── Clássicos de filmes/séries ────────────────────────────────────────────────
   {title:"🕷️ \"With great power comes great responsibility.\"", body:"O poder do inglês te espera. Abre uma missão agora!"},
   {title:"⚡ \"May the Force be with you.\"", body:"Que a força do inglês esteja com você. Um exercício hoje?"},
   {title:"🪄 \"It is our choices that show what we truly are.\"", body:"Escolha praticar agora. Tem um badge esperando por você! 🏆"},
   {title:"🦇 \"Why do we fall? So we can learn to pick ourselves up.\"", body:"Não importa onde parou — volta agora e sobe seu streak! 🔥"},
+  {title:"🔥 \"Power lies where men believe it lies.\"", body:"O poder do inglês tá onde você acreditar. Começa agora!"},
+
+  // ── Harvey Specter — Suits ────────────────────────────────────────────────────
+  {title:"⚖️ Harvey Specter: \"I don't have dreams, I have goals.\"", body:"Sua meta hoje: completar as missões. Simples assim. Bora! 💼"},
+  {title:"⚖️ Harvey Specter: \"Win the moment right in front of you.\"", body:"O momento é agora. Uma missão. Sem desculpa. 🎯"},
+  {title:"⚖️ Harvey Specter: \"You always have a choice.\"", body:"Pratica ou fica pra trás. O mercado de Santos não espera. 📈"},
+  {title:"⚖️ Harvey Specter: \"Anyone can do my job, but no one can be me.\"", body:"Mas você precisa de inglês pra chegar lá. Hoje é o dia! 🌍"},
+
+  // ── Rocky Balboa ─────────────────────────────────────────────────────────────
+  {title:"🥊 Rocky: \"It ain't about how hard you hit.\"", body:"É sobre continuar depois de levar. Bora treinar inglês! 💪"},
+  {title:"🥊 Rocky: \"Going in one more round when you don't think you can.\"", body:"Mais uma missão. Só mais uma. Você consegue! 🔥"},
+
+  // ── Naruto ───────────────────────────────────────────────────────────────────
+  {title:"🍥 Naruto: \"I'm not gonna run away, I never go back on my word!\"", body:"Você prometeu aprender inglês. Hora de honrar isso. Vai! 🎯"},
+  {title:"🍥 Naruto: \"Hard work is worthless for those that don't believe in themselves.\"", body:"Você acredita. E tá aqui. Continua! Missão te espera. 💛"},
+
+  // ── The Wolf of Wall Street ───────────────────────────────────────────────────
+  {title:"💰 Jordan Belfort: \"The only thing between you and your goal is the story you tell yourself.\"", body:"Para de se enrolar. Inglês fluente começa agora. 🚀"},
+  {title:"💰 Wolf of Wall Street: \"Sell me this pen.\"", body:"No mercado de Santos, inglês é a caneta que fecha o deal. Pratica! 🖊️"},
+
+  // ── The Pursuit of Happyness ──────────────────────────────────────────────────
+  {title:"🏃 Will Smith: \"Don't ever let somebody tell you, you can't do something.\"", body:"Nem você mesmo. Inglês fluente tá no seu alcance. Bora! 🌟"},
+  {title:"🏃 Chris Gardner: \"You want something? Go get it. Period.\"", body:"Vai buscar o inglês que você quer. Missão aberta. 🎯"},
+
+  // ── Matrix / Morpheus ─────────────────────────────────────────────────────────
+  {title:"💊 Morpheus: \"You have to let it all go, Neo. Fear, doubt, disbelief.\"", body:"Larga o medo de errar. O erro é o aprendizado. Abre o app! 🔵"},
+  {title:"💊 Morpheus: \"I'm trying to free your mind.\"", body:"O inglês libera portas que você nem imagina. Uma missão hoje? 🧠"},
+
+  // ── Breaking Bad ─────────────────────────────────────────────────────────────
+  {title:"⚗️ Walter White: \"I am the one who knocks.\"", body:"No mercado bilíngue de Santos, você bate na porta ou abre? Pratica! 💼"},
+  {title:"⚗️ Jesse Pinkman: \"Yeah, science!\"", body:"A ciência do aprendizado diz: consistência > intensidade. Hoje conta! 🔬"},
+
+  // ── Game of Thrones ───────────────────────────────────────────────────────────
+  {title:"🐉 Tyrion Lannister: \"A mind needs books as a sword needs a whetstone.\"", body:"Afie a sua mente com inglês. Missão rápida hoje! 📚"},
+  {title:"🐉 Jon Snow: \"The night is dark and full of terrors.\"", body:"Mas o dia de amanhã no mercado é cheio de oportunidades. Pratica! ⚔️"},
+  {title:"🦁 Cersei: \"When you play the game of thrones, you win or you die.\"", body:"No mercado de trabalho, ou você se qualifica ou perde espaço. Vai! 👑"},
+
+  // ── Interstellar ─────────────────────────────────────────────────────────────
+  {title:"🚀 Cooper: \"We used to look up at the sky and wonder.\"", body:"Olha pro seu futuro. O inglês leva você lá. Uma missão agora! 🌌"},
+  {title:"🌌 Dr. Brand: \"Love is the one thing we're capable of that transcends time.\"", body:"E consistência também. Mantém o streak! 🔥"},
+
+  // ── Gladiador ────────────────────────────────────────────────────────────────
+  {title:"⚔️ Maximus: \"Are you not entertained?\"", body:"Lições VIC são mais divertidas que reunião. Abre o app! 🏟️"},
+  {title:"⚔️ Maximus: \"What we do in life echoes in eternity.\"", body:"O inglês que você aprende hoje ressoa pra sempre. Bora! 🌟"},
+
+  // ── Friends ──────────────────────────────────────────────────────────────────
+  {title:"☕ Chandler Bing: \"Could this BE any more important?\"", body:"Inglês no Porto de Santos? Extremamente importante. Vai! 🚢"},
+  {title:"☕ Joey Tribbiani: \"How you doin'?\"", body:"Bem? Então tá ótimo pra fazer uma missão! Bora aprender mais! 😄"},
+
+  // ── Mercado de Santos — specific ──────────────────────────────────────────────
+  {title:"🚢 Porto de Santos é o maior da América Latina.", body:"Quem opera nele fala inglês. Você vai ser essa pessoa! 📦"},
+  {title:"🏭 Santos tem +200 empresas de comércio exterior.", body:"Todas pedem inglês no currículo. Bora garantir o seu! 💼"},
+  {title:"🌍 Exportação, logística, shipping — tudo em inglês.", body:"Você tá aprendendo a língua do seu mercado. Continua! 📈"},
+  {title:"⚓ Do porto de Santos pro mundo todo.", body:"O inglês é o passaporte. Você já tá no caminho certo! 🌐"},
+  {title:"📦 Importação/exportação na Baixada Santista cresce todo ano.", body:"Profissionais bilíngues são os primeiros contratados. Pratica! 🚀"},
+  {title:"🏢 Multinacional em Santos pediu inglês intermediário.", body:"Você já passou disso. Umas missões a mais e você é fluente! 🎯"},
+
+  // ── Desafios diretos ──────────────────────────────────────────────────────────
+  {title:"🧪 Desafio: você aguenta 5 acertos seguidos?", body:"Streak de respostas = badge de performance. Vem tentar! 🏅"},
+  {title:"🎮 Você consegue zerar o jogo de memória hoje?", body:"Sem olhar dica. Força bruta. Você é capaz? Abre o app! 🧠"},
+  {title:"🔥 Sua sequência de dias tá em risco.", body:"Um treino agora e o streak sobrevive. Não deixa morrer! ⏱️"},
+  {title:"⏱️ Quanto tempo você leva pra completar 3 missões?", body:"Cronometre. Depois bate o próprio recorde. Desafio aceito? 🏆"},
+  {title:"📊 Você sabe mais inglês do que imagina.", body:"Prova isso pra mim. Abre o flashcard e vai até o fim! 🃏"},
+  {title:"🤔 Você lembra o que aprendeu ontem?", body:"Testem a memória. Abre o modo Memória e descobre! 🧩"},
+  {title:"💬 E se você tivesse uma entrevista em inglês amanhã?", body:"Pratica o diálogo agora. Melhor prevenir! 🎤"},
+  {title:"📝 Alguém no Porto de Santos abriu vaga hoje exigindo inglês.", body:"Candidato bilíngue que praticou ontem leva vantagem. Vai! 💼"},
+
+  // ── Motivacionais curtos ──────────────────────────────────────────────────────
   {title:"💡 \"Knowledge is power.\"", body:"E o inglês é a chave. Bora aprender algo novo hoje?"},
   {title:"🧠 \"The mind is everything.\"", body:"Treine a sua. Uma missão agora e você sai na frente! 🎯"},
   {title:"🌟 \"You become what you believe.\"", body:"Acredita que você fala inglês. Agora vem provar! 💪"},
   {title:"🚀 \"This is your moment. Take it.\"", body:"Seu badge mais próximo está a poucos XP. Vai buscar!"},
   {title:"👑 \"You were made for more.\"", body:"Mais do que você imagina. Abre o VIC English e prova! 🌍"},
-  {title:"🍋 \"If life gives you lemons, upgrade them to a business.\"", body:"Upgrada seu inglês primeiro. Missão rápida te espera!"},
   {title:"✨ \"Messy progress is still progress.\"", body:"Não precisa ser perfeito. Só precisa aparecer. Bora!"},
-  {title:"💪 \"You survived Monday. You can do anything.\"", body:"Literalmente. Então faz um exercício. Fácil demais pra você!"},
+  {title:"💪 \"You survived today. You can do anything.\"", body:"Literalmente. Então faz um exercício. Fácil demais pra você!"},
   {title:"😏 \"Look at you being consistent. Who are you?\"", body:"Aumente seu streak mais um dia. Você já está no ritmo! 🔥"},
   {title:"🏅 \"Not bad for someone who almost quit.\"", body:"Você tá aqui. Isso já é vitória. Vem buscar mais um badge!"},
-  {title:"🎯 \"You came. You tried. You didn't quit.\"", body:"E isso é tudo. Mais uma missão e o streak continua!"},
   {title:"👀 \"Still here? That's elite behavior.\"", body:"Comportamento de elite merece XP de elite. Vem pegar!"},
-  {title:"💥 From 'I can't' to 'watch me'", body:"Abre o app. Faz uma missão. Manda ver! 🚀"},
-  {title:"🔥 \"Power lies where men believe it lies.\"", body:"O poder do inglês tá onde você acreditar. Começa agora!"},
   {title:"⏰ Ei, tá na hora!", body:"O mercado de trabalho não espera. Bora praticar inglês! 💼"},
   {title:"🏆 Tem um badge esperando por você!", body:"Você tá pertinho. Abre o app e vai buscar! 🎯"},
-  {title:"🌍 O mercado te aguarda!", body:"Quem fala inglês se destaca. Você já está no caminho! 📈"},
   {title:"⚡ Para de enrolar!", body:"15 minutinhos. Um exercício. Teu futuro agradece. Bora!"},
   {title:"😴 Ei, seu streak tá dormindo...", body:"Não deixa ele morrer! Um exercício agora resolve tudo. 🔥"},
   {title:"🎓 Profissionais bilíngues ganham até 50% mais.", body:"Você já tá investindo nisso. Mais um passo hoje?"},
