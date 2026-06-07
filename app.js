@@ -705,16 +705,15 @@ function getTodayKey(){ return new Date().toISOString().slice(0,10); }
 function getDailyProgress(){
   const today=getTodayKey();
   const saved=(userData?.dailyProgress)||{};
-  // Only reset if it's a new day
   if(saved.date!==today){
-    // Keep missions if not completed yesterday (they persist)
-    const prevComplete=saved.allComplete||false;
-    if(prevComplete){
-      // Yesterday was completed — fresh start
-      return {date:today,dailyExercises:0,dailyPerfect:0,dailyMaritime:0,allComplete:false};
+    if(saved.allComplete){
+      // Completed — fresh start
+      return {date:today,allComplete:false};
     } else {
-      // Yesterday not completed — carry over progress but update date
-      return {date:today,dailyExercises:saved.dailyExercises||0,dailyPerfect:saved.dailyPerfect||0,dailyMaritime:saved.dailyMaritime||0,allComplete:false};
+      // Not completed — carry all progress keys forward
+      const carried={date:today,allComplete:false};
+      Object.keys(saved).forEach(k=>{ if(k!=='date'&&k!=='allComplete') carried[k]=saved[k]; });
+      return carried;
     }
   }
   return saved;
@@ -744,12 +743,32 @@ async function updateDailyProgress(type){
 }
 
 function showDailyComplete(bonusXP){
+  // Confetti
+  const emojis=['⭐','✨','🌟','💫','🎉','🏆','🎊'];
+  for(let i=0;i<22;i++){
+    const el=document.createElement('span');
+    el.className='dc-confetti';
+    el.textContent=emojis[i%emojis.length];
+    el.style.left=`${Math.random()*100}%`;
+    el.style.setProperty('--fall-dur',`${1.8+Math.random()*2}s`);
+    el.style.setProperty('--fall-delay',`${Math.random()*1}s`);
+    el.style.setProperty('--fall-rot',`${(Math.random()-0.5)*720}deg`);
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),4200);
+  }
   const overlay=document.getElementById("daily-complete-overlay");
   const xpEl=document.getElementById("daily-complete-xp");
   if(!overlay) return;
   if(xpEl) xpEl.textContent=`+${bonusXP} XP Bônus 🎁`;
   overlay.style.display="flex";
   SoundFX.complete();
+}
+function toggleDailyBlock(){
+  const block=document.getElementById('daily-block');
+  if(!block) return;
+  vibrate(10);
+  block.classList.toggle('collapsed');
+  localStorage.setItem('vic_daily_collapsed',block.classList.contains('collapsed')?'1':'0');
 }
 function renderDailyMissions(){
   const dp=getDailyProgress();
@@ -779,10 +798,19 @@ function renderDailyMissions(){
     });
     container.appendChild(div);
   });
-  const overall=Math.round((totalDone/totalTarget)*100);
+  const overall=totalTarget>0?Math.round((totalDone/totalTarget)*100):0;
   const ob=document.getElementById("daily-overall-bar"), ot=document.getElementById("daily-overall-pct");
   if(ob) ob.style.width=`${overall}%`;
-  if(ot) ot.textContent=`${overall}% done today`;
+  if(ot) ot.textContent=dp.allComplete?`✅ Completo!`:`${overall}% feito hoje`;
+  // Golden all-complete state + initial collapsed state from localStorage
+  const block=document.getElementById('daily-block');
+  if(block){
+    block.classList.toggle('all-complete',!!dp.allComplete);
+    if(!block.hasAttribute('data-init')){
+      block.setAttribute('data-init','1');
+      if(localStorage.getItem('vic_daily_collapsed')==='1') block.classList.add('collapsed');
+    }
+  }
 }
 
 // ── AUTH ──────────────────────────────────────────────────────────────────────
@@ -6208,6 +6236,7 @@ if(typeof obNext !== 'undefined') window.obNext = obNext;
 if(typeof obSkip !== 'undefined') window.obSkip = obSkip;
 if(typeof obBack !== 'undefined') window.obBack = obBack;
 if(typeof showInstallOS !== 'undefined') window.showInstallOS = showInstallOS;
+if(typeof toggleDailyBlock !== 'undefined') window.toggleDailyBlock = toggleDailyBlock;
 if(typeof openLeaderboard !== 'undefined') window.openLeaderboard = openLeaderboard;
 if(typeof closeLeaderboard !== 'undefined') window.closeLeaderboard = closeLeaderboard;
 if(typeof loadLeaderboard !== 'undefined') window.loadLeaderboard = loadLeaderboard;

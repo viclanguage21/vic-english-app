@@ -23,10 +23,10 @@
 <!-- Daily missions complete celebration -->
 <div class="daily-complete-overlay" id="daily-complete-overlay" style="display:none">
   <div class="daily-complete-card">
-    <div class="daily-complete-emoji">🎉</div>
-    <div class="daily-complete-title">Daily Missions Complete!</div>
-    <div class="daily-complete-sub">Missões do dia concluídas!</div>
-    <div class="daily-complete-xp" id="daily-complete-xp">+65 XP Bônus</div>
+    <div class="daily-complete-emoji">🏆</div>
+    <div class="daily-complete-title">Missões Completas!</div>
+    <div class="daily-complete-sub">Você concluiu todas as missões de hoje!</div>
+    <div class="daily-complete-xp" id="daily-complete-xp">+65 XP Bônus 🎁</div>
     <button class="btn-primary" id="btn-daily-complete-ok">Continuar 🚀</button>
   </div>
 </div>
@@ -667,6 +667,23 @@
       <button class="pro-banner-btn" id="btn-upgrade-dash" data-i18n="subscribe">Assinar</button>
     </div>
 
+    <!-- daily missions -->
+    <div class="daily-block" id="daily-block">
+      <div class="daily-block-header" onclick="toggleDailyBlock()">
+        <div class="daily-block-title" id="dash-daily-title" data-i18n="daily_missions">🎯 Daily Missions</div>
+        <div class="daily-header-right">
+          <span class="daily-overall-pct" id="daily-overall-pct">0% feito hoje</span>
+          <span class="daily-chevron" id="daily-chevron">▼</span>
+        </div>
+      </div>
+      <div class="daily-block-body" id="daily-block-body">
+        <div class="daily-overall-bar-wrap">
+          <div class="daily-overall-bar" id="daily-overall-bar" style="width:0%"></div>
+        </div>
+        <div id="daily-missions-list"></div>
+      </div>
+    </div>
+
     <!-- Curiosity ticker — before Start Now -->
     <div class="curiosity-ticker">
       <div class="curiosity-text" id="curiosity-ticker-text"></div>
@@ -674,18 +691,6 @@
 
     <!-- START NOW button — pink, below ticker -->
     <button class="btn-start-now" id="btn-start-now" data-i18n="start_now">▶ Start Now!<//button>
-
-    <!-- daily missions -->
-    <div class="daily-block">
-      <div class="daily-block-header">
-        <div class="daily-block-title" id="dash-daily-title" data-i18n="daily_missions">🎯 Daily Missions</div>
-        <div class="daily-overall-pct" id="daily-overall-pct">0% done today</div>
-      </div>
-      <div class="daily-overall-bar-wrap">
-        <div class="daily-overall-bar" id="daily-overall-bar" style="width:0%"></div>
-      </div>
-      <div id="daily-missions-list"></div>
-    </div>
 
     <!-- quick access -->
     <div class="section-label" id="dash-quick-label" data-i18n="quick_access">🎯 Acesso Rápido</div>
