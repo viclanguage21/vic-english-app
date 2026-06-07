@@ -4431,6 +4431,31 @@ body.light-mode .quick-btn:hover {
   transform: translateY(-2px);
 }
 
+/* ══ AUTH TAGLINE — polished ════════════════════════════ */
+.auth-tagline {
+  font-size: 23px !important;
+  font-weight: 900 !important;
+  color: #f2c87a !important;
+  letter-spacing: 0.5px !important;
+  line-height: 1.2 !important;
+  text-align: center;
+  text-shadow:
+    0 1px 1px rgba(0,0,0,0.4),
+    0 0 16px rgba(242,200,122,0.6),
+    0 0 36px rgba(228,180,92,0.28) !important;
+  margin-bottom: 4px !important;
+}
+.auth-tagline-pt {
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: rgba(242,200,122,0.55) !important;
+  font-style: italic !important;
+  letter-spacing: 0.9px !important;
+  text-align: center;
+  text-shadow: 0 0 12px rgba(228,180,92,0.15) !important;
+  margin-bottom: 14px !important;
+}
+
 /* ══ LIGHT MODE — pro banner lilac ════════════════════ */
 body.light-mode .pro-banner {
   background: linear-gradient(135deg, #7c3aed, #a78bfa) !important;
