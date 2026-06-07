@@ -6681,3 +6681,12 @@ a.settings-big-btn:active {
   border-radius: 12px !important;
   filter: drop-shadow(0 4px 16px rgba(201,147,58,0.3));
 }
+
+/* ── Dashboard header logo — compact, sides cropped ── */
+#dash-logo-img {
+  width: 96px !important;
+  height: 44px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: 10px !important;
+}
