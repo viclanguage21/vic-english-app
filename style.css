@@ -7088,7 +7088,7 @@ a.settings-big-btn:active {
   position: fixed !important;
   inset: 0 !important;
   background: rgba(8,4,18,0.88) !important;
-  display: flex !important;
+  display: flex;
   align-items: center !important;
   justify-content: center !important;
   z-index: 9999 !important;
