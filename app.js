@@ -141,6 +141,10 @@ function applyLang() {
     const key = el.getAttribute("data-i18n");
     el.textContent = t(key);
   });
+  document.querySelectorAll("[data-i18n-html]").forEach(el => {
+    const key = el.getAttribute("data-i18n-html");
+    el.innerHTML = t(key);
+  });
 
   // Atualizar placeholders
   document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
@@ -6202,6 +6206,8 @@ if(typeof handleDiagOption !== 'undefined') window.handleDiagOption = handleDiag
 if(typeof skipDiagnosis !== 'undefined') window.skipDiagnosis = skipDiagnosis;
 if(typeof obNext !== 'undefined') window.obNext = obNext;
 if(typeof obSkip !== 'undefined') window.obSkip = obSkip;
+if(typeof obBack !== 'undefined') window.obBack = obBack;
+if(typeof showInstallOS !== 'undefined') window.showInstallOS = showInstallOS;
 if(typeof openLeaderboard !== 'undefined') window.openLeaderboard = openLeaderboard;
 if(typeof closeLeaderboard !== 'undefined') window.closeLeaderboard = closeLeaderboard;
 if(typeof loadLeaderboard !== 'undefined') window.loadLeaderboard = loadLeaderboard;
