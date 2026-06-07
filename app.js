@@ -4886,16 +4886,10 @@ function startWritingTopic(index){
 }
 
 async function checkWriting(){
+  if(!isPro()) return showUpgradeScreen();
+
   const text=document.getElementById("writing-textarea").value.trim();
   if(!text||text.length<20) return showXpToast("✍️ Escreva mais antes de corrigir!");
-
-  let apiKey=localStorage.getItem("vic_anthropic_key")||"";
-  if(!apiKey){
-    apiKey=prompt("Cole sua chave da API Anthropic para ativar a correção com IA (será salva no dispositivo):");
-    if(!apiKey) return;
-    localStorage.setItem("vic_anthropic_key",apiKey.trim());
-    apiKey=apiKey.trim();
-  }
 
   const btn=document.getElementById("btn-check-writing");
   btn.disabled=true; btn.textContent="🤖 Analisando...";
@@ -4914,12 +4908,12 @@ async function checkWriting(){
       method:"POST",
       headers:{
         "Content-Type":"application/json",
-        "x-api-key":apiKey,
+        "x-api-key":localStorage.getItem("vic_anthropic_key")||"",
         "anthropic-version":"2023-06-01",
         "anthropic-dangerous-direct-browser-access":"true"
       },
       body:JSON.stringify({
-        model:"claude-sonnet-4-5",
+        model:"claude-haiku-4-5-20251001",
         max_tokens:1500,
         messages:[{
           role:"user",
@@ -4946,16 +4940,17 @@ Tips must be specific to the student's actual text, not generic advice.`
       })
     });
 
-    if(response.status===401){
-      localStorage.removeItem("vic_anthropic_key");
+    if(!response.ok){
+      if(response.status===401) localStorage.removeItem("vic_anthropic_key");
       btn.disabled=false; btn.textContent="🤖 Corrigir com IA";
-      return showXpToast("❌ Chave inválida. Tente novamente.");
+      return showXpToast("❌ Erro na correção. Tente novamente.");
     }
     const data=await response.json();
-    const raw=data.content?.[0]?.text||"{}";
+    const raw=data.content?.[0]?.text||"";
+    if(!raw){ btn.disabled=false; btn.textContent="🤖 Corrigir com IA"; return showXpToast("❌ Sem resposta da IA. Tente novamente."); }
     let result;
     try{ result=JSON.parse(raw.replace(/```json|```/g,"").trim()); }
-    catch(e){ result={score:7,good:"Bom esforço!",tips:[],corrected:text}; }
+    catch(e){ result={score:5,good:"Bom esforço!",tips:[],corrected:text}; }
 
     // Show inline corrected text below textarea
     const inlineEl=document.getElementById("writing-correction-inline");
