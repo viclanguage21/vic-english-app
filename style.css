@@ -7259,3 +7259,7 @@ a.settings-big-btn:active {
 .daily-block.all-complete .dmi-sub   { color: rgba(254,243,199,0.6) !important; }
 .daily-block.all-complete .dmi-xp    { color: #f2c87a !important; }
 .daily-block.all-complete .daily-header-right .daily-overall-pct { color: rgba(242,200,122,0.75) !important; }
+
+/* ══ OVERLAY VISIBILITY — classe controla, não inline style ════ */
+.daily-complete-overlay          { display: none   !important; }
+.daily-complete-overlay.visible  { display: flex   !important; }

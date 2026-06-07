@@ -720,13 +720,15 @@ function getDailyProgress(){
 }
 async function updateDailyProgress(type){
   const dp=getDailyProgress();
+  const wasComplete=dp.allComplete||false;
+  const todayMissions=getDailyDef();
+  // Check if missions were ALREADY all done before this update (carry-forward false positive)
+  const alreadyDoneBeforeUpdate=!wasComplete&&todayMissions.every(dm=>(dp[dm.key]||0)>=(dm.target));
+
   if(type==="exercise") dp.dailyExercises=Math.min((dp.dailyExercises||0)+1,99);
   if(type==="perfect")  dp.dailyPerfect  =Math.min((dp.dailyPerfect||0)+1,  99);
   if(type==="maritime") dp.dailyMaritime =Math.min((dp.dailyMaritime||0)+1,  99);
 
-  // Check if ALL missions newly completed
-  const wasComplete=dp.allComplete||false;
-  const todayMissions=getDailyDef();
   const allDone=todayMissions.every(dm=>(dp[dm.key]||0)>=(dm.target));
   if(allDone&&!wasComplete){
     dp.allComplete=true;
@@ -734,7 +736,7 @@ async function updateDailyProgress(type){
     userData.xp=(userData.xp||0)+bonusXP;
     await saveProgress(currentUser.uid,{xp:userData.xp,dailyProgress:dp});
     userData.dailyProgress=dp;
-    showDailyComplete(bonusXP);
+    if(!alreadyDoneBeforeUpdate) showDailyComplete(bonusXP);
   } else {
     userData.dailyProgress=dp;
     await saveProgress(currentUser.uid,{dailyProgress:dp});
@@ -743,7 +745,6 @@ async function updateDailyProgress(type){
 }
 
 function showDailyComplete(bonusXP){
-  // Confetti
   const emojis=['⭐','✨','🌟','💫','🎉','🏆','🎊'];
   for(let i=0;i<22;i++){
     const el=document.createElement('span');
@@ -760,7 +761,7 @@ function showDailyComplete(bonusXP){
   const xpEl=document.getElementById("daily-complete-xp");
   if(!overlay) return;
   if(xpEl) xpEl.textContent=`+${bonusXP} XP Bônus 🎁`;
-  overlay.style.display="flex";
+  overlay.classList.add("visible");
   SoundFX.complete();
 }
 function toggleDailyBlock(){
@@ -6021,7 +6022,7 @@ function init(){
     reader.readAsDataURL(file);
   });
   document.getElementById("btn-daily-complete-ok")?.addEventListener("click",()=>{
-    document.getElementById("daily-complete-overlay").style.display="none";
+    document.getElementById("daily-complete-overlay")?.classList.remove("visible");
   });
   document.getElementById("btn-edit-name")?.addEventListener("click",()=>openEditModal("name","Novo nome",userData?.name||"","text"));
   document.getElementById("btn-edit-username")?.addEventListener("click",()=>openEditModal("username","Novo username (@)",userData?.username||"","text"));
