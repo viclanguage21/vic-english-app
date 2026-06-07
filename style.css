@@ -6566,18 +6566,22 @@ a.settings-big-btn:active {
 .quick-grid {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
-  gap: 10px !important;
+  gap: 8px !important;
   width: 100% !important;
   margin-bottom: 4px !important;
 }
-/* ── Quick buttons — uniform height ── */
+/* ── Quick buttons — compact ── */
 .quick-btn {
-  min-height: 52px !important;
+  min-height: unset !important;
+  height: auto !important;
+  padding: 10px 8px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   text-align: center !important;
   width: 100% !important;
+  font-size: 13px !important;
+  line-height: 1.3 !important;
 }
 
 /* ── Ranking CTA button — larger ── */
