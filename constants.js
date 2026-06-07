@@ -56,7 +56,7 @@ export const I18N = {
     "choose_category": "Escolha uma categoria", "choose_scenario": "Escolha um cenário",
     "choose_exercise": "Escolha um exercício", "choose_topic": "Escolha um tópico",
     "flashcards": "Flashcards", "memory": "Memória",
-    "true_false": "Verdadeiro / Falso", "dialogue": "Diálogo", "writing": "Redação",
+    "true_false": "V ou F", "dialogue": "Diálogo", "writing": "Redação",
     "slow": "🐢 Devagar", "flip": "Virar",
 
     // Diagnóstico
@@ -142,7 +142,7 @@ export const I18N = {
     "next_badge_label": "Próxima conquista",
     "xp_to_next": "XP para o próximo nível",
     "coming_soon": "Em breve",
-    "qa_memory": "🧠 Memória", "qa_truefalse": "✅ Verdadeiro ou Falso",
+    "qa_memory": "🧠 Memória", "qa_truefalse": "✅ V ou F",
     "qa_dialogue": "💬 Diálogo", "qa_flashcards": "🃏 Flashcards",
     "gc_sub": "20 subcategorias — todas liberadas",
     "gc_tags_more": "+15 mais",
@@ -450,7 +450,7 @@ export const I18N = {
     "xp_to_next": "XP para el siguiente nivel",
     "coming_soon": "Próximamente",
     "qa_memory": "🧠 Memória",
-    "qa_truefalse": "✅ Verdadeiro ou Falso",
+    "qa_truefalse": "✅ V ou F",
     "qa_dialogue": "💬 Diálogo",
     "qa_flashcards": "🃏 Flashcards",
     "gc_sub": "20 subcategorias — todas liberadas",
