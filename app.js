@@ -802,15 +802,14 @@ async function handleRegister(){
   if(pw.length<6) return showAuthError(t("min_password"));
   btn.disabled=true; btn.textContent="Criando...";
   showAuthLoading("Criando sua conta... 🚀");
-  // Safety timeout — if auth doesn't fire in 10s, reset
   const timeout=setTimeout(()=>{
     hideAuthLoading();
     btn.disabled=false; btn.textContent="Criar Conta";
-    showAuthError("Algo deu errado. Tente novamente.");
-  }, 10000);
+    showView("view-auth");
+    showAuthError("Tempo esgotado. Verifique sua internet e tente novamente.");
+  }, 12000);
   try{
     await registerUser(email,pw,name,username);
-    // Salvar avatar escolhido no cadastro
     if(_regAvatar) _setCfg("avatar", _regAvatar);
     localStorage.setItem("vic_last_email",email);
     clearTimeout(timeout);
@@ -818,7 +817,11 @@ async function handleRegister(){
   }
   catch(e){
     clearTimeout(timeout);
+    console.error("Register error:", e.code, e.message);
+    // If auth user was already created but Firestore failed, the user exists in Auth.
+    // Navigate back to auth and show the error regardless of current view.
     hideAuthLoading();
+    showView("view-auth");
     showAuthError(translateErr(e.code));
     btn.disabled=false;
     btn.textContent="Criar Conta";

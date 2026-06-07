@@ -112,8 +112,14 @@ const gProvider = new GoogleAuthProvider();
 // ── AUTH ──────────────────────────────────────────────
 export async function registerUser(email, password, name, username="") {
   const c = await createUserWithEmailAndPassword(auth, email, password);
-  await updateProfile(c.user, { displayName: name });
-  await createUserDoc(c.user.uid, { name, email, provider: "email", username: username||name });
+  await updateProfile(c.user, { displayName: name }).catch(()=>{});
+  try{
+    await createUserDoc(c.user.uid, { name, email, provider: "email", username: username||name });
+  }catch(firestoreErr){
+    console.error("Firestore createUserDoc failed:", firestoreErr.code, firestoreErr.message);
+    // Auth user was created successfully — Firestore will be retried by loadDashboard.
+    // Don't throw, just log. The user can proceed.
+  }
   return c.user;
 }
 
