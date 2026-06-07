@@ -786,12 +786,13 @@ function renderDailyMissions(){
     div.addEventListener("click",()=>{
       if(done) return;
       vibrate(22);
-      // Route to the right destination based on mission type
-      if(dm.key==="dailyFlashcard") { showView("view-flashcards"); initFlashcards && initFlashcards(); return; }
-      if(dm.key==="dailyMemory")    { showView("view-memory-free"); initMemoryFree && initMemoryFree(); return; }
-      if(dm.key==="dailyDialogue")  { showView("view-dialogue"); return; }
-      if(dm.key==="dailyWriting")   { showView("view-writing"); return; }
-      // For segment/exercise missions — go to segment phases
+      // Route each mission key to the correct destination
+      if(dm.key==="dailyFlashcard") { openFlashcards(); return; }
+      if(dm.key==="dailyMemory")    { openMemoryFree(); return; }
+      if(dm.key==="dailyDialogue")  { openDialogue(); return; }
+      if(dm.key==="dailyWriting")   { openWriting(); return; }
+      if(dm.key==="dailyVoice")     { openDialogue(); return; } // dialogue has voice practice
+      // Exercises, perfect score, streak, segment lesson → segment phases
       const seg = dm.segmentId || userData?.diagnosisAnswers?.segment || currentSegmentId || "maritimo";
       currentSegmentId = seg;
       openSegmentPhases(seg);
