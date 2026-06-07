@@ -6650,3 +6650,22 @@ a.settings-big-btn:active {
   line-height: 1.4;
 }
 .ob-install-caption strong { color: #fff; }
+
+/* ── New logo (landscape) — auth login + loading screen ── */
+.auth-logo-img {
+  width: 230px !important;
+  height: auto !important;
+  object-fit: contain !important;
+  border-radius: 16px !important;
+  display: block !important;
+  margin: 0 auto 16px !important;
+  filter: drop-shadow(0 6px 24px rgba(201,147,58,0.35)) !important;
+}
+.auth-loading-logo {
+  width: 200px;
+  height: auto;
+  border-radius: 14px;
+  display: block;
+  margin: 0 auto 24px;
+  filter: drop-shadow(0 6px 24px rgba(201,147,58,0.4));
+}
