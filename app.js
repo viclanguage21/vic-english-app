@@ -5108,7 +5108,6 @@ function checkBadges(){
 }
 
 function showBadgeUnlock(badge){
-  // Remove any existing overlay
   document.getElementById("badge-overlay")?.remove();
 
   const overlay = document.createElement("div");
@@ -5122,19 +5121,123 @@ function showBadgeUnlock(badge){
       <div class="badge-unlock-name">${badge.name}</div>
       <div class="badge-unlock-desc">${badge.desc}</div>
       <div class="badge-unlock-xp">+${badge.xp} XP</div>
-      <button class="badge-unlock-btn" onclick="document.getElementById('badge-overlay').remove()">Incrível! 🚀</button>
+      <div class="badge-unlock-actions">
+        <button class="badge-unlock-btn" onclick="document.getElementById('badge-overlay').remove()">Incrível! 🚀</button>
+        <button class="badge-share-btn" onclick="shareBadge(${JSON.stringify(badge).replace(/"/g,'&quot;')})">Compartilhar 📲</button>
+      </div>
     </div>`;
   document.body.appendChild(overlay);
   SoundFX.complete();
   vibrate([60,30,60,30,200]);
 
-  // Award XP
   userData.xp=(userData.xp||0)+badge.xp;
   if(currentUser) saveProgress(currentUser.uid,{xp:userData.xp});
   showXpToast(`${badge.icon} +${badge.xp} XP — ${badge.name}`);
 
-  // Auto close after 6 seconds
-  setTimeout(()=>overlay.remove(), 6000);
+  setTimeout(()=>overlay.remove(), 8000);
+}
+
+async function shareBadge(badge){
+  try{
+    const canvas = document.createElement("canvas");
+    canvas.width = 1080; canvas.height = 1080;
+    const ctx = canvas.getContext("2d");
+
+    // Background gradient
+    const grad = ctx.createLinearGradient(0,0,1080,1080);
+    grad.addColorStop(0,"#0a0f1e");
+    grad.addColorStop(0.5,"#0d1b2e");
+    grad.addColorStop(1,"#0a0f1e");
+    ctx.fillStyle = grad; ctx.fillRect(0,0,1080,1080);
+
+    // Gold border glow
+    ctx.shadowColor = "rgba(201,147,58,0.6)";
+    ctx.shadowBlur = 40;
+    ctx.strokeStyle = "rgba(201,147,58,0.7)";
+    ctx.lineWidth = 8;
+    const r = 48;
+    ctx.beginPath();
+    ctx.moveTo(r,4); ctx.lineTo(1080-r,4);
+    ctx.quadraticCurveTo(1076,4,1076,r);
+    ctx.lineTo(1076,1080-r);
+    ctx.quadraticCurveTo(1076,1076,1080-r,1076);
+    ctx.lineTo(r,1076); ctx.quadraticCurveTo(4,1076,4,1080-r);
+    ctx.lineTo(4,r); ctx.quadraticCurveTo(4,4,r,4);
+    ctx.closePath(); ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // "CONQUISTA DESBLOQUEADA" label
+    ctx.fillStyle = "rgba(201,147,58,0.75)";
+    ctx.font = "bold 38px system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.letterSpacing = "6px";
+    ctx.fillText("CONQUISTA DESBLOQUEADA", 540, 160);
+
+    // Badge icon (emoji rendered large)
+    ctx.font = "220px serif";
+    ctx.textAlign = "center";
+    ctx.fillText(badge.icon, 540, 460);
+
+    // Badge name
+    ctx.shadowColor = "rgba(201,147,58,0.5)";
+    ctx.shadowBlur = 20;
+    ctx.fillStyle = "#f2c87a";
+    ctx.font = "bold 72px system-ui, sans-serif";
+    ctx.fillText(badge.name, 540, 580);
+    ctx.shadowBlur = 0;
+
+    // Badge desc
+    ctx.fillStyle = "rgba(255,255,255,0.65)";
+    ctx.font = "38px system-ui, sans-serif";
+    // Word-wrap desc
+    const words = badge.desc.split(" ");
+    let line = "", lines = [], maxW = 860;
+    words.forEach(w => {
+      const test = line ? line+" "+w : w;
+      if(ctx.measureText(test).width > maxW){ lines.push(line); line=w; }
+      else line=test;
+    });
+    if(line) lines.push(line);
+    lines.forEach((l,i) => ctx.fillText(l, 540, 660 + i*52));
+
+    // XP badge
+    ctx.fillStyle = "rgba(201,147,58,0.15)";
+    ctx.beginPath(); ctx.roundRect(390,780,300,80,40); ctx.fill();
+    ctx.strokeStyle = "rgba(201,147,58,0.6)"; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.roundRect(390,780,300,80,40); ctx.stroke();
+    ctx.fillStyle = "#f2c87a";
+    ctx.font = "bold 44px system-ui, sans-serif";
+    ctx.fillText(`+${badge.xp} XP`, 540, 833);
+
+    // VIC Language branding
+    ctx.fillStyle = "rgba(255,255,255,0.3)";
+    ctx.font = "32px system-ui, sans-serif";
+    ctx.fillText("VIC English · app.viclanguage.com.br", 540, 960);
+
+    // Convert to blob and share
+    canvas.toBlob(async blob => {
+      if(!blob) return;
+      const file = new File([blob], "conquista-vic.png", {type:"image/png"});
+      if(navigator.canShare?.({files:[file]})){
+        try{
+          await navigator.share({
+            files:[file],
+            title: `Conquista: ${badge.name}`,
+            text: `Desbloqueei "${badge.name}" no VIC English! ${badge.icon} +${badge.xp} XP`,
+          });
+        }catch(e){ if(e.name!=="AbortError") _shareDownload(canvas); }
+      } else {
+        _shareDownload(canvas);
+      }
+    }, "image/png");
+  }catch(e){ vicLog("share","badge share failed",e); }
+}
+
+function _shareDownload(canvas){
+  const a = document.createElement("a");
+  a.href = canvas.toDataURL("image/png");
+  a.download = "conquista-vic.png";
+  a.click();
 }
 
 let _streakMissionTriggered = false;
@@ -5195,27 +5298,25 @@ function scheduleNotifications(){
   if(!("Notification" in window)||Notification.permission!=="granted") return;
   if(_cfg.notifEnabled==="0") return;
 
-  const freq=parseInt(_cfg.notifFreq||"3");
-  const minHours=24/freq; // e.g. 3x/day = every 8h
-  const last=parseInt(_cfg.lastNotif||"0");
-  const now=Date.now();
-  const hoursSinceLast=(now-last)/(3600*1000);
+  localStorage.setItem("vic_last_visit", String(Date.now()));
 
-  if(hoursSinceLast>=minHours){
-    const idx=Math.floor(Math.random()*NOTIF_MESSAGES.length);
-    const msg=NOTIF_MESSAGES[idx];
-    try{
-      new Notification(msg.title,{
-        body: msg.body,
-        icon: "new_logo_big.png",
-        badge: "vic_lamp.png",
-        tag: "vic-english-"+idx,
-        requireInteraction: false,
-      });
-      _setCfg("lastNotif", String(now));
-    }catch(e){ vicLog("notif","local notification failed",e); }
+  // Schedule a 7pm reminder via service worker if user hasn't completed today's missions
+  const dp = getDailyProgress();
+  if(!dp.allComplete){
+    const now = new Date();
+    const target = new Date(); target.setHours(19,0,0,0);
+    const delay = target.getTime() - now.getTime();
+    if(delay > 0){
+      navigator.serviceWorker?.ready.then(reg => {
+        reg.active?.postMessage({
+          type: "SCHEDULE_NOTIF",
+          delay,
+          title: "VIC English 📚",
+          body: "Você não praticou hoje! 🔥 Seu streak está em risco.",
+        });
+      }).catch(()=>{});
+    }
   }
-  localStorage.setItem("vic_last_visit", String(now));
 }
 
 // Ask for notifications with friendly banner after first mission
@@ -6258,6 +6359,7 @@ if(typeof obBack !== 'undefined') window.obBack = obBack;
 if(typeof showInstallOS !== 'undefined') window.showInstallOS = showInstallOS;
 if(typeof toggleDailyBlock !== 'undefined') window.toggleDailyBlock = toggleDailyBlock;
 if(typeof startOnboarding !== 'undefined') window.startOnboarding = startOnboarding;
+if(typeof shareBadge !== 'undefined') window.shareBadge = shareBadge;
 if(typeof openLeaderboard !== 'undefined') window.openLeaderboard = openLeaderboard;
 if(typeof closeLeaderboard !== 'undefined') window.closeLeaderboard = closeLeaderboard;
 if(typeof loadLeaderboard !== 'undefined') window.loadLeaderboard = loadLeaderboard;

@@ -7263,3 +7263,16 @@ a.settings-big-btn:active {
 /* ══ OVERLAY VISIBILITY — classe controla, não inline style ════ */
 .daily-complete-overlay          { display: none   !important; }
 .daily-complete-overlay.visible  { display: flex   !important; }
+
+/* ══ BADGE SHARE BUTTON ════════════════════════════════════════ */
+.badge-unlock-actions {
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 4px;
+}
+.badge-share-btn {
+  padding: 12px 22px; border: 1.5px solid rgba(201,147,58,0.55);
+  background: rgba(201,147,58,0.1); border-radius: 999px;
+  color: #f2c87a; font-weight: 700; font-size: 15px;
+  cursor: pointer; font-family: var(--font);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.badge-share-btn:hover { background: rgba(201,147,58,0.22); box-shadow: 0 0 16px rgba(201,147,58,0.3); }

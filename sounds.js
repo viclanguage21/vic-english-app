@@ -5,6 +5,7 @@ const SoundFX = {
 
   init() {
     if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (this.ctx.state === 'suspended') this.ctx.resume();
   },
 
   correct() {
