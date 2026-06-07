@@ -6750,3 +6750,43 @@ a.settings-big-btn:active {
   object-position: center !important;
   border-radius: 10px !important;
 }
+
+/* ── Grammar/Writing banners — definitive layout (no collapse) ── */
+.grammar-core-banner,
+.writing-core-banner {
+  align-items: stretch !important;
+  min-height: 90px !important;
+  box-sizing: border-box !important;
+}
+.grammar-core-banner .gc-left,
+.writing-core-banner .gc-left {
+  align-items: flex-start !important;
+  flex-direction: row !important;
+}
+.grammar-core-banner .gc-text,
+.writing-core-banner .gc-text {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  flex: 1 !important;
+}
+.grammar-core-banner .gc-sub,
+.writing-core-banner .gc-sub {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  margin-bottom: 8px !important;
+}
+.grammar-core-banner .gc-tags,
+.writing-core-banner .gc-tags {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.grammar-core-banner .gc-arrow,
+.writing-core-banner .gc-arrow {
+  align-self: center !important;
+  flex-shrink: 0 !important;
+}
