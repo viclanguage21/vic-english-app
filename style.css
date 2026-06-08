@@ -7213,16 +7213,18 @@ a.settings-big-btn:active {
 
 /* ══ DAILY BLOCK — azul claro translúcido (glass) ═══════ */
 .daily-block {
-  background: linear-gradient(150deg, rgba(96,165,250,0.16) 0%, rgba(56,189,248,0.09) 100%) !important;
-  border: 1px solid rgba(96,165,250,0.35) !important;
+  background: linear-gradient(150deg, rgba(96,165,250,0.16) 0%, rgba(56,189,248,0.08) 45%, rgba(10,30,56,0.42) 100%) !important;
+  border: 1px solid rgba(96,165,250,0.32) !important;
   backdrop-filter: blur(10px) !important;
   -webkit-backdrop-filter: blur(10px) !important;
   box-shadow:
     inset 0 1px 0 rgba(186,230,253,0.18),
-    0 6px 24px rgba(8,30,60,0.25) !important;
+    0 6px 24px rgba(8,30,60,0.3),
+    0 0 22px rgba(236,72,153,0.06) !important;
 }
+/* linha do topo — mistura dourado · rosa · azul */
 .daily-block::before {
-  background: linear-gradient(90deg, transparent, rgba(125,211,252,0.7), transparent) !important;
+  background: linear-gradient(90deg, transparent, rgba(240,208,112,0.85), rgba(236,72,153,0.7), rgba(125,211,252,0.85), transparent) !important;
 }
 .daily-block-title {
   color: #7dd3fc !important;
@@ -7239,8 +7241,8 @@ a.settings-big-btn:active {
   border-radius: 999px;
 }
 .daily-block .daily-overall-bar {
-  background: linear-gradient(90deg, #38bdf8, #7dd3fc) !important;
-  box-shadow: 0 0 10px rgba(125,211,252,0.6) !important;
+  background: linear-gradient(90deg, #38bdf8 0%, #a78bfa 40%, #ec4899 70%, #f0d070 100%) !important;
+  box-shadow: 0 0 10px rgba(236,72,153,0.4) !important;
 }
 .daily-block .daily-mission-item {
   background: rgba(186,230,253,0.08) !important;
@@ -7252,9 +7254,9 @@ a.settings-big-btn:active {
 .daily-block .daily-mission-item:last-child { margin-bottom: 0 !important; border-bottom: none !important; }
 .daily-block .daily-mission-item:not(.completed):hover {
   background: rgba(186,230,253,0.16) !important;
-  border-color: rgba(125,211,252,0.5) !important;
+  border-color: rgba(236,72,153,0.45) !important;
   transform: translateX(3px) !important;
-  box-shadow: -3px 0 0 #38bdf8 !important;
+  box-shadow: -3px 0 0 #ec4899 !important;
 }
 .daily-block .daily-mission-item.completed {
   background: rgba(186,230,253,0.05) !important;
@@ -7271,7 +7273,7 @@ a.settings-big-btn:active {
 .daily-block .dmi-title { color: #e0f2fe !important; font-weight: 700 !important; }
 .daily-block .dmi-sub   { color: rgba(125,211,252,0.65) !important; }
 .daily-block .dmi-count { color: rgba(125,211,252,0.55) !important; font-size: 11px !important; }
-.daily-block .dmi-xp    { color: #38bdf8 !important; font-weight: 700 !important; }
+.daily-block .dmi-xp    { color: #f0d070 !important; font-weight: 800 !important; text-shadow: 0 0 8px rgba(240,208,112,0.3) !important; }
 .daily-block .dmi-icon  { filter: drop-shadow(0 0 4px rgba(56,189,248,0.3)); }
 
 /* Keep golden override for all-complete state */
@@ -7493,10 +7495,11 @@ a.settings-big-btn:active {
 .dash-header-3col #dash-logo-img,
 .dash-header-3col .dash-logo-img {
   width: auto !important;
-  height: 66px !important;
-  max-width: 190px !important;
+  height: 78px !important;
+  max-width: 210px !important;
   border-radius: 10px !important;
   object-fit: contain !important;
+  transform: scale(1.08) !important;   /* zoom leve p/ destacar Vic English */
   box-shadow: none !important;
   filter: drop-shadow(0 3px 16px rgba(201,147,58,0.4)) !important;
 }
