@@ -205,6 +205,20 @@
   </div>
 </div>
 
+<!-- ══ VERIFY EMAIL ══════════════════════════════════════════ -->
+<div class="view" id="view-verify-email">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px 24px;text-align:center;">
+    <div style="font-size:64px;margin-bottom:20px;">📧</div>
+    <h2 style="color:#fff;font-size:22px;font-weight:900;margin-bottom:10px;" data-i18n="verify_title">Verifique seu email</h2>
+    <p style="color:rgba(255,255,255,0.6);font-size:14px;line-height:1.6;margin-bottom:8px;" data-i18n="verify_sub">Enviamos um link de verificação para</p>
+    <p id="verify-email-addr" style="color:#f0d070;font-weight:700;font-size:15px;margin-bottom:28px;"></p>
+    <button onclick="window.checkEmailVerified()" class="auth-btn-primary" style="margin-bottom:12px;" data-i18n="verify_done">✅ Já verifiquei</button>
+    <button onclick="window.resendVerifyEmail()" class="btn-forgot-password" data-i18n="verify_resend">📨 Reenviar email</button>
+    <button onclick="window.backToAuthFromVerify()" class="btn-forgot-password" style="margin-top:8px;" data-i18n="back">← Voltar</button>
+    <p id="verify-msg" style="color:#a78bfa;font-size:13px;margin-top:16px;min-height:20px;"></p>
+  </div>
+</div>
+
 <div class="view" id="view-auth">
 
   <!-- Reload button (same as dashboard) -->

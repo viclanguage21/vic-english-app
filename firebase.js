@@ -13,6 +13,7 @@ import {
   onAuthStateChanged,
   updateProfile,
   sendPasswordResetEmail,
+  sendEmailVerification,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
   getFirestore,
@@ -110,14 +111,22 @@ const gProvider = new GoogleAuthProvider();
 export async function registerUser(email, password, name) {
   const c = await createUserWithEmailAndPassword(auth, email, password);
   await updateProfile(c.user, { displayName: name }).catch(()=>{});
+  sendEmailVerification(c.user).catch(()=>{});
   try{
     await createUserDoc(c.user.uid, { name, email, provider: "email" });
   }catch(firestoreErr){
     console.error("Firestore createUserDoc failed:", firestoreErr.code, firestoreErr.message);
-    // Auth user was created successfully — Firestore will be retried by loadDashboard.
-    // Don't throw, just log. The user can proceed.
   }
   return c.user;
+}
+
+export async function resendVerificationEmail() {
+  if(auth.currentUser) await sendEmailVerification(auth.currentUser);
+}
+
+export async function reloadCurrentUser() {
+  if(auth.currentUser) await auth.currentUser.reload();
+  return auth.currentUser;
 }
 
 export async function loginUser(email, password) {

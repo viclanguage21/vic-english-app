@@ -1,6 +1,6 @@
 // app.js — VIC English v12 — Full fix
 
-import { auth, registerUser, loginUser, loginWithGoogle, logoutUser, onAuthChange, getUserData, saveProgress, getAllUsers, getUserById, OWNER_UID, registerFCMToken, onForegroundMessage, resetPassword } from "./firebase.js";
+import { auth, registerUser, loginUser, loginWithGoogle, logoutUser, onAuthChange, getUserData, saveProgress, getAllUsers, getUserById, OWNER_UID, registerFCMToken, onForegroundMessage, resetPassword, resendVerificationEmail, reloadCurrentUser } from "./firebase.js";
 import { I18N, SEG_NAMES, LEVEL_TIPS, LOADING_QUOTES, GLOSSARY, PRO_MESSAGES, BADGES, NOTIF_MESSAGES, MP_LINK } from "./constants.js";
 import { calcLevel, stripEmoji, cleanEnunciado, shuffle, vibrate } from "./utils.js";
 
@@ -2521,9 +2521,10 @@ async function nextPhrase(){ await autoAdvance(10); }
 
 async function completeMission(xp){
   const mission=getMission(currentSegmentId,currentPhaseId,currentMissionId);
-  const completed=userData.completedMissions||[];
+  const completed=[...new Set(userData.completedMissions||[])]; // dedup
   const key=`${currentSegmentId}_${currentPhaseId}_${currentMissionId}`;
   if(!completed.includes(key)) completed.push(key);
+  if(completed.length>400) completed.splice(0, completed.length-400); // keep newest 400
   currentPhraseIndex=0;
   await saveProgressSafe(currentUser.uid,{xp:xp??userData.xp,completedMissions:completed,currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:0}},true);
   userData.completedMissions=completed;
@@ -5566,6 +5567,16 @@ async function _handleAuth(user){
   const splashWasShowing = !!document.getElementById("loading-splash-overlay");
   hideAuthLoading();
 
+  // Block unverified email users (Google logins are pre-verified, guests are local)
+  if(!user.emailVerified && !user.isLocalGuest &&
+     user.providerData?.[0]?.providerId === "password"){
+    hideLoadingSplash();
+    const addrEl = document.getElementById("verify-email-addr");
+    if(addrEl) addrEl.textContent = user.email || "";
+    showView("view-verify-email");
+    return;
+  }
+
   const t0 = Date.now();
   try{
     if(user.uid===OWNER_UID){ currentUser=user; await loadAdminDashboard(); }
@@ -6428,5 +6439,32 @@ if(typeof backToDashboard !== 'undefined') window.backToDashboard = backToDashbo
 if(typeof showView !== 'undefined') window.showView = showView;
 if(typeof openGlossary !== 'undefined') window.openGlossary = openGlossary;
 if(typeof closeGlossary !== 'undefined') window.closeGlossary = closeGlossary;
+
+// ── Email verification screen handlers ────────────────────────────────────────
+window.checkEmailVerified = async function(){
+  const msg = document.getElementById("verify-msg");
+  if(msg) msg.textContent = "Verificando...";
+  try{
+    const user = await reloadCurrentUser();
+    if(user?.emailVerified){
+      await _handleAuth(user);
+    } else {
+      if(msg) msg.textContent = "Email ainda não verificado. Confira sua caixa de entrada.";
+    }
+  }catch(e){ if(msg) msg.textContent = "Erro ao verificar. Tente novamente."; }
+};
+
+window.resendVerifyEmail = async function(){
+  const msg = document.getElementById("verify-msg");
+  try{
+    await resendVerificationEmail();
+    if(msg) msg.textContent = "✅ Email reenviado! Confira sua caixa de entrada.";
+  }catch(e){ if(msg) msg.textContent = "Erro ao reenviar. Tente em alguns minutos."; }
+};
+
+window.backToAuthFromVerify = function(){
+  logoutUser().catch(()=>{});
+  showView("view-auth");
+};
 
 document.addEventListener("DOMContentLoaded",init);
