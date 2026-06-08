@@ -1845,6 +1845,63 @@ VICTOR_DATA.writingTopics = [
     ptPrompt:"Traduza e reescreva de forma mais profissional.",
     example:"Dear Team,\n\nI am writing to address the recent delivery delay. The vessel arrived behind schedule due to adverse weather conditions, and the customs clearance process took longer than expected. We are currently working to resolve this matter as efficiently as possible and will provide an update shortly.\n\nBest regards.",
     tips:["Informal → Formal: 'Olá' → 'Dear Team'","Replace casual words: 'ruim' → 'adverse', 'demorou' → 'took longer than expected'","Add professional closing"] },
+
+  // ── MAIS TÓPICOS ──────────────────────────────────────
+  { id:"w9", level:"A1", icon:"📝", title:"Write a To-Do List",
+    ptTitle:"Escreva uma lista de tarefas",
+    prompt:"Write a list of 5 work tasks you need to do today. Use full sentences.",
+    ptPrompt:"Escreva uma lista de 5 tarefas de trabalho para hoje. Use frases completas.",
+    example:"I need to check the emails. I have to call the supplier. I must prepare the report. I need to attend a meeting at 2 PM. I have to update the schedule.",
+    tips:["Use 'I need to...' / 'I have to...' / 'I must...'","Use the base form of the verb after these","Keep each task short and clear"] },
+
+  { id:"w10", level:"A2", icon:"👥", title:"Describe Your Coworkers",
+    ptTitle:"Descreva seus colegas",
+    prompt:"Write 5-6 sentences describing two coworkers — their roles and personalities.",
+    ptPrompt:"Escreva 5-6 frases descrevendo dois colegas — funções e personalidades.",
+    example:"Ana is the manager. She is organized and very professional. She always helps the team. Pedro works in logistics. He is friendly and hardworking. We work well together.",
+    tips:["Use 'He/She is...' for personality","Use adjectives: organized, friendly, hardworking","Use 'works in/as' for their role"] },
+
+  { id:"w11", level:"A2", icon:"🧭", title:"Give Directions",
+    ptTitle:"Dê direções",
+    prompt:"A tourist asks how to get from the hotel to the beach. Write the directions (4-5 sentences).",
+    ptPrompt:"Um turista pergunta como ir do hotel à praia. Escreva as direções.",
+    example:"Go out of the hotel and turn left. Walk straight for two blocks. Turn right at the bank. The beach is at the end of the street. It takes about ten minutes.",
+    tips:["Use imperatives: Go, Turn, Walk","Use prepositions: left, right, straight, at the end","Mention distance or time"] },
+
+  { id:"w12", level:"B1", icon:"🛎️", title:"Respond to a Complaint",
+    ptTitle:"Responda a uma reclamação",
+    prompt:"A customer complained about a late delivery. Write a polite response (5-6 sentences) apologizing and offering a solution.",
+    ptPrompt:"Um cliente reclamou de uma entrega atrasada. Escreva uma resposta educada com desculpas e solução.",
+    example:"Dear Mr. Costa,\n\nThank you for contacting us, and I sincerely apologize for the delay in your delivery. We understand how frustrating this can be. The issue was caused by a problem at customs, which has now been resolved. As an apology, we would like to offer you a 10% discount on your next order. Please let us know if there is anything else we can do.\n\nBest regards.",
+    tips:["Apologize sincerely: 'I sincerely apologize for...'","Explain briefly, then offer a solution","Stay polite and professional"] },
+
+  { id:"w13", level:"B1", icon:"🌍", title:"Write a COMEX Email",
+    ptTitle:"Escreva um email de comércio exterior",
+    prompt:"Write an email to a foreign supplier requesting a quote for 500 units, including shipping to Santos.",
+    ptPrompt:"Escreva um email a um fornecedor estrangeiro pedindo cotação de 500 unidades com frete para Santos.",
+    example:"Dear Supplier,\n\nWe are interested in placing an order for 500 units of your product. Could you please send us a quotation including the unit price, shipping costs to the Port of Santos, and the estimated delivery time? We would also like to know the available payment terms.\n\nWe look forward to your reply.\n\nBest regards.",
+    tips:["Use 'Could you please send us...' for polite requests","Be specific: quantity, destination, delivery time","Ask about price, shipping and payment terms"] },
+
+  { id:"w14", level:"B1", icon:"🏖️", title:"Describe a Tourist Spot",
+    ptTitle:"Descreva um ponto turístico",
+    prompt:"Describe a tourist attraction in Santos to a foreign visitor (5-6 sentences).",
+    ptPrompt:"Descreva uma atração turística de Santos para um visitante estrangeiro.",
+    example:"Santos has the largest beachfront garden in the world. It is perfect for a walk or a bike ride. Nearby, you can visit the Coffee Museum, which shows the history of the city. The port is also very impressive. I recommend trying the local seafood. You will love it.",
+    tips:["Use Present Simple for facts","Use 'You can...' for suggestions","End with a recommendation"] },
+
+  { id:"w15", level:"B2", icon:"💼", title:"Write a Cover Letter",
+    ptTitle:"Escreva uma carta de apresentação",
+    prompt:"Write a short cover letter (6-8 sentences) applying for a bilingual position at a logistics company.",
+    ptPrompt:"Escreva uma carta de apresentação para uma vaga bilíngue numa empresa de logística.",
+    example:"Dear Hiring Manager,\n\nI am writing to apply for the bilingual logistics analyst position at your company. I have three years of experience in the import and export sector at the Port of Santos. I am fluent in Portuguese and have a strong command of English. In my current role, I coordinate shipments and communicate daily with international partners. I am confident that my skills and experience make me a strong candidate. I would welcome the opportunity to discuss my application further.\n\nSincerely.",
+    tips:["Open with the position you want","Highlight experience and language skills","Close with a call to action: 'I would welcome the opportunity...'"] },
+
+  { id:"w16", level:"B2", icon:"🤝", title:"Negotiate a Deal",
+    ptTitle:"Negocie um acordo",
+    prompt:"A supplier's price is too high. Write a professional message (6-8 sentences) negotiating a better price or terms.",
+    ptPrompt:"O preço do fornecedor está alto. Escreva uma mensagem negociando preço ou condições melhores.",
+    example:"Dear Mr. Lee,\n\nThank you for your quotation. We are very interested in working with you; however, the proposed price is slightly above our budget. Given the large volume of our order, we would appreciate a 12% discount. In return, we are willing to commit to a long-term partnership and faster payment terms. We believe this would be beneficial for both parties. Please let us know if this arrangement works for you.\n\nBest regards.",
+    tips:["Acknowledge first, then raise the concern","Use 'however' and 'given that...' to soften","Offer something in return (win-win)"] },
 ];
 
 // ══════════════════════════════════════════════════════
