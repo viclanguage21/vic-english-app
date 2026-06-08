@@ -3576,3 +3576,12 @@ VICTOR_DATA.flashcardDecks.push({
     return (ai<0?9999:ai)-(bi<0?9999:bi);
   });
 })();
+
+// ── Order segments by relevance ───────────────────────────────
+(function(){
+  const ORDER = ["maritimo","comex","offshore","cruzeiros","aeroporto","hotelaria","restaurantes","corporativo","transporte","varejo","saude"];
+  VICTOR_DATA.segments.sort((a,b)=>{
+    const ai=ORDER.indexOf(a.id), bi=ORDER.indexOf(b.id);
+    return (ai<0?9999:ai)-(bi<0?9999:bi);
+  });
+})();
