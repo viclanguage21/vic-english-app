@@ -596,7 +596,7 @@ async function updateStreak(){
   userData.xpToday=0;
   userData.streak=streak;
   userData.lastLoginDate=today;
-  await saveProgress(currentUser.uid,{streak,lastLoginDate:today,xpYesterday:userData.xpYesterday,xpToday:0});
+  await saveProgressSafe(currentUser.uid,{streak,lastLoginDate:today,xpYesterday:userData.xpYesterday,xpToday:0},true);
 }
 
 // ── GREETING ──────────────────────────────────────────────────────────────────
@@ -740,14 +740,14 @@ async function updateDailyProgress(type){
     dp.allComplete=true;
     const bonusXP=todayMissions.reduce((a,dm)=>a+dm.xp,0);
     userData.xp=(userData.xp||0)+bonusXP;
-    await saveProgress(currentUser.uid,{xp:userData.xp,dailyProgress:dp});
+    await saveProgressSafe(currentUser.uid,{xp:userData.xp,dailyProgress:dp},true);
     userData.dailyProgress=dp;
     // Cancel the 7pm reminder since user already practiced
     navigator.serviceWorker?.ready.then(reg => reg.active?.postMessage({type:"CANCEL_NOTIF"})).catch(()=>{});
     if(!alreadyDoneBeforeUpdate) showDailyComplete(bonusXP);
   } else {
     userData.dailyProgress=dp;
-    await saveProgress(currentUser.uid,{dailyProgress:dp});
+    saveProgressSafe(currentUser.uid,{dailyProgress:dp});
   }
   renderDailyMissions();
 }
@@ -1162,54 +1162,96 @@ async function finishDiagnosis(){
 
 
 // ══════════════════════════════════════════════════════════════════════════════
-// OFFLINE SYNC — fila de progresso quando sem internet
+// ══════════════════════════════════════════════════════════════════════════════
+// SAVE BATCH + OFFLINE QUEUE
+// Non-urgent saves are merged and written after 4s of inactivity.
+// Urgent saves (streak, mission complete, payment) flush immediately.
+// Offline queue is keyed by UID so updates merge instead of stacking.
 // ══════════════════════════════════════════════════════════════════════════════
 const OFFLINE_QUEUE_KEY = "vic_offline_queue";
 
 function offlineEnqueue(uid, updates){
-  const queue = JSON.parse(localStorage.getItem(OFFLINE_QUEUE_KEY)||"[]");
-  queue.push({ uid, updates, ts: Date.now() });
-  localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(queue));
+  if(uid?.startsWith("guest_")) return;
+  try{
+    const q = JSON.parse(localStorage.getItem(OFFLINE_QUEUE_KEY)||"{}");
+    q[uid] = { ...(q[uid]||{}), ...updates, _ts: Date.now() };
+    localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(q));
+  }catch(e){}
 }
 
 async function offlineFlush(){
-  const queue = JSON.parse(localStorage.getItem(OFFLINE_QUEUE_KEY)||"[]");
-  if(!queue.length) return;
-  const failed = [];
-  for(const item of queue){
-    try{
-      await saveProgress(item.uid, item.updates);
-    }catch(e){
-      if(Date.now() - item.ts < 86400000) failed.push(item); // retry por 24h
+  try{
+    const q = JSON.parse(localStorage.getItem(OFFLINE_QUEUE_KEY)||"{}");
+    const uids = Object.keys(q);
+    if(!uids.length) return;
+    const failed = {};
+    for(const uid of uids){
+      const { _ts, ...updates } = q[uid];
+      try{
+        await saveProgress(uid, updates);
+      }catch(e){
+        if(Date.now() - (_ts||0) < 86400000) failed[uid] = q[uid];
+      }
     }
-  }
-  localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(failed));
-  if(queue.length > failed.length){
-    console.log(`✅ Offline sync: ${queue.length - failed.length} itens sincronizados`);
-  }
+    localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(failed));
+    const n = uids.length - Object.keys(failed).length;
+    if(n > 0) console.log(`✅ Synced ${n} queued saves`);
+  }catch(e){ console.warn("offlineFlush error:", e); }
 }
 
-// Wrapper de saveProgress com fallback offline
-async function saveProgressSafe(uid, updates){
-  if(!navigator.onLine){
-    offlineEnqueue(uid, updates);
-    showXpToast("📶 Sem internet — progresso salvo localmente");
-    return;
-  }
+// Batch state
+let _saveBatch = null;  // { uid, updates }
+let _saveTimer = null;
+
+function _flushSaveBatch(){
+  clearTimeout(_saveTimer); _saveTimer = null;
+  if(!_saveBatch) return;
+  const { uid, updates } = _saveBatch; _saveBatch = null;
+  _doSave(uid, updates);
+}
+
+async function _doSave(uid, updates){
+  if(!navigator.onLine){ offlineEnqueue(uid, updates); return; }
   try{
     await saveProgress(uid, updates);
+    // Clear from offline queue on success
+    try{
+      const q = JSON.parse(localStorage.getItem(OFFLINE_QUEUE_KEY)||"{}");
+      if(q[uid]){ delete q[uid]; localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(q)); }
+    }catch(e){}
   }catch(e){
     offlineEnqueue(uid, updates);
-    console.warn("saveProgress falhou, enfileirado:", e.message);
+    console.warn("Save queued:", e.message);
   }
 }
 
-// Sincronizar quando voltar online
+// saveProgressSafe — use this everywhere instead of saveProgress directly.
+// urgent=true  → flush batch immediately (mission complete, streak, payment)
+// urgent=false → debounce 4s (per-answer XP, daily progress, etc.)
+async function saveProgressSafe(uid, updates, urgent = false){
+  if(uid?.startsWith("guest_")) return saveProgress(uid, updates);
+  if(_saveBatch?.uid === uid){
+    Object.assign(_saveBatch.updates, updates);
+  } else {
+    _flushSaveBatch();
+    _saveBatch = { uid, updates: { ...updates } };
+  }
+  if(urgent){
+    _flushSaveBatch();
+  } else {
+    clearTimeout(_saveTimer);
+    _saveTimer = setTimeout(_flushSaveBatch, 4000);
+  }
+}
+
+// Flush when app is backgrounded or closed
+document.addEventListener("visibilitychange", () => { if(document.hidden) _flushSaveBatch(); });
+window.addEventListener("pagehide", _flushSaveBatch);
+
 window.addEventListener("online", () => {
   showXpToast("📶 Conexão restaurada! Sincronizando...");
-  if(currentUser) offlineFlush();
+  if(currentUser){ _flushSaveBatch(); offlineFlush(); }
 });
-
 window.addEventListener("offline", () => {
   showXpToast("📶 Sem internet — progresso salvo localmente");
 });
@@ -2433,7 +2475,7 @@ async function autoAdvance(score){
   await updateDailyProgress("segment");
   if(currentPhraseIndex<total-1){
     currentPhraseIndex++;
-    await saveProgress(currentUser.uid,{xp:newXp,currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:currentPhraseIndex}});
+    saveProgressSafe(currentUser.uid,{xp:newXp,currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:currentPhraseIndex}});
     renderMission();
   } else await completeMission(newXp);
 }
@@ -2483,7 +2525,7 @@ async function completeMission(xp){
   const key=`${currentSegmentId}_${currentPhaseId}_${currentMissionId}`;
   if(!completed.includes(key)) completed.push(key);
   currentPhraseIndex=0;
-  await saveProgress(currentUser.uid,{xp:xp??userData.xp,completedMissions:completed,currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:0}});
+  await saveProgressSafe(currentUser.uid,{xp:xp??userData.xp,completedMissions:completed,currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:0}},true);
   userData.completedMissions=completed;
   SoundFX.complete();
   if(completed.length===1) showNotifBanner();
@@ -3096,7 +3138,7 @@ function handleFreeMemCard(div,total){
       a.classList.add("matched");b.classList.add("matched");SoundFX.correct();freeMemMatched++;freeMemXP+=10;
       document.getElementById("mem-score-display").textContent=`XP: ${freeMemXP}`;
       freeMemSelected=[];
-      if(freeMemMatched===total){showXpToast(`🧠 +${freeMemXP} XP`);if(currentUser)saveProgress(currentUser.uid,{xp:(userData.xp||0)+freeMemXP}).then(()=>{userData.xp=(userData.xp||0)+freeMemXP;});updateDailyProgress("memory");setTimeout(()=>openMemoryFree(),1500);}
+      if(freeMemMatched===total){showXpToast(`🧠 +${freeMemXP} XP`);if(currentUser){userData.xp=(userData.xp||0)+freeMemXP;saveProgressSafe(currentUser.uid,{xp:userData.xp});};updateDailyProgress("memory");setTimeout(()=>openMemoryFree(),1500);}
     } else {SoundFX.wrong();setTimeout(()=>{a.classList.remove("flipped");b.classList.remove("flipped");freeMemSelected=[];},900);}
   }
 }
@@ -3169,7 +3211,7 @@ function showTFResult(){
   document.getElementById("tf-result-msg").textContent=pct>=80?"Excelente! 🌟":pct>=50?"Bom trabalho! 👍":"Continue praticando! 💪";
   document.getElementById("tf-result-bar").style.width=`${pct}%`;
   showXpToast(`✅ +${tfScore} XP`);
-  if(currentUser)saveProgress(currentUser.uid,{xp:(userData.xp||0)+tfScore}).then(()=>{userData.xp=(userData.xp||0)+tfScore;});
+  if(currentUser){userData.xp=(userData.xp||0)+tfScore;saveProgressSafe(currentUser.uid,{xp:userData.xp});}
   SoundFX.complete();
 }
 
@@ -3411,7 +3453,7 @@ function showDlgResult(){
   document.getElementById("dlg-result-score").textContent=`${dlgScore} / ${max} pts`;
   document.getElementById("dlg-result-msg").textContent=pct>=80?"Conversa fluente! 🌟":pct>=50?"Bom trabalho! 👍":"Pratique mais! 💪";
   showXpToast(`💬 +${dlgScore} XP`);
-  if(currentUser)saveProgress(currentUser.uid,{xp:(userData.xp||0)+dlgScore}).then(()=>{userData.xp=(userData.xp||0)+dlgScore;});
+  if(currentUser){userData.xp=(userData.xp||0)+dlgScore;saveProgressSafe(currentUser.uid,{xp:userData.xp});}
   updateDailyProgress("dialogue");
   SoundFX.complete();
 }
@@ -4449,7 +4491,7 @@ async function trackDailyXP(amount){
   const history=userData.xpHistory||{};
   history[today]=(history[today]||0)+amount;
   userData.xpHistory=history;
-  await saveProgress(currentUser.uid,{xpHistory:history});
+  saveProgressSafe(currentUser.uid,{xpHistory:history});
 }
 
 window.showSkillDetail=function(name, pct){
@@ -5042,7 +5084,7 @@ Tips must be specific to the student's actual text, not generic advice.`
     const xpGain=result.score>=8?30:result.score>=5?20:10;
     userData.xp=(userData.xp||0)+xpGain;
     showXpToast(`✍️ +${xpGain} XP`);
-    if(currentUser) saveProgress(currentUser.uid,{xp:userData.xp});
+    if(currentUser) saveProgressSafe(currentUser.uid,{xp:userData.xp});
     updateDailyProgress("writing");
     btn.textContent="✅ Corrigido!";
     document.getElementById("writing-feedback").scrollIntoView({behavior:"smooth",block:"start"});
@@ -5098,7 +5140,7 @@ function checkBadges(){
   // Save to userData
   const updated = [...earned, ...newBadges.map(b=>b.id)];
   userData.badges = updated;
-  if(currentUser) saveProgress(currentUser.uid, {badges:updated});
+  if(currentUser) saveProgressSafe(currentUser.uid, {badges:updated});
 
   // Show only 1 badge per session — avoid badge flooding
   showBadgeUnlock(newBadges[0]);
@@ -5128,7 +5170,7 @@ function showBadgeUnlock(badge){
   vibrate([60,30,60,30,200]);
 
   userData.xp=(userData.xp||0)+badge.xp;
-  if(currentUser) saveProgress(currentUser.uid,{xp:userData.xp});
+  if(currentUser) saveProgressSafe(currentUser.uid,{xp:userData.xp});
   showXpToast(`${badge.icon} +${badge.xp} XP — ${badge.name}`);
 
   setTimeout(()=>overlay.remove(), 8000);
