@@ -3,7 +3,29 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>VIC English — Inglês Operacional</title>
+  <title>VIC English — Inglês para Profissionais</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Aprenda inglês técnico para sua área: Marítimo, COMEX, Offshore, Hotelaria, Aeroporto e mais. Frases reais, progresso gamificado, grátis para começar."/>
+  <meta name="keywords" content="inglês profissional, inglês técnico, inglês marítimo, inglês COMEX, inglês offshore, inglês hotelaria, aprender inglês"/>
+  <link rel="canonical" href="https://app.viclanguage.com.br/"/>
+
+  <!-- Open Graph (WhatsApp, Facebook, LinkedIn) -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://app.viclanguage.com.br/"/>
+  <meta property="og:site_name" content="VIC English"/>
+  <meta property="og:title" content="VIC English — Inglês para Profissionais"/>
+  <meta property="og:description" content="Inglês técnico para sua área: Marítimo, COMEX, Offshore, Hotelaria e mais. Aprenda as frases que realmente usam no trabalho."/>
+  <meta property="og:image" content="https://app.viclanguage.com.br/og_image.png"/>
+  <meta property="og:image:alt" content="VIC English — Inglês para Profissionais"/>
+  <meta property="og:locale" content="pt_BR"/>
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="VIC English — Inglês para Profissionais"/>
+  <meta name="twitter:description" content="Inglês técnico para sua área: Marítimo, COMEX, Offshore, Hotelaria e mais."/>
+  <meta name="twitter:image" content="https://app.viclanguage.com.br/og_image.png"/>
+  <!-- NOTE: Create og_image.png (1200x630px) with VIC logo + tagline for best WhatsApp previews -->
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json"/>
@@ -208,6 +230,10 @@
 <!-- ══ VERIFY EMAIL ══════════════════════════════════════════ -->
 <div class="view" id="view-verify-email">
   <div class="verify-email-screen">
+    <div class="verify-lang-row">
+      <button onclick="setLang('pt')" class="auth-lang-btn">🇧🇷 PT</button>
+      <button onclick="setLang('en')" class="auth-lang-btn">🇺🇸 EN</button>
+    </div>
     <img src="vic_english_logo.png" alt="VIC English" class="verify-logo">
 
     <div class="verify-envelope-wrap">

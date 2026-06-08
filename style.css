@@ -7791,3 +7791,11 @@ a.settings-big-btn:active {
 }
 .dash-header-streak[data-fire="off"] .dhs-fire { filter: grayscale(1) !important; opacity: 0.5 !important; }
 .dash-header-streak[data-fire="off"] .dhs-val  { color: rgba(200,200,220,0.55) !important; }
+
+/* ── Language flags on verify-email screen ── */
+.verify-lang-row {
+  display: flex;
+  gap: 8px;
+  align-self: flex-end;
+  margin-bottom: 8px;
+}
