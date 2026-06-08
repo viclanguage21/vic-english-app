@@ -2,14 +2,28 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Each user can read/write their own document
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      // Read own document
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // Create own document on registration
+      allow create: if request.auth != null && request.auth.uid == userId;
+
+      // Update own document — cannot change plan or provider (prevents free→pro self-upgrade)
+      allow update: if request.auth != null
+        && request.auth.uid == userId
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['plan', 'provider']);
+
+      // No client-side deletes
+      allow delete: if false;
     }
 
-    // All authenticated users can read the users collection (needed for ranking)
+    // Non-anonymous authenticated users can read all profiles (leaderboard)
+    // Anonymous users cannot browse other people's data
     match /users/{document=**} {
-      allow read: if request.auth != null;
+      allow read: if request.auth != null
+        && request.auth.token.firebase.sign_in_provider != "anonymous";
     }
   }
 }
