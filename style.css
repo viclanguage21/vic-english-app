@@ -7445,6 +7445,7 @@ a.settings-big-btn:active {
   display: flex;
   align-items: center;
   gap: 3px;
+  margin-top: 7px;          /* abaixa o fogo, sem mexer na data */
   padding: 2px 8px;
   background: rgba(249,115,22,0.14);
   border: 1px solid rgba(249,115,22,0.3);
