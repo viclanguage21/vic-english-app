@@ -7211,53 +7211,54 @@ a.settings-big-btn:active {
   100% { transform: translateY(110vh) rotate(var(--fall-rot))   scale(0.4); opacity: 0; }
 }
 
-/* ══ DAILY BLOCK — navy/mission redesign ════════════════ */
+/* ══ DAILY BLOCK — azul claro translúcido (glass) ═══════ */
 .daily-block {
-  background: linear-gradient(150deg, #041624 0%, #071e38 55%, #0a2545 100%) !important;
-  border: 1px solid rgba(14,165,233,0.38) !important;
+  background: linear-gradient(150deg, rgba(96,165,250,0.16) 0%, rgba(56,189,248,0.09) 100%) !important;
+  border: 1px solid rgba(96,165,250,0.35) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
   box-shadow:
-    0 0 0 0 transparent,
-    inset 0 1px 0 rgba(56,189,248,0.12),
-    0 6px 28px rgba(0,0,0,0.45) !important;
+    inset 0 1px 0 rgba(186,230,253,0.18),
+    0 6px 24px rgba(8,30,60,0.25) !important;
 }
 .daily-block::before {
-  background: linear-gradient(90deg, transparent, rgba(56,189,248,0.65), transparent) !important;
+  background: linear-gradient(90deg, transparent, rgba(125,211,252,0.7), transparent) !important;
 }
 .daily-block-title {
-  color: #38bdf8 !important;
-  text-shadow: 0 0 12px rgba(56,189,248,0.4) !important;
+  color: #7dd3fc !important;
+  text-shadow: 0 0 12px rgba(125,211,252,0.45) !important;
 }
 .daily-header-right .daily-overall-pct {
-  color: rgba(56,189,248,0.6) !important;
+  color: rgba(186,230,253,0.7) !important;
 }
 .daily-block .daily-chevron {
-  color: rgba(56,189,248,0.38) !important;
+  color: rgba(186,230,253,0.5) !important;
 }
 .daily-block .daily-overall-bar-wrap {
-  background: rgba(14,165,233,0.1) !important;
+  background: rgba(186,230,253,0.15) !important;
   border-radius: 999px;
 }
 .daily-block .daily-overall-bar {
-  background: linear-gradient(90deg, #0284c7, #38bdf8) !important;
-  box-shadow: 0 0 10px rgba(14,165,233,0.55) !important;
+  background: linear-gradient(90deg, #38bdf8, #7dd3fc) !important;
+  box-shadow: 0 0 10px rgba(125,211,252,0.6) !important;
 }
 .daily-block .daily-mission-item {
-  background: linear-gradient(145deg, rgba(2,15,35,0.85), rgba(5,25,55,0.75)) !important;
-  border: 1px solid rgba(14,165,233,0.18) !important;
+  background: rgba(186,230,253,0.08) !important;
+  border: 1px solid rgba(96,165,250,0.22) !important;
   border-radius: 10px !important;
   margin-bottom: 6px !important;
   padding: 10px 12px !important;
 }
 .daily-block .daily-mission-item:last-child { margin-bottom: 0 !important; border-bottom: none !important; }
 .daily-block .daily-mission-item:not(.completed):hover {
-  background: linear-gradient(145deg, rgba(5,28,65,0.95), rgba(8,38,85,0.9)) !important;
-  border-color: rgba(56,189,248,0.42) !important;
+  background: rgba(186,230,253,0.16) !important;
+  border-color: rgba(125,211,252,0.5) !important;
   transform: translateX(3px) !important;
-  box-shadow: -3px 0 0 #0ea5e9 !important;
+  box-shadow: -3px 0 0 #38bdf8 !important;
 }
 .daily-block .daily-mission-item.completed {
-  background: rgba(14,165,233,0.06) !important;
-  border-color: rgba(14,165,233,0.12) !important;
+  background: rgba(186,230,253,0.05) !important;
+  border-color: rgba(96,165,250,0.12) !important;
   opacity: 0.72 !important;
 }
 .daily-block .dmi-bar-wrap {
