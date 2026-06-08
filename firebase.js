@@ -12,8 +12,6 @@ import {
   signOut,
   onAuthStateChanged,
   updateProfile,
-  browserLocalPersistence,
-  setPersistence,
   sendPasswordResetEmail,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
@@ -103,8 +101,6 @@ export function onForegroundMessage(callback) {
   return onMessage(msg, callback);
 }
 
-// Keep user logged in permanently — even after closing the app
-setPersistence(auth, browserLocalPersistence).catch(()=>{});
 
 export const OWNER_UID = "BPj6R6IH5naAcW0SWcZglXL7pEy2";
 
