@@ -111,11 +111,11 @@ export const OWNER_UID = "BPj6R6IH5naAcW0SWcZglXL7pEy2";
 const gProvider = new GoogleAuthProvider();
 
 // ── AUTH ──────────────────────────────────────────────
-export async function registerUser(email, password, name, username="") {
+export async function registerUser(email, password, name) {
   const c = await createUserWithEmailAndPassword(auth, email, password);
   await updateProfile(c.user, { displayName: name }).catch(()=>{});
   try{
-    await createUserDoc(c.user.uid, { name, email, provider: "email", username: username||name });
+    await createUserDoc(c.user.uid, { name, email, provider: "email" });
   }catch(firestoreErr){
     console.error("Firestore createUserDoc failed:", firestoreErr.code, firestoreErr.message);
     // Auth user was created successfully — Firestore will be retried by loadDashboard.

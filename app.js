@@ -833,13 +833,10 @@ function selectRegAvatar(btn){
 }
 
 async function handleRegister(){
-  const username=document.getElementById("reg-username")?.value?.trim()||"";
   const name=document.getElementById("reg-name").value.trim();
   const email=document.getElementById("reg-email").value.trim();
   const pw=document.getElementById("reg-password").value;
   const btn=document.getElementById("btn-register");
-  if(!username) return showAuthError(t("create_username"));
-  if(username.length<3) return showAuthError(t("min_username"));
   if(!name||!email||!pw) return showAuthError(t("fill_all"));
   if(pw.length<6) return showAuthError(t("min_password"));
   btn.disabled=true; btn.textContent="Criando...";
@@ -851,7 +848,7 @@ async function handleRegister(){
     showAuthError("Tempo esgotado. Verifique sua internet e tente novamente.");
   }, 12000);
   try{
-    const newUser = await registerUser(email,pw,name,username);
+    const newUser = await registerUser(email,pw,name);
     if(_regAvatar){
       _setCfg("avatar", _regAvatar);
       saveProgress(newUser.uid, {avatar: _regAvatar}).catch(()=>{});
@@ -4724,12 +4721,6 @@ async function saveEdit(){
       await saveProgress(currentUser.uid,{name:val});
       const phn=document.getElementById("profile-hero-name"); if(phn) phn.textContent=val;
       const ghi=document.getElementById("greeting-hi"); if(ghi) ghi.textContent=ghi.textContent.replace(/, .+! 👋$/, `, ${val}! 👋`);
-    } else if(editField==="username"){
-      if(val.length<3){msg.textContent="❌ Mínimo 3 caracteres.";return;}
-      if(!/^[a-zA-Z0-9_.]+$/.test(val)){msg.textContent="❌ Só letras, números, _ e .";return;}
-      userData.username=val;
-      await saveProgress(currentUser.uid,{username:val});
-      const hun=document.getElementById("profile-hero-username"); if(hun) hun.textContent=`@${val}`;
     } else if(editField==="email"){
       msg.textContent="⚠️ Para mudar o email, faça logout e login novamente com o novo email.";
       return;
@@ -6146,8 +6137,6 @@ function init(){
     document.getElementById("daily-complete-overlay")?.classList.remove("visible");
   });
   document.getElementById("btn-edit-name")?.addEventListener("click",()=>openEditModal("name","Novo nome",userData?.name||"","text"));
-  document.getElementById("btn-edit-username")?.addEventListener("click",()=>openEditModal("username","Novo username (@)",userData?.username||"","text"));
-  document.getElementById("btn-edit-username-inline")?.addEventListener("click",()=>openEditModal("username","Novo username (@)",userData?.username||"","text"));
   document.getElementById("btn-edit-email")?.addEventListener("click",()=>openEditModal("email","Novo email",userData?.email||"","email"));
   document.getElementById("btn-edit-password")?.addEventListener("click",()=>openEditModal("password","Nova senha","","password"));
   document.getElementById("btn-save-edit")?.addEventListener("click",saveEdit);

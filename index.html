@@ -288,13 +288,6 @@
 
       <!-- REGISTER FORM -->
       <div class="auth-form" id="form-register">
-        <div class="auth-field">
-          <label for="reg-username">@ Nome de usuário</label>
-          <input type="text" id="reg-username" placeholder="Ex: capitao.silva ou vic-english" autocomplete="username"
-            style="font-family:monospace;letter-spacing:.3px;" maxlength="20"
-            oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_.\-]/g,'')"/>
-          <div style="font-size:11px;color:var(--text-muted,#888);margin-top:4px;">Aparece no ranking. Letras, números, _ . -</div>
-        </div>
         <!-- Escolher avatar no cadastro -->
         <div class="auth-field">
           <label>Escolha um avatar <span style="color:rgba(255,255,255,0.4);font-weight:400;font-size:11px;">— você pode trocar depois</span></label>
@@ -1593,10 +1586,6 @@
         <button class="profile-avatar-edit" id="btn-edit-avatar" title="Mudar avatar">✏️</button>
       </div>
       <div class="profile-hero-name"  id="profile-hero-name"></div>
-      <div class="profile-hero-username-row">
-        <span class="profile-hero-username" id="profile-hero-username"></span>
-        <button class="profile-edit-inline-btn" id="btn-edit-username-inline" title="Editar username">✏️</button>
-      </div>
       <div class="profile-hero-level" id="profile-hero-level"></div>
     </div>
 
@@ -1700,7 +1689,6 @@
       <div class="profile-section-title" id="prof-title-account">👤 Conta</div>
       <div class="settings-big-btns">
         <button class="settings-big-btn" id="btn-edit-name">✏️ Mudar Nome</button>
-        <button class="settings-big-btn" id="btn-edit-username">🏷️ Mudar Username</button>
         <button class="settings-big-btn" id="btn-edit-email">📧 Mudar Email</button>
         <button class="settings-big-btn" id="btn-edit-password">🔒 Mudar Senha</button>
         <button class="settings-big-btn btn-logout-profile" id="btn-logout">⏻ Sair da conta</button>
