@@ -1162,6 +1162,8 @@ export const GLOSSARY = {
   ]},
 };
 
+Object.values(GLOSSARY).forEach(seg => seg.terms.sort((a,b) => a.en.localeCompare(b.en)));
+
 export const PRO_MESSAGES=[
   {title:"🚀 Acelere seu inglês",        sub:"Só R$ 5/mês — menos que um café por dia!"},
   {title:"💼 Para sua carreira",         sub:"Todo conteúdo profissional por apenas R$ 5/mês"},

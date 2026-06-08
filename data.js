@@ -3554,3 +3554,25 @@ VICTOR_DATA.flashcardDecks.push({
   ]
 });
 
+// ── Group flashcard decks by segment ──────────────────────────
+(function(){
+  const ORDER = [
+    "fc_maritimo","maritimo_comex","maritimo_doc","maritimo_bl","concais_vocab",
+    "fc_comex","comex_incoterms",
+    "fc_hotel","hotelaria_vocab2",
+    "fc_restaurante",
+    "airport_vocab","aeroporto_vocab2",
+    "offshore_vocab","offshore_vocab3",
+    "corporate_vocab","corporativo_vocab2","corporativo_emails",
+    "saude_vocab2",
+    "transporte_vocab2",
+    "varejo_vocab2",
+    "turismo_santos2",
+    "negociacao_vocab",
+    "homophones","false_friends_complete",
+  ];
+  VICTOR_DATA.flashcardDecks.sort((a,b)=>{
+    const ai=ORDER.indexOf(a.id), bi=ORDER.indexOf(b.id);
+    return (ai<0?9999:ai)-(bi<0?9999:bi);
+  });
+})();
