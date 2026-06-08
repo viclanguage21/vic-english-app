@@ -7361,13 +7361,33 @@ a.settings-big-btn:active {
   border-radius: 16px !important;
   color: #fff !important;
   text-shadow: 0 1px 4px rgba(0,0,0,0.3) !important;
-  box-shadow: 0 4px 20px rgba(177,77,130,0.35), 0 0 0 0 rgba(38,128,176,0.3) !important;
-  animation: start-now-pulse 2.6s ease-in-out infinite !important;
+  overflow: hidden !important;
+  position: relative !important;
+  animation: start-now-pulse 2.2s ease-in-out infinite !important;
   letter-spacing: 0.5px !important;
 }
+.btn-start-now::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important; left: -120% !important;
+  width: 55% !important; height: 100% !important;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent) !important;
+  animation: start-now-shimmer 2.2s ease-in-out infinite !important;
+  pointer-events: none !important;
+}
 @keyframes start-now-pulse {
-  0%,100% { box-shadow: 0 4px 20px rgba(244,114,182,0.3), 0 0 0 0 rgba(124,200,245,0.25); }
-  50%      { box-shadow: 0 6px 28px rgba(244,114,182,0.45), 0 0 0 6px rgba(124,200,245,0.08); }
+  0%, 100% {
+    box-shadow: 0 4px 18px rgba(106,71,160,0.45), 0 0 0 0 rgba(177,77,130,0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 8px 38px rgba(106,71,160,0.75), 0 0 24px 4px rgba(177,77,130,0.35);
+    transform: scale(1.018);
+  }
+}
+@keyframes start-now-shimmer {
+  0%    { left: -120%; }
+  55%, 100% { left: 160%; }
 }
 
 /* ══ GAME HEADERS — accent de cor por jogo ════════════════════
