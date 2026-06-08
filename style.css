@@ -1980,8 +1980,8 @@ input { color: #ffffff !important; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(145deg, #3a1f63 0%, #4a2160 55%, #5c2758 100%);
-  border: 1px solid rgba(216,150,230,0.32);
+  background: linear-gradient(135deg, #7a2e60 0%, #6b2a5e 55%, #5c2858 100%);
+  border: 1px solid rgba(236,72,153,0.4);
   border-radius: var(--r);
   padding: 14px 16px;
   margin-bottom: 14px;
@@ -7429,6 +7429,13 @@ a.settings-big-btn:active {
   align-self: flex-start !important;   /* sobe a data p/ o topo do header */
   padding-top: 2px !important;
 }
+/* inner encolhe p/ largura da data — centraliza o foguinho sob ela */
+.dash-left-inner {
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: fit-content !important;
+}
 .dash-header-3col .dash-date {
   display: flex !important;
   flex-direction: column !important;
@@ -7440,25 +7447,25 @@ a.settings-big-btn:active {
   border: none !important;
   text-align: left !important;
 }
-/* streak com foguinho pequeno embaixo da data */
+/* streak com foguinho pequeno embaixo da data, centralizado */
 .dash-header-streak {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   margin-top: 7px;          /* abaixa o fogo, sem mexer na data */
-  padding: 2px 8px;
+  padding: 2px 9px;
   background: rgba(249,115,22,0.14);
   border: 1px solid rgba(249,115,22,0.3);
   border-radius: 999px;
 }
-.dash-header-streak .dhs-fire { font-size: 11px; line-height: 1; }
+.dash-header-streak .dhs-fire { font-size: 14px; line-height: 1; }
 .dash-header-streak .dhs-val {
-  font-size: 12px; font-weight: 800;
+  font-size: 13px; font-weight: 800;
   color: #fb923c;
 }
 .dash-date-weekday {
   font-family: var(--font) !important;
-  font-size: 11px !important;
+  font-size: 12px !important;
   font-weight: 600 !important;
   letter-spacing: 1px !important;
   text-transform: uppercase !important;
@@ -7468,7 +7475,7 @@ a.settings-big-btn:active {
 }
 .dash-date-day {
   font-family: var(--font) !important;
-  font-size: 16px !important;
+  font-size: 18px !important;
   font-weight: 800 !important;
   letter-spacing: -0.2px !important;
   font-style: normal !important;
@@ -7532,4 +7539,16 @@ a.settings-big-btn:active {
   color: #1a0d2e; font-size: 16px; font-weight: 900;
   border-radius: 50%;
   box-shadow: 0 2px 8px rgba(201,147,58,0.4);
+}
+
+/* ══ XP PROGRESS BAR — roxo claro com borda rosa (só no dashboard) ══ */
+.xp-track .progress-bar-bg {
+  height: 9px !important;
+  background: rgba(0,0,0,0.3) !important;
+  border: 1.5px solid rgba(236,72,153,0.6) !important;
+  border-radius: 999px !important;
+}
+.xp-track .progress-bar-fill {
+  background: linear-gradient(90deg, #8b6fc7, #a78bfa) !important;
+  box-shadow: 0 0 8px rgba(167,139,250,0.55) !important;
 }
