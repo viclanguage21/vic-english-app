@@ -27,6 +27,7 @@ import {
   orderBy,
   limit,
   serverTimestamp,
+  arrayUnion,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -108,10 +109,15 @@ export const OWNER_UID = "BPj6R6IH5naAcW0SWcZglXL7pEy2";
 const gProvider = new GoogleAuthProvider();
 
 // ── AUTH ──────────────────────────────────────────────
+const _verifyActionSettings = {
+  url: "https://app.viclanguage.com.br/?emailVerified=1",
+  handleCodeInApp: false,
+};
+
 export async function registerUser(email, password, name) {
   const c = await createUserWithEmailAndPassword(auth, email, password);
   await updateProfile(c.user, { displayName: name }).catch(()=>{});
-  sendEmailVerification(c.user).catch(()=>{});
+  sendEmailVerification(c.user, _verifyActionSettings).catch(()=>{});
   try{
     await createUserDoc(c.user.uid, { name, email, provider: "email" });
   }catch(firestoreErr){
@@ -121,7 +127,7 @@ export async function registerUser(email, password, name) {
 }
 
 export async function resendVerificationEmail() {
-  if(auth.currentUser) await sendEmailVerification(auth.currentUser);
+  if(auth.currentUser) await sendEmailVerification(auth.currentUser, _verifyActionSettings);
 }
 
 export async function reloadCurrentUser() {
@@ -193,26 +199,41 @@ export async function getUserData(uid) {
   }
 }
 
+// Arrays that must only grow — use arrayUnion to make concurrent writes safe
+const _UNION_FIELDS = new Set(["completedMissions", "badges"]);
+
 export async function saveProgress(uid, updates) {
   if (uid?.startsWith("guest_")) {
     try {
       const cur = JSON.parse(localStorage.getItem("vic_guest_data") || "{}");
-      localStorage.setItem("vic_guest_data", JSON.stringify({ ...cur, ...updates, uid }));
+      const merged = { ...cur, uid };
+      for (const [k, v] of Object.entries(updates)) {
+        if (_UNION_FIELDS.has(k) && Array.isArray(v) && Array.isArray(merged[k])) {
+          merged[k] = [...new Set([...merged[k], ...v])];
+        } else {
+          merged[k] = v;
+        }
+      }
+      localStorage.setItem("vic_guest_data", JSON.stringify(merged));
     } catch(e) {}
     return;
   }
+
+  // Build atomic update: use arrayUnion for grow-only array fields
+  const atomicUpdate = { lastSeen: serverTimestamp() };
+  for (const [k, v] of Object.entries(updates)) {
+    if (_UNION_FIELDS.has(k) && Array.isArray(v) && v.length > 0) {
+      atomicUpdate[k] = arrayUnion(...v);
+    } else {
+      atomicUpdate[k] = v;
+    }
+  }
+
   try {
-    await updateDoc(doc(db, "users", uid), {
-      ...updates,
-      lastSeen: serverTimestamp(),
-    });
+    await updateDoc(doc(db, "users", uid), atomicUpdate);
   } catch (e) {
-    // If doc doesn't exist, create it
     try {
-      await setDoc(doc(db, "users", uid), {
-        ...updates,
-        lastSeen: serverTimestamp(),
-      }, { merge: true });
+      await setDoc(doc(db, "users", uid), atomicUpdate, { merge: true });
     } catch (e2) {
       console.error("saveProgress error:", e2);
     }

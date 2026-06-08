@@ -7616,3 +7616,178 @@ a.settings-big-btn:active {
   justify-content: center !important;
   text-align: center !important;
 }
+
+/* ══ VERIFY EMAIL SCREEN ════════════════════════════════════════ */
+.verify-email-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 28px 24px 40px;
+  text-align: center;
+  background: linear-gradient(160deg, #0e0620 0%, #1a0a38 35%, #2b1268 70%, #3e1e88 100%);
+  overflow-y: auto;
+}
+
+.verify-logo {
+  width: 120px;
+  max-width: 55%;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 4px 16px rgba(177,77,130,0.45));
+}
+
+.verify-envelope-wrap {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #b14d82 0%, #6a47a0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 32px rgba(177,77,130,0.45), 0 0 0 6px rgba(177,77,130,0.12);
+  animation: verify-envelope-pop 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+.verify-envelope-inner {
+  font-size: 40px;
+  line-height: 1;
+  animation: verify-envelope-sway 3s ease-in-out 0.8s infinite;
+}
+
+@keyframes verify-envelope-pop {
+  from { transform: scale(0.3); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+@keyframes verify-envelope-sway {
+  0%, 100% { transform: rotate(-6deg) scale(1); }
+  50%       { transform: rotate(6deg) scale(1.06); }
+}
+
+.verify-title {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 900;
+  margin: 0 0 8px;
+  letter-spacing: -0.3px;
+}
+
+.verify-tagline {
+  color: rgba(255,255,255,0.65);
+  font-size: 14px;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+.verify-tagline-accent { color: #f0d070; }
+
+.verify-sent-label {
+  color: rgba(255,255,255,0.5);
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.verify-email-addr {
+  color: #f0d070;
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 22px;
+  word-break: break-all;
+}
+
+.verify-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 28px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(177,77,130,0.2);
+  border-radius: 16px;
+  padding: 16px 18px;
+}
+
+.verify-benefit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.85);
+  text-align: left;
+}
+.verify-benefit span { line-height: 1.4; }
+
+.verify-btn-primary {
+  width: 100%;
+  max-width: 320px;
+  padding: 15px 24px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #b14d82, #6a47a0);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 11px;
+  box-shadow: 0 6px 24px rgba(177,77,130,0.45);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.verify-btn-primary:active { transform: scale(0.97); box-shadow: 0 2px 10px rgba(177,77,130,0.3); }
+
+.verify-btn-secondary {
+  width: 100%;
+  max-width: 320px;
+  padding: 13px 24px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(177,77,130,0.4);
+  color: rgba(255,255,255,0.85);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 11px;
+  transition: background 0.15s;
+}
+.verify-btn-secondary:active { background: rgba(255,255,255,0.15); }
+
+.verify-btn-back {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.4);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 8px;
+  margin-bottom: 6px;
+}
+.verify-btn-back:hover { color: rgba(255,255,255,0.7); }
+
+.verify-msg {
+  color: #a78bfa;
+  font-size: 13px;
+  min-height: 20px;
+  margin-top: 4px;
+}
+
+.verify-hint {
+  color: rgba(255,255,255,0.25);
+  font-size: 12px;
+  margin-top: 14px;
+}
+
+/* ══ STREAK FIRE — active vs cold ══════════════════════════════ */
+/* Active (exercised today) — normal orange */
+.dash-header-streak[data-fire="on"] {
+  background: rgba(249,115,22,0.14) !important;
+  border-color: rgba(249,115,22,0.3) !important;
+}
+.dash-header-streak[data-fire="on"] .dhs-fire { filter: none !important; opacity: 1 !important; }
+.dash-header-streak[data-fire="on"] .dhs-val  { color: #fb923c !important; }
+
+/* Cold (not exercised today) — dimmed gray */
+.dash-header-streak[data-fire="off"] {
+  background: rgba(150,150,170,0.10) !important;
+  border-color: rgba(150,150,170,0.22) !important;
+}
+.dash-header-streak[data-fire="off"] .dhs-fire { filter: grayscale(1) !important; opacity: 0.5 !important; }
+.dash-header-streak[data-fire="off"] .dhs-val  { color: rgba(200,200,220,0.55) !important; }

@@ -581,22 +581,67 @@ function isSegmentFree(segId,phaseId){
 // ── STREAK ────────────────────────────────────────────────────────────────────
 async function updateStreak(){
   const today=new Date().toISOString().slice(0,10);
-  const last=userData.lastLoginDate||"";
+  const yesterday=new Date(Date.now()-86400000).toISOString().slice(0,10);
+  const lastLogin=userData.lastLoginDate||"";
+
+  if(lastLogin!==today){
+    // Archive yesterday's XP
+    userData.xpYesterday=userData.xpToday||0;
+    userData.xpToday=0;
+    userData.lastLoginDate=today;
+
+    // Streak RESET only — increment only happens via updateStreakOnExercise
+    // If lastExerciseDate is set and older than yesterday, the streak is broken
+    const lastEx=userData.lastExerciseDate||"";
+    if(lastEx && lastEx<yesterday && (userData.streak||0)>0){
+      userData.streak=0;
+    }
+
+    const save={lastLoginDate:today,xpYesterday:userData.xpYesterday,xpToday:0};
+    if(userData.streak===0) save.streak=0;
+    await saveProgressSafe(currentUser.uid,save,true);
+  }
+
+  updateStreakFireDisplay();
+}
+
+// Called whenever user completes an exercise — increments streak for first exercise of the day
+async function updateStreakOnExercise(){
+  if(!currentUser||!userData) return;
+  const today=new Date().toISOString().slice(0,10);
+  const lastEx=userData.lastExerciseDate||"";
+  if(lastEx===today){ updateStreakFireDisplay(); return; } // already counted today
+
   const yesterday=new Date(Date.now()-86400000).toISOString().slice(0,10);
   let streak=userData.streak||0;
-  if(last===today) return;
-  // Save yesterday's XP before resetting
-  if(last===yesterday){
-    streak=streak+1;
-    userData.xpYesterday=userData.xpToday||0;
-  } else {
-    streak=1;
-    userData.xpYesterday=0;
-  }
-  userData.xpToday=0;
+  streak = (lastEx===yesterday) ? streak+1 : 1;
+
   userData.streak=streak;
-  userData.lastLoginDate=today;
-  await saveProgressSafe(currentUser.uid,{streak,lastLoginDate:today,xpYesterday:userData.xpYesterday,xpToday:0},true);
+  userData.lastExerciseDate=today;
+
+  const elSt=document.getElementById("dash-streak");
+  if(elSt) elSt.textContent=streak;
+  updateStreakFireDisplay();
+
+  await saveProgressSafe(currentUser.uid,{streak,lastExerciseDate:today},true);
+}
+
+// Updates the header fire icon: bright if exercised today, dimmed if not
+function updateStreakFireDisplay(){
+  const today=new Date().toISOString().slice(0,10);
+  const active=userData?.lastExerciseDate===today;
+  const streak=userData?.streak||0;
+
+  const elSt=document.getElementById("dash-streak");
+  if(elSt) elSt.textContent=streak;
+
+  const elStH=document.getElementById("dash-header-streak");
+  const elStHV=document.getElementById("dash-header-streak-val");
+  if(elStH&&elStHV){
+    elStHV.textContent=streak;
+    elStH.style.display=streak>=1?"flex":"none";
+    if(streak>=1) elStH.setAttribute("data-fire",active?"on":"off");
+  }
 }
 
 // ── GREETING ──────────────────────────────────────────────────────────────────
@@ -1244,8 +1289,31 @@ async function saveProgressSafe(uid, updates, urgent = false){
   }
 }
 
-// Flush when app is backgrounded or closed
-document.addEventListener("visibilitychange", () => { if(document.hidden) _flushSaveBatch(); });
+// Flush when app is backgrounded or closed; re-sync arrays when tab becomes visible again
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    _flushSaveBatch();
+  } else {
+    // Tab regained focus — quietly merge remote data to protect against two-tab overwrites
+    if (currentUser && !currentUser.isLocalGuest) {
+      getUserData(currentUser.uid).then(fresh => {
+        if (!fresh || !userData) return;
+        if (Array.isArray(fresh.completedMissions)) {
+          userData.completedMissions = [...new Set([...(userData.completedMissions||[]), ...fresh.completedMissions])];
+        }
+        if (Array.isArray(fresh.badges)) {
+          userData.badges = [...new Set([...(userData.badges||[]), ...fresh.badges])];
+        }
+        if (typeof fresh.xp === "number" && fresh.xp > (userData.xp||0)) {
+          userData.xp = fresh.xp;
+        }
+        if (typeof fresh.streak === "number") {
+          userData.streak = fresh.streak;
+        }
+      }).catch(()=>{});
+    }
+  }
+});
 window.addEventListener("pagehide", _flushSaveBatch);
 
 window.addEventListener("online", () => {
@@ -1810,7 +1878,7 @@ function showStreakCalendarPopup(){
           <span class="cal-hot" style="width:14px;height:14px;display:inline-block;border-radius:3px;margin-left:8px"></span> Ativo!
         </div>
         <div class="streak-grid">${cells}</div>
-        <div class="streak-total">Streak atual: <strong>${userData.streak||0} dias 🔥</strong></div>
+        <div class="streak-total">Sequência de exercícios: <strong>${userData.streak||0} dias ${userData.lastExerciseDate===new Date().toISOString().slice(0,10)?"🔥":"❄️"}</strong></div>
         <button class="popup-close-btn" onclick="document.getElementById('streak-popup').remove()">Fechar</button>
       </div>
     </div>`);
@@ -1861,15 +1929,7 @@ function renderDashboard(){
   // username handled by fitUserName above
   const elXP=document.getElementById("dash-xp"); if(elXP) elXP.textContent=xp;
   const elLv=document.getElementById("dash-level"); if(elLv) elLv.textContent=level;
-  const elSt=document.getElementById("dash-streak"); if(elSt) elSt.textContent=userData.streak||0;
-  // Header streak (fire under the date) — only show when streak >= 1
-  const elStH=document.getElementById("dash-header-streak");
-  const elStHV=document.getElementById("dash-header-streak-val");
-  if(elStH&&elStHV){
-    const st=userData.streak||0;
-    elStHV.textContent=st;
-    elStH.style.display=st>=1?"flex":"none";
-  }
+  updateStreakFireDisplay();
 
   // Next badge inline below XP bar
   const earned2=userData.badges||[];
@@ -2528,6 +2588,7 @@ async function completeMission(xp){
   currentPhraseIndex=0;
   await saveProgressSafe(currentUser.uid,{xp:xp??userData.xp,completedMissions:completed,currentMission:{segmentId:currentSegmentId,phaseId:currentPhaseId,missionId:currentMissionId,phraseIndex:0}},true);
   userData.completedMissions=completed;
+  updateStreakOnExercise().catch(()=>{});
   SoundFX.complete();
   if(completed.length===1) showNotifBanner();
 
@@ -3139,7 +3200,7 @@ function handleFreeMemCard(div,total){
       a.classList.add("matched");b.classList.add("matched");SoundFX.correct();freeMemMatched++;freeMemXP+=10;
       document.getElementById("mem-score-display").textContent=`XP: ${freeMemXP}`;
       freeMemSelected=[];
-      if(freeMemMatched===total){showXpToast(`🧠 +${freeMemXP} XP`);if(currentUser){userData.xp=(userData.xp||0)+freeMemXP;saveProgressSafe(currentUser.uid,{xp:userData.xp});};updateDailyProgress("memory");setTimeout(()=>openMemoryFree(),1500);}
+      if(freeMemMatched===total){showXpToast(`🧠 +${freeMemXP} XP`);if(currentUser){userData.xp=(userData.xp||0)+freeMemXP;saveProgressSafe(currentUser.uid,{xp:userData.xp});updateStreakOnExercise().catch(()=>{});};updateDailyProgress("memory");setTimeout(()=>openMemoryFree(),1500);}
     } else {SoundFX.wrong();setTimeout(()=>{a.classList.remove("flipped");b.classList.remove("flipped");freeMemSelected=[];},900);}
   }
 }
@@ -3212,7 +3273,7 @@ function showTFResult(){
   document.getElementById("tf-result-msg").textContent=pct>=80?"Excelente! 🌟":pct>=50?"Bom trabalho! 👍":"Continue praticando! 💪";
   document.getElementById("tf-result-bar").style.width=`${pct}%`;
   showXpToast(`✅ +${tfScore} XP`);
-  if(currentUser){userData.xp=(userData.xp||0)+tfScore;saveProgressSafe(currentUser.uid,{xp:userData.xp});}
+  if(currentUser){userData.xp=(userData.xp||0)+tfScore;saveProgressSafe(currentUser.uid,{xp:userData.xp});updateStreakOnExercise().catch(()=>{});}
   SoundFX.complete();
 }
 
@@ -3454,7 +3515,7 @@ function showDlgResult(){
   document.getElementById("dlg-result-score").textContent=`${dlgScore} / ${max} pts`;
   document.getElementById("dlg-result-msg").textContent=pct>=80?"Conversa fluente! 🌟":pct>=50?"Bom trabalho! 👍":"Pratique mais! 💪";
   showXpToast(`💬 +${dlgScore} XP`);
-  if(currentUser){userData.xp=(userData.xp||0)+dlgScore;saveProgressSafe(currentUser.uid,{xp:userData.xp});}
+  if(currentUser){userData.xp=(userData.xp||0)+dlgScore;saveProgressSafe(currentUser.uid,{xp:userData.xp});updateStreakOnExercise().catch(()=>{});}
   updateDailyProgress("dialogue");
   SoundFX.complete();
 }
@@ -5600,6 +5661,14 @@ async function _handleAuth(user){
     await new Promise(r => setTimeout(r, remaining));
     hideLoadingSplash();
   }
+
+  // Celebrate successful email verification on first load after clicking link
+  if(window._showEmailVerifiedCelebration){
+    window._showEmailVerifiedCelebration = false;
+    setTimeout(()=>{
+      showXpToast("🎉 Email verificado! Bem-vindo(a) ao VIC English!");
+    }, 800);
+  }
 }
 
 // ── ONBOARDING ────────────────────────────────────────────────────────────────
@@ -5979,6 +6048,16 @@ function init(){
 
   // ── Mercado Pago: verificar retorno de pagamento ────────────────────────────
   checkMercadoPagoReturn();
+
+  // ── Email verification return ────────────────────────────────────────────────
+  const _urlParams = new URLSearchParams(window.location.search);
+  if (_urlParams.get("emailVerified") === "1") {
+    window.history.replaceState({}, document.title, window.location.pathname);
+    // Reload the current user so emailVerified flag is fresh
+    reloadCurrentUser().catch(()=>{});
+    // Toast shown after dashboard loads (handled in _handleAuth flow)
+    window._showEmailVerifiedCelebration = true;
+  }
 
   // ── Deep links ───────────────────────────────────────────────────────────────
   // app.viclanguage.com.br?seg=maritimo → abre direto no segmento
