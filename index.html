@@ -91,13 +91,13 @@
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
               <div class="ob-mock-badges">🏅 🎯 ⚓ 🌟 🔥</div>
-              <div style="font-size:11px;color:#ffd700;font-weight:700;">#3 Ranking</div>
+              <div style="font-size:11px;color:#ffd700;font-weight:700;">12 badges 🏆</div>
             </div>
           </div>
         </div>
         <div class="ob-slide-content">
-          <div class="ob-slide-title" data-i18n="ob_title_2">Missões, XP e Ranking</div>
-          <div class="ob-slide-sub" data-i18n="ob_sub_2">Missões diárias, XP, streak de dias consecutivos, badges e ranking com outros alunos. Aprenda mais jogando do que estudando.</div>
+          <div class="ob-slide-title" data-i18n="ob_title_2">Missões, XP e Conquistas</div>
+          <div class="ob-slide-sub" data-i18n="ob_sub_2">Missões diárias, XP, streak de dias consecutivos e dezenas de badges para desbloquear. Aprenda mais jogando do que estudando.</div>
         </div>
       </div>
 
@@ -262,12 +262,7 @@
           <span>Manter-me conectado</span>
         </label>
         <button class="auth-btn-primary" id="btn-login">Entrar</button>
-        <button type="button" id="btn-forgot-password" style="
-          background:none;border:none;cursor:pointer;
-          color:rgba(255,255,255,0.45);font-size:12px;
-          width:100%;text-align:center;padding:4px 0 8px;
-          font-family:var(--font);
-        ">Esqueceu a senha?</button>
+        <button type="button" id="btn-forgot-password" class="btn-forgot-password">Esqueceu a senha?</button>
 
         <div class="auth-sep"><span>ou</span></div>
 
@@ -618,6 +613,7 @@
 
     <div class="stats-row">
       <div class="stat-card stat-card-click" id="stat-xp-card" title="Ver histórico de XP">
+        <span class="stat-tap-hint">›</span>
         <span class="stat-value" id="dash-xp">0</span>
         <span class="stat-label">XP Total 📊</span>
       </div>
@@ -626,6 +622,7 @@
         <span class="stat-label">Nível ⭐</span>
       </div>
       <div class="stat-card stat-card-click" id="stat-streak-card" title="Ver calendário">
+        <span class="stat-tap-hint">›</span>
         <span class="stat-value" id="dash-streak">0</span>
         <span class="stat-label">Streak 🔥</span>
       </div>
@@ -1131,8 +1128,11 @@
     </div>
     <button class="btn-primary" id="btn-back-complete" data-i18n="back_dashboard">Voltar ao Dashboard</button>
     <button class="btn-next-mission" id="btn-next-mission" style="display:none"></button>
-    <div class="powered-footer" style="margin-top:20px"><a href="https://www.viclanguage.com.br" target="_blank" class="vic-link"><img src="vic_lamp.png" alt="VIC Language" class="vic-logo-sm"><span>VIC Language</span></a></div>
-    <a href="https://www.viclanguage.com.br" target="_blank" class="vic-site-link">viclanguage.com.br →</a>
+    <div class="powered-footer" style="margin-top:24px">
+      <a href="https://www.viclanguage.com.br" target="_blank" class="vic-link">
+        <img src="vic_lamp.png" alt="VIC Language" class="vic-logo-sm"><span>VIC Language</span>
+      </a>
+    </div>
   </div>
 </div>
 
@@ -1459,10 +1459,20 @@
       💳 Assinar agora — R$ 5/mês
     </a>
 
-    <div class="upgrade-note">
-      Após o pagamento, envie o comprovante para<br>
-      <strong>contato@viclanguage.com.br</strong><br>
-      e seu acesso Pro será ativado em até 1 hora.
+    <div class="upgrade-steps">
+      <div class="upgrade-steps-title">Como ativar seu Pro</div>
+      <div class="upgrade-step">
+        <span class="upgrade-step-num">1</span>
+        <span class="upgrade-step-text">Faça o pagamento de R$ 5/mês no botão acima</span>
+      </div>
+      <div class="upgrade-step">
+        <span class="upgrade-step-num">2</span>
+        <span class="upgrade-step-text">Envie o comprovante para <strong>contato@viclanguage.com.br</strong></span>
+      </div>
+      <div class="upgrade-step">
+        <span class="upgrade-step-num">3</span>
+        <span class="upgrade-step-text">Seu acesso Pro é ativado em até <strong>1 hora</strong> ⚡</span>
+      </div>
     </div>
 
     <a href="https://www.viclanguage.com.br" target="_blank" class="vic-site-link">
