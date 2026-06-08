@@ -7409,9 +7409,8 @@ a.settings-big-btn:active {
 #view-writing .phases-title { color: #f0c97a !important; text-shadow: 0 0 14px rgba(228,180,92,0.35); }
 #view-writing .phases-header::after { background: linear-gradient(90deg, transparent, #e4b45c, transparent); }
 
-/* ══ HEADER HORIZONTAL — logo à esquerda, perfil à direita ════
-   Layout clássico balanceado.                                   */
-.dash-header-row {
+/* ══ HEADER 3 COLUNAS — data esq · logo centro · avatar dir ════ */
+.dash-header-3col {
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
@@ -7419,44 +7418,74 @@ a.settings-big-btn:active {
   padding: 14px 16px !important;
   min-height: unset !important;
 }
-.dash-logo-left {
+/* coluna esquerda: data (flex:1 equilibra com o avatar p/ centrar o logo) */
+.dash-header-3col .dash-date {
+  flex: 1 1 0 !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: flex-start !important;
-  gap: 3px !important;
-}
-/* logo na proporção real (3:2) — sem cortar mais */
-.dash-header-row #dash-logo-img,
-.dash-header-row .dash-logo-img {
-  width: auto !important;
-  height: 54px !important;
-  max-width: 200px !important;
-  border-radius: 10px !important;
-  object-fit: contain !important;
-  box-shadow: none !important;
-  filter: drop-shadow(0 3px 14px rgba(201,147,58,0.35)) !important;
-}
-/* data discreta, em Inter, abaixo do logo */
-.dash-header-row .dash-date {
+  gap: 1px !important;
   margin: 0 !important;
   padding: 0 !important;
   background: none !important;
   border: none !important;
   text-align: left !important;
 }
-.dash-date-line {
+.dash-date-weekday {
   font-family: var(--font) !important;
   font-size: 11px !important;
   font-weight: 600 !important;
-  letter-spacing: 0.4px !important;
-  color: rgba(240,208,112,0.6) !important;
-  text-transform: none !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
   font-style: normal !important;
+  color: rgba(240,208,112,0.6) !important;
+  line-height: 1.2 !important;
 }
-/* avatar à direita */
-.dash-header-row .dash-user { margin: 0 !important; flex-shrink: 0 !important; }
-/* garante que o badge ✏️ de editar apareça (não corta nas bordas) */
-.dash-header-row .dash-avatar-wrap { overflow: visible !important; }
+.dash-date-day {
+  font-family: var(--font) !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.2px !important;
+  font-style: normal !important;
+  color: #f0d070 !important;
+  text-shadow: 0 0 14px rgba(240,208,112,0.35) !important;
+  line-height: 1.15 !important;
+}
+/* coluna central: logo em destaque, sem cortar */
+.dash-logo-mid {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.dash-header-3col #dash-logo-img,
+.dash-header-3col .dash-logo-img {
+  width: auto !important;
+  height: 58px !important;
+  max-width: 180px !important;
+  border-radius: 10px !important;
+  object-fit: contain !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 3px 16px rgba(201,147,58,0.4)) !important;
+}
+/* coluna direita: avatar arredondado (squircle, não círculo) */
+.dash-header-3col .dash-user {
+  flex: 1 1 0 !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  margin: 0 !important;
+}
+.dash-header-3col .dash-avatar-wrap {
+  overflow: visible !important;
+  border-radius: 15px !important;
+}
+.dash-header-3col .dash-avatar-wrap #dash-avatar-icon,
+.dash-header-3col .dash-avatar-wrap img {
+  border-radius: 13px !important;
+}
+.dash-header-3col .dash-avatar-edit {
+  border-radius: 50% !important;
+}
 
 /* ══ ONBOARDING — aviso do botão de atualizar ════════════════ */
 .ob-refresh-tip {
