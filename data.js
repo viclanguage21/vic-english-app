@@ -2721,6 +2721,197 @@ VICTOR_DATA.trueFalseCategories.push(
   }
 );
 
+// ── V/F — Marítimo Operacional (novos termos técnicos) ────────────────────────
+VICTOR_DATA.trueFalseCategories.push({
+  id:"maritimo_vf2", name:"⚓ Marítimo — Operacional", description:"Termos técnicos de porto e carga",
+  items:[
+    {statement:"The cargo manifest must be submitted before the vessel arrives.",answer:true,explanation:"Correto! O manifesto de carga é enviado antes da chegada do navio."},
+    {statement:"A tally sheet is used to record the physical count of cargo.",answer:true,explanation:"Correto! O romaneio registra a conferência física da carga no cais."},
+    {statement:"Port side is the right side of the ship.",answer:false,explanation:"Port side = bombordo = lado ESQUERDO. Lado direito = starboard (estibordo)."},
+    {statement:"A bulk carrier is designed to transport loose cargo such as grain and ore.",answer:true,explanation:"Correto! Graneleiro transporta carga a granel — grãos, minérios, fertilizantes."},
+    {statement:"Draft refers to the height of the ship above the waterline.",answer:false,explanation:"Draft = calado = parte SUBMERSA do casco. Acima da água = freeboard (franco-bordo)."},
+    {statement:"Berth is the designated space where a vessel docks.",answer:true,explanation:"Correto! O berço é o local numerado onde o navio atraca no cais."},
+    {statement:"Freeboard is the submerged part of the hull.",answer:false,explanation:"Freeboard = franco-bordo = altura do casco ACIMA da linha d'água."},
+    {statement:"A quay crane is used on the dock to load and unload vessels.",answer:true,explanation:"Correto! O guindaste de cais opera no porto para movimentação de contêineres."},
+    {statement:"Starboard is the left side of the ship.",answer:false,explanation:"Starboard = estibordo = lado DIREITO. Lado esquerdo = port side (bombordo)."},
+    {statement:"Tide windows affect when large vessels can enter or leave port.",answer:true,explanation:"Correto! A janela de maré define quando navios de grande calado podem operar com segurança."},
+  ]
+});
+
+// ── V/F — COMEX ───────────────────────────────────────────────────────────────
+VICTOR_DATA.trueFalseCategories.push({
+  id:"comex_vf", name:"🌍 COMEX", description:"Verdadeiro ou falso — comércio exterior",
+  items:[
+    {statement:"The HS code is used to classify goods for customs and taxation purposes.",answer:true,explanation:"Correto! O código HS (NCM no Brasil) é a classificação fiscal internacional da mercadoria."},
+    {statement:"A Bill of Lading is an air transport document.",answer:false,explanation:"B/L = conhecimento de embarque MARÍTIMO. Transporte aéreo usa AWB (Air Waybill)."},
+    {statement:"Incoterms define the responsibilities between buyer and seller in international trade.",answer:true,explanation:"Correto! Incoterms determinam quem paga o frete, seguro e assume os riscos."},
+    {statement:"A packing list can replace the commercial invoice.",answer:false,explanation:"São documentos diferentes. Packing list = romaneio de embalagem. Invoice = fatura comercial."},
+    {statement:"Customs clearance releases goods from customs hold.",answer:true,explanation:"Correto! O desembaraço aduaneiro libera a mercadoria para o destinatário."},
+    {statement:"Under FOB terms, the seller is responsible for ocean freight.",answer:false,explanation:"FOB = Free On Board. O COMPRADOR paga o frete após o embarque no porto de origem."},
+    {statement:"A freight forwarder acts as a logistics intermediary.",answer:true,explanation:"Correto! O agente de carga coordena o transporte, a documentação e o desembaraço."},
+    {statement:"Duty means a discount applied to imported goods.",answer:false,explanation:"Duty = imposto de importação. Desconto = discount."},
+    {statement:"DI (Declaração de Importação) is an export document in Brazil.",answer:false,explanation:"DI é o documento de IMPORTAÇÃO. Para exportação usa-se o RE (Registro de Exportação)."},
+    {statement:"A commercial invoice is a mandatory document for customs clearance.",answer:true,explanation:"Correto! A fatura comercial é exigida em todo desembaraço aduaneiro de importação."},
+  ]
+});
+
+// ── Diálogos — segmentos sem cobertura ────────────────────────────────────────
+VICTOR_DATA.trueFalseCategories.push(
+  {
+    id:"comex_alfandega_dlg", name:"🌍 COMEX — Alfândega", segment:"COMEX",
+    description:"Comunicação com agente aduaneiro sobre problema na importação.",
+    lines:[
+      {role:"Agent",   text:"Good morning. Your shipment is currently on ___ at customs.",blank:"hold",options:["hold","sale","route","display"],correct:0},
+      {role:"Client",  text:"On hold? What is the reason?",blank:null},
+      {role:"Agent",   text:"We are missing the original commercial ___.",blank:"invoice",options:["invoice","passport","ticket","receipt"],correct:0},
+      {role:"Client",  text:"Can we send a scanned copy?",blank:null},
+      {role:"Agent",   text:"No, customs requires the ___ document.",blank:"original",options:["original","digital","signed","printed"],correct:0},
+      {role:"Client",  text:"How long will clearance take once we send it?",blank:null},
+      {role:"Agent",   text:"Customs ___ usually takes 24 to 48 hours.",blank:"clearance",options:["clearance","delay","payment","arrival"],correct:0},
+      {role:"Client",  text:"Is the HS code correct?",blank:null},
+      {role:"Agent",   text:"Yes, the ___ code has been validated.",blank:"HS",options:["HS","ID","tax","ZIP"],correct:0},
+      {role:"Client",  text:"We will send the invoice today.",blank:null},
+      {role:"Agent",   text:"Perfect. I will update you once the cargo is ___.",blank:"released",options:["released","sold","moved","packed"],correct:0},
+    ]
+  },
+  {
+    id:"offshore_safety_dlg", name:"🛢️ Offshore — Emergência", segment:"Offshore",
+    description:"Procedimento de segurança na plataforma.",
+    lines:[
+      {role:"Supervisor",text:"Attention all personnel. We have a gas ___ near wellhead 3.",blank:"leak",options:["leak","test","drill","check"],correct:0},
+      {role:"Worker",    text:"Should we activate the BOP?",blank:null},
+      {role:"Supervisor",text:"Yes. Activate the ___ immediately.",blank:"BOP",options:["BOP","GPS","POS","SOS"],correct:0},
+      {role:"Worker",    text:"BOP activated. What is the next step?",blank:null},
+      {role:"Supervisor",text:"Evacuate the ___ zone now.",blank:"hazard",options:["hazard","dining","sleeping","work"],correct:0},
+      {role:"Worker",    text:"All crew to muster station?",blank:null},
+      {role:"Supervisor",text:"Yes. Everyone must report to their ___ station.",blank:"muster",options:["muster","dinner","office","work"],correct:0},
+      {role:"Worker",    text:"Is the platform shutting down?",blank:null},
+      {role:"Supervisor",text:"We are initiating an emergency ___.",blank:"shutdown",options:["shutdown","meeting","drill","report"],correct:0},
+      {role:"Worker",    text:"Copy that. Moving to muster station now.",blank:null},
+      {role:"Supervisor",text:"Do not return until the area is declared ___.",blank:"safe",options:["safe","open","free","empty"],correct:0},
+    ]
+  },
+  {
+    id:"cruzeiros_embarque_dlg", name:"🛳️ Cruzeiro — Embarque", segment:"Cruzeiros",
+    description:"Atendimento de passageiro no embarque.",
+    lines:[
+      {role:"Staff",    text:"Welcome aboard! May I see your ___ and passport?",blank:"ticket",options:["ticket","luggage","cabin","key"],correct:0},
+      {role:"Passenger",text:"Here they are. I'm in cabin 412.",blank:null},
+      {role:"Staff",    text:"Perfect. Your ___ is on deck 4.",blank:"cabin",options:["cabin","pool","stage","gym"],correct:0},
+      {role:"Passenger",text:"What time does embarkation close?",blank:null},
+      {role:"Staff",    text:"All passengers must be ___ by 5 PM.",blank:"aboard",options:["aboard","checked","seated","ready"],correct:0},
+      {role:"Passenger",text:"Is there a muster drill today?",blank:null},
+      {role:"Staff",    text:"Yes. The safety ___ is at 6 PM — it is mandatory.",blank:"drill",options:["drill","show","meeting","briefing"],correct:0},
+      {role:"Passenger",text:"Where do I book shore excursions?",blank:null},
+      {role:"Staff",    text:"Shore ___ bookings are at the desk on deck 3.",blank:"excursion",options:["excursion","dinner","concert","sports"],correct:0},
+      {role:"Passenger",text:"Thank you!",blank:null},
+      {role:"Staff",    text:"Enjoy your ___!",blank:"cruise",options:["cruise","flight","stay","trip"],correct:0},
+    ]
+  },
+  {
+    id:"aeroporto_delay_dlg", name:"✈️ Aeroporto — Voo Atrasado", segment:"Aeroporto",
+    description:"Atendimento a passageiro com voo atrasado e rebooking.",
+    lines:[
+      {role:"Agent",    text:"Good afternoon. How can I help you?",blank:null},
+      {role:"Passenger",text:"My flight has been ___. What are my options?",blank:"delayed",options:["delayed","cancelled","changed","boarded"],correct:0},
+      {role:"Agent",    text:"I'm sorry. May I see your boarding ___?",blank:"pass",options:["pass","bag","ticket","ID"],correct:0},
+      {role:"Passenger",text:"Here. I also have a connecting flight.",blank:null},
+      {role:"Agent",    text:"I see — you will miss your ___ in São Paulo.",blank:"connection",options:["connection","gate","seat","flight"],correct:0},
+      {role:"Passenger",text:"Can I be rebooked on another flight?",blank:null},
+      {role:"Agent",    text:"Yes. I can put you on the next available ___.",blank:"flight",options:["flight","bus","train","seat"],correct:0},
+      {role:"Passenger",text:"What about my checked luggage?",blank:null},
+      {role:"Agent",    text:"Your ___ will be transferred automatically.",blank:"baggage",options:["baggage","ticket","seat","passport"],correct:0},
+      {role:"Passenger",text:"What gate is the new flight?",blank:null},
+      {role:"Agent",    text:"Please proceed to ___ 22B for your new departure.",blank:"gate",options:["gate","hall","desk","bay"],correct:0},
+    ]
+  },
+  {
+    id:"hotel_complaint_dlg", name:"🏨 Hotel — Reclamação", segment:"Hotelaria",
+    description:"Você é o recepcionista resolvendo uma reclamação de hóspede.",
+    lines:[
+      {role:"Guest",        text:"Excuse me. There is a problem with my ___.",blank:"room",options:["room","bill","car","key"],correct:0},
+      {role:"Receptionist", text:"I'm sorry. What seems to be the ___?",blank:"problem",options:["problem","price","name","date"],correct:0},
+      {role:"Guest",        text:"The air conditioning is not working.",blank:null},
+      {role:"Receptionist", text:"I'll send ___ to check it immediately.",blank:"maintenance",options:["maintenance","housekeeping","security","management"],correct:0},
+      {role:"Guest",        text:"Also, the room was not clean on arrival.",blank:null},
+      {role:"Receptionist", text:"I apologize. I'll have ___ attend to it right away.",blank:"housekeeping",options:["housekeeping","reception","security","the chef"],correct:0},
+      {role:"Guest",        text:"Can I get a room ___?",blank:"upgrade",options:["upgrade","refund","discount","change"],correct:0},
+      {role:"Receptionist", text:"Let me check what is ___.",blank:"available",options:["available","possible","allowed","ready"],correct:0},
+      {role:"Guest",        text:"I'd really appreciate it.",blank:null},
+      {role:"Receptionist", text:"I have a ___ room on the 8th floor — same rate.",blank:"deluxe",options:["deluxe","basic","small","standard"],correct:0},
+      {role:"Guest",        text:"That would be perfect. Thank you.",blank:null},
+    ]
+  },
+  {
+    id:"corporativo_reuniao_dlg", name:"💼 Corporativo — Reunião", segment:"Corporativo",
+    description:"Você está conduzindo uma reunião de equipe em inglês.",
+    lines:[
+      {role:"Manager", text:"Let's get started. Did everyone review the ___?",blank:"agenda",options:["agenda","report","budget","invoice"],correct:0},
+      {role:"Team",    text:"Yes, we're ready.",blank:null},
+      {role:"Manager", text:"Good. First, let's talk about the project ___.",blank:"deadline",options:["deadline","address","number","title"],correct:0},
+      {role:"Team",    text:"The deadline is next Friday.",blank:null},
+      {role:"Manager", text:"Are we on ___ to deliver?",blank:"track",options:["track","time","budget","hold"],correct:0},
+      {role:"Team",    text:"Yes, but we need extra resources.",blank:null},
+      {role:"Manager", text:"Understood. Let's review the ___ first.",blank:"budget",options:["budget","agenda","report","data"],correct:0},
+      {role:"Team",    text:"The current budget is under pressure.",blank:null},
+      {role:"Manager", text:"I'll follow ___ with the director.",blank:"up",options:["up","down","out","in"],correct:0},
+      {role:"Team",    text:"Should we prepare a written report?",blank:null},
+      {role:"Manager", text:"Yes. Send me a ___ by end of day.",blank:"summary",options:["summary","message","bill","ticket"],correct:0},
+    ]
+  },
+  {
+    id:"transporte_entrega_dlg", name:"🚚 Transporte — Entrega Atrasada", segment:"Transporte",
+    description:"Você é o atendente explicando um atraso na entrega.",
+    lines:[
+      {role:"Agent",    text:"Good morning. How can I help you?",blank:null},
+      {role:"Customer", text:"My delivery was supposed to arrive ___.",blank:"yesterday",options:["yesterday","tomorrow","now","soon"],correct:0},
+      {role:"Agent",    text:"I apologize for the ___. Let me check your order.",blank:"delay",options:["delay","price","route","driver"],correct:0},
+      {role:"Customer", text:"The tracking shows it's still in transit.",blank:null},
+      {role:"Agent",    text:"There was an issue at the ___ hub.",blank:"distribution",options:["distribution","main","local","nearby"],correct:0},
+      {role:"Customer", text:"When will it be delivered?",blank:null},
+      {role:"Agent",    text:"We expect delivery by ___ of day tomorrow.",blank:"end",options:["end","start","middle","close"],correct:0},
+      {role:"Customer", text:"Can I get a tracking update sent to me?",blank:null},
+      {role:"Agent",    text:"I'll send a ___ link to your email.",blank:"tracking",options:["tracking","payment","discount","order"],correct:0},
+      {role:"Customer", text:"Please make sure it arrives on time.",blank:null},
+      {role:"Agent",    text:"We will. I apologize for the ___.",blank:"inconvenience",options:["inconvenience","mistake","error","delay"],correct:0},
+    ]
+  },
+  {
+    id:"varejo_troca_dlg", name:"🛍️ Varejo — Troca e Devolução", segment:"Varejo",
+    description:"Você é o atendente processando uma troca de produto.",
+    lines:[
+      {role:"Staff",    text:"Hello! How can I assist you?",blank:null},
+      {role:"Customer", text:"I'd like to ___ this item, please.",blank:"exchange",options:["exchange","buy","keep","donate"],correct:0},
+      {role:"Staff",    text:"Of course. Do you have your ___?",blank:"receipt",options:["receipt","bag","card","ID"],correct:0},
+      {role:"Customer", text:"Yes, here it is. It's the wrong size.",blank:null},
+      {role:"Staff",    text:"No problem. What ___ do you need?",blank:"size",options:["size","color","style","brand"],correct:0},
+      {role:"Customer", text:"I need a large.",blank:null},
+      {role:"Staff",    text:"Let me check if it's in ___.",blank:"stock",options:["stock","sale","display","store"],correct:0},
+      {role:"Customer", text:"What if it's not available?",blank:null},
+      {role:"Staff",    text:"We can offer a full ___ or store credit.",blank:"refund",options:["refund","exchange","discount","voucher"],correct:0},
+      {role:"Customer", text:"A refund would be great.",blank:null},
+      {role:"Staff",    text:"I'll process that now. Please ___ here.",blank:"sign",options:["sign","wait","check","look"],correct:0},
+    ]
+  },
+  {
+    id:"saude_consulta_dlg", name:"🏥 Saúde — Consulta Médica", segment:"Saúde",
+    description:"Atendimento médico em inglês.",
+    lines:[
+      {role:"Receptionist",text:"Good morning! Do you have an ___?",blank:"appointment",options:["appointment","insurance","prescription","symptom"],correct:0},
+      {role:"Patient",     text:"Yes, I'm here to see Dr. Santos.",blank:null},
+      {role:"Receptionist",text:"Please show your ___ card.",blank:"insurance",options:["insurance","credit","loyalty","ID"],correct:0},
+      {role:"Patient",     text:"Here. I haven't been feeling well.",blank:null},
+      {role:"Doctor",      text:"Hello. What are your main ___?",blank:"symptoms",options:["symptoms","problems","issues","feelings"],correct:0},
+      {role:"Patient",     text:"I have a headache and a fever.",blank:null},
+      {role:"Doctor",      text:"How long have you had these ___?",blank:"symptoms",options:["symptoms","feelings","pains","signs"],correct:0},
+      {role:"Patient",     text:"Since yesterday morning.",blank:null},
+      {role:"Doctor",      text:"I'll write a ___ for you.",blank:"prescription",options:["prescription","referral","report","form"],correct:0},
+      {role:"Patient",     text:"Should I schedule a follow-up?",blank:null},
+      {role:"Doctor",      text:"Yes. Please book a ___ in one week.",blank:"follow-up",options:["follow-up","check-out","meeting","return"],correct:0},
+    ]
+  }
+);
+
 // Grammar Core subcategory for False Friends
 // Add to existing grammar phases via a new phase object
 // (appended to gramatica segment phases in data access)
