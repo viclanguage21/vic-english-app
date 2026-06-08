@@ -257,20 +257,20 @@
       <div class="auth-form active" id="form-login">
         <div class="auth-field">
           <label for="login-email">Email</label>
-          <input type="email" id="login-email" placeholder="seu@email.com" autocomplete="email"/>
+          <input type="email" id="login-email" placeholder="seu@email.com" data-i18n-placeholder="ph_email" autocomplete="email"/>
         </div>
         <div class="auth-field">
-          <label for="login-password">Senha</label>
+          <label for="login-password" data-i18n="password">Senha</label>
           <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password"/>
         </div>
         <label class="remember-me-label">
           <input type="checkbox" id="remember-me" checked/>
-          <span>Manter-me conectado</span>
+          <span data-i18n="keep_logged">Manter-me conectado</span>
         </label>
-        <button class="auth-btn-primary" id="btn-login">Entrar</button>
-        <button type="button" id="btn-forgot-password" class="btn-forgot-password">Esqueceu a senha?</button>
+        <button class="auth-btn-primary" id="btn-login" data-i18n="login">Entrar</button>
+        <button type="button" id="btn-forgot-password" class="btn-forgot-password" data-i18n="forgot_password">Esqueceu a senha?</button>
 
-        <div class="auth-sep"><span>ou</span></div>
+        <div class="auth-sep"><span data-i18n="or">ou</span></div>
 
         <button class="auth-btn-google" id="btn-google">
           <svg width="18" height="18" viewBox="0 0 48 48">
@@ -279,19 +279,17 @@
             <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
             <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
           </svg>
-          Entrar com Google
+          <span data-i18n="login_google">Entrar com Google</span>
         </button>
 
-        <button class="auth-btn-anon" id="btn-anon">
-          👤 Entrar sem cadastro
-        </button>
+        <button class="auth-btn-anon" id="btn-anon" data-i18n="login_anon">👤 Entrar sem cadastro</button>
       </div>
 
       <!-- REGISTER FORM -->
       <div class="auth-form" id="form-register">
         <!-- Escolher avatar no cadastro -->
         <div class="auth-field">
-          <label>Escolha um avatar <span style="color:rgba(255,255,255,0.4);font-weight:400;font-size:11px;">— você pode trocar depois</span></label>
+          <label><span data-i18n="avatar_choose">Escolha um avatar</span> <span style="color:rgba(255,255,255,0.4);font-weight:400;font-size:11px;" data-i18n="avatar_later">— você pode trocar depois</span></label>
           <div class="reg-avatar-row" id="reg-avatar-row">
             <button type="button" class="reg-avatar-opt selected" data-emoji="😎" onclick="selectRegAvatar(this)">😎</button>
             <button type="button" class="reg-avatar-opt" data-emoji="⚓" onclick="selectRegAvatar(this)">⚓</button>
@@ -308,17 +306,17 @@
 
         <div class="auth-field">
           <label for="reg-name" data-i18n="name">Nome completo</label>
-          <input type="text" id="reg-name" placeholder="Seu nome" autocomplete="name"/>
+          <input type="text" id="reg-name" placeholder="Seu nome" data-i18n-placeholder="ph_name" autocomplete="name"/>
         </div>
         <div class="auth-field">
           <label for="reg-email">Email</label>
-          <input type="email" id="reg-email" placeholder="seu@email.com" autocomplete="email"/>
+          <input type="email" id="reg-email" placeholder="seu@email.com" data-i18n-placeholder="ph_email" autocomplete="email"/>
         </div>
         <div class="auth-field">
-          <label for="reg-password">Senha</label>
-          <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" autocomplete="new-password"/>
+          <label for="reg-password" data-i18n="password">Senha</label>
+          <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" data-i18n-placeholder="ph_password" autocomplete="new-password"/>
         </div>
-        <button class="auth-btn-primary" id="btn-register">Criar Conta</button>
+        <button class="auth-btn-primary" id="btn-register" data-i18n="register">Criar Conta</button>
       </div>
 
     </div><!-- end auth-box -->
