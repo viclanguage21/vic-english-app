@@ -7462,8 +7462,8 @@ a.settings-big-btn:active {
 .dash-header-3col #dash-logo-img,
 .dash-header-3col .dash-logo-img {
   width: auto !important;
-  height: 58px !important;
-  max-width: 180px !important;
+  height: 66px !important;
+  max-width: 190px !important;
   border-radius: 10px !important;
   object-fit: contain !important;
   box-shadow: none !important;
