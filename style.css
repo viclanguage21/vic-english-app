@@ -1397,11 +1397,11 @@ input { color: #ffffff !important; }
   background: linear-gradient(90deg, transparent, rgba(201,147,58,0.5), transparent);
 }
 
-/* ── XP track — gradiente rosa (esq) → roxo (dir) ── */
+/* ── XP track — roxo claro sólido, detalhes roxo escuro, barra dourada ── */
 .xp-track {
-  background: linear-gradient(100deg, #6b2a5e 0%, #4f2160 50%, #3a1f63 100%) !important;
-  border-color: rgba(216,150,230,0.32) !important;
-  box-shadow: 0 0 0 1px rgba(216,150,230,0.08), 0 4px 14px rgba(0,0,0,0.3) !important;
+  background: #553aa0 !important;
+  border: 1.5px solid #2a1655 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 14px rgba(0,0,0,0.3) !important;
 }
 
 /* ── Daily block ── */
@@ -1980,8 +1980,8 @@ input { color: #ffffff !important; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(135deg, #7a2e60 0%, #6b2a5e 55%, #5c2858 100%);
-  border: 1px solid rgba(236,72,153,0.4);
+  background: linear-gradient(100deg, #6b2a5e 0%, #4f2160 50%, #3a1f63 100%);
+  border: 1px solid rgba(216,150,230,0.32);
   border-radius: var(--r);
   padding: 14px 16px;
   margin-bottom: 14px;
@@ -7544,14 +7544,27 @@ a.settings-big-btn:active {
   box-shadow: 0 2px 8px rgba(201,147,58,0.4);
 }
 
-/* ══ XP PROGRESS BAR — roxo claro com borda rosa (só no dashboard) ══ */
+/* ══ XP PROGRESS BAR — trilho roxo escuro, barra dourada (só no dashboard) ══ */
 .xp-track .progress-bar-bg {
   height: 9px !important;
-  background: rgba(0,0,0,0.3) !important;
-  border: 1.5px solid rgba(236,72,153,0.6) !important;
+  background: rgba(26,13,46,0.55) !important;
+  border: 1px solid rgba(42,22,85,0.9) !important;
   border-radius: 999px !important;
 }
 .xp-track .progress-bar-fill {
-  background: linear-gradient(90deg, #8b6fc7, #a78bfa) !important;
-  box-shadow: 0 0 8px rgba(167,139,250,0.55) !important;
+  background: linear-gradient(90deg, #c9933a, #e4b45c) !important;
+  box-shadow: 0 0 8px rgba(228,180,92,0.55) !important;
+}
+
+/* ══ EMOJIS DOS SEGMENTOS — bem maiores ════════════════════════ */
+.seg-icon {
+  font-size: 42px !important;
+  line-height: 1 !important;
+  display: block !important;
+  margin-bottom: 4px !important;
+}
+/* ══ ACESSO RÁPIDO — fonte maior ═══════════════════════════════ */
+.quick-btn {
+  font-size: 18px !important;
+  font-weight: 800 !important;
 }
