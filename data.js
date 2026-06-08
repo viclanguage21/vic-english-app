@@ -175,7 +175,7 @@ const VICTOR_DATA = {
               description:"Monte as frases na ordem certa", xpTotal:50,
               phrases:[
                 {id:"o1",type:"word_order",en:"The ship is in the port.",pt:"O navio está no porto.",scrambled:["The","ship","is","in","the","port."],answer:"The ship is in the port.",words:[{w:"ship",cls:"noun",tr:"navio"},{w:"port",cls:"noun",tr:"porto"}]},
-                {id:"o2",type:"word_order",en:"The crew is on board. 👥",pt:"A tripulação está a bordo.",scrambled:["The","crew","is","on","board."],answer:"The crew is on board.",words:[{w:"crew",cls:"noun",tr:"tripulação"}]},
+                {id:"o2",type:"word_order",en:"The crew is onboard. 👥",pt:"A tripulação está a bordo.",scrambled:["The","crew","is","onboard."],answer:"The crew is onboard.",words:[{w:"crew",cls:"noun",tr:"tripulação"}]},
               ]
             },
             {
@@ -230,7 +230,7 @@ const VICTOR_DATA = {
               description:"Monte frases do porto", xpTotal:50,
               phrases:[
                 {id:"o1",type:"word_order",en:"Please proceed to gate three. 🚪",pt:"Por favor, vá até o portão três.",scrambled:["Please","proceed","to","gate","three."],answer:"Please proceed to gate three.",words:[{w:"proceed",cls:"verb",tr:"avançar"}]},
-                {id:"o2",type:"word_order",en:"How many crew members are on board? 👥",pt:"Quantos tripulantes estão a bordo?",scrambled:["How","many","crew","members","are","on","board?"],answer:"How many crew members are on board?",words:[{w:"crew",cls:"noun",tr:"tripulação"}]},
+                {id:"o2",type:"word_order",en:"How many crew members are onboard? 👥",pt:"Quantos tripulantes estão a bordo?",scrambled:["How","many","crew","members","are","onboard?"],answer:"How many crew members are onboard?",words:[{w:"crew",cls:"noun",tr:"tripulação"}]},
               ]
             },
           ]
@@ -2018,7 +2018,7 @@ VICTOR_DATA.segments.push(
             phrases:[{id:"m1",type:"memory_match",en:"Cruise vocabulary",pt:"Vocabulário de cruzeiros",pairs:[{a:"cruise",b:"cruzeiro"},{a:"deck",b:"deck/andar"},{a:"cabin",b:"cabine"},{a:"port of call",b:"escala"},{a:"embarkation",b:"embarque"},{a:"disembarkation",b:"desembarque"}],words:[]}]
           },
           { id:"match_cruise", name:"🔗 Match", icon:"🔗", description:"Conecte termos", xpTotal:50,
-            phrases:[{id:"mc1",type:"match_columns",en:"Cruise match",pt:"Cruzeiro",pairs:[{a:"starboard",b:"bombordo/estibordo"},{a:"stern",b:"popa"},{a:"bow",b:"proa"},{a:"gangway",b:"passarela de embarque"}],words:[]}]
+            phrases:[{id:"mc1",type:"match_columns",en:"Cruise match",pt:"Cruzeiro",pairs:[{a:"embarkation",b:"embarque"},{a:"gangway",b:"passarela de acesso"},{a:"guest",b:"passageiro/hóspede"},{a:"crew card",b:"cartão da tripulação"}],words:[]}]
           },
           { id:"mc_cruise", name:"☑️ Quiz", icon:"☑️", description:"Teste o vocabulário", xpTotal:60,
             phrases:[
@@ -2038,7 +2038,7 @@ VICTOR_DATA.segments.push(
               {id:"r1",type:"pronunciation",en:"Welcome to Santos! Your cruise ship is docked at pier three.",pt:"Bem-vindo a Santos! Seu navio de cruzeiro está no píer três.",words:[{w:"docked",cls:"verb",tr:"atracado"},{w:"pier",b:"noun",tr:"píer/cais"}]},
               {id:"r2",type:"fill_blank",en:"May I see your ___ and cruise card?",pt:"Posso ver seu passaporte e cartão do cruzeiro?",answer:"passport",words:[{w:"passport",cls:"noun",tr:"passaporte"}]},
               {id:"r3",type:"multiple_choice",en:"Passenger asks about excursions. You say:",pt:"Passageiro pergunta sobre excursões. Você diz:",options:["We have wonderful tours available. Let me show you the options.","I don't know.","Ask someone else.","There are no tours."],correct:0,words:[{w:"tours",cls:"noun",tr:"passeios/excursões"}]},
-              {id:"r4",type:"pronunciation",en:"The ship departs at six PM. Please be back on board by five thirty.",pt:"O navio parte às 18h. Por favor esteja a bordo até 17h30.",words:[{w:"departs",cls:"verb",tr:"parte"},{w:"on board",cls:"adv",tr:"a bordo"}]},
+              {id:"r4",type:"pronunciation",en:"The ship departs at six PM. Please be back onboard by five thirty.",pt:"O navio parte às 18h. Por favor esteja a bordo até 17h30.",words:[{w:"departs",cls:"verb",tr:"parte"},{w:"onboard",cls:"adv",tr:"a bordo"}]},
               {id:"r5",type:"translate_pt_en",en:"Santos is famous for its port and beaches.",pt:"Santos é famosa pelo porto e pelas praias.",answer:"santos is famous for its port and beaches",words:[{w:"famous",cls:"adj",tr:"famosa"}]},
             ]
           },
@@ -3746,6 +3746,70 @@ VICTOR_DATA.flashcardDecks.push({
 });
 
 // ════════════════════════════════════════════════════════════
+// CRUZEIROS — vocabulário do terminal, tripulação & gírias
+// ════════════════════════════════════════════════════════════
+(function(){
+  const seg = VICTOR_DATA.segments.find(s => s.id === "cruzeiros");
+  if (!seg) return;
+
+  // ── Enriquece f1 com missão de vocabulário do terminal ──
+  const f1 = seg.phases.find(p => p.id === "f1");
+  if (f1) f1.missions.push(
+    { id:"terminal_vocab_crz", name:"🧳 Terminal — Vocabulário Essencial", icon:"🧳",
+      description:"Malas, carregadores e operações no terminal", xpTotal:70,
+      phrases:[
+        {id:"tv1",type:"multiple_choice",en:"What does 'porter' mean? 🧳",pt:"O que significa 'porter'?",options:["🧳 Carregador de malas","👔 Supervisor","🚛 Motorista de caminhão","🎫 Atendente do balcão"],correct:0,words:[{w:"porter",cls:"noun",tr:"carregador de malas"}]},
+        {id:"tv2",type:"multiple_choice",en:"A passenger's 'belongings' are: 🎒",pt:"Os 'belongings' de um passageiro são:",options:["🎒 Seus pertences / bagagem pessoal","🎫 Seus documentos de viagem","🏷️ Suas etiquetas de mala","📋 Seus dados de reserva"],correct:0,words:[{w:"belongings",cls:"noun",tr:"pertences"}]},
+        {id:"tv3",type:"fill_blank",en:"How many ___ do you have? Please place them on the scale. 🧳",pt:"Quantas malas você tem? Por favor coloque-as na balança.",answer:"bags",words:[{w:"bags",cls:"noun",tr:"malas/sacolas"}]},
+        {id:"tv4",type:"multiple_choice",en:"'Carry-on' at a cruise terminal means: 🎒",pt:"'Carry-on' no terminal de cruzeiros significa:",options:["🎒 Bagagem de mão que o passageiro leva consigo","🧳 Mala despachada para o camarote","🏷️ Etiqueta de identificação da mala","🚛 Bagagem enviada para o caminhão"],correct:0,words:[{w:"carry-on",cls:"noun",tr:"bagagem de mão"}]},
+        {id:"tv5",type:"word_order",en:"The porter will take your luggage directly to your cabin. 🧳",pt:"O carregador levará sua bagagem diretamente para sua cabine.",scrambled:["The","porter","will","take","your","luggage","directly","to","your","cabin."],answer:"The porter will take your luggage directly to your cabin.",words:[{w:"porter",cls:"noun",tr:"carregador"},{w:"luggage",cls:"noun",tr:"bagagem"}]},
+      ]
+    }
+  );
+
+  // ── Enriquece f2 com missão de tripulação e cabines ──
+  const f2 = seg.phases.find(p => p.id === "f2");
+  if (f2) f2.missions.push(
+    { id:"crew_vocab_crz", name:"👷 Tripulação — Cabines & Áreas", icon:"👷",
+      description:"Vocabulário de tripulação onboard", xpTotal:70,
+      phrases:[
+        {id:"cv1",type:"pronunciation",en:"Show your crew card to access crew-only areas onboard. 🪪",pt:"Mostre seu cartão da tripulação para acessar áreas restritas a bordo.",words:[{w:"crew card",cls:"noun",tr:"cartão da tripulação"}]},
+        {id:"cv2",type:"fill_blank",en:"All crew must wear their ___ tag while on duty. 🏷️",pt:"Toda a tripulação deve usar o crachá em serviço.",answer:"name",words:[{w:"name tag",cls:"noun",tr:"crachá/etiqueta de nome"}]},
+        {id:"cv3",type:"multiple_choice",en:"'Crew mess' onboard is: 🍽️",pt:"'Crew mess' a bordo é:",options:["🍽️ O restaurante exclusivo da tripulação","🛏️ A cabine da tripulação","🍺 O bar da tripulação","🏋️ A academia da tripulação"],correct:0,words:[{w:"crew mess",cls:"noun",tr:"restaurante da tripulação"}]},
+        {id:"cv4",type:"translate_pt_en",en:"Crew cabins are located on deck 2, below the passenger area.",pt:"As cabines da tripulação ficam no convés 2, abaixo da área de passageiros.",answer:"crew cabins are located on deck 2 below the passenger area",words:[{w:"crew cabin",cls:"noun",tr:"cabine da tripulação"}]},
+        {id:"cv5",type:"pronunciation",en:"IPM crew stays onboard during port calls — they are responsible for ship security. 🚢",pt:"A equipe IPM permanece a bordo durante as escalas — são responsáveis pela segurança do navio.",words:[{w:"IPM",cls:"noun",tr:"tripulação de plantão em porto"}]},
+      ]
+    },
+    { id:"guest_vocab_crz", name:"🛳️ Passageiros & Cabines", icon:"🛳️",
+      description:"Vocabulário de atendimento ao passageiro onboard", xpTotal:70,
+      phrases:[
+        {id:"gv1",type:"pronunciation",en:"Good afternoon! Each guest receives a welcome card with their cabin number and pool deck schedule. 🎫",pt:"Boa tarde! Cada passageiro recebe um cartão de boas-vindas com o número da cabine e horário do deck de piscina.",words:[{w:"guest",cls:"noun",tr:"passageiro/hóspede"},{w:"pool deck",cls:"noun",tr:"deck de piscina"}]},
+        {id:"gv2",type:"fill_blank",en:"Your ___ cabin is on deck 8, room 814. Your carry-on is inside already. 🛏️",pt:"Sua cabine de passageiro fica no convés 8, quarto 814. Sua bagagem de mão já está lá.",answer:"passenger",words:[{w:"passenger cabin",cls:"noun",tr:"cabine de passageiro"}]},
+        {id:"gv3",type:"multiple_choice",en:"'Pool deck' on a cruise ship is: 🏊",pt:"'Pool deck' em um navio de cruzeiro é:",options:["🏊 O deck com piscina (também chamado lido deck)","🍽️ O andar do restaurante principal","⚓ O deck de operações do porto","🎭 O salão de entretenimento"],correct:0,words:[{w:"pool deck",cls:"noun",tr:"deck de piscina"}]},
+        {id:"gv4",type:"translate_pt_en",en:"The pool deck is open from 7 AM to 10 PM.",pt:"O deck de piscina abre às 7h e fecha às 22h.",answer:"the pool deck is open from 7 am to 10 pm",words:[{w:"pool deck",cls:"noun",tr:"deck de piscina"}]},
+        {id:"gv5",type:"word_order",en:"Each guest must carry their belongings through the security check. 🎒",pt:"Cada passageiro deve levar seus pertences pelo controle de segurança.",scrambled:["Each","guest","must","carry","their","belongings","through","the","security","check."],answer:"Each guest must carry their belongings through the security check.",words:[{w:"guest",cls:"noun",tr:"passageiro"},{w:"belongings",cls:"noun",tr:"pertences"}]},
+      ]
+    }
+  );
+})();
+
+// ────── Correção global: "lido deck" → "pool deck" em exercícios ──────
+(function(){
+  function fix(obj) {
+    if (!obj || typeof obj !== "object") return;
+    for (const k of Object.keys(obj)) {
+      if (typeof obj[k] === "string") {
+        obj[k] = obj[k].replace(/lido deck/gi, "pool deck");
+      } else if (Array.isArray(obj[k]) || typeof obj[k] === "object") {
+        fix(obj[k]);
+      }
+    }
+  }
+  const crz = VICTOR_DATA.segments.find(s => s.id === "cruzeiros");
+  if (crz) fix(crz);
+})();
+
+// ════════════════════════════════════════════════════════════
 // NOVAS FASES — CRUZEIROS f3 (B1) + f4 (B2) + f5 (C1-C2)
 // ════════════════════════════════════════════════════════════
 (function(){
@@ -4476,4 +4540,35 @@ VICTOR_DATA.flashcardDecks.push({
     const ai=ORDER.indexOf(a.id), bi=ORDER.indexOf(b.id);
     return (ai<0?9999:ai)-(bi<0?9999:bi);
   });
+})();
+
+// ── Global: replace "a bordo" with "onboard" in English fields ─
+(function(){
+  const EN_KEYS = new Set(["en","answer","scrambled"]);
+  const WORD_KEYS = new Set(["tr"]);
+  function fixStr(s){
+    return s
+      .replace(/\ba bordo\b/gi, "onboard")
+      .replace(/\bon board\b/gi, "onboard");
+  }
+  function walk(obj){
+    if (!obj || typeof obj !== "object") return;
+    if (Array.isArray(obj)){
+      for(let i=0;i<obj.length;i++){
+        if (typeof obj[i]==="string") obj[i]=fixStr(obj[i]);
+        else walk(obj[i]);
+      }
+      return;
+    }
+    for(const k of Object.keys(obj)){
+      if (typeof obj[k]==="string"){
+        if (EN_KEYS.has(k)||WORD_KEYS.has(k)) obj[k]=fixStr(obj[k]);
+      } else {
+        walk(obj[k]);
+      }
+    }
+  }
+  // Apply to segments and flashcard decks (English fields only)
+  if (VICTOR_DATA.segments) VICTOR_DATA.segments.forEach(walk);
+  if (VICTOR_DATA.flashcardDecks) VICTOR_DATA.flashcardDecks.forEach(walk);
 })();
