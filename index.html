@@ -1719,9 +1719,9 @@
 
     <!-- Stats row -->
     <div class="profile-stats-row">
-      <div class="profile-stat"><span id="ps-xp">0</span><small>XP Total</small></div>
-      <div class="profile-stat"><span id="ps-days">0</span><small>Dias Praticados</small></div>
-      <div class="profile-stat"><span id="ps-missions">0</span><small>Missões</small></div>
+      <div class="profile-stat"><span id="ps-xp">0</span><small data-i18n="stat_xp">XP Total</small></div>
+      <div class="profile-stat"><span id="ps-days">0</span><small data-i18n="stat_days">Dias Praticados</small></div>
+      <div class="profile-stat"><span id="ps-missions">0</span><small data-i18n="stat_missions">Missões</small></div>
     </div>
 
     <!-- Commitment — right after XP -->
@@ -1735,10 +1735,10 @@
       <div class="profile-section-title" id="prof-title-calendar">📅 Calendário de Atividade</div>
       <div class="activity-calendar" id="activity-calendar"></div>
       <div class="activity-legend">
-        <span class="al-box al-0"></span><span>Sem atividade</span>
-        <span class="al-box al-1"></span><span>Baixo</span>
-        <span class="al-box al-2"></span><span>Médio</span>
-        <span class="al-box al-3"></span><span>Alto</span>
+        <span class="al-box al-0"></span><span data-i18n="activity_none">Sem atividade</span>
+        <span class="al-box al-1"></span><span data-i18n="activity_low">Baixo</span>
+        <span class="al-box al-2"></span><span data-i18n="activity_mid">Médio</span>
+        <span class="al-box al-3"></span><span data-i18n="activity_high">Alto</span>
       </div>
     </div>
 
@@ -1746,9 +1746,9 @@
     <div class="profile-section">
       <div class="profile-section-title" data-i18n="xp_history">📊 Progresso de XP</div>
       <div class="chart-tabs">
-        <button class="chart-tab active" data-period="week">Esta semana</button>
-        <button class="chart-tab" data-period="week1">Semana passada</button>
-        <button class="chart-tab" data-period="week2">2 semanas atrás</button>
+        <button class="chart-tab active" data-period="week" data-i18n="week_this">Esta semana</button>
+        <button class="chart-tab" data-period="week1" data-i18n="week_last">Semana passada</button>
+        <button class="chart-tab" data-period="week2" data-i18n="week_2ago">2 semanas atrás</button>
       </div>
       <div class="xp-chart" id="xp-chart"></div>
     </div>
