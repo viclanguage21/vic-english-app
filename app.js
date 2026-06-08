@@ -2181,11 +2181,30 @@ function renderMission(){
   document.getElementById("phrase-counter").textContent      =`${currentPhraseIndex+1}/${total}`;
   document.getElementById("mission-progress-bar").style.width=`${Math.round(((currentPhraseIndex+1)/total)*100)}%`;
   const ptEl=document.getElementById("phrase-pt");
+  const dicaBtn=document.getElementById("btn-dica");
+  const showDica = phrase.pt && !["translate_en_pt","translate_pt_en","memory_match","match_columns"].includes(phrase.type);
   if(ptEl){
-    if(phrase.pt&&phrase.type!=="translate_en_pt"&&phrase.type!=="translate_pt_en"){
+    if(showDica){
       ptEl.innerHTML=`<span class="phrase-pt-label">🇧🇷</span> ${phrase.pt}`;
+      ptEl.style.display="none";
+    } else if(phrase.pt && ["translate_pt_en"].includes(phrase.type)){
+      ptEl.innerHTML=`<span class="phrase-pt-label">🇧🇷</span> ${phrase.pt}`;
+      ptEl.style.display="";
     } else {
       ptEl.textContent="";
+      ptEl.style.display="none";
+    }
+  }
+  if(dicaBtn){
+    if(showDica){
+      dicaBtn.style.display="inline-flex";
+      dicaBtn.classList.remove("used");
+      dicaBtn.onclick=()=>{
+        if(ptEl){ ptEl.style.display=""; }
+        dicaBtn.classList.add("used");
+      };
+    } else {
+      dicaBtn.style.display="none";
     }
   }
   document.getElementById("phrase-tip").textContent          =phrase.tip?`💡 ${stripEmoji(phrase.tip)}`:"";
