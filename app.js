@@ -198,7 +198,7 @@ function renderDashboardTexts() {
   document.querySelectorAll(".profile-stat small").forEach(el => {
     const txt = el.textContent;
     if(txt.includes("XP Total") || txt.includes("Total XP")) el.textContent = t("total_xp");
-    if(txt.includes("Streak"))   el.textContent = t("total_streak");
+    if(txt.includes("Dias Praticados") || txt.includes("Days Practiced") || txt.includes("Tage")) el.textContent = t("days_practiced")||"Dias Praticados";
     if(txt.includes("Missões") || txt.includes("Missions")) el.textContent = t("total_missions");
   });
   // Próxima conquista
@@ -1927,7 +1927,7 @@ function renderDashboard(){
   const adminBtn=document.getElementById("btn-admin-float");
   if(adminBtn) adminBtn.style.display=currentUser?.uid===OWNER_UID?"flex":"none";
   // username handled by fitUserName above
-  const elXP=document.getElementById("dash-xp"); if(elXP) elXP.textContent=xp;
+  const elXP=document.getElementById("dash-xp"); if(elXP) elXP.textContent=userData.xpToday||0;
   const elLv=document.getElementById("dash-level"); if(elLv) elLv.textContent=level;
   updateStreakFireDisplay();
 
@@ -4359,7 +4359,8 @@ function openProfile(){
     if(hun) hun.textContent=userData?.username ? `@${userData.username}` : "";
     const hl=document.getElementById("profile-hero-level"); if(hl) hl.textContent=lv.label;
     const pxp=document.getElementById("ps-xp"); if(pxp) pxp.textContent=xp;
-    const pstr=document.getElementById("ps-streak"); if(pstr) pstr.textContent=userData?.streak||0;
+    const daysPracticed=Object.keys(userData?.xpHistory||{}).filter(d=>(userData.xpHistory[d]||0)>0).length;
+    const pdays=document.getElementById("ps-days"); if(pdays) pdays.textContent=daysPracticed;
     const pmis=document.getElementById("ps-missions"); if(pmis) pmis.textContent=completed.length;
     const pyday=document.getElementById("ps-xp-yesterday"); if(pyday) pyday.textContent=userData?.xpYesterday||0;
 
