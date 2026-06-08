@@ -1397,9 +1397,9 @@ input { color: #ffffff !important; }
   background: linear-gradient(90deg, transparent, rgba(201,147,58,0.5), transparent);
 }
 
-/* ── XP track — leve gradiente rosa/roxo claro ── */
+/* ── XP track — gradiente rosa (esq) → roxo (dir) ── */
 .xp-track {
-  background: linear-gradient(145deg, #3a1f63 0%, #4a2160 55%, #5c2758 100%) !important;
+  background: linear-gradient(100deg, #6b2a5e 0%, #4f2160 50%, #3a1f63 100%) !important;
   border-color: rgba(216,150,230,0.32) !important;
   box-shadow: 0 0 0 1px rgba(216,150,230,0.08), 0 4px 14px rgba(0,0,0,0.3) !important;
 }
@@ -1980,8 +1980,8 @@ input { color: #ffffff !important; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(201,147,58,0.08));
-  border: 1px solid rgba(124,58,237,0.35);
+  background: linear-gradient(100deg, #6b2a5e 0%, #4f2160 50%, #3a1f63 100%);
+  border: 1px solid rgba(216,150,230,0.32);
   border-radius: var(--r);
   padding: 14px 16px;
   margin-bottom: 14px;
