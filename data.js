@@ -3745,6 +3745,707 @@ VICTOR_DATA.flashcardDecks.push({
   ]
 });
 
+// ════════════════════════════════════════════════════════════
+// NOVAS FASES — CRUZEIROS f3 (B1) + f4 (B2) + f5 (C1-C2)
+// ════════════════════════════════════════════════════════════
+(function(){
+  const seg = VICTOR_DATA.segments.find(s => s.id === "cruzeiros");
+  if (!seg) return;
+  const f3 = seg.phases.find(p => p.id === "f3");
+  const f4 = seg.phases.find(p => p.id === "f4");
+  const f5 = seg.phases.find(p => p.id === "f5");
+  if (f3) f3.missions = [
+    { id:"abordo_crz3", name:"🛳️ A Bordo do Navio", icon:"🛳️",
+      description:"Vida a bordo — rotinas e espaços", xpTotal:80,
+      phrases:[
+        {id:"ab1",type:"pronunciation",en:"Your stateroom is on deck 8, cabin 814. The cabin steward will assist you. 🛳️",pt:"Seu camarote fica no convés 8, cabine 814. O camareiro de bordo irá ajudá-lo.",words:[{w:"stateroom",cls:"noun",tr:"camarote"},{w:"cabin steward",cls:"noun",tr:"camareiro de bordo"}]},
+        {id:"ab2",type:"fill_blank",en:"The breakfast ___ is served from 6 to 10 AM on the lido deck. 🍳",pt:"O bufê do café da manhã é servido das 6h às 10h no deck de piscina.",answer:"buffet",words:[{w:"buffet",cls:"noun",tr:"bufê"},{w:"lido deck",cls:"noun",tr:"deck de piscina"}]},
+        {id:"ab3",type:"multiple_choice",en:"A 'sea day' on a cruise means: 🌊",pt:"Um 'sea day' em um cruzeiro significa:",options:["🌊 Dia navegando sem parar em porto","🏖️ Dia de excursão em terra","🍽️ Jantar especial a bordo","🎭 Dia de entretenimento noturno"],correct:0,words:[{w:"sea day",cls:"noun",tr:"dia de navegação"}]},
+        {id:"ab4",type:"translate_pt_en",en:"The cabin steward will service your room twice a day.",pt:"O camareiro arrumará seu camarote duas vezes ao dia.",answer:"the cabin steward will service your room twice a day",words:[{w:"cabin steward",cls:"noun",tr:"camareiro de bordo"}]},
+        {id:"ab5",type:"word_order",en:"The lido deck is open from 7 AM with the buffet and pool. 🏊",pt:"O deck de piscina abre às 7h com o bufê e a piscina.",scrambled:["The","lido","deck","is","open","from","7","AM","with","the","buffet","and","pool."],answer:"The lido deck is open from 7 AM with the buffet and pool.",words:[{w:"lido deck",cls:"noun",tr:"deck de piscina"},{w:"buffet",cls:"noun",tr:"bufê"}]},
+      ]
+    },
+    { id:"escalas_crz3", name:"⚓ Portos & Excursões", icon:"⚓",
+      description:"Escalas e passeios em terra", xpTotal:80,
+      phrases:[
+        {id:"es1",type:"pronunciation",en:"Our first port of call is Cartagena. Excursion tours depart from the gangway at 9 AM. ⚓",pt:"Nossa primeira escala é em Cartagena. Os passeios partem da passarela às 9h.",words:[{w:"port of call",cls:"noun",tr:"porto de escala"},{w:"gangway",cls:"noun",tr:"passarela de acesso"}]},
+        {id:"es2",type:"fill_blank",en:"Book your shore ___ at the excursion desk before 6 PM. 🎫",pt:"Reserve sua excursão no balcão de passeios antes das 18h.",answer:"excursion",words:[{w:"excursion",cls:"noun",tr:"excursão/passeio"}]},
+        {id:"es3",type:"multiple_choice",en:"A 'tender' on a cruise is: 🚤",pt:"Um 'tender' em cruzeiro é:",options:["🚤 Lancha que leva passageiros à terra","⚓ Tipo de âncora grande","🛳️ Deck externo do navio","🍽️ Restaurante premium a bordo"],correct:0,words:[{w:"tender",cls:"noun",tr:"lancha de transbordo"}]},
+        {id:"es4",type:"translate_pt_en",en:"We will use a tender to reach the island — the ship cannot dock there.",pt:"Usaremos uma lancha para chegar à ilha — o navio não consegue atracar lá.",answer:"we will use a tender to reach the island the ship cannot dock there",words:[{w:"tender",cls:"noun",tr:"lancha de transbordo"}]},
+        {id:"es5",type:"pronunciation",en:"Shore leave is granted from 9 AM to 6 PM. Please return to the ship before departure time. 🕕",pt:"A licença para ir a terra é das 9h às 18h. Retorne ao navio antes da partida.",words:[{w:"shore leave",cls:"noun",tr:"licença para sair a terra"}]},
+      ]
+    },
+    { id:"mem_crz3", name:"🃏 Memória Cruzeiro", icon:"🃏",
+      description:"Vocabulário de vida a bordo", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Cruise vocabulary 🛳️",pt:"Vocabulário de cruzeiro",pairs:[{a:"stateroom",b:"camarote"},{a:"lido deck",b:"deck de piscina"},{a:"buffet",b:"bufê"},{a:"excursion",b:"excursão"},{a:"gangway",b:"passarela"},{a:"tender",b:"lancha de transbordo"}],words:[]}]
+    },
+    { id:"match_crz3", name:"🔗 Match Cruzeiro", icon:"🔗",
+      description:"Conecte termos de cruzeiro", xpTotal:50,
+      phrases:[{id:"mc1",type:"match_columns",en:"Cruise match 🛳️",pt:"Cruzeiro",pairs:[{a:"sea day",b:"dia de navegação"},{a:"port of call",b:"porto de escala"},{a:"shore leave",b:"licença para terra"},{a:"cabin steward",b:"camareiro de bordo"}],words:[]}]
+    },
+    { id:"order_crz3", name:"🔀 Frases de Cruzeiro", icon:"🔀",
+      description:"Monte frases do vocabulário de cruzeiros", xpTotal:50,
+      phrases:[
+        {id:"o1",type:"word_order",en:"Book your shore excursion at the excursion desk before six PM. 🎫",pt:"Reserve sua excursão no balcão de passeios antes das 18h.",scrambled:["Book","your","shore","excursion","at","the","excursion","desk","before","six","PM."],answer:"Book your shore excursion at the excursion desk before six PM.",words:[{w:"excursion",cls:"noun",tr:"excursão"}]},
+      ]
+    },
+  ];
+  if (f4) f4.missions = [
+    { id:"operacoes_crz4", name:"🚢 Operações de Embarque", icon:"🚢",
+      description:"Embarque, desembarque e logística", xpTotal:100,
+      phrases:[
+        {id:"op1",type:"pronunciation",en:"Embarkation begins at 12 noon. Please have your cruise card and passport ready at the gangway. 🚢",pt:"O embarque começa ao meio-dia. Tenha seu cartão de cruzeiro e passaporte prontos na passarela.",words:[{w:"embarkation",cls:"noun",tr:"embarque"},{w:"gangway",cls:"noun",tr:"passarela de acesso"}]},
+        {id:"op2",type:"fill_blank",en:"___ is scheduled for 8 AM on the last day. Please vacate your stateroom. 🧳",pt:"O desembarque está programado para 8h no último dia. Por favor desocupe o camarote.",answer:"Disembarkation",words:[{w:"disembarkation",cls:"noun",tr:"desembarque"}]},
+        {id:"op3",type:"multiple_choice",en:"'Turnaround day' on a cruise ship means: 🔄",pt:"'Turnaround day' em cruzeiro significa:",options:["🔄 Dia em que todos os passageiros saem e novos embarcam","🌊 Dia de retorno ao porto de origem","🛳️ Virada de rota do navio","⚓ Parada técnica em porto"],correct:0,words:[{w:"turnaround",cls:"noun",tr:"dia de troca de passageiros"}]},
+        {id:"op4",type:"translate_pt_en",en:"Disembarkation is scheduled for 8 AM. All passengers must vacate by that time.",pt:"O desembarque está programado para 8h. Todos os passageiros devem sair até esse horário.",answer:"disembarkation is scheduled for 8 am all passengers must vacate by that time",words:[{w:"disembarkation",cls:"noun",tr:"desembarque"}]},
+        {id:"op5",type:"word_order",en:"The cruise itinerary includes five ports across the Caribbean. 🗺️",pt:"O itinerário do cruzeiro inclui cinco portos pelo Caribe.",scrambled:["The","cruise","itinerary","includes","five","ports","across","the","Caribbean."],answer:"The cruise itinerary includes five ports across the Caribbean.",words:[{w:"itinerary",cls:"noun",tr:"itinerário"}]},
+      ]
+    },
+    { id:"seguranca_crz4", name:"🆘 Segurança a Bordo", icon:"🆘",
+      description:"Procedimentos de segurança e emergência", xpTotal:80,
+      phrases:[
+        {id:"sg1",type:"pronunciation",en:"The muster drill is mandatory for all passengers. Please proceed to your muster station. 🆘",pt:"O exercício de abandono é obrigatório para todos. Siga para seu ponto de abandono.",words:[{w:"muster drill",cls:"noun",tr:"exercício de abandono"}]},
+        {id:"sg2",type:"multiple_choice",en:"A 'knot' as a speed unit means: 🌊",pt:"Um 'knot' como unidade de velocidade significa:",options:["🌊 1 milha náutica por hora (1,85 km/h)","⚓ Tipo de nó de amarra","🚢 Velocidade máxima do navio","🛳️ Rotação do hélice"],correct:0,words:[{w:"knot",cls:"noun",tr:"nó — unidade de velocidade"}]},
+        {id:"sg3",type:"fill_blank",en:"The ship is cruising at 20 ___ — we will arrive in port at 7 AM. 🧭",pt:"O navio está navegando a 20 nós — chegaremos ao porto às 7h.",answer:"knots",words:[{w:"knot",cls:"noun",tr:"nó"}]},
+        {id:"sg4",type:"translate_pt_en",en:"The muster drill is mandatory for all passengers before departure.",pt:"O exercício de abandono é obrigatório para todos os passageiros antes da partida.",answer:"the muster drill is mandatory for all passengers before departure",words:[{w:"muster drill",cls:"noun",tr:"exercício de abandono"}]},
+      ]
+    },
+    { id:"mem_crz4", name:"🃏 Memória Cruzeiro Avançado", icon:"🃏",
+      description:"Termos de operação de cruzeiro", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Cruise operations 🚢",pt:"Operações de cruzeiro",pairs:[{a:"embarkation",b:"embarque"},{a:"disembarkation",b:"desembarque"},{a:"itinerary",b:"itinerário"},{a:"muster drill",b:"exercício de abandono"},{a:"turnaround",b:"dia de troca"},{a:"knot",b:"nó (velocidade)"}],words:[]}]
+    },
+    { id:"match_crz4", name:"🔗 Match Cruzeiro Avançado", icon:"🔗",
+      description:"Conecte termos avançados de cruzeiro", xpTotal:50,
+      phrases:[{id:"mc1",type:"match_columns",en:"Cruise advanced 🚢",pt:"Cruzeiro avançado",pairs:[{a:"embarkation",b:"embarque"},{a:"disembarkation",b:"desembarque"},{a:"turnaround",b:"troca de passageiros"},{a:"itinerary",b:"itinerário"}],words:[]}]
+    },
+    { id:"order_crz4", name:"🔀 Frases Avançadas Cruzeiro", icon:"🔀",
+      description:"Monte frases de operação de cruzeiro", xpTotal:60,
+      phrases:[
+        {id:"o1",type:"word_order",en:"Turnaround day requires all passengers to vacate their staterooms by 8 AM. 🛳️",pt:"No dia de troca, todos devem desocupar os camarotes até as 8h.",scrambled:["Turnaround","day","requires","all","passengers","to","vacate","their","staterooms","by","8","AM."],answer:"Turnaround day requires all passengers to vacate their staterooms by 8 AM.",words:[{w:"turnaround",cls:"noun",tr:"troca de passageiros"},{w:"staterooms",cls:"noun",tr:"camarotes"}]},
+        {id:"o2",type:"translate_pt_en",en:"The ship is cruising at 20 knots and will arrive at the port of call at 7 AM.",pt:"O navio navega a 20 nós e chegará ao porto de escala às 7h.",answer:"the ship is cruising at 20 knots and will arrive at the port of call at 7 am",words:[{w:"knots",cls:"noun",tr:"nós"},{w:"port of call",cls:"noun",tr:"porto de escala"}]},
+      ]
+    },
+  ];
+  if (f5) f5.missions = [
+    { id:"fluencia_crz5", name:"🌊 Fluência em Cruzeiros", icon:"🌊",
+      description:"Comunicação C1 em ambiente de cruzeiro", xpTotal:120,
+      phrases:[
+        {id:"fl1",type:"pronunciation",en:"Welcome aboard! Your stateroom on deck 8 is ready. The cabin steward has prepared it with complimentary amenities. 🛳️",pt:"Bem-vindo a bordo! Seu camarote no convés 8 está pronto. O camareiro preparou com comodidades de cortesia.",words:[{w:"stateroom",cls:"noun",tr:"camarote"},{w:"cabin steward",cls:"noun",tr:"camareiro"}]},
+        {id:"fl2",type:"translate_pt_en",en:"Our itinerary covers five ports of call, with two sea days between them.",pt:"Nosso itinerário cobre cinco portos de escala, com dois dias de navegação entre eles.",answer:"our itinerary covers five ports of call with two sea days between them",words:[{w:"itinerary",cls:"noun",tr:"itinerário"},{w:"sea days",cls:"noun",tr:"dias de navegação"}]},
+        {id:"fl3",type:"pronunciation",en:"Embarkation for returning passengers begins at 12 noon. Please use the gangway at pier 4. 🚢",pt:"O embarque para os passageiros começa ao meio-dia. Use a passarela no cais 4.",words:[{w:"embarkation",cls:"noun",tr:"embarque"},{w:"gangway",cls:"noun",tr:"passarela"}]},
+        {id:"fl4",type:"multiple_choice",en:"The excursion desk closes at 6 PM. A passenger arrives at 5:55 PM. You say: 🎫",pt:"O balcão fecha às 18h. Passageiro chega às 17h55. Você diz:",options:["Of course! We have five minutes — let me help you quickly. 😊","Sorry, we are closed. ❌","Come back tomorrow. 🔄","Call the shore desk. 📞"],correct:0,words:[{w:"excursion",cls:"noun",tr:"excursão"}]},
+        {id:"fl5",type:"word_order",en:"Shore leave is granted until 6 PM — the ship departs at 7 PM, so please be back on time. ⏰",pt:"A licença para terra vai até 18h — o navio parte às 19h, então volte no horário.",scrambled:["Shore","leave","is","granted","until","6","PM","—","the","ship","departs","at","7","PM,","so","please","be","back","on","time."],answer:"Shore leave is granted until 6 PM — the ship departs at 7 PM, so please be back on time.",words:[{w:"shore leave",cls:"noun",tr:"licença para terra"}]},
+      ]
+    },
+    { id:"mem_crz5", name:"🃏 Memória Final Cruzeiro", icon:"🃏",
+      description:"Revisão completa de cruzeiros", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Cruise final review 🛳️",pt:"Revisão final de cruzeiro",pairs:[{a:"stateroom",b:"camarote"},{a:"itinerary",b:"itinerário"},{a:"muster drill",b:"exercício de abandono"},{a:"shore leave",b:"licença para terra"},{a:"gangway",b:"passarela"},{a:"knot",b:"nó (velocidade)"}],words:[]}]
+    },
+    { id:"match_crz5", name:"🔗 Match Final Cruzeiro", icon:"🔗",
+      description:"Revisão final de todos os termos", xpTotal:60,
+      phrases:[{id:"mc1",type:"match_columns",en:"Cruise final match 🛳️",pt:"Revisão final",pairs:[{a:"embarkation",b:"embarque"},{a:"disembarkation",b:"desembarque"},{a:"port of call",b:"porto de escala"},{a:"cabin steward",b:"camareiro de bordo"}],words:[]}]
+    },
+  ];
+})();
+
+// ════════════════════════════════════════════════════════════
+// NOVAS FASES — VAREJO f3 (B1) + f4 (B2) + f5 (C1-C2)
+// ════════════════════════════════════════════════════════════
+(function(){
+  const seg = VICTOR_DATA.segments.find(s => s.id === "varejo");
+  if (!seg) return;
+  const f3 = seg.phases.find(p => p.id === "f3");
+  const f4 = seg.phases.find(p => p.id === "f4");
+  const f5 = seg.phases.find(p => p.id === "f5");
+  if (f3) f3.missions = [
+    { id:"atendimento_vj3", name:"🛒 Atendimento ao Cliente", icon:"🛒",
+      description:"Gerencie trocas, devoluções e reclamações", xpTotal:80,
+      phrases:[
+        {id:"at1",type:"pronunciation",en:"I am sorry, that item is currently out of stock. We expect a new delivery next week. 📦",pt:"Desculpe, esse produto está fora de estoque. Esperamos reposição semana que vem.",words:[{w:"out of stock",cls:"adj",tr:"fora de estoque/esgotado"}]},
+        {id:"at2",type:"fill_blank",en:"Can I ___ this for a different size? The fitting room is at the back. 👗",pt:"Posso trocar por um tamanho diferente? O provador fica no fundo.",answer:"exchange",words:[{w:"exchange",cls:"verb",tr:"trocar"},{w:"fitting room",cls:"noun",tr:"provador"}]},
+        {id:"at3",type:"multiple_choice",en:"Customer asks for a refund. You say: 💵",pt:"Cliente pede reembolso. Você diz:",options:["Of course! Please show your receipt and I will process the refund. 🧾","No refunds. ❌","Read the policy. 📋","Ask the manager. 👔"],correct:0,words:[{w:"refund",cls:"noun",tr:"reembolso/devolução"},{w:"receipt",cls:"noun",tr:"recibo"}]},
+        {id:"at4",type:"translate_pt_en",en:"Keep your receipt in case you need to exchange the item.",pt:"Guarde o recibo caso precise trocar o produto.",answer:"keep your receipt in case you need to exchange the item",words:[{w:"receipt",cls:"noun",tr:"recibo"},{w:"exchange",cls:"verb",tr:"trocar"}]},
+        {id:"at5",type:"word_order",en:"The fitting rooms are at the back of the store on the left side. 👗",pt:"Os provadores ficam no fundo da loja, no lado esquerdo.",scrambled:["The","fitting","rooms","are","at","the","back","of","the","store","on","the","left","side."],answer:"The fitting rooms are at the back of the store on the left side.",words:[{w:"fitting room",cls:"noun",tr:"provador"}]},
+      ]
+    },
+    { id:"loja_vj3", name:"🏪 Controle de Loja", icon:"🏪",
+      description:"Estoque, prateleiras e operações da loja", xpTotal:80,
+      phrases:[
+        {id:"lj1",type:"pronunciation",en:"Please restock the shelves before opening — check the inventory list first. 📦",pt:"Por favor reponha as prateleiras antes de abrir — confira a lista de estoque primeiro.",words:[{w:"shelf",cls:"noun",tr:"prateleira"},{w:"inventory",cls:"noun",tr:"estoque/inventário"}]},
+        {id:"lj2",type:"fill_blank",en:"Scan the ___ to check the price and update inventory. 📷",pt:"Escaneie o código de barras para verificar o preço e atualizar o estoque.",answer:"barcode",words:[{w:"barcode",cls:"noun",tr:"código de barras"}]},
+        {id:"lj3",type:"multiple_choice",en:"The 'POS system' in a store is: 🖥️",pt:"O 'POS system' em uma loja é:",options:["🖥️ Sistema de caixa / ponto de venda","📦 Sistema de estoque","💳 Máquina de cartão","📋 Software de relatórios"],correct:0,words:[{w:"POS",cls:"noun",tr:"ponto de venda/caixa"}]},
+        {id:"lj4",type:"translate_pt_en",en:"We need to update the inventory before the weekend sale.",pt:"Precisamos atualizar o estoque antes da promoção de fim de semana.",answer:"we need to update the inventory before the weekend sale",words:[{w:"inventory",cls:"noun",tr:"estoque/inventário"}]},
+        {id:"lj5",type:"pronunciation",en:"The price tag shows the original price and the discounted sale price. The discount is 30%. 🏷️",pt:"A etiqueta mostra o preço original e o preço promocional. O desconto é de 30%.",words:[{w:"price tag",cls:"noun",tr:"etiqueta de preço"},{w:"discount",cls:"noun",tr:"desconto"}]},
+      ]
+    },
+    { id:"mem_vj3", name:"🃏 Memória Varejo", icon:"🃏",
+      description:"Vocabulário de varejo intermediário", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Retail vocabulary 🛒",pt:"Vocabulário de varejo",pairs:[{a:"receipt",b:"recibo/cupom"},{a:"refund",b:"reembolso"},{a:"exchange",b:"troca"},{a:"discount",b:"desconto"},{a:"fitting room",b:"provador"},{a:"barcode",b:"código de barras"}],words:[]}]
+    },
+    { id:"match_vj3", name:"🔗 Match Varejo", icon:"🔗",
+      description:"Conecte termos de varejo", xpTotal:50,
+      phrases:[{id:"mc1",type:"match_columns",en:"Retail match 🛒",pt:"Varejo",pairs:[{a:"out of stock",b:"fora de estoque"},{a:"price tag",b:"etiqueta de preço"},{a:"shelf",b:"prateleira"},{a:"inventory",b:"estoque"}],words:[]}]
+    },
+    { id:"order_vj3", name:"🔀 Frases de Varejo", icon:"🔀",
+      description:"Monte frases de atendimento ao cliente", xpTotal:50,
+      phrases:[
+        {id:"o1",type:"word_order",en:"Please join the queue at the cashier — we will be with you shortly. 🏷️",pt:"Por favor entre na fila do caixa — atenderemos em breve.",scrambled:["Please","join","the","queue","at","the","cashier","—","we","will","be","with","you","shortly."],answer:"Please join the queue at the cashier — we will be with you shortly.",words:[{w:"queue",cls:"noun",tr:"fila"},{w:"cashier",cls:"noun",tr:"caixa"}]},
+      ]
+    },
+  ];
+  if (f4) f4.missions = [
+    { id:"fidelidade_vj4", name:"🌟 Fidelidade & Promoções", icon:"🌟",
+      description:"Programa de fidelidade e gestão de promoções", xpTotal:100,
+      phrases:[
+        {id:"fd1",type:"pronunciation",en:"Sign up for our loyalty program and earn points with every purchase. 🌟",pt:"Cadastre-se no programa de fidelidade e acumule pontos a cada compra.",words:[{w:"loyalty program",cls:"noun",tr:"programa de fidelidade"}]},
+        {id:"fd2",type:"fill_blank",en:"All marked-down items are final sale — no exchange or ___. 📉",pt:"Todos os itens em liquidação são venda final — sem troca ou reembolso.",answer:"refund",words:[{w:"markdown",cls:"noun",tr:"liquidação/redução de preço"},{w:"refund",cls:"noun",tr:"reembolso"}]},
+        {id:"fd3",type:"multiple_choice",en:"'Wholesale' prices are for: 📦",pt:"Preços no 'wholesale' são para:",options:["📦 Compras em grande volume / atacado","🛒 Compras únicas no varejo","💳 Pagamento com cartão","🎁 Presentes e brindes"],correct:0,words:[{w:"wholesale",cls:"noun",tr:"atacado"}]},
+        {id:"fd4",type:"translate_pt_en",en:"We are offering a 20% discount this weekend on all items.",pt:"Estamos oferecendo 20% de desconto neste fim de semana em todos os produtos.",answer:"we are offering a 20% discount this weekend on all items",words:[{w:"discount",cls:"noun",tr:"desconto"}]},
+        {id:"fd5",type:"word_order",en:"All markdown items have reduced prices displayed on the price tag. 🏷️",pt:"Todos os itens em liquidação têm preços reduzidos na etiqueta.",scrambled:["All","markdown","items","have","reduced","prices","displayed","on","the","price","tag."],answer:"All markdown items have reduced prices displayed on the price tag.",words:[{w:"markdown",cls:"noun",tr:"liquidação"},{w:"price tag",cls:"noun",tr:"etiqueta de preço"}]},
+      ]
+    },
+    { id:"gestao_vj4", name:"📊 Gestão de Loja", icon:"📊",
+      description:"Operações avançadas de gerenciamento", xpTotal:100,
+      phrases:[
+        {id:"gv1",type:"pronunciation",en:"The POS system is down — we can only accept cash at the moment. I apologize for the inconvenience. 🖥️",pt:"O sistema de caixa está fora — só aceitamos dinheiro no momento. Desculpe o transtorno.",words:[{w:"POS",cls:"noun",tr:"sistema de caixa/ponto de venda"}]},
+        {id:"gv2",type:"fill_blank",en:"We sell at ___ prices for bulk orders of 100 units or more. 📦",pt:"Vendemos a preços de atacado para pedidos de 100 unidades ou mais.",answer:"wholesale",words:[{w:"wholesale",cls:"noun",tr:"atacado"}]},
+        {id:"gv3",type:"multiple_choice",en:"The cashier's main responsibility is: 🖥️",pt:"A principal função do caixa é:",options:["🖥️ Processar pagamentos e emitir recibos","📦 Repor as prateleiras","🛒 Atender no provador","📋 Controlar estoque"],correct:0,words:[{w:"cashier",cls:"noun",tr:"caixa/atendente"}]},
+        {id:"gv4",type:"translate_pt_en",en:"Scan the barcode to verify the price before processing the payment.",pt:"Escaneie o código de barras para verificar o preço antes de processar o pagamento.",answer:"scan the barcode to verify the price before processing the payment",words:[{w:"barcode",cls:"noun",tr:"código de barras"}]},
+        {id:"gv5",type:"pronunciation",en:"The loyalty program rewards customers with one point per real spent. Points can be redeemed for discounts. 🌟",pt:"O programa de fidelidade dá um ponto por real gasto. Os pontos podem ser trocados por descontos.",words:[{w:"loyalty program",cls:"noun",tr:"programa de fidelidade"}]},
+      ]
+    },
+    { id:"mem_vj4", name:"🃏 Memória Varejo Avançado", icon:"🃏",
+      description:"Termos avançados de varejo", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Advanced retail terms 🛒",pt:"Varejo avançado",pairs:[{a:"loyalty program",b:"programa de fidelidade"},{a:"wholesale",b:"atacado"},{a:"markdown",b:"liquidação"},{a:"POS",b:"ponto de venda/caixa"},{a:"cashier",b:"caixa/atendente"},{a:"queue",b:"fila"}],words:[]}]
+    },
+    { id:"match_vj4", name:"🔗 Match Varejo Avançado", icon:"🔗",
+      description:"Conecte termos avançados", xpTotal:50,
+      phrases:[{id:"mc1",type:"match_columns",en:"Retail advanced match 🛒",pt:"Varejo avançado",pairs:[{a:"loyalty program",b:"programa de fidelidade"},{a:"wholesale",b:"atacado"},{a:"markdown",b:"liquidação/redução"},{a:"barcode",b:"código de barras"}],words:[]}]
+    },
+    { id:"order_vj4", name:"🔀 Frases Avançadas Varejo", icon:"🔀",
+      description:"Monte frases complexas de varejo", xpTotal:60,
+      phrases:[
+        {id:"o1",type:"word_order",en:"The POS system is down — please accept cash only until further notice. 💵",pt:"O sistema de caixa está fora — aceite apenas dinheiro até novo aviso.",scrambled:["The","POS","system","is","down","—","please","accept","cash","only","until","further","notice."],answer:"The POS system is down — please accept cash only until further notice.",words:[{w:"POS",cls:"noun",tr:"ponto de venda"}]},
+        {id:"o2",type:"translate_pt_en",en:"Sign up for our loyalty program to earn points on every purchase.",pt:"Cadastre-se no programa de fidelidade para acumular pontos em cada compra.",answer:"sign up for our loyalty program to earn points on every purchase",words:[{w:"loyalty program",cls:"noun",tr:"programa de fidelidade"}]},
+      ]
+    },
+  ];
+  if (f5) f5.missions = [
+    { id:"fluencia_vj5", name:"🌟 Fluência em Varejo", icon:"🌟",
+      description:"Comunicação C1 no ambiente de varejo", xpTotal:120,
+      phrases:[
+        {id:"fl1",type:"pronunciation",en:"I understand you would like a full refund. Please show your receipt and I will process it right away. If you paid by card, the amount will return in 3 to 5 business days. 💳",pt:"Entendo que deseja reembolso total. Mostre o recibo e processo agora. Se pagou com cartão, volta em 3-5 dias úteis.",words:[{w:"refund",cls:"noun",tr:"reembolso"},{w:"receipt",cls:"noun",tr:"recibo"}]},
+        {id:"fl2",type:"translate_pt_en",en:"I am sorry, this item is out of stock, but we can place a special order for you.",pt:"Desculpe, este produto está fora de estoque, mas podemos fazer um pedido especial para você.",answer:"i am sorry this item is out of stock but we can place a special order for you",words:[{w:"out of stock",cls:"adj",tr:"fora de estoque"}]},
+        {id:"fl3",type:"pronunciation",en:"Our wholesale price for bulk orders starts at 100 units. Let me show you the pricing schedule. 📦",pt:"Nosso preço no atacado para pedidos em volume começa em 100 unidades. Vou mostrar a tabela de preços.",words:[{w:"wholesale",cls:"noun",tr:"atacado"}]},
+        {id:"fl4",type:"multiple_choice",en:"A customer finds an item with no price tag. You: 🏷️",pt:"Cliente encontra produto sem etiqueta. Você:",options:["Scan the barcode to check the price right away. 📷","Say you don't know. 🤷","Tell them to look online. 📱","Guess a price. 🤔"],correct:0,words:[{w:"price tag",cls:"noun",tr:"etiqueta de preço"},{w:"barcode",cls:"noun",tr:"código de barras"}]},
+        {id:"fl5",type:"word_order",en:"The markdown on these items brings the discount to 40% — all items are final sale. 📉",pt:"A liquidação desses itens chega a 40% de desconto — venda final sem troca.",scrambled:["The","markdown","on","these","items","brings","the","discount","to","40%","—","all","items","are","final","sale."],answer:"The markdown on these items brings the discount to 40% — all items are final sale.",words:[{w:"markdown",cls:"noun",tr:"liquidação"},{w:"discount",cls:"noun",tr:"desconto"}]},
+      ]
+    },
+    { id:"mem_vj5", name:"🃏 Memória Final Varejo", icon:"🃏",
+      description:"Revisão completa de varejo", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Retail final review 🛒",pt:"Revisão final de varejo",pairs:[{a:"receipt",b:"recibo"},{a:"refund",b:"reembolso"},{a:"discount",b:"desconto"},{a:"inventory",b:"estoque"},{a:"wholesale",b:"atacado"},{a:"fitting room",b:"provador"}],words:[]}]
+    },
+    { id:"match_vj5", name:"🔗 Match Final Varejo", icon:"🔗",
+      description:"Revisão total de todos os termos", xpTotal:60,
+      phrases:[{id:"mc1",type:"match_columns",en:"Retail final match 🛒",pt:"Varejo — revisão final",pairs:[{a:"POS",b:"ponto de venda"},{a:"loyalty program",b:"programa de fidelidade"},{a:"markdown",b:"liquidação"},{a:"barcode",b:"código de barras"}],words:[]}]
+    },
+  ];
+})();
+
+// ════════════════════════════════════════════════════════════
+// NOVAS FASES — OFFSHORE f3 (B1) + f4 (B2) + f5 (C1-C2)
+// ════════════════════════════════════════════════════════════
+(function(){
+  const seg = VICTOR_DATA.segments.find(s => s.id === "offshore");
+  if (!seg) return;
+  const f3 = seg.phases.find(p => p.id === "f3");
+  const f4 = seg.phases.find(p => p.id === "f4");
+  const f5 = seg.phases.find(p => p.id === "f5");
+  if (f3) f3.missions = [
+    { id:"equipamentos_off3", name:"⚙️ Equipamentos da Plataforma", icon:"⚙️",
+      description:"Vocabulário de equipamentos e estrutura", xpTotal:80,
+      phrases:[
+        {id:"eq1",type:"pronunciation",en:"Test the BOP before drilling operations begin — it is a critical safety step. 🛢️",pt:"Teste o BOP antes de iniciar as operações de perfuração — é uma etapa crítica de segurança.",words:[{w:"BOP",cls:"noun",tr:"preventor de erupção"}]},
+        {id:"eq2",type:"fill_blank",en:"The ___ runs from the platform to the refinery onshore. 🛢️",pt:"O oleoduto vai da plataforma até a refinaria em terra.",answer:"pipeline",words:[{w:"pipeline",cls:"noun",tr:"oleoduto/duto"}]},
+        {id:"eq3",type:"multiple_choice",en:"A 'derrick' on a drilling platform is: 🏗️",pt:"Uma 'derrick' em uma plataforma de perfuração é:",options:["🏗️ A torre de perfuração","🚁 O heliporto","🛢️ O oleoduto","⚙️ A bomba de petróleo"],correct:0,words:[{w:"derrick",cls:"noun",tr:"torre de perfuração"}]},
+        {id:"eq4",type:"translate_pt_en",en:"Monitor the wellbore pressure continuously during drilling operations.",pt:"Monitore a pressão do poço continuamente durante as operações de perfuração.",answer:"monitor the wellbore pressure continuously during drilling operations",words:[{w:"wellbore",cls:"noun",tr:"poço de perfuração"}]},
+        {id:"eq5",type:"word_order",en:"The derrick is 50 meters tall and handles all the drill pipe connections. 🏗️",pt:"A torre tem 50 metros de altura e gerencia todas as conexões do tubo.",scrambled:["The","derrick","is","50","meters","tall","and","handles","all","the","drill","pipe","connections."],answer:"The derrick is 50 meters tall and handles all the drill pipe connections.",words:[{w:"derrick",cls:"noun",tr:"torre de perfuração"}]},
+      ]
+    },
+    { id:"pessoal_off3", name:"👷 Pessoal & Segurança", icon:"👷",
+      description:"Tripulação, turnos e briefings de segurança", xpTotal:80,
+      phrases:[
+        {id:"ps1",type:"pronunciation",en:"A safety briefing is mandatory before any offshore task. All personnel must attend. 🦺",pt:"Um briefing de segurança é obrigatório antes de qualquer tarefa offshore. Todo o pessoal deve participar.",words:[{w:"safety briefing",cls:"noun",tr:"briefing de segurança"}]},
+        {id:"ps2",type:"fill_blank",en:"Crew ___ is scheduled every 14 days — the helicopter departs at 0700. 🚁",pt:"A troca de turno está programada a cada 14 dias — o helicóptero parte às 7h.",answer:"change",words:[{w:"crew change",cls:"noun",tr:"troca de turno"}]},
+        {id:"ps3",type:"multiple_choice",en:"A 'roughneck' on a drilling rig is: 👷",pt:"Um 'roughneck' em uma sonda é:",options:["👷 Auxiliar de sonda — lida com tubos e conexões","🎖️ Chefe de plataforma","🔧 Engenheiro de produção","🚁 Piloto de helicóptero"],correct:0,words:[{w:"roughneck",cls:"noun",tr:"auxiliar de sonda"}]},
+        {id:"ps4",type:"translate_pt_en",en:"All personnel must know their muster station and emergency procedures.",pt:"Todo o pessoal deve conhecer seu ponto de abandono e procedimentos de emergência.",answer:"all personnel must know their muster station and emergency procedures",words:[{w:"muster station",cls:"noun",tr:"ponto de abandono"}]},
+        {id:"ps5",type:"pronunciation",en:"The offshore shift is typically 12 hours on and 12 hours off — two weeks on, two weeks off. ⏰",pt:"O turno offshore é tipicamente 12 horas de trabalho e 12 de descanso — duas semanas a bordo, duas em casa.",words:[{w:"shift",cls:"noun",tr:"turno de trabalho"}]},
+      ]
+    },
+    { id:"mem_off3", name:"🃏 Memória Offshore", icon:"🃏",
+      description:"Vocabulário de plataforma offshore", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Offshore vocabulary 🛢️",pt:"Vocabulário offshore",pairs:[{a:"derrick",b:"torre de perfuração"},{a:"BOP",b:"preventor de erupção"},{a:"pipeline",b:"oleoduto"},{a:"roughneck",b:"auxiliar de sonda"},{a:"shift",b:"turno de trabalho"},{a:"wellbore",b:"poço de perfuração"}],words:[]}]
+    },
+    { id:"match_off3", name:"🔗 Match Offshore", icon:"🔗",
+      description:"Conecte termos de plataforma", xpTotal:50,
+      phrases:[{id:"mc1",type:"match_columns",en:"Offshore match 🛢️",pt:"Offshore",pairs:[{a:"safety briefing",b:"briefing de segurança"},{a:"crew change",b:"troca de turno"},{a:"muster station",b:"ponto de abandono"},{a:"shift",b:"turno de trabalho"}],words:[]}]
+    },
+    { id:"order_off3", name:"🔀 Frases Offshore", icon:"🔀",
+      description:"Monte frases de plataforma offshore", xpTotal:50,
+      phrases:[
+        {id:"o1",type:"word_order",en:"A safety briefing is mandatory before any offshore task begins. 🦺",pt:"Um briefing de segurança é obrigatório antes de qualquer tarefa offshore.",scrambled:["A","safety","briefing","is","mandatory","before","any","offshore","task","begins."],answer:"A safety briefing is mandatory before any offshore task begins.",words:[{w:"safety briefing",cls:"noun",tr:"briefing de segurança"}]},
+      ]
+    },
+  ];
+  if (f4) f4.missions = [
+    { id:"producao_off4", name:"🛢️ Produção & Processamento", icon:"🛢️",
+      description:"FPSO, petróleo bruto e operações de produção", xpTotal:100,
+      phrases:[
+        {id:"pr1",type:"pronunciation",en:"The FPSO processes and stores crude oil before offloading to a tanker. 🛢️",pt:"O FPSO processa e armazena petróleo bruto antes do descarregamento para um tanque.",words:[{w:"FPSO",cls:"noun",tr:"navio-plataforma de produção"},{w:"crude oil",cls:"noun",tr:"petróleo bruto"}]},
+        {id:"pr2",type:"fill_blank",en:"The ___ burns off excess gas safely to prevent pressure buildup. 🔥",pt:"A tocha queima o excesso de gás com segurança para evitar acúmulo de pressão.",answer:"flare",words:[{w:"flare",cls:"noun",tr:"tocha/queimador de gás"}]},
+        {id:"pr3",type:"multiple_choice",en:"'Subsea' equipment on a platform refers to: 🌊",pt:"Equipamento 'subsea' em plataforma refere-se a:",options:["🌊 Equipamento submarino abaixo da linha d'água","🏗️ Estrutura da torre de perfuração","🚁 Equipamento de transporte aéreo","⚙️ Sistema de ventilação da plataforma"],correct:0,words:[{w:"subsea",cls:"noun",tr:"submarino/submerso"}]},
+        {id:"pr4",type:"translate_pt_en",en:"The subsea equipment must be inspected by ROV every six months.",pt:"O equipamento submarino deve ser inspecionado por ROV a cada seis meses.",answer:"the subsea equipment must be inspected by rov every six months",words:[{w:"subsea",cls:"noun",tr:"submarino"}]},
+        {id:"pr5",type:"word_order",en:"Crude oil is pumped from the wellbore to the FPSO for processing. 🛢️",pt:"O petróleo bruto é bombeado do poço para o FPSO para processamento.",scrambled:["Crude","oil","is","pumped","from","the","wellbore","to","the","FPSO","for","processing."],answer:"Crude oil is pumped from the wellbore to the FPSO for processing.",words:[{w:"crude oil",cls:"noun",tr:"petróleo bruto"},{w:"wellbore",cls:"noun",tr:"poço"}]},
+      ]
+    },
+    { id:"logistica_off4", name:"🚁 Logística Offshore", icon:"🚁",
+      description:"Sondas, plataformas e transporte offshore", xpTotal:100,
+      phrases:[
+        {id:"lg1",type:"pronunciation",en:"The helicopter landed safely on the helideck. Crew change begins at 0800. 🚁",pt:"O helicóptero pousou com segurança no heliporto. A troca de turno começa às 8h.",words:[{w:"helideck",cls:"noun",tr:"heliporto da plataforma"}]},
+        {id:"lg2",type:"fill_blank",en:"The drilling ___ is equipped for ultra-deep water operations. 🌊",pt:"O navio-sonda está equipado para operações em águas ultra-profundas.",answer:"rig",words:[{w:"rig",cls:"noun",tr:"sonda/plataforma de perfuração"},{w:"drillship",cls:"noun",tr:"navio-sonda"}]},
+        {id:"lg3",type:"multiple_choice",en:"A 'drillship' is: 🚢",pt:"Um 'drillship' é:",options:["🚢 Navio equipado para perfuração em águas profundas","🛢️ Plataforma fixa no fundo do mar","🏗️ Torre de perfuração em terra","⚓ Navio de suporte logístico"],correct:0,words:[{w:"drillship",cls:"noun",tr:"navio-sonda"}]},
+        {id:"lg4",type:"translate_pt_en",en:"The platform operates 120 km from the coast in 2000 meters of water.",pt:"A plataforma opera a 120 km da costa em 2000 metros de profundidade.",answer:"the platform operates 120 km from the coast in 2000 meters of water",words:[{w:"platform",cls:"noun",tr:"plataforma offshore"}]},
+        {id:"lg5",type:"pronunciation",en:"The rig will be on location for six months. Crew change is every 14 days via helicopter from the helideck. 🚁",pt:"A sonda ficará no local por 6 meses. Troca de turno a cada 14 dias via helicóptero.",words:[{w:"rig",cls:"noun",tr:"sonda"},{w:"helideck",cls:"noun",tr:"heliporto"}]},
+      ]
+    },
+    { id:"mem_off4", name:"🃏 Memória Offshore Avançado", icon:"🃏",
+      description:"Termos avançados de produção offshore", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Advanced offshore terms 🛢️",pt:"Offshore avançado",pairs:[{a:"FPSO",b:"navio-plataforma de produção"},{a:"crude oil",b:"petróleo bruto"},{a:"flare",b:"tocha de gás"},{a:"subsea",b:"submarino/submerso"},{a:"helideck",b:"heliporto"},{a:"drillship",b:"navio-sonda"}],words:[]}]
+    },
+    { id:"match_off4", name:"🔗 Match Offshore Avançado", icon:"🔗",
+      description:"Conecte termos avançados de offshore", xpTotal:50,
+      phrases:[{id:"mc1",type:"match_columns",en:"Offshore advanced 🛢️",pt:"Offshore avançado",pairs:[{a:"FPSO",b:"navio-plataforma de produção"},{a:"drillship",b:"navio-sonda"},{a:"crude oil",b:"petróleo bruto"},{a:"flare",b:"tocha/queimador de gás"}],words:[]}]
+    },
+    { id:"order_off4", name:"🔀 Frases Avançadas Offshore", icon:"🔀",
+      description:"Monte frases técnicas de produção", xpTotal:60,
+      phrases:[
+        {id:"o1",type:"word_order",en:"The FPSO processes crude oil and stores it until an oil tanker arrives for offloading. 🛢️",pt:"O FPSO processa petróleo bruto e armazena até um tanque chegar para descarregamento.",scrambled:["The","FPSO","processes","crude","oil","and","stores","it","until","an","oil","tanker","arrives","for","offloading."],answer:"The FPSO processes crude oil and stores it until an oil tanker arrives for offloading.",words:[{w:"FPSO",cls:"noun",tr:"navio-plataforma"},{w:"crude oil",cls:"noun",tr:"petróleo bruto"}]},
+        {id:"o2",type:"translate_pt_en",en:"The flare burns off excess gas safely to prevent pressure buildup.",pt:"A tocha queima o excesso de gás com segurança para evitar acúmulo de pressão.",answer:"the flare burns off excess gas safely to prevent pressure buildup",words:[{w:"flare",cls:"noun",tr:"tocha"}]},
+      ]
+    },
+  ];
+  if (f5) f5.missions = [
+    { id:"fluencia_off5", name:"🌊 Fluência Offshore", icon:"🌊",
+      description:"Comunicação C1 em ambiente offshore", xpTotal:120,
+      phrases:[
+        {id:"fl1",type:"pronunciation",en:"Good morning. Before we begin drilling, the BOP must be tested and all crew must complete the safety briefing at their muster station. 🦺",pt:"Bom dia. Antes de perfurar, o BOP deve ser testado e a tripulação deve completar o briefing de segurança nos pontos de abandono.",words:[{w:"BOP",cls:"noun",tr:"preventor de erupção"},{w:"safety briefing",cls:"noun",tr:"briefing de segurança"}]},
+        {id:"fl2",type:"translate_pt_en",en:"The wellbore pressure has exceeded the safety threshold. We need to activate the BOP immediately.",pt:"A pressão do poço excedeu o limite de segurança. Precisamos ativar o BOP imediatamente.",answer:"the wellbore pressure has exceeded the safety threshold we need to activate the bop immediately",words:[{w:"wellbore",cls:"noun",tr:"poço"},{w:"BOP",cls:"noun",tr:"preventor de erupção"}]},
+        {id:"fl3",type:"pronunciation",en:"The drillship is positioned 80 km offshore. The FPSO is on location to receive the crude oil from the pipeline. 🛢️",pt:"O navio-sonda está posicionado a 80 km da costa. O FPSO está no local para receber o petróleo bruto.",words:[{w:"drillship",cls:"noun",tr:"navio-sonda"},{w:"FPSO",cls:"noun",tr:"navio-plataforma"}]},
+        {id:"fl4",type:"multiple_choice",en:"'Offshore shift' scheduling of 14/14 means: ⏰",pt:"Escala offshore de 14/14 significa:",options:["⏰ 14 dias a bordo + 14 dias em casa, repetindo","🔄 14 horas de trabalho + 14 de descanso","📅 14 semanas de contrato","🏠 14 dias de férias por ano"],correct:0,words:[{w:"shift",cls:"noun",tr:"turno de trabalho"},{w:"crew change",cls:"noun",tr:"troca de turno"}]},
+        {id:"fl5",type:"word_order",en:"Crew change is scheduled every 14 days via helicopter from the helideck at 0700 hours. 🚁",pt:"A troca de turno está programada a cada 14 dias via helicóptero às 7h.",scrambled:["Crew","change","is","scheduled","every","14","days","via","helicopter","from","the","helideck","at","0700","hours."],answer:"Crew change is scheduled every 14 days via helicopter from the helideck at 0700 hours.",words:[{w:"crew change",cls:"noun",tr:"troca de turno"},{w:"helideck",cls:"noun",tr:"heliporto"}]},
+      ]
+    },
+    { id:"mem_off5", name:"🃏 Memória Final Offshore", icon:"🃏",
+      description:"Revisão completa do vocabulário offshore", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Offshore final review 🛢️",pt:"Revisão final offshore",pairs:[{a:"platform",b:"plataforma offshore"},{a:"rig",b:"sonda de perfuração"},{a:"BOP",b:"preventor de erupção"},{a:"crude oil",b:"petróleo bruto"},{a:"shift",b:"turno de trabalho"},{a:"subsea",b:"submarino"}],words:[]}]
+    },
+    { id:"match_off5", name:"🔗 Match Final Offshore", icon:"🔗",
+      description:"Revisão total de todos os termos offshore", xpTotal:60,
+      phrases:[{id:"mc1",type:"match_columns",en:"Offshore final match 🛢️",pt:"Offshore — revisão final",pairs:[{a:"FPSO",b:"navio-plataforma de produção"},{a:"derrick",b:"torre de perfuração"},{a:"pipeline",b:"oleoduto"},{a:"roughneck",b:"auxiliar de sonda"}],words:[]}]
+    },
+    { id:"quiz_off5", name:"🎯 Quiz C1-C2 Offshore", icon:"🎯",
+      description:"Teste final de fluência offshore", xpTotal:80,
+      phrases:[
+        {id:"q1",type:"multiple_choice",en:"Before starting any task offshore, you must: 🦺",pt:"Antes de iniciar qualquer tarefa offshore, você deve:",options:["🦺 Assistir ao safety briefing e ir ao muster station","🛢️ Verificar o nível de petróleo no FPSO","🚁 Aguardar a chegada do drillship","⚙️ Testar o pipeline de produção"],correct:0,words:[{w:"safety briefing",cls:"noun",tr:"briefing de segurança"},{w:"muster station",cls:"noun",tr:"ponto de abandono"}]},
+        {id:"q2",type:"pronunciation",en:"The subsea wellbore shows abnormal pressure readings. Activating BOP and initiating emergency shutdown protocol. 🚨",pt:"O poço submarino mostra leituras anormais de pressão. Ativando BOP e protocolo de desligamento de emergência.",words:[{w:"subsea",cls:"noun",tr:"submarino"},{w:"wellbore",cls:"noun",tr:"poço"},{w:"BOP",cls:"noun",tr:"preventor de erupção"}]},
+        {id:"q3",type:"translate_pt_en",en:"The flare is used to safely burn off excess gas from the platform.",pt:"A tocha é usada para queimar com segurança o excesso de gás da plataforma.",answer:"the flare is used to safely burn off excess gas from the platform",words:[{w:"flare",cls:"noun",tr:"tocha"}]},
+      ]
+    },
+  ];
+})();
+
+// ════════════════════════════════════════════════════════════
+// NOVAS FASES — COMEX f4 (B2) + f5 (C1-C2)
+// ════════════════════════════════════════════════════════════
+(function(){
+  const seg = VICTOR_DATA.segments.find(s => s.id === "comex");
+  if (!seg) return;
+  const f4 = seg.phases.find(p => p.id === "f4");
+  const f5 = seg.phases.find(p => p.id === "f5");
+  if (f4) f4.missions = [
+    { id:"incoterms_adv", name:"📦 Incoterms & Documentação", icon:"📦",
+      description:"Domine os contratos internacionais de comércio", xpTotal:100,
+      phrases:[
+        {id:"i1",type:"pronunciation",en:"The proforma invoice is required to open a letter of credit. 💳",pt:"A fatura proforma é necessária para abrir uma carta de crédito.",words:[{w:"proforma invoice",cls:"noun",tr:"fatura proforma"},{w:"letter of credit",cls:"noun",tr:"carta de crédito"}]},
+        {id:"i2",type:"fill_blank",en:"The customs ___ handles all import documentation. 🛃",pt:"O despachante aduaneiro cuida de toda a documentação.",answer:"broker",words:[{w:"customs broker",cls:"noun",tr:"despachante aduaneiro"}]},
+        {id:"i3",type:"multiple_choice",en:"Under FOB terms, who pays the ocean freight? 🚢",pt:"Nos termos FOB, quem paga o frete marítimo?",options:["🛒 O comprador (importador)","📤 O vendedor (exportador)","💳 O banco","🛃 A alfândega"],correct:0,words:[{w:"FOB",cls:"noun",tr:"Free On Board"}]},
+        {id:"i4",type:"translate_pt_en",en:"The CIF value includes cost, insurance and freight.",pt:"O valor CIF inclui custo, seguro e frete.",answer:"the cif value includes cost insurance and freight",words:[{w:"CIF",cls:"noun",tr:"custo, seguro e frete"}]},
+        {id:"i5",type:"word_order",en:"Please attach the packing list to every shipment. 📦",pt:"Por favor anexe o romaneio a cada remessa.",scrambled:["Please","attach","the","packing","list","to","every","shipment."],answer:"Please attach the packing list to every shipment.",words:[{w:"packing list",cls:"noun",tr:"romaneio"}]},
+      ]
+    },
+    { id:"export_process", name:"🌍 Processo de Exportação", icon:"🌍",
+      description:"Do embarque ao destino final", xpTotal:100,
+      phrases:[
+        {id:"e1",type:"pronunciation",en:"The shipper is responsible for packing, labeling and delivering cargo to port. 📦",pt:"O embarcador é responsável pelo embalamento, etiquetagem e entrega ao porto.",words:[{w:"shipper",cls:"noun",tr:"embarcador/exportador"}]},
+        {id:"e2",type:"fill_blank",en:"The ___ must be present to receive the cargo at destination. 📥",pt:"O destinatário deve estar presente para receber a carga.",answer:"consignee",words:[{w:"consignee",cls:"noun",tr:"destinatário/importador"}]},
+        {id:"e3",type:"multiple_choice",en:"A 'warehouse' in COMEX is: 🏭",pt:"Um 'warehouse' em COMEX é:",options:["🏭 Armazém / depósito de mercadorias","🚢 Porto de destino","📋 Documento aduaneiro","💳 Carta de crédito"],correct:0,words:[{w:"warehouse",cls:"noun",tr:"armazém/depósito"}]},
+        {id:"e4",type:"translate_pt_en",en:"You must declare the correct HS code for each product.",pt:"Você deve declarar o código HS correto para cada produto.",answer:"you must declare the correct hs code for each product",words:[{w:"HS code",cls:"noun",tr:"código HS/NCM"}]},
+        {id:"e5",type:"pronunciation",en:"The goods are stored in our bonded warehouse pending customs clearance. ✅",pt:"A mercadoria está no armazém alfandegado aguardando desembaraço aduaneiro.",words:[{w:"warehouse",cls:"noun",tr:"armazém"},{w:"clearance",cls:"noun",tr:"desembaraço"}]},
+      ]
+    },
+    { id:"mem_comex4", name:"🃏 Memória COMEX Avançado", icon:"🃏",
+      description:"Termos avançados de comércio exterior", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Advanced COMEX terms 🌍",pt:"Termos COMEX avançados",pairs:[{a:"proforma invoice",b:"fatura proforma"},{a:"packing list",b:"romaneio"},{a:"letter of credit",b:"carta de crédito"},{a:"customs broker",b:"despachante aduaneiro"},{a:"HS code",b:"código NCM/HS"},{a:"consignee",b:"destinatário"}],words:[]}]
+    },
+    { id:"match_comex4", name:"🔗 Match Incoterms", icon:"🔗",
+      description:"Conecte Incoterms e definições", xpTotal:50,
+      phrases:[{id:"mc1",type:"match_columns",en:"Incoterms 🌍",pt:"Incoterms",pairs:[{a:"EXW",b:"comprador paga tudo desde a fábrica"},{a:"FOB",b:"vendedor paga até o embarque"},{a:"CIF",b:"vendedor paga custo+seguro+frete"},{a:"DDP",b:"vendedor paga até destino final"}],words:[]}]
+    },
+    { id:"order_comex4", name:"🔀 Frases Complexas COMEX", icon:"🔀",
+      description:"Monte frases técnicas de alto nível", xpTotal:60,
+      phrases:[
+        {id:"o1",type:"word_order",en:"A 20% import tariff applies to this category of goods. 💸",pt:"Uma tarifa de importação de 20% se aplica a esta categoria.",scrambled:["A","20%","import","tariff","applies","to","this","category","of","goods."],answer:"A 20% import tariff applies to this category of goods.",words:[{w:"tariff",cls:"noun",tr:"tarifa/imposto"}]},
+        {id:"o2",type:"translate_pt_en",en:"The original bill of lading must be presented at customs.",pt:"O conhecimento de embarque original deve ser apresentado na alfândega.",answer:"the original bill of lading must be presented at customs",words:[{w:"bill of lading",cls:"noun",tr:"conhecimento de embarque"}]},
+      ]
+    },
+  ];
+  if (f5) f5.missions = [
+    { id:"fluencia_comex", name:"🌍 Fluência COMEX", icon:"🌍",
+      description:"Comunicação C1 em comércio exterior", xpTotal:120,
+      phrases:[
+        {id:"fl1",type:"pronunciation",en:"We are experiencing a delay in customs clearance due to a discrepancy in the invoice. We are working to resolve this urgently. 📋",pt:"Temos atraso no desembaraço por discrepância na fatura. Estamos resolvendo urgentemente.",words:[{w:"discrepancy",cls:"noun",tr:"discrepância"},{w:"clearance",cls:"noun",tr:"desembaraço"}]},
+        {id:"fl2",type:"translate_pt_en",en:"Our customs broker is handling the documentation to avoid further delays.",pt:"Nosso despachante aduaneiro está cuidando da documentação para evitar mais atrasos.",answer:"our customs broker is handling the documentation to avoid further delays",words:[{w:"customs broker",cls:"noun",tr:"despachante"}]},
+        {id:"fl3",type:"pronunciation",en:"The shipment was cleared through customs and will be delivered to your warehouse by Thursday. ✅",pt:"A remessa foi liberada e será entregue ao armazém até quinta-feira.",words:[{w:"shipment",cls:"noun",tr:"remessa"},{w:"warehouse",cls:"noun",tr:"armazém"}]},
+        {id:"fl4",type:"multiple_choice",en:"'Demurrage' in shipping means: 💸",pt:"'Demurrage' significa:",options:["💸 Taxa por uso prolongado do contêiner","📋 Tipo de fatura proforma","🚢 Atraso na chegada do navio","📦 Embalagem especial"],correct:0,words:[{w:"demurrage",cls:"noun",tr:"taxa de sobre-estadia"}]},
+        {id:"fl5",type:"word_order",en:"Please send the proforma invoice before we issue the letter of credit. 💳",pt:"Envie a fatura proforma antes de emitirmos a carta de crédito.",scrambled:["Please","send","the","proforma","invoice","before","we","issue","the","letter","of","credit."],answer:"Please send the proforma invoice before we issue the letter of credit.",words:[{w:"proforma invoice",cls:"noun",tr:"fatura proforma"},{w:"letter of credit",cls:"noun",tr:"carta de crédito"}]},
+      ]
+    },
+    { id:"emails_comex5", name:"📧 Emails COMEX Profissional", icon:"📧",
+      description:"Emails de alto nível em comércio exterior", xpTotal:100,
+      phrases:[
+        {id:"em1",type:"pronunciation",en:"Dear team, please find attached the original bill of lading and packing list for this shipment. 📎",pt:"Prezados, encontrem em anexo o B/L original e o romaneio desta remessa.",words:[{w:"bill of lading",cls:"noun",tr:"conhecimento de embarque"},{w:"packing list",cls:"noun",tr:"romaneio"}]},
+        {id:"em2",type:"fill_blank",en:"The ___ has confirmed receipt of the cargo at destination. 📥",pt:"O destinatário confirmou o recebimento da carga no destino.",answer:"consignee",words:[{w:"consignee",cls:"noun",tr:"destinatário"}]},
+        {id:"em3",type:"translate_pt_en",en:"We require the corrected invoice to complete the customs clearance process.",pt:"Precisamos da fatura corrigida para completar o desembaraço aduaneiro.",answer:"we require the corrected invoice to complete the customs clearance process",words:[{w:"invoice",cls:"noun",tr:"fatura"},{w:"clearance",cls:"noun",tr:"desembaraço"}]},
+        {id:"em4",type:"multiple_choice",en:"To check the import duty rate, you look for: 🔢",pt:"Para checar a alíquota de importação, você consulta:",options:["🔢 O código HS/NCM do produto","📦 O peso bruto da carga","🚢 O nome do navio","📋 O contrato de compra"],correct:0,words:[{w:"HS code",cls:"noun",tr:"código HS/NCM"}]},
+        {id:"em5",type:"pronunciation",en:"The freight costs under CIF terms are included in the total price. Please confirm acceptance. ✅",pt:"Os custos de frete nos termos CIF estão incluídos no preço total. Confirme a aceitação.",words:[{w:"freight",cls:"noun",tr:"frete"},{w:"CIF",cls:"noun",tr:"CIF"}]},
+      ]
+    },
+    { id:"mem_comex5", name:"🃏 Memória — Fluência COMEX", icon:"🃏",
+      description:"Revisão de todos os termos COMEX", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"COMEX fluency 🌍",pt:"Fluência COMEX",pairs:[{a:"freight",b:"frete"},{a:"tariff",b:"tarifa"},{a:"shipper",b:"embarcador"},{a:"warehouse",b:"armazém"},{a:"invoice",b:"fatura"},{a:"clearance",b:"desembaraço"}],words:[]}]
+    },
+    { id:"match_comex5", name:"🔗 Match Final COMEX", icon:"🔗",
+      description:"Revisão final — todos os termos", xpTotal:60,
+      phrases:[{id:"mc1",type:"match_columns",en:"COMEX final review 🌍",pt:"Revisão final COMEX",pairs:[{a:"bill of lading",b:"conhecimento de embarque"},{a:"packing list",b:"romaneio"},{a:"proforma invoice",b:"fatura proforma"},{a:"customs broker",b:"despachante aduaneiro"}],words:[]}]
+    },
+  ];
+})();
+
+// ════════════════════════════════════════════════════════════
+// NOVAS FASES — CORPORATIVO f4 (B2) + f5 (C1-C2)
+// ════════════════════════════════════════════════════════════
+(function(){
+  const seg = VICTOR_DATA.segments.find(s => s.id === "corporativo");
+  if (!seg) return;
+  const f4 = seg.phases.find(p => p.id === "f4");
+  const f5 = seg.phases.find(p => p.id === "f5");
+  if (f4) f4.missions = [
+    { id:"strategy_corp4", name:"📊 Estratégia & KPIs", icon:"📊",
+      description:"Vocabulário de estratégia e indicadores", xpTotal:100,
+      phrases:[
+        {id:"s1",type:"pronunciation",en:"Our quarterly KPIs show a 15% improvement in ROI compared to last year. 📈",pt:"Nossos KPIs trimestrais mostram uma melhora de 15% no ROI em relação ao ano passado.",words:[{w:"quarterly",cls:"adj",tr:"trimestral"},{w:"KPI",cls:"noun",tr:"indicador de desempenho"},{w:"ROI",cls:"noun",tr:"retorno sobre investimento"}]},
+        {id:"s2",type:"fill_blank",en:"We need to set a ___ to compare our performance against competitors. 📉",pt:"Precisamos definir um benchmark para comparar nosso desempenho com a concorrência.",answer:"benchmark",words:[{w:"benchmark",cls:"noun",tr:"referência/padrão"}]},
+        {id:"s3",type:"multiple_choice",en:"'Stakeholder' in business means: 💼",pt:"'Stakeholder' em negócios significa:",options:["💼 Parte interessada no projeto/empresa","💰 Acionista majoritário","👔 Gerente de área","📋 Cliente final"],correct:0,words:[{w:"stakeholder",cls:"noun",tr:"parte interessada"}]},
+        {id:"s4",type:"translate_pt_en",en:"The project is over budget — we need to cut costs.",pt:"O projeto está acima do orçamento — precisamos cortar custos.",answer:"the project is over budget we need to cut costs",words:[{w:"budget",cls:"noun",tr:"orçamento"}]},
+        {id:"s5",type:"word_order",en:"All stakeholders must approve the final proposal by Friday. 📋",pt:"Todas as partes interessadas devem aprovar a proposta final até sexta.",scrambled:["All","stakeholders","must","approve","the","final","proposal","by","Friday."],answer:"All stakeholders must approve the final proposal by Friday.",words:[{w:"stakeholders",cls:"noun",tr:"partes interessadas"},{w:"proposal",cls:"noun",tr:"proposta"}]},
+      ]
+    },
+    { id:"workflow_corp4", name:"⚙️ Processos & Workflow", icon:"⚙️",
+      description:"Otimize fluxos de trabalho em inglês", xpTotal:100,
+      phrases:[
+        {id:"w1",type:"pronunciation",en:"We need to streamline our approval workflow to reduce turnaround time. ⚙️",pt:"Precisamos otimizar nosso fluxo de aprovação para reduzir o tempo de retorno.",words:[{w:"workflow",cls:"noun",tr:"fluxo de trabalho"},{w:"streamline",cls:"verb",tr:"otimizar"}]},
+        {id:"w2",type:"fill_blank",en:"The client sent a detailed ___ for the new campaign. 📝",pt:"O cliente enviou um briefing detalhado para a nova campanha.",answer:"brief",words:[{w:"brief",cls:"noun",tr:"briefing/resumo de projeto"}]},
+        {id:"w3",type:"multiple_choice",en:"To 'outsource' a service means: 💼",pt:"'Outsource' um serviço significa:",options:["💼 Terceirizar para outra empresa","📋 Detalhar em contrato","🤝 Fazer parceria","🔄 Cancelar o projeto"],correct:0,words:[{w:"outsource",cls:"verb",tr:"terceirizar"}]},
+        {id:"w4",type:"translate_pt_en",en:"Who is responsible for taking the meeting minutes today?",pt:"Quem é responsável por fazer a ata da reunião hoje?",answer:"who is responsible for taking the meeting minutes today",words:[{w:"minutes",cls:"noun",tr:"ata de reunião"}]},
+        {id:"w5",type:"pronunciation",en:"I will follow up on this by Thursday and send you the updated presentation. 📊",pt:"Farei acompanhamento até quinta e enviarei a apresentação atualizada.",words:[{w:"follow-up",cls:"noun",tr:"acompanhamento"},{w:"presentation",cls:"noun",tr:"apresentação"}]},
+      ]
+    },
+    { id:"mem_corp4", name:"🃏 Memória Corporativo Avançado", icon:"🃏",
+      description:"Termos avançados do ambiente corporativo", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Advanced corporate terms 💼",pt:"Termos corporativos avançados",pairs:[{a:"KPI",b:"indicador de desempenho"},{a:"ROI",b:"retorno sobre investimento"},{a:"benchmark",b:"referência/padrão"},{a:"outsource",b:"terceirizar"},{a:"workflow",b:"fluxo de trabalho"},{a:"minutes",b:"ata de reunião"}],words:[]}]
+    },
+    { id:"match_corp4", name:"🔗 Match Estratégia", icon:"🔗",
+      description:"Conecte termos de estratégia corporativa", xpTotal:50,
+      phrases:[{id:"mc1",type:"match_columns",en:"Strategy match 💼",pt:"Estratégia",pairs:[{a:"follow-up",b:"acompanhamento/retorno"},{a:"quarterly",b:"trimestral"},{a:"brief",b:"briefing/resumo"},{a:"feedback",b:"retorno/avaliação"}],words:[]}]
+    },
+    { id:"order_corp4", name:"🔀 Frases Complexas Corp.", icon:"🔀",
+      description:"Monte frases do ambiente corporativo avançado", xpTotal:60,
+      phrases:[
+        {id:"o1",type:"word_order",en:"Our quarterly results exceeded expectations by twenty percent. 📈",pt:"Nossos resultados trimestrais superaram as expectativas em 20%.",scrambled:["Our","quarterly","results","exceeded","expectations","by","twenty","percent."],answer:"Our quarterly results exceeded expectations by twenty percent.",words:[{w:"quarterly",cls:"adj",tr:"trimestral"},{w:"exceeded",cls:"verb",tr:"superaram"}]},
+        {id:"o2",type:"translate_pt_en",en:"Please send me your feedback by end of day.",pt:"Por favor me envie seu feedback até o fim do dia.",answer:"please send me your feedback by end of day",words:[{w:"feedback",cls:"noun",tr:"retorno/avaliação"}]},
+      ]
+    },
+  ];
+  if (f5) f5.missions = [
+    { id:"cLevel_corp5", name:"🏆 Comunicação C-Level", icon:"🏆",
+      description:"Inglês para executivos e apresentações estratégicas", xpTotal:120,
+      phrases:[
+        {id:"c1",type:"pronunciation",en:"Good morning, board members. Today I will present our strategic roadmap for the next quarter. 📊",pt:"Bom dia, membros do conselho. Apresentarei hoje nosso roadmap estratégico para o próximo trimestre.",words:[{w:"board members",cls:"noun",tr:"membros do conselho"},{w:"roadmap",cls:"noun",tr:"roteiro estratégico"}]},
+        {id:"c2",type:"translate_pt_en",en:"Our ROI increased by 30% thanks to the outsourced IT support model.",pt:"Nosso ROI aumentou 30% graças ao modelo de suporte de TI terceirizado.",answer:"our roi increased by 30% thanks to the outsourced it support model",words:[{w:"ROI",cls:"noun",tr:"retorno sobre investimento"},{w:"outsourced",cls:"adj",tr:"terceirizado"}]},
+        {id:"c3",type:"pronunciation",en:"All stakeholders have reviewed the proposal. We are aligned on the budget and workflow. ✅",pt:"Todas as partes interessadas revisaram a proposta. Estamos alinhados no orçamento e fluxo de trabalho.",words:[{w:"stakeholders",cls:"noun",tr:"partes interessadas"},{w:"aligned",cls:"adj",tr:"alinhados"},{w:"workflow",cls:"noun",tr:"fluxo de trabalho"}]},
+        {id:"c4",type:"multiple_choice",en:"In a board meeting, 'tabling an item' (US English) means: 📋",pt:"Em reunião de diretoria, 'tabling an item' (inglês americano) significa:",options:["📋 Adiar o item para depois","✅ Aprovar o item imediatamente","❌ Cancelar o item","💬 Discutir o item agora"],correct:0,words:[{w:"table",cls:"verb",tr:"adiar/deixar para depois"}]},
+        {id:"c5",type:"word_order",en:"We need to benchmark our pricing against industry standards before the next meeting. 📉",pt:"Precisamos comparar nossos preços com o padrão do setor antes da próxima reunião.",scrambled:["We","need","to","benchmark","our","pricing","against","industry","standards","before","the","next","meeting."],answer:"We need to benchmark our pricing against industry standards before the next meeting.",words:[{w:"benchmark",cls:"verb",tr:"comparar com padrão"}]},
+      ]
+    },
+    { id:"fluencia_corp5", name:"💼 Fluência Corporativa", icon:"💼",
+      description:"Comunicação fluente no ambiente de trabalho", xpTotal:100,
+      phrases:[
+        {id:"fl1",type:"pronunciation",en:"Let's get started. The first agenda item is the budget review for Q3. 📋",pt:"Vamos começar. O primeiro item da pauta é a revisão do orçamento do 3º trimestre.",words:[{w:"agenda",cls:"noun",tr:"pauta/agenda"},{w:"budget",cls:"noun",tr:"orçamento"}]},
+        {id:"fl2",type:"fill_blank",en:"I will ___ on your request and get back to you by Thursday. 🔄",pt:"Farei acompanhamento do seu pedido e retorno até quinta.",answer:"follow-up",words:[{w:"follow-up",cls:"noun",tr:"acompanhamento"}]},
+        {id:"fl3",type:"translate_pt_en",en:"Please review the agenda before the meeting and send any questions in advance.",pt:"Por favor revise a pauta antes da reunião e envie perguntas antecipadamente.",answer:"please review the agenda before the meeting and send any questions in advance",words:[{w:"agenda",cls:"noun",tr:"pauta"}]},
+        {id:"fl4",type:"pronunciation",en:"Our deadline is next Monday. I will need your input on the presentation slides by Friday. 🗓️",pt:"Nosso prazo é segunda que vem. Preciso do seu input nos slides até sexta.",words:[{w:"deadline",cls:"noun",tr:"prazo final"},{w:"presentation",cls:"noun",tr:"apresentação"}]},
+        {id:"fl5",type:"multiple_choice",en:"'Synergy' in business means: 🤝",pt:"'Synergy' em negócios significa:",options:["🤝 Esforço combinado gera resultado maior","💼 Redução de custos operacionais","📊 Análise de dados","🔄 Processo repetitivo"],correct:0,words:[{w:"synergy",cls:"noun",tr:"sinergia"}]},
+      ]
+    },
+    { id:"mem_corp5", name:"🃏 Memória — Fluência Corp.", icon:"🃏",
+      description:"Revisão total do vocabulário corporativo", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Corporate fluency 💼",pt:"Fluência corporativa",pairs:[{a:"deadline",b:"prazo final"},{a:"proposal",b:"proposta"},{a:"agenda",b:"pauta da reunião"},{a:"budget",b:"orçamento"},{a:"quarterly",b:"trimestral"},{a:"presentation",b:"apresentação"}],words:[]}]
+    },
+    { id:"match_corp5", name:"🔗 Match Final Corporativo", icon:"🔗",
+      description:"Revisão final — todos os termos", xpTotal:60,
+      phrases:[{id:"mc1",type:"match_columns",en:"Corporate final review 💼",pt:"Revisão corporativa final",pairs:[{a:"KPI",b:"indicador-chave de desempenho"},{a:"ROI",b:"retorno sobre investimento"},{a:"outsource",b:"terceirizar"},{a:"benchmark",b:"referência do setor"}],words:[]}]
+    },
+  ];
+})();
+
+// ════════════════════════════════════════════════════════════
+// NOVAS FASES — SAÚDE f4 (B2) + f5 (C1-C2)
+// ════════════════════════════════════════════════════════════
+(function(){
+  const seg = VICTOR_DATA.segments.find(s => s.id === "saude");
+  if (!seg) return;
+  const f4 = seg.phases.find(p => p.id === "f4");
+  const f5 = seg.phases.find(p => p.id === "f5");
+  if (f4) f4.missions = [
+    { id:"clinico_saude4", name:"🩺 Diagnóstico & Tratamento", icon:"🩺",
+      description:"Vocabulário clínico avançado", xpTotal:100,
+      phrases:[
+        {id:"c1",type:"pronunciation",en:"The diagnosis was confirmed after the scan results came back. 🔬",pt:"O diagnóstico foi confirmado após os resultados do exame de imagem.",words:[{w:"diagnosis",cls:"noun",tr:"diagnóstico"},{w:"scan",cls:"noun",tr:"exame de imagem"}]},
+        {id:"c2",type:"fill_blank",en:"What is the correct ___ for this medication — twice a day? 💊",pt:"Qual é a dosagem correta deste medicamento — duas vezes ao dia?",answer:"dosage",words:[{w:"dosage",cls:"noun",tr:"dosagem"}]},
+        {id:"c3",type:"multiple_choice",en:"'Vital signs' include: 🩺",pt:"'Vital signs' incluem:",options:["🩺 Pressão, pulso, temperatura e respiração","💊 Medicamentos prescritos","🔬 Resultados de exames","📋 Histórico do paciente"],correct:0,words:[{w:"vital signs",cls:"noun",tr:"sinais vitais"}]},
+        {id:"c4",type:"translate_pt_en",en:"The treatment plan includes medication and two weeks of rest.",pt:"O plano de tratamento inclui medicação e duas semanas de repouso.",answer:"the treatment plan includes medication and two weeks of rest",words:[{w:"treatment",cls:"noun",tr:"tratamento"}]},
+        {id:"c5",type:"word_order",en:"Please check the patient's vital signs every hour. 🩺",pt:"Por favor verifique os sinais vitais do paciente a cada hora.",scrambled:["Please","check","the","patient's","vital","signs","every","hour."],answer:"Please check the patient's vital signs every hour.",words:[{w:"vital signs",cls:"noun",tr:"sinais vitais"}]},
+      ]
+    },
+    { id:"documentos_saude4", name:"📋 Documentação Médica", icon:"📋",
+      description:"Termos de burocracia hospitalar", xpTotal:100,
+      phrases:[
+        {id:"d1",type:"pronunciation",en:"Please sign the consent form before the procedure. We will explain everything first. 📋",pt:"Por favor assine o termo de consentimento antes do procedimento. Explicaremos tudo primeiro.",words:[{w:"consent form",cls:"noun",tr:"termo de consentimento"}]},
+        {id:"d2",type:"fill_blank",en:"I need a ___ to see the specialist next week. 📄",pt:"Preciso de um encaminhamento para ver o especialista semana que vem.",answer:"referral",words:[{w:"referral",cls:"noun",tr:"encaminhamento médico"}]},
+        {id:"d3",type:"multiple_choice",en:"'Insurance' in a medical context means: 💳",pt:"'Insurance' em contexto médico significa:",options:["💳 Plano de saúde / seguro médico","💊 Receita de medicamento","📋 Prontuário do paciente","🏥 Internação hospitalar"],correct:0,words:[{w:"insurance",cls:"noun",tr:"plano de saúde/seguro"}]},
+        {id:"d4",type:"translate_pt_en",en:"Is this procedure covered by your insurance?",pt:"Este procedimento é coberto pelo seu plano de saúde?",answer:"is this procedure covered by your insurance",words:[{w:"insurance",cls:"noun",tr:"plano de saúde"}]},
+        {id:"d5",type:"pronunciation",en:"The patient was discharged after three days. A follow-up appointment is scheduled in two weeks. 🏥",pt:"O paciente recebeu alta após três dias. Uma consulta de retorno está marcada para duas semanas.",words:[{w:"discharged",cls:"verb",tr:"alta hospitalar"},{w:"follow-up",cls:"noun",tr:"consulta de retorno"}]},
+      ]
+    },
+    { id:"mem_saude4", name:"🃏 Memória Saúde Avançado", icon:"🃏",
+      description:"Termos clínicos e hospitalares avançados", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Advanced medical terms 🏥",pt:"Termos médicos avançados",pairs:[{a:"diagnosis",b:"diagnóstico"},{a:"dosage",b:"dosagem"},{a:"consent form",b:"termo de consentimento"},{a:"referral",b:"encaminhamento"},{a:"triage",b:"triagem"},{a:"ward",b:"ala hospitalar"}],words:[]}]
+    },
+    { id:"match_saude4", name:"🔗 Match Clínico", icon:"🔗",
+      description:"Conecte termos hospitalares", xpTotal:50,
+      phrases:[{id:"mc1",type:"match_columns",en:"Clinical match 🏥",pt:"Termos clínicos",pairs:[{a:"scan",b:"exame de imagem"},{a:"discharge",b:"alta hospitalar"},{a:"symptoms",b:"sintomas"},{a:"vital signs",b:"sinais vitais"}],words:[]}]
+    },
+    { id:"order_saude4", name:"🔀 Frases Clínicas", icon:"🔀",
+      description:"Monte frases clínicas complexas", xpTotal:60,
+      phrases:[
+        {id:"o1",type:"word_order",en:"Schedule a follow-up appointment in two weeks to review the scan results. 📅",pt:"Agende uma consulta de retorno em duas semanas para revisar os resultados.",scrambled:["Schedule","a","follow-up","appointment","in","two","weeks","to","review","the","scan","results."],answer:"Schedule a follow-up appointment in two weeks to review the scan results.",words:[{w:"follow-up",cls:"noun",tr:"retorno"},{w:"scan",cls:"noun",tr:"exame de imagem"}]},
+        {id:"o2",type:"translate_pt_en",en:"Triage is done at the emergency entrance to assess priority.",pt:"A triagem é feita na entrada da emergência para avaliar prioridade.",answer:"triage is done at the emergency entrance to assess priority",words:[{w:"triage",cls:"noun",tr:"triagem"}]},
+      ]
+    },
+  ];
+  if (f5) f5.missions = [
+    { id:"fluencia_saude5", name:"👨‍⚕️ Fluência Médica", icon:"👨‍⚕️",
+      description:"Comunicação C1 com pacientes e equipes", xpTotal:120,
+      phrases:[
+        {id:"fl1",type:"pronunciation",en:"Good morning. I am Dr. Santos. I have reviewed your scan results and I would like to discuss your diagnosis and treatment options. 🩺",pt:"Bom dia. Sou o Dr. Santos. Revisei seus exames e gostaria de discutir seu diagnóstico e opções de tratamento.",words:[{w:"diagnosis",cls:"noun",tr:"diagnóstico"},{w:"treatment",cls:"noun",tr:"tratamento"}]},
+        {id:"fl2",type:"translate_pt_en",en:"The doctor gave me a prescription for antibiotics and asked me to schedule a follow-up.",pt:"O médico me deu uma receita de antibióticos e pediu que eu agendasse um retorno.",answer:"the doctor gave me a prescription for antibiotics and asked me to schedule a follow-up",words:[{w:"prescription",cls:"noun",tr:"receita médica"},{w:"follow-up",cls:"noun",tr:"consulta de retorno"}]},
+        {id:"fl3",type:"pronunciation",en:"Please check the patient's vital signs and update the chart. The dosage must not exceed 500mg per day. 💊",pt:"Por favor verifique os sinais vitais e atualize o prontuário. A dosagem não deve exceder 500mg por dia.",words:[{w:"vital signs",cls:"noun",tr:"sinais vitais"},{w:"dosage",cls:"noun",tr:"dosagem"}]},
+        {id:"fl4",type:"multiple_choice",en:"'Triage' in a hospital means: 🏥",pt:"'Triage' em hospital significa:",options:["🏥 Classificar pacientes por urgência na entrada","💊 Distribuir medicamentos","📋 Registrar prontuários","🩺 Fazer diagnóstico final"],correct:0,words:[{w:"triage",cls:"noun",tr:"triagem"}]},
+        {id:"fl5",type:"word_order",en:"The patient is in the cardiac ward and will be discharged tomorrow if the scan results are clear. 🏥",pt:"O paciente está na ala cardíaca e receberá alta amanhã se os exames estiverem limpos.",scrambled:["The","patient","is","in","the","cardiac","ward","and","will","be","discharged","tomorrow","if","the","scan","results","are","clear."],answer:"The patient is in the cardiac ward and will be discharged tomorrow if the scan results are clear.",words:[{w:"ward",cls:"noun",tr:"ala hospitalar"},{w:"discharged",cls:"verb",tr:"alta"}]},
+      ]
+    },
+    { id:"relatorio_saude5", name:"📋 Relatórios Clínicos", icon:"📋",
+      description:"Escreva e compreenda relatórios médicos", xpTotal:100,
+      phrases:[
+        {id:"r1",type:"pronunciation",en:"The patient presented with severe symptoms. An appointment was scheduled for a full scan and further diagnosis. 🔬",pt:"O paciente apresentou sintomas graves. Uma consulta foi agendada para exame completo e diagnóstico.",words:[{w:"symptoms",cls:"noun",tr:"sintomas"},{w:"appointment",cls:"noun",tr:"consulta"}]},
+        {id:"r2",type:"fill_blank",en:"The patient has an ___ to penicillin — it must be noted in all records. ⚠️",pt:"O paciente tem alergia a penicilina — deve estar anotado em todos os registros.",answer:"allergy",words:[{w:"allergy",cls:"noun",tr:"alergia"}]},
+        {id:"r3",type:"translate_pt_en",en:"Please sign the consent form before we proceed with the procedure.",pt:"Por favor assine o termo de consentimento antes de iniciar o procedimento.",answer:"please sign the consent form before we proceed with the procedure",words:[{w:"consent form",cls:"noun",tr:"termo de consentimento"}]},
+        {id:"r4",type:"pronunciation",en:"The referral to the specialist has been submitted. Expect contact within five business days. 📄",pt:"O encaminhamento ao especialista foi enviado. Aguarde contato em até cinco dias úteis.",words:[{w:"referral",cls:"noun",tr:"encaminhamento"}]},
+      ]
+    },
+    { id:"mem_saude5", name:"🃏 Memória Final Saúde", icon:"🃏",
+      description:"Revisão completa do vocabulário médico", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Medical final review 🏥",pt:"Revisão médica final",pairs:[{a:"prescription",b:"receita médica"},{a:"appointment",b:"consulta"},{a:"insurance",b:"plano de saúde"},{a:"discharge",b:"alta hospitalar"},{a:"scan",b:"exame de imagem"},{a:"allergy",b:"alergia"}],words:[]}]
+    },
+    { id:"match_saude5", name:"🔗 Match Final Saúde", icon:"🔗",
+      description:"Revisão final de todos os termos", xpTotal:60,
+      phrases:[{id:"mc1",type:"match_columns",en:"Medical final match 🏥",pt:"Revisão final de saúde",pairs:[{a:"dosage",b:"dosagem"},{a:"referral",b:"encaminhamento"},{a:"vital signs",b:"sinais vitais"},{a:"consent form",b:"termo de consentimento"}],words:[]}]
+    },
+  ];
+})();
+
+// ════════════════════════════════════════════════════════════
+// NOVAS FASES — AEROPORTO f4 (B2) + f5 (C1-C2)
+// ════════════════════════════════════════════════════════════
+(function(){
+  const seg = VICTOR_DATA.segments.find(s => s.id === "aeroporto");
+  if (!seg) return;
+  const f4 = seg.phases.find(p => p.id === "f4");
+  const f5 = seg.phases.find(p => p.id === "f5");
+  if (f4) f4.missions = [
+    { id:"imigracao_air4", name:"🛂 Imigração & Alfândega", icon:"🛂",
+      description:"Termos de controle de passageiros e fronteira", xpTotal:100,
+      phrases:[
+        {id:"im1",type:"pronunciation",en:"All non-citizens must clear immigration upon arrival. Please have your passport ready. 🛂",pt:"Todos os não-cidadãos passam pela imigração na chegada. Tenha o passaporte em mãos.",words:[{w:"immigration",cls:"noun",tr:"imigração/controle de passaporte"}]},
+        {id:"im2",type:"fill_blank",en:"Declare all items above the duty-free limit at ___. 🛃",pt:"Declare todos os itens acima do limite isento na alfândega.",answer:"customs",words:[{w:"customs",cls:"noun",tr:"alfândega"}]},
+        {id:"im3",type:"multiple_choice",en:"'Transit passenger' means: ✈️",pt:"'Transit passenger' significa:",options:["✈️ Passageiro em escala — não entra no país","🛂 Passageiro chegando ao destino final","🎫 Passageiro com upgrade","💼 Passageiro sem bagagem"],correct:0,words:[{w:"transit",cls:"noun",tr:"trânsito/escala"}]},
+        {id:"im4",type:"translate_pt_en",en:"Passengers in transit do not need a visa.",pt:"Passageiros em trânsito não precisam de visto.",answer:"passengers in transit do not need a visa",words:[{w:"transit",cls:"noun",tr:"trânsito"}]},
+        {id:"im5",type:"word_order",en:"Remove your laptop before going through the security check. 💻",pt:"Retire o notebook antes de passar pelo controle de segurança.",scrambled:["Remove","your","laptop","before","going","through","the","security","check."],answer:"Remove your laptop before going through the security check.",words:[{w:"security check",cls:"noun",tr:"controle de segurança"}]},
+      ]
+    },
+    { id:"conexao_air4", name:"🔄 Conexões & Escalas", icon:"🔄",
+      description:"Gerenciar conexões, escalas e atrasos", xpTotal:100,
+      phrases:[
+        {id:"co1",type:"pronunciation",en:"I have a connecting flight in São Paulo. My layover is only one hour. ✈️",pt:"Tenho um voo de conexão em São Paulo. Minha escala é de apenas uma hora.",words:[{w:"connecting flight",cls:"noun",tr:"voo de conexão"},{w:"layover",cls:"noun",tr:"escala"}]},
+        {id:"co2",type:"fill_blank",en:"The flight is ___ by two hours due to bad weather. ⛈️",pt:"O voo está atrasado duas horas por causa do mau tempo.",answer:"delayed",words:[{w:"delay",cls:"noun",tr:"atraso de voo"}]},
+        {id:"co3",type:"multiple_choice",en:"'Baggage claim' is where you: 🧳",pt:"'Baggage claim' é onde você:",options:["🧳 Retira sua bagagem na chegada","🛫 Despacha a bagagem","🎫 Troca de voo","✈️ Embarca no avião"],correct:0,words:[{w:"baggage claim",cls:"noun",tr:"esteira de bagagem"}]},
+        {id:"co4",type:"translate_pt_en",en:"Your carry-on must fit in the overhead bin.",pt:"Sua bagagem de mão deve caber no compartimento superior.",answer:"your carry-on must fit in the overhead bin",words:[{w:"carry-on",cls:"noun",tr:"bagagem de mão"}]},
+        {id:"co5",type:"pronunciation",en:"I prefer an aisle seat for easy access during long-haul flights. 💺",pt:"Prefiro assento no corredor para facilitar o acesso em voos longos.",words:[{w:"aisle seat",cls:"noun",tr:"assento no corredor"}]},
+      ]
+    },
+    { id:"mem_air4", name:"🃏 Memória Aeroporto Avançado", icon:"🃏",
+      description:"Termos avançados de aeroporto", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Advanced airport terms ✈️",pt:"Aeroporto avançado",pairs:[{a:"immigration",b:"imigração"},{a:"transit",b:"trânsito/escala"},{a:"layover",b:"escala longa"},{a:"carry-on",b:"bagagem de mão"},{a:"aisle seat",b:"assento no corredor"},{a:"baggage claim",b:"esteira de bagagem"}],words:[]}]
+    },
+    { id:"match_air4", name:"🔗 Match Avançado Aeroporto", icon:"🔗",
+      description:"Conecte termos de aeroporto avançados", xpTotal:50,
+      phrases:[{id:"mc1",type:"match_columns",en:"Airport advanced match ✈️",pt:"Aeroporto avançado",pairs:[{a:"connecting flight",b:"voo de conexão"},{a:"security check",b:"controle de segurança"},{a:"boarding",b:"embarque"},{a:"departure",b:"partida"}],words:[]}]
+    },
+    { id:"order_air4", name:"🔀 Frases Complexas Aeroporto", icon:"🔀",
+      description:"Monte frases avançadas do aeroporto", xpTotal:60,
+      phrases:[
+        {id:"o1",type:"word_order",en:"Baggage claim for your flight is at carousel five on the arrivals level. 🧳",pt:"A esteira de bagagem do seu voo é a número 5 no andar de chegadas.",scrambled:["Baggage","claim","for","your","flight","is","at","carousel","five","on","the","arrivals","level."],answer:"Baggage claim for your flight is at carousel five on the arrivals level.",words:[{w:"baggage claim",cls:"noun",tr:"esteira de bagagem"}]},
+        {id:"o2",type:"translate_pt_en",en:"Online check-in opens 48 hours before departure.",pt:"O check-in online abre 48 horas antes da partida.",answer:"online check-in opens 48 hours before departure",words:[{w:"check-in",cls:"noun",tr:"check-in"},{w:"departure",cls:"noun",tr:"partida"}]},
+      ]
+    },
+  ];
+  if (f5) f5.missions = [
+    { id:"fluencia_air5", name:"✈️ Fluência em Aeroporto", icon:"✈️",
+      description:"Comunicação C1 no ambiente aeroportuário", xpTotal:120,
+      phrases:[
+        {id:"fl1",type:"pronunciation",en:"Good morning. I can see your flight has been delayed. I will rebook you on the next available departure and arrange a meal voucher for the wait. 🎫",pt:"Bom dia. Vejo que seu voo atrasou. Vou remarcar para a próxima partida e providenciar um vale-refeição.",words:[{w:"delayed",cls:"verb",tr:"atrasado"},{w:"rebook",cls:"verb",tr:"remarcar"}]},
+        {id:"fl2",type:"translate_pt_en",en:"The departure gate has changed from B4 to C12 — please allow extra time for the transfer.",pt:"O portão de embarque mudou de B4 para C12 — por favor reserve tempo extra para o deslocamento.",answer:"the departure gate has changed from b4 to c12 please allow extra time for the transfer",words:[{w:"gate",cls:"noun",tr:"portão de embarque"}]},
+        {id:"fl3",type:"pronunciation",en:"Your boarding pass shows seat 14F — that is a window seat on the right side of the aircraft. Boarding begins in 30 minutes at Gate 22. 🪟",pt:"Seu cartão de embarque mostra assento 14F — janela no lado direito. Embarque em 30 min no Portão 22.",words:[{w:"boarding pass",cls:"noun",tr:"cartão de embarque"},{w:"gate",cls:"noun",tr:"portão"}]},
+        {id:"fl4",type:"multiple_choice",en:"Passenger asks about their luggage that did not arrive. You say: 🧳",pt:"Passageiro diz que a bagagem não chegou. Você diz:",options:["Please go to the baggage claim office and we will trace your luggage immediately. 🧳","I cannot help. 🤷","Ask the airline. 📞","It will come later. ⏳"],correct:0,words:[{w:"baggage claim",cls:"noun",tr:"esteira/escritório de bagagem"}]},
+        {id:"fl5",type:"word_order",en:"Passengers requiring assistance should proceed to the priority lane at the security check. 💺",pt:"Passageiros que precisam de assistência devem ir à fila prioritária no controle de segurança.",scrambled:["Passengers","requiring","assistance","should","proceed","to","the","priority","lane","at","the","security","check."],answer:"Passengers requiring assistance should proceed to the priority lane at the security check.",words:[{w:"security check",cls:"noun",tr:"controle de segurança"}]},
+      ]
+    },
+    { id:"quiz_air5", name:"🎯 Quiz C1-C2 Aeroporto", icon:"🎯",
+      description:"Teste final de fluência aeroportuária", xpTotal:100,
+      phrases:[
+        {id:"q1",type:"pronunciation",en:"We have a 6-hour layover in Lisbon. I recommend visiting the downtown area — it is only 30 minutes from the airport. 🇵🇹",pt:"Temos 6 horas de escala em Lisboa. Recomendo o centro — são 30 minutos do aeroporto.",words:[{w:"layover",cls:"noun",tr:"escala/conexão longa"}]},
+        {id:"q2",type:"translate_pt_en",en:"Please have your boarding pass and passport ready at immigration.",pt:"Por favor tenha seu cartão de embarque e passaporte prontos na imigração.",answer:"please have your boarding pass and passport ready at immigration",words:[{w:"boarding pass",cls:"noun",tr:"cartão de embarque"},{w:"immigration",cls:"noun",tr:"imigração"}]},
+        {id:"q3",type:"multiple_choice",en:"'Arrival' at an airport refers to: ✈️",pt:"'Arrival' no aeroporto refere-se a:",options:["✈️ Chegada de voos e passageiros","🛫 Partida de voos","🔄 Embarque de passageiros","🧳 Despacho de bagagem"],correct:0,words:[{w:"arrival",cls:"noun",tr:"chegada"}]},
+        {id:"q4",type:"fill_blank",en:"Each passenger is allowed one piece of ___ baggage. 🧳",pt:"Cada passageiro tem direito a uma bagagem de mão.",answer:"carry-on",words:[{w:"carry-on",cls:"noun",tr:"bagagem de mão"}]},
+      ]
+    },
+    { id:"mem_air5", name:"🃏 Memória Final Aeroporto", icon:"🃏",
+      description:"Revisão completa do vocabulário do aeroporto", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Airport final review ✈️",pt:"Revisão final de aeroporto",pairs:[{a:"departure",b:"partida"},{a:"arrival",b:"chegada"},{a:"boarding pass",b:"cartão de embarque"},{a:"gate",b:"portão de embarque"},{a:"customs",b:"alfândega"},{a:"carry-on",b:"bagagem de mão"}],words:[]}]
+    },
+    { id:"match_air5", name:"🔗 Match Final Aeroporto", icon:"🔗",
+      description:"Match final — todos os termos", xpTotal:60,
+      phrases:[{id:"mc1",type:"match_columns",en:"Airport final match ✈️",pt:"Aeroporto — revisão final",pairs:[{a:"immigration",b:"imigração"},{a:"layover",b:"escala longa"},{a:"aisle seat",b:"assento no corredor"},{a:"baggage claim",b:"esteira de bagagem"}],words:[]}]
+    },
+  ];
+})();
+
+// ════════════════════════════════════════════════════════════
+// NOVAS FASES — TRANSPORTE f4 (B2) + f5 (C1-C2)
+// ════════════════════════════════════════════════════════════
+(function(){
+  const seg = VICTOR_DATA.segments.find(s => s.id === "transporte");
+  if (!seg) return;
+  const f4 = seg.phases.find(p => p.id === "f4");
+  const f5 = seg.phases.find(p => p.id === "f5");
+  if (f4) f4.missions = [
+    { id:"situacoes_transp4", name:"⚠️ Situações Avançadas", icon:"⚠️",
+      description:"Gerencie atrasos, conexões e problemas", xpTotal:100,
+      phrases:[
+        {id:"s1",type:"pronunciation",en:"I am sorry, but the train is running 20 minutes late due to a delay on the line. ⏰",pt:"Me desculpe, mas o trem está com 20 minutos de atraso na linha.",words:[{w:"delay",cls:"noun",tr:"atraso"}]},
+        {id:"s2",type:"fill_blank",en:"You will need to ___ at Central Station to reach downtown. 🔄",pt:"Você precisará fazer baldeação na Estação Central para chegar ao centro.",answer:"transfer",words:[{w:"transfer",cls:"noun",tr:"baldeação/transferência"}]},
+        {id:"s3",type:"multiple_choice",en:"Passenger: 'I have a tight connection — only 30 minutes.' You say: 🏃",pt:"Passageiro tem conexão em 30 min. Você diz:",options:["The express service will get you there on time. Platform 3. 🚂","I cannot help. 🤷","That is too short. ❌","Take a taxi. 🚕"],correct:0,words:[{w:"connection",cls:"noun",tr:"conexão/baldeação"},{w:"express",cls:"adj",tr:"expresso"}]},
+        {id:"s4",type:"translate_pt_en",en:"All trains are running on time today.",pt:"Todos os trens estão no horário hoje.",answer:"all trains are running on time today",words:[{w:"on time",cls:"adv",tr:"no horário/pontual"}]},
+        {id:"s5",type:"word_order",en:"Please store your luggage in the overhead rack above your seat. 🧳",pt:"Por favor guarde sua bagagem no porta-bagagem acima do assento.",scrambled:["Please","store","your","luggage","in","the","overhead","rack","above","your","seat."],answer:"Please store your luggage in the overhead rack above your seat.",words:[{w:"luggage rack",cls:"noun",tr:"porta-bagagem"},{w:"luggage",cls:"noun",tr:"bagagem"}]},
+      ]
+    },
+    { id:"profissional_transp4", name:"🚌 Comunicação Profissional", icon:"🚌",
+      description:"Inglês para condutores e atendentes", xpTotal:100,
+      phrases:[
+        {id:"p1",type:"pronunciation",en:"Your reserved seat is in coach three, window side. Here is your ticket. 🎫",pt:"Seu assento reservado fica no vagão três, lado da janela. Aqui está seu bilhete.",words:[{w:"reserved seat",cls:"noun",tr:"assento reservado"}]},
+        {id:"p2",type:"fill_blank",en:"The ___ fare to the airport is fifteen reais. 💰",pt:"A tarifa de passagem para o aeroporto é quinze reais.",answer:"fare",words:[{w:"fare",cls:"noun",tr:"tarifa/passagem"}]},
+        {id:"p3",type:"multiple_choice",en:"The conductor's role on a train is: 🎫",pt:"A função do condutor no trem é:",options:["🎫 Verificar bilhetes e auxiliar passageiros","🔧 Reparar o trem","📋 Vender passagens","🗺️ Planejar a rota"],correct:0,words:[{w:"conductor",cls:"noun",tr:"condutor/fiscal"}]},
+        {id:"p4",type:"translate_pt_en",en:"Which route do you recommend to avoid traffic?",pt:"Qual rota você recomenda para evitar o trânsito?",answer:"which route do you recommend to avoid traffic",words:[{w:"route",cls:"noun",tr:"rota/trajeto"}]},
+        {id:"p5",type:"pronunciation",en:"Departure is at platform 3 at 8:15 AM. Estimated arrival is at 10:30 AM. 🕗",pt:"A partida é na plataforma 3 às 8h15. Chegada estimada às 10h30.",words:[{w:"departure",cls:"noun",tr:"partida"},{w:"arrival",cls:"noun",tr:"chegada"},{w:"platform",cls:"noun",tr:"plataforma"}]},
+      ]
+    },
+    { id:"mem_transp4", name:"🃏 Memória Transporte Avançado", icon:"🃏",
+      description:"Termos avançados de transporte", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Advanced transport terms 🚌",pt:"Transporte avançado",pairs:[{a:"on time",b:"no horário"},{a:"transfer",b:"baldeação"},{a:"conductor",b:"fiscal/condutor"},{a:"express",b:"expresso"},{a:"platform",b:"plataforma"},{a:"reserved seat",b:"assento reservado"}],words:[]}]
+    },
+    { id:"match_transp4", name:"🔗 Match Transporte", icon:"🔗",
+      description:"Conecte termos de transporte avançados", xpTotal:50,
+      phrases:[{id:"mc1",type:"match_columns",en:"Transport match 🚌",pt:"Transporte",pairs:[{a:"departure",b:"partida"},{a:"arrival",b:"chegada"},{a:"delay",b:"atraso"},{a:"fare",b:"tarifa/passagem"}],words:[]}]
+    },
+    { id:"order_transp4", name:"🔀 Frases Complexas Transporte", icon:"🔀",
+      description:"Monte frases profissionais de transporte", xpTotal:60,
+      phrases:[
+        {id:"o1",type:"word_order",en:"The express service does not stop at smaller stations along the route. 🚂",pt:"O serviço expresso não para nas estações menores ao longo da rota.",scrambled:["The","express","service","does","not","stop","at","smaller","stations","along","the","route."],answer:"The express service does not stop at smaller stations along the route.",words:[{w:"express",cls:"adj",tr:"expresso"},{w:"route",cls:"noun",tr:"rota"}]},
+        {id:"o2",type:"translate_pt_en",en:"Your train departs from platform 7 in five minutes.",pt:"Seu tren parte da plataforma 7 em cinco minutos.",answer:"your train departs from platform 7 in five minutes",words:[{w:"platform",cls:"noun",tr:"plataforma"}]},
+      ]
+    },
+  ];
+  if (f5) f5.missions = [
+    { id:"fluencia_transp5", name:"🌍 Fluência em Transporte", icon:"🌍",
+      description:"Comunicação fluente C1 em transporte", xpTotal:120,
+      phrases:[
+        {id:"fl1",type:"pronunciation",en:"Due to severe weather conditions, all departures from Terminal B are delayed by approximately one hour. We apologize for the inconvenience. ⏰",pt:"Devido a condições climáticas severas, todas as partidas do Terminal B estão atrasadas em aproximadamente uma hora. Pedimos desculpas pelo transtorno.",words:[{w:"terminal",cls:"noun",tr:"terminal"},{w:"delay",cls:"noun",tr:"atraso"}]},
+        {id:"fl2",type:"translate_pt_en",en:"Passengers with connecting services should speak to a member of staff immediately.",pt:"Passageiros com conexões devem falar com um atendente imediatamente.",answer:"passengers with connecting services should speak to a member of staff immediately",words:[{w:"connection",cls:"noun",tr:"conexão"}]},
+        {id:"fl3",type:"pronunciation",en:"Your boarding pass shows seat 12A — that is a window seat near the front of the vehicle. 🪟",pt:"Seu cartão de embarque mostra assento 12A — janela na frente do veículo.",words:[{w:"boarding pass",cls:"noun",tr:"cartão de embarque"}]},
+        {id:"fl4",type:"fill_blank",en:"Please have your ___ pass ready for inspection at the gate. 🎫",pt:"Por favor tenha seu cartão de embarque pronto para inspeção no portão.",answer:"boarding",words:[{w:"boarding pass",cls:"noun",tr:"cartão de embarque"}]},
+        {id:"fl5",type:"multiple_choice",en:"A 'luggage rack' is used for: 🧳",pt:"Um 'luggage rack' é usado para:",options:["🧳 Guardar bagagem acima do assento","💺 Reservar um assento","🎫 Validar o bilhete","📋 Verificar o horário"],correct:0,words:[{w:"luggage rack",cls:"noun",tr:"porta-bagagem"}]},
+      ]
+    },
+    { id:"situacoes_transp5", name:"🎯 Quiz C1-C2 Transporte", icon:"🎯",
+      description:"Nível avançado — fluência total", xpTotal:100,
+      phrases:[
+        {id:"q1",type:"pronunciation",en:"I understand this delay has caused you to miss your connection. Let me rebook you on the next available departure at no extra charge. 🎫",pt:"Entendo que este atraso fez você perder a conexão. Vou remarcar para a próxima partida sem custo adicional.",words:[{w:"rebook",cls:"verb",tr:"remarcar"},{w:"departure",cls:"noun",tr:"partida"}]},
+        {id:"q2",type:"translate_pt_en",en:"The reserved seat fee is included in the ticket price for express services.",pt:"A taxa de assento reservado está incluída no preço do bilhete para serviços expressos.",answer:"the reserved seat fee is included in the ticket price for express services",words:[{w:"reserved seat",cls:"noun",tr:"assento reservado"},{w:"express",cls:"adj",tr:"expresso"}]},
+        {id:"q3",type:"word_order",en:"Please proceed to platform seven — your train is boarding now. 🚂",pt:"Por favor siga para a plataforma sete — seu trem está embarcando agora.",scrambled:["Please","proceed","to","platform","seven","—","your","train","is","boarding","now."],answer:"Please proceed to platform seven — your train is boarding now.",words:[{w:"platform",cls:"noun",tr:"plataforma"}]},
+        {id:"q4",type:"multiple_choice",en:"'On time performance' in transport means: ⏱️",pt:"'On time performance' em transporte significa:",options:["⏱️ Pontualidade / percentual de viagens no horário","🚀 Velocidade máxima do veículo","💰 Custo por passagem","🗺️ Eficiência da rota"],correct:0,words:[{w:"on time",cls:"adv",tr:"pontual/no horário"}]},
+      ]
+    },
+    { id:"mem_transp5", name:"🃏 Memória Final Transporte", icon:"🃏",
+      description:"Revisão final de transporte", xpTotal:50,
+      phrases:[{id:"m1",type:"memory_match",en:"Transport final 🚌",pt:"Revisão final",pairs:[{a:"luggage",b:"bagagem"},{a:"fare",b:"tarifa"},{a:"route",b:"rota"},{a:"connection",b:"conexão"},{a:"platform",b:"plataforma"},{a:"boarding pass",b:"cartão de embarque"}],words:[]}]
+    },
+    { id:"match_transp5", name:"🔗 Match Final Transporte", icon:"🔗",
+      description:"Revisão total de transporte", xpTotal:60,
+      phrases:[{id:"mc1",type:"match_columns",en:"Transport final review 🚌",pt:"Revisão de transporte",pairs:[{a:"conductor",b:"fiscal/condutor"},{a:"express",b:"expresso/direto"},{a:"transfer",b:"baldeação"},{a:"luggage rack",b:"porta-bagagem"}],words:[]}]
+    },
+  ];
+})();
+
 // ── Group flashcard decks by segment ──────────────────────────
 (function(){
   const ORDER = [
