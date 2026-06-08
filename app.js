@@ -1824,6 +1824,14 @@ function renderDashboard(){
   const elXP=document.getElementById("dash-xp"); if(elXP) elXP.textContent=xp;
   const elLv=document.getElementById("dash-level"); if(elLv) elLv.textContent=level;
   const elSt=document.getElementById("dash-streak"); if(elSt) elSt.textContent=userData.streak||0;
+  // Header streak (fire under the date) — only show when streak >= 1
+  const elStH=document.getElementById("dash-header-streak");
+  const elStHV=document.getElementById("dash-header-streak-val");
+  if(elStH&&elStHV){
+    const st=userData.streak||0;
+    elStHV.textContent=st;
+    elStH.style.display=st>=1?"flex":"none";
+  }
 
   // Next badge inline below XP bar
   const earned2=userData.badges||[];

@@ -1980,7 +1980,7 @@ input { color: #ffffff !important; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(100deg, #6b2a5e 0%, #4f2160 50%, #3a1f63 100%);
+  background: linear-gradient(145deg, #3a1f63 0%, #4a2160 55%, #5c2758 100%);
   border: 1px solid rgba(216,150,230,0.32);
   border-radius: var(--r);
   padding: 14px 16px;
@@ -7419,9 +7419,17 @@ a.settings-big-btn:active {
   padding: 14px 16px !important;
   min-height: unset !important;
 }
-/* coluna esquerda: data (flex:1 equilibra com o avatar p/ centrar o logo) */
-.dash-header-3col .dash-date {
+/* coluna esquerda: wrapper data+streak (flex:1 equilibra com o avatar p/ centrar o logo) */
+.dash-header-3col .dash-left-col {
   flex: 1 1 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 3px !important;
+  align-self: flex-start !important;   /* sobe a data p/ o topo do header */
+  padding-top: 2px !important;
+}
+.dash-header-3col .dash-date {
   display: flex !important;
   flex-direction: column !important;
   align-items: flex-start !important;
@@ -7431,6 +7439,21 @@ a.settings-big-btn:active {
   background: none !important;
   border: none !important;
   text-align: left !important;
+}
+/* streak com foguinho pequeno embaixo da data */
+.dash-header-streak {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  background: rgba(249,115,22,0.14);
+  border: 1px solid rgba(249,115,22,0.3);
+  border-radius: 999px;
+}
+.dash-header-streak .dhs-fire { font-size: 11px; line-height: 1; }
+.dash-header-streak .dhs-val {
+  font-size: 12px; font-weight: 800;
+  color: #fb923c;
 }
 .dash-date-weekday {
   font-family: var(--font) !important;
