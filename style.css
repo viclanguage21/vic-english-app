@@ -7358,17 +7358,18 @@ a.settings-big-btn:active {
   font-size: 18px !important;
   font-weight: 900 !important;
   margin: 8px 0 14px !important;
-  background: linear-gradient(135deg, #0ea5e9, #6366f1) !important;
+  background: linear-gradient(135deg, #5cc6f5 0%, #b98ee8 50%, #f78fc6 100%) !important;
   border: none !important;
   border-radius: 16px !important;
   color: #fff !important;
-  box-shadow: 0 4px 20px rgba(14,165,233,0.4), 0 0 0 0 rgba(14,165,233,0.3) !important;
+  text-shadow: 0 1px 4px rgba(70,25,80,0.35) !important;
+  box-shadow: 0 4px 20px rgba(244,114,182,0.32), 0 0 0 0 rgba(124,200,245,0.3) !important;
   animation: start-now-pulse 2.6s ease-in-out infinite !important;
   letter-spacing: 0.5px !important;
 }
 @keyframes start-now-pulse {
-  0%,100% { box-shadow: 0 4px 20px rgba(14,165,233,0.4), 0 0 0 0 rgba(14,165,233,0.3); }
-  50%      { box-shadow: 0 6px 28px rgba(14,165,233,0.55), 0 0 0 6px rgba(14,165,233,0.08); }
+  0%,100% { box-shadow: 0 4px 20px rgba(244,114,182,0.3), 0 0 0 0 rgba(124,200,245,0.25); }
+  50%      { box-shadow: 0 6px 28px rgba(244,114,182,0.45), 0 0 0 6px rgba(124,200,245,0.08); }
 }
 
 /* ══ GAME HEADERS — accent de cor por jogo ════════════════════
