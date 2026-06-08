@@ -2489,7 +2489,7 @@ body.light-mode .dash-date { color:#1e0f50 !important; }
   gap: 10px;
   border-bottom: none;
   position: relative; z-index: 1;
-  background: linear-gradient(180deg, rgba(22,10,44,0.98) 0%, rgba(16,8,34,0.97) 100%);
+  background: linear-gradient(90deg, #130930 0%, #2b1268 30%, #3e1e88 50%, #2b1268 70%, #130930 100%);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 1px 0 rgba(201,147,58,0.18), 0 4px 20px rgba(0,0,0,0.4);
