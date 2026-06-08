@@ -7461,14 +7461,14 @@ a.settings-big-btn:active {
   border: 1px solid rgba(249,115,22,0.3);
   border-radius: 999px;
 }
-.dash-header-streak .dhs-fire { font-size: 14px; line-height: 1; }
+.dash-header-streak .dhs-fire { font-size: 17px; line-height: 1; }
 .dash-header-streak .dhs-val {
-  font-size: 13px; font-weight: 800;
+  font-size: 15px; font-weight: 800;
   color: #fb923c;
 }
 .dash-date-weekday {
   font-family: var(--font) !important;
-  font-size: 12px !important;
+  font-size: 13px !important;
   font-weight: 600 !important;
   letter-spacing: 1px !important;
   text-transform: uppercase !important;
@@ -7478,7 +7478,7 @@ a.settings-big-btn:active {
 }
 .dash-date-day {
   font-family: var(--font) !important;
-  font-size: 18px !important;
+  font-size: 20px !important;
   font-weight: 800 !important;
   letter-spacing: -0.2px !important;
   font-style: normal !important;
@@ -7569,3 +7569,9 @@ a.settings-big-btn:active {
   font-size: 18px !important;
   font-weight: 800 !important;
 }
+
+/* ══ DAILY MISSIONS — fonte maior ══════════════════════════════ */
+.daily-block-title { font-size: 16px !important; }
+.daily-block .daily-overall-pct, .daily-header-right .daily-overall-pct { font-size: 12px !important; }
+.daily-block .dmi-title { font-size: 16px !important; }
+.daily-block .dmi-sub   { font-size: 13px !important; }
