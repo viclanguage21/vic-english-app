@@ -5524,3 +5524,346 @@ VICTOR_DATA.flashcardDecks.push({
     }
   );
 })();
+
+
+// ── Segmento NAVAL (hidden — em desenvolvimento) ──────────────────────────────
+(function(){
+  VICTOR_DATA.segments.push({
+    id:"naval", name:"Naval", icon:"⚙️", available:true, hidden:true,
+    phases:[
+      // ── f1 · A1 · Ferramentas ──────────────────────────────────────────────
+      {
+        id:"f1", name:"Fase 1 🔧", subtitle:"A1 — Ferramentas e equipamentos", unlocked:true,
+        missions:[
+          {
+            id:"vocab_n_f1", name:"📝 Ferramentas Essenciais", icon:"📝",
+            description:"Vocabulário básico de ferramentas a bordo", xpTotal:60,
+            phrases:[
+              {id:"p1",type:"multiple_choice",en:"What does 'pipe wrench' mean? 🔧",pt:"O que é 'pipe wrench'?",options:["🔧 Chave de grifo","🔩 Parafuso","🪛 Chave de fenda","⚙️ Alicate"],correct:0,words:[{w:"pipe wrench",cls:"noun",tr:"chave de grifo"}]},
+              {id:"p2",type:"multiple_choice",en:"'Socket' in tools means: 🔩",pt:"'Socket' no contexto de ferramentas significa:",options:["🔩 Soquete","🔧 Chave de grifo","🛠️ Torno","⚙️ Martelo"],correct:0,words:[{w:"socket",cls:"noun",tr:"soquete"}]},
+              {id:"p3",type:"multiple_choice",en:"What is a 'lathe' used for? 🛠️",pt:"Para que serve um 'lathe'?",options:["🛠️ Usinar / tornear peças","🔧 Apertar parafusos","⚙️ Medir pressão","🪛 Soldar"],correct:0,words:[{w:"lathe",cls:"noun",tr:"torno mecânico"}]},
+              {id:"p4",type:"fill_blank",en:"The ___ is in the toolbox next to the hammer. 🛠️",pt:"O ___ está na caixa de ferramentas ao lado do martelo.",answer:"socket",words:[{w:"socket",cls:"noun",tr:"soquete"}]},
+              {id:"p5",type:"fill_blank",en:"Use a ___ to loosen the corroded fitting. 🔧",pt:"Use uma ___ para afrouxar a conexão corroída.",answer:"pipe wrench",words:[{w:"pipe wrench",cls:"noun",tr:"chave de grifo"}]},
+            ]
+          },
+          {
+            id:"mem_n_f1", name:"🃏 Jogo da Memória", icon:"🃏",
+            description:"Combine ferramentas PT↔EN", xpTotal:50,
+            phrases:[{id:"mem1",type:"memory_match",en:"Match the tools ⚙️",pt:"Combine as ferramentas",pairs:[{a:"🔧 pipe wrench",b:"chave de grifo"},{a:"🔩 socket",b:"soquete"},{a:"⚙️ pliers",b:"alicate"},{a:"🛠️ hammer",b:"martelo"},{a:"🪛 screwdriver",b:"chave de fenda"},{a:"📦 toolbox",b:"caixa de ferramentas"}],words:[]}]
+          },
+          {
+            id:"fill_n_f1", name:"✏️ Complete as Frases", icon:"✏️",
+            description:"Ferramentas nas frases certas", xpTotal:60,
+            phrases:[
+              {id:"f1",type:"fill_blank",en:"Return all tools to the ___ after the job. 🧰",pt:"Devolva todas as ferramentas à ___ após o serviço.",answer:"toolbox",words:[{w:"toolbox",cls:"noun",tr:"caixa de ferramentas"}]},
+              {id:"f2",type:"fill_blank",en:"Tighten the ___ with the correct wrench. 🔩",pt:"Aperte a ___ com a chave correta.",answer:"nut",words:[{w:"nut",cls:"noun",tr:"porca"}]},
+              {id:"f3",type:"fill_blank",en:"Use a ___ to remove the panel cover. 🪛",pt:"Use uma ___ para remover a tampa do painel.",answer:"screwdriver",words:[{w:"screwdriver",cls:"noun",tr:"chave de fenda"}]},
+              {id:"f4",type:"fill_blank",en:"The ___ was used to machine the new shaft part. 🛠️",pt:"O ___ foi usado para usinar a nova peça do eixo.",answer:"lathe",words:[{w:"lathe",cls:"noun",tr:"torno mecânico"}]},
+            ]
+          },
+          {
+            id:"order_n_f1", name:"🔀 Ordene as Frases", icon:"🔀",
+            description:"Monte frases sobre ferramentas", xpTotal:50,
+            phrases:[
+              {id:"o1",type:"word_order",en:"I need a socket set for this job.",pt:"Preciso de um jogo de soquetes para este serviço.",scrambled:["I","need","a","socket","set","for","this","job."],answer:"I need a socket set for this job.",words:[{w:"socket set",cls:"noun",tr:"jogo de soquetes"}]},
+              {id:"o2",type:"word_order",en:"The lathe is not working properly.",pt:"O torno não está funcionando direito.",scrambled:["The","lathe","is","not","working","properly."],answer:"The lathe is not working properly.",words:[{w:"lathe",cls:"noun",tr:"torno"}]},
+              {id:"o3",type:"word_order",en:"Pass me the pipe wrench, please.",pt:"Me passa a chave de grifo, por favor.",scrambled:["Pass","me","the","pipe","wrench,","please."],answer:"Pass me the pipe wrench, please.",words:[{w:"pipe wrench",cls:"noun",tr:"chave de grifo"}]},
+            ]
+          },
+          {
+            id:"pron_n_f1", name:"🎤 Pronúncia", icon:"🎤",
+            description:"Ferramentas em inglês — fale com clareza", xpTotal:40,
+            phrases:[
+              {id:"pr1",type:"pronunciation",en:"Wrench. 🔧",pt:"Chave / chave de grifo.",words:[{w:"Wrench",cls:"noun",tr:"chave"}]},
+              {id:"pr2",type:"pronunciation",en:"Lathe. 🛠️",pt:"Torno mecânico.",words:[{w:"Lathe",cls:"noun",tr:"torno"}]},
+              {id:"pr3",type:"pronunciation",en:"Pliers. ⚙️",pt:"Alicate.",words:[{w:"Pliers",cls:"noun",tr:"alicate"}]},
+              {id:"pr4",type:"pronunciation",en:"Pass me the screwdriver — this cover is loose. 🪛",pt:"Me passa a chave de fenda — esta tampa está frouxa.",words:[{w:"screwdriver",cls:"noun",tr:"chave de fenda"}]},
+            ]
+          },
+        ]
+      },
+      // ── f2 · A1+ · Partes do Navio ────────────────────────────────────────
+      {
+        id:"f2", name:"Fase 2 🚢", subtitle:"A1+ — Partes do navio", unlocked:false,
+        missions:[
+          {
+            id:"vocab_n_f2", name:"📝 Partes do Navio", icon:"📝",
+            description:"Vocabulário das partes principais do navio", xpTotal:60,
+            phrases:[
+              {id:"p1",type:"multiple_choice",en:"'Bow' is the ___ of the ship. 🚢",pt:"'Bow' é a ___ do navio.",options:["🚢 Proa (frente)","⚓ Popa (fundo)","🔧 Motor","🏗️ Cais"],correct:0,words:[{w:"bow",cls:"noun",tr:"proa"}]},
+              {id:"p2",type:"multiple_choice",en:"What is the 'hull' of a vessel? ⚙️",pt:"O que é o 'hull' de um navio?",options:["⚙️ O casco","🌊 A hélice","🔩 O eixo","⚓ O leme"],correct:0,words:[{w:"hull",cls:"noun",tr:"casco"}]},
+              {id:"p3",type:"multiple_choice",en:"'Propeller' in Portuguese is: 🌊",pt:"'Propeller' em português é:",options:["🌊 Hélice","⚙️ Eixo","🔧 Turbina","🛢️ Lastro"],correct:0,words:[{w:"propeller",cls:"noun",tr:"hélice"}]},
+              {id:"p4",type:"fill_blank",en:"The cargo is stored in the ___ below deck. 📦",pt:"A carga é armazenada no ___ abaixo do convés.",answer:"hold",words:[{w:"hold",cls:"noun",tr:"porão"}]},
+              {id:"p5",type:"fill_blank",en:"Fill the ___ tanks to stabilise the ship. ⚖️",pt:"Encha os tanques de ___ para estabilizar o navio.",answer:"ballast",words:[{w:"ballast",cls:"noun",tr:"lastro"}]},
+            ]
+          },
+          {
+            id:"match_n_f2", name:"🔗 Ligue as Colunas", icon:"🔗",
+            description:"Partes do navio PT↔EN", xpTotal:50,
+            phrases:[{id:"mc1",type:"match_columns",en:"Ship parts 🚢",pt:"Partes do navio",pairs:[{a:"🚢 bow",b:"proa"},{a:"⚙️ hull",b:"casco"},{a:"🌊 propeller",b:"hélice"},{a:"📦 hold",b:"porão"}],words:[]}]
+          },
+          {
+            id:"mem_n_f2", name:"🃏 Jogo da Memória", icon:"🃏",
+            description:"Combine partes do navio", xpTotal:50,
+            phrases:[{id:"mem1",type:"memory_match",en:"Match ship parts ⚙️",pt:"Combine as partes",pairs:[{a:"🚢 bow",b:"proa"},{a:"⚙️ hull",b:"casco"},{a:"🌊 propeller",b:"hélice"},{a:"📦 hold",b:"porão"},{a:"⚖️ ballast",b:"lastro"},{a:"🔩 shaft",b:"eixo"}],words:[]}]
+          },
+          {
+            id:"fill_n_f2", name:"✏️ Partes nas Frases", icon:"✏️",
+            description:"Complete com partes do navio", xpTotal:60,
+            phrases:[
+              {id:"f1",type:"fill_blank",en:"The anchor is at the ___ of the ship. 🚢",pt:"A âncora fica na ___ do navio.",answer:"bow",words:[{w:"bow",cls:"noun",tr:"proa"}]},
+              {id:"f2",type:"fill_blank",en:"Inspect the ___ for cracks and corrosion. ⚙️",pt:"Inspecione o ___ em busca de rachaduras e corrosão.",answer:"hull",words:[{w:"hull",cls:"noun",tr:"casco"}]},
+              {id:"f3",type:"fill_blank",en:"The ___ was damaged and needs dry-dock inspection. 🌊",pt:"A ___ foi danificada e precisa de inspeção na doca seca.",answer:"propeller",words:[{w:"propeller",cls:"noun",tr:"hélice"}]},
+            ]
+          },
+          {
+            id:"pron_n_f2", name:"🎤 Pronúncia", icon:"🎤",
+            description:"Partes do navio — pronuncie corretamente", xpTotal:40,
+            phrases:[
+              {id:"pr1",type:"pronunciation",en:"Hull. ⚙️",pt:"Casco do navio.",words:[{w:"Hull",cls:"noun",tr:"casco"}]},
+              {id:"pr2",type:"pronunciation",en:"Propeller. 🌊",pt:"Hélice.",words:[{w:"Propeller",cls:"noun",tr:"hélice"}]},
+              {id:"pr3",type:"pronunciation",en:"Inspect the hold for water ingress. 📦",pt:"Inspecione o porão em busca de entrada de água.",words:[{w:"hold",cls:"noun",tr:"porão"},{w:"ingress",cls:"noun",tr:"entrada"}]},
+            ]
+          },
+        ]
+      },
+      // ── f3 · A2 · Manutenção Básica ───────────────────────────────────────
+      {
+        id:"f3", name:"Fase 3 🔩", subtitle:"A2 — Manutenção básica", unlocked:false,
+        missions:[
+          {
+            id:"vocab_n_f3", name:"📝 Tipos de Manutenção", icon:"📝",
+            description:"Manutenção preventiva vs corretiva", xpTotal:60,
+            phrases:[
+              {id:"p1",type:"multiple_choice",en:"'Preventive maintenance' means: 🔧",pt:"'Preventive maintenance' significa:",options:["🔧 Manutenção preventiva","🚨 Emergência","🔩 Revisão geral","⚙️ Manutenção corretiva"],correct:0,words:[{w:"preventive maintenance",cls:"noun",tr:"manutenção preventiva"}]},
+              {id:"p2",type:"multiple_choice",en:"'Overhaul' in Portuguese means: ⚙️",pt:"'Overhaul' em português significa:",options:["⚙️ Revisão geral","🔧 Troca de filtro","📦 Inspeção visual","🔩 Lubrificação"],correct:0,words:[{w:"overhaul",cls:"noun",tr:"revisão geral"}]},
+              {id:"p3",type:"multiple_choice",en:"The pump has a ___. It needs repair. 🔧",pt:"A bomba tem um ___. Precisa de reparo.",options:["🔧 fault","🚢 voyage","📦 cargo","⚙️ maneuver"],correct:0,words:[{w:"fault",cls:"noun",tr:"defeito"}]},
+              {id:"p4",type:"fill_blank",en:"Apply ___ to all bearings before reassembly. ⚙️",pt:"Aplique ___ em todos os mancais antes da remontagem.",answer:"lubrication",words:[{w:"lubrication",cls:"noun",tr:"lubrificação"}]},
+              {id:"p5",type:"fill_blank",en:"The bearing needs ___ — it shows wear. 🔩",pt:"O mancal precisa de ___ — mostra desgaste.",answer:"replacement",words:[{w:"replacement",cls:"noun",tr:"substituição"}]},
+            ]
+          },
+          {
+            id:"mem_n_f3", name:"🃏 Memória: Manutenção", icon:"🃏",
+            description:"Combine termos de manutenção", xpTotal:50,
+            phrases:[{id:"mem1",type:"memory_match",en:"Maintenance terms ⚙️",pt:"Termos de manutenção",pairs:[{a:"🔧 overhaul",b:"revisão geral"},{a:"⚙️ lubrication",b:"lubrificação"},{a:"🔩 fault",b:"defeito"},{a:"🛠️ replacement",b:"substituição"},{a:"🚨 failure",b:"falha/avaria"},{a:"✅ sealing",b:"vedação"}],words:[]}]
+          },
+          {
+            id:"trad_n_f3", name:"🌐 Traduza para EN", icon:"🌐",
+            description:"Frases de manutenção em inglês", xpTotal:70,
+            phrases:[
+              {id:"t1",type:"translate_pt_en",en:"The pump has a fault — it needs replacement.",pt:"A bomba tem um defeito — precisa de substituição.",answer:"the pump has a fault — it needs replacement",words:[{w:"fault",cls:"noun",tr:"defeito"},{w:"replacement",cls:"noun",tr:"substituição"}]},
+              {id:"t2",type:"translate_pt_en",en:"Schedule an overhaul for the generator.",pt:"Planeje uma revisão geral para o gerador.",answer:"schedule an overhaul for the generator",words:[{w:"overhaul",cls:"noun",tr:"revisão geral"}]},
+              {id:"t3",type:"translate_pt_en",en:"Apply lubrication to all bearings.",pt:"Aplique lubrificação em todos os mancais.",answer:"apply lubrication to all bearings",words:[{w:"lubrication",cls:"noun",tr:"lubrificação"}]},
+            ]
+          },
+          {
+            id:"order_n_f3", name:"🔀 Ordene as Frases", icon:"🔀",
+            description:"Monte frases de manutenção", xpTotal:50,
+            phrases:[
+              {id:"o1",type:"word_order",en:"The valve is stuck — we need to replace it.",pt:"A válvula está presa — precisamos substituí-la.",scrambled:["The","valve","is","stuck","—","we","need","to","replace","it."],answer:"The valve is stuck — we need to replace it.",words:[{w:"stuck",cls:"adj",tr:"preso"},{w:"replace",cls:"verb",tr:"substituir"}]},
+              {id:"o2",type:"word_order",en:"Fill out a work order before starting the job.",pt:"Preencha uma ordem de serviço antes de começar.",scrambled:["Fill","out","a","work","order","before","starting","the","job."],answer:"Fill out a work order before starting the job.",words:[{w:"work order",cls:"noun",tr:"ordem de serviço"}]},
+            ]
+          },
+          {
+            id:"pron_n_f3", name:"🎤 Pronúncia Técnica", icon:"🎤",
+            description:"Manutenção — pronuncie os termos", xpTotal:40,
+            phrases:[
+              {id:"pr1",type:"pronunciation",en:"Overhaul. ⚙️",pt:"Revisão geral.",words:[{w:"Overhaul",cls:"noun",tr:"revisão geral"}]},
+              {id:"pr2",type:"pronunciation",en:"Lubrication. 🛢️",pt:"Lubrificação.",words:[{w:"Lubrication",cls:"noun",tr:"lubrificação"}]},
+              {id:"pr3",type:"pronunciation",en:"We need to do preventive maintenance on the generator. 🔧",pt:"Precisamos fazer manutenção preventiva no gerador.",words:[{w:"preventive maintenance",cls:"noun",tr:"manutenção preventiva"}]},
+            ]
+          },
+        ]
+      },
+      // ── f4 · B1 · Sistemas e Componentes ──────────────────────────────────
+      {
+        id:"f4", name:"Fase 4 ⚙️", subtitle:"B1 — Sistemas mecânicos", unlocked:false,
+        missions:[
+          {
+            id:"vocab_n_f4", name:"📝 Componentes Técnicos", icon:"📝",
+            description:"Componentes da praça de máquinas", xpTotal:70,
+            phrases:[
+              {id:"p1",type:"multiple_choice",en:"'Bearing' in Portuguese means: 🔩",pt:"'Bearing' em português é:",options:["🔩 Mancal / rolamento","🔧 Parafuso","⚙️ Eixo","🛢️ Filtro"],correct:0,words:[{w:"bearing",cls:"noun",tr:"mancal/rolamento"}]},
+              {id:"p2",type:"multiple_choice",en:"What is a 'gasket' used for? ⚙️",pt:"Para que serve uma 'gasket'?",options:["⚙️ Vedação entre peças","🔧 Apertar parafusos","🛠️ Medir pressão","📦 Armazenar óleo"],correct:0,words:[{w:"gasket",cls:"noun",tr:"gaxeta/junta"}]},
+              {id:"p3",type:"multiple_choice",en:"'Spare parts' means: 📦",pt:"'Spare parts' significa:",options:["📦 Peças sobressalentes","🔧 Ferramentas extras","⚙️ Componentes usados","🛢️ Filtros de óleo"],correct:0,words:[{w:"spare parts",cls:"noun",tr:"peças sobressalentes"}]},
+              {id:"p4",type:"fill_blank",en:"The hydraulic ___ burst — replace before restarting. 🚰",pt:"A ___ hidráulica estourou — troque antes de religar.",answer:"hose",words:[{w:"hose",cls:"noun",tr:"mangueira"}]},
+              {id:"p5",type:"fill_blank",en:"Replace the oil ___ every 250 operating hours. 🛢️",pt:"Troque o ___ de óleo a cada 250 horas.",answer:"filter",words:[{w:"filter",cls:"noun",tr:"filtro"}]},
+            ]
+          },
+          {
+            id:"match_n_f4", name:"🔗 Ligue os Componentes", icon:"🔗",
+            description:"Componentes técnicos PT↔EN", xpTotal:50,
+            phrases:[{id:"mc1",type:"match_columns",en:"Engine room components ⚙️",pt:"Componentes da praça de máquinas",pairs:[{a:"🔩 bearing",b:"mancal/rolamento"},{a:"⚙️ gasket",b:"gaxeta/junta"},{a:"🚰 hose",b:"mangueira"},{a:"🛢️ filter",b:"filtro"}],words:[]}]
+          },
+          {
+            id:"trad_n_f4", name:"🌐 Traduza", icon:"🌐",
+            description:"Frases técnicas de sistemas", xpTotal:70,
+            phrases:[
+              {id:"t1",type:"translate_en_pt",en:"The worn gasket is causing an oil leak at the flange.",pt:"A gaxeta desgastada está causando um vazamento de óleo na flange.",answer:"a gaxeta desgastada está causando um vazamento de óleo na flange",words:[{w:"gasket",cls:"noun",tr:"gaxeta"},{w:"oil leak",cls:"noun",tr:"vazamento de óleo"}]},
+              {id:"t2",type:"translate_en_pt",en:"Keep critical spare parts in the engine room store.",pt:"Mantenha as peças sobressalentes críticas no estoque da praça de máquinas.",answer:"mantenha as peças sobressalentes críticas no estoque da praça de máquinas",words:[{w:"spare parts",cls:"noun",tr:"peças sobressalentes"}]},
+              {id:"t3",type:"translate_en_pt",en:"The propeller shaft must be aligned after the repair.",pt:"O eixo da hélice deve ser alinhado após o reparo.",answer:"o eixo da hélice deve ser alinhado após o reparo",words:[{w:"shaft",cls:"noun",tr:"eixo"}]},
+            ]
+          },
+          {
+            id:"order_n_f4", name:"🔀 Ordene as Frases", icon:"🔀",
+            description:"Monte frases de sistemas técnicos", xpTotal:50,
+            phrases:[
+              {id:"o1",type:"word_order",en:"The backup generator started automatically when power failed.",pt:"O gerador de reserva ligou automaticamente quando a energia falhou.",scrambled:["The","backup","generator","started","automatically","when","power","failed."],answer:"The backup generator started automatically when power failed.",words:[{w:"generator",cls:"noun",tr:"gerador"},{w:"automatically",cls:"adv",tr:"automaticamente"}]},
+              {id:"o2",type:"word_order",en:"Apply grease to all moving parts during the service.",pt:"Aplique graxa em todas as peças móveis durante a manutenção.",scrambled:["Apply","grease","to","all","moving","parts","during","the","service."],answer:"Apply grease to all moving parts during the service.",words:[{w:"grease",cls:"noun",tr:"graxa"}]},
+            ]
+          },
+          {
+            id:"pron_n_f4", name:"🎤 Pronúncia Técnica", icon:"🎤",
+            description:"Componentes — pronúncia clara", xpTotal:40,
+            phrases:[
+              {id:"pr1",type:"pronunciation",en:"Bearing. 🔩",pt:"Mancal / rolamento.",words:[{w:"Bearing",cls:"noun",tr:"mancal"}]},
+              {id:"pr2",type:"pronunciation",en:"Gasket. ⚙️",pt:"Gaxeta / junta de vedação.",words:[{w:"Gasket",cls:"noun",tr:"gaxeta"}]},
+              {id:"pr3",type:"pronunciation",en:"The hydraulic hose burst — shut it down immediately. 🚰",pt:"A mangueira hidráulica estourou — desligue imediatamente.",words:[{w:"hose",cls:"noun",tr:"mangueira"},{w:"burst",cls:"verb",tr:"estourou"}]},
+            ]
+          },
+        ]
+      },
+      // ── f5 · B1+ · Monitoramento ──────────────────────────────────────────
+      {
+        id:"f5", name:"Fase 5 📊", subtitle:"B1+ — Monitoramento técnico", unlocked:false,
+        missions:[
+          {
+            id:"vocab_n_f5", name:"📊 Instrumentos de Medição", icon:"📊",
+            description:"Pressão, temperatura e sensores", xpTotal:70,
+            phrases:[
+              {id:"p1",type:"multiple_choice",en:"'Pressure gauge' in Portuguese is: 📊",pt:"'Pressure gauge' em português é:",options:["📊 Manômetro","🌡️ Termômetro","⚙️ Sensor","🔩 Válvula"],correct:0,words:[{w:"pressure gauge",cls:"noun",tr:"manômetro"}]},
+              {id:"p2",type:"multiple_choice",en:"The sensor is showing abnormal ___. ⚠️",pt:"O sensor está mostrando ___ anormais.",options:["⚠️ readings","🔧 tools","📦 cargo","⚙️ valves"],correct:0,words:[{w:"readings",cls:"noun",tr:"leituras"}]},
+              {id:"p3",type:"multiple_choice",en:"'It's losing pressure' means: 📊",pt:"'It's losing pressure' significa:",options:["📊 Está perdendo pressão","⚙️ Está perdendo óleo","🌡️ Está aquecendo","⚠️ Está falhando"],correct:0,words:[{w:"losing pressure",cls:"phrase",tr:"perdendo pressão"}]},
+              {id:"p4",type:"fill_blank",en:"The engine ___ exceeded 95°C — shut it down. 🌡️",pt:"A ___ do motor ultrapassou 95°C — desligue.",answer:"temperature",words:[{w:"temperature",cls:"noun",tr:"temperatura"}]},
+              {id:"p5",type:"fill_blank",en:"Check the oil ___ before starting the engine. 🛢️",pt:"Verifique o ___ de óleo antes de ligar o motor.",answer:"level",words:[{w:"level",cls:"noun",tr:"nível"}]},
+            ]
+          },
+          {
+            id:"match_n_f5", name:"🔗 Monitoramento", icon:"🔗",
+            description:"Termos de monitoramento PT↔EN", xpTotal:50,
+            phrases:[{id:"mc1",type:"match_columns",en:"Monitoring terms 📊",pt:"Termos de monitoramento",pairs:[{a:"📊 pressure gauge",b:"manômetro"},{a:"⚠️ alarm",b:"alarme"},{a:"🌡️ temperature",b:"temperatura"},{a:"🛢️ oil level",b:"nível de óleo"}],words:[]}]
+          },
+          {
+            id:"trad_n_f5", name:"🌐 Traduza para EN", icon:"🌐",
+            description:"Monitoramento em inglês", xpTotal:70,
+            phrases:[
+              {id:"t1",type:"translate_pt_en",en:"Check the oil level before starting the engine.",pt:"Verifique o nível de óleo antes de ligar o motor.",answer:"check the oil level before starting the engine",words:[{w:"oil level",cls:"noun",tr:"nível de óleo"}]},
+              {id:"t2",type:"translate_pt_en",en:"The pressure gauge reads 8 bar — within normal range.",pt:"O manômetro marca 8 bar — dentro da faixa normal.",answer:"the pressure gauge reads 8 bar — within normal range",words:[{w:"pressure gauge",cls:"noun",tr:"manômetro"}]},
+              {id:"t3",type:"translate_pt_en",en:"An alarm sounded in the engine room — investigate immediately.",pt:"Um alarme soou na praça de máquinas — investigue imediatamente.",answer:"an alarm sounded in the engine room — investigate immediately",words:[{w:"alarm",cls:"noun",tr:"alarme"}]},
+            ]
+          },
+          {
+            id:"order_n_f5", name:"🔀 Ordene as Frases", icon:"🔀",
+            description:"Frases de monitoramento", xpTotal:50,
+            phrases:[
+              {id:"o1",type:"word_order",en:"The oil pressure is dropping — shut it down.",pt:"A pressão do óleo está caindo — desligue.",scrambled:["The","oil","pressure","is","dropping","—","shut","it","down."],answer:"The oil pressure is dropping — shut it down.",words:[{w:"pressure",cls:"noun",tr:"pressão"},{w:"dropping",cls:"verb",tr:"caindo"}]},
+              {id:"o2",type:"word_order",en:"Monitor the pressure gauge continuously during operations.",pt:"Monitore o manômetro continuamente durante as operações.",scrambled:["Monitor","the","pressure","gauge","continuously","during","operations."],answer:"Monitor the pressure gauge continuously during operations.",words:[{w:"pressure gauge",cls:"noun",tr:"manômetro"}]},
+            ]
+          },
+          {
+            id:"pron_n_f5", name:"🎤 Pronúncia Técnica", icon:"🎤",
+            description:"Monitoramento — fale com confiança", xpTotal:40,
+            phrases:[
+              {id:"pr1",type:"pronunciation",en:"Pressure gauge. 📊",pt:"Manômetro.",words:[{w:"Pressure gauge",cls:"noun",tr:"manômetro"}]},
+              {id:"pr2",type:"pronunciation",en:"The temperature sensor is showing abnormal readings. 🌡️",pt:"O sensor de temperatura está mostrando leituras anormais.",words:[{w:"sensor",cls:"noun",tr:"sensor"},{w:"readings",cls:"noun",tr:"leituras"}]},
+              {id:"pr3",type:"pronunciation",en:"Check the oil level and pressure before starting. 🛢️",pt:"Verifique o nível e a pressão do óleo antes de ligar.",words:[{w:"oil level",cls:"noun",tr:"nível de óleo"}]},
+            ]
+          },
+        ]
+      },
+      // ── f6 · B2 · Relatórios e Procedimentos ──────────────────────────────
+      {
+        id:"f6", name:"Fase 6 🔍", subtitle:"B2 — Relatórios e procedimentos técnicos", unlocked:false,
+        missions:[
+          {
+            id:"vocab_n_f6", name:"📋 Relatórios Técnicos", icon:"📋",
+            description:"Vocabulário para ordens de serviço e relatórios", xpTotal:80,
+            phrases:[
+              {id:"p1",type:"multiple_choice",en:"What is a 'work order' in a maintenance context? 📋",pt:"O que é uma 'work order' em manutenção?",options:["📋 Ordem de serviço","🔧 Manual de ferramentas","⚙️ Relatório de avaria","🛠️ Lista de peças"],correct:0,words:[{w:"work order",cls:"noun",tr:"ordem de serviço"}]},
+              {id:"p2",type:"multiple_choice",en:"'Corrective maintenance' is performed: ⚙️",pt:"A 'corrective maintenance' é realizada:",options:["⚙️ Após uma falha ocorrer","🔧 Para evitar falhas","📊 Mensalmente","📋 Antes de cada viagem"],correct:0,words:[{w:"corrective maintenance",cls:"noun",tr:"manutenção corretiva"}]},
+              {id:"p3",type:"multiple_choice",en:"'Drydock' is when a vessel: 🚢",pt:"'Drydock' é quando um navio:",options:["🚢 Entra em doca seca para reparos","⚓ Ancora no porto","🔧 Recebe abastecimento","📦 Carrega carga"],correct:0,words:[{w:"drydock",cls:"noun",tr:"doca seca"}]},
+              {id:"p4",type:"fill_blank",en:"The vessel enters ___ every five years for major repairs. 🚢",pt:"O navio entra em ___ a cada cinco anos para grandes reparos.",answer:"drydock",words:[{w:"drydock",cls:"noun",tr:"doca seca"}]},
+              {id:"p5",type:"fill_blank",en:"The main engine ___ is scheduled for next dry-docking. ⚙️",pt:"A ___ do motor principal está prevista para a próxima docagem.",answer:"overhaul",words:[{w:"overhaul",cls:"noun",tr:"revisão geral"}]},
+            ]
+          },
+          {
+            id:"trad_n_f6", name:"🌐 Traduza: Procedimentos", icon:"🌐",
+            description:"Procedimentos técnicos em inglês", xpTotal:80,
+            phrases:[
+              {id:"t1",type:"translate_pt_en",en:"Fill out a work order before starting any maintenance task.",pt:"Preencha uma ordem de serviço antes de iniciar qualquer tarefa de manutenção.",answer:"fill out a work order before starting any maintenance task",words:[{w:"work order",cls:"noun",tr:"ordem de serviço"}]},
+              {id:"t2",type:"translate_pt_en",en:"The hull must be inspected for corrosion and cracks annually.",pt:"O casco deve ser inspecionado por corrosão e rachaduras anualmente.",answer:"the hull must be inspected for corrosion and cracks annually",words:[{w:"hull",cls:"noun",tr:"casco"},{w:"corrosion",cls:"noun",tr:"corrosão"}]},
+              {id:"t3",type:"translate_pt_en",en:"Apply sealing compound around the flange to prevent oil leaks.",pt:"Aplique vedante ao redor da flange para prevenir vazamentos de óleo.",answer:"apply sealing compound around the flange to prevent oil leaks",words:[{w:"sealing",cls:"noun",tr:"vedação"}]},
+            ]
+          },
+          {
+            id:"order_n_f6", name:"🔀 Ordene: Técnico", icon:"🔀",
+            description:"Procedimentos técnicos na ordem certa", xpTotal:60,
+            phrases:[
+              {id:"o1",type:"word_order",en:"Corrosion on the hull must be treated before dry-docking.",pt:"A corrosão no casco deve ser tratada antes da docagem.",scrambled:["Corrosion","on","the","hull","must","be","treated","before","dry-docking."],answer:"Corrosion on the hull must be treated before dry-docking.",words:[{w:"corrosion",cls:"noun",tr:"corrosão"},{w:"hull",cls:"noun",tr:"casco"}]},
+              {id:"o2",type:"word_order",en:"Replace the oil filter every 250 operating hours.",pt:"Troque o filtro de óleo a cada 250 horas de operação.",scrambled:["Replace","the","oil","filter","every","250","operating","hours."],answer:"Replace the oil filter every 250 operating hours.",words:[{w:"filter",cls:"noun",tr:"filtro"}]},
+            ]
+          },
+          {
+            id:"match_n_f6", name:"🔗 Match Técnico B2", icon:"🔗",
+            description:"Vocabulário técnico avançado", xpTotal:50,
+            phrases:[{id:"mc1",type:"match_columns",en:"Advanced naval terms ⚙️",pt:"Termos navais avançados",pairs:[{a:"drydock",b:"doca seca"},{a:"corrosion",b:"corrosão"},{a:"work order",b:"ordem de serviço"},{a:"welding",b:"soldagem"}],words:[]}]
+          },
+        ]
+      },
+      // ── f7 · C1 · Emergências ─────────────────────────────────────────────
+      {
+        id:"f7", name:"Fase 7 🚨", subtitle:"C1 — Situações de emergência", unlocked:false,
+        missions:[
+          {
+            id:"emerg_n_f7", name:"🚨 Emergências a Bordo", icon:"🚨",
+            description:"Comunicação em situações críticas na praça de máquinas", xpTotal:100,
+            phrases:[
+              {id:"p1",type:"pronunciation",en:"Engine room alarm! Oil leak on Deck 2 — shut down the pump immediately! 🚨",pt:"Alarme na praça de máquinas! Vazamento de óleo no Convés 2 — desligue a bomba imediatamente!",words:[{w:"oil leak",cls:"noun",tr:"vazamento de óleo"},{w:"shut down",cls:"verb",tr:"desligar"}]},
+              {id:"p2",type:"multiple_choice",en:"There's an oil leak. What do you say first? 🚨",pt:"Há um vazamento de óleo. O que você diz primeiro?",options:["🚨 Shut down the pump immediately!","📋 Fill out a work order.","🔧 Get the tools.","📊 Check the pressure gauge."],correct:0,words:[{w:"shut down",cls:"verb",tr:"desligar"}]},
+              {id:"p3",type:"translate_pt_en",en:"The engine temperature exceeded 95°C — initiate emergency shutdown.",pt:"A temperatura do motor ultrapassou 95°C — inicie o desligamento de emergência.",answer:"the engine temperature exceeded 95°C — initiate emergency shutdown",words:[{w:"emergency shutdown",cls:"noun",tr:"desligamento de emergência"}]},
+              {id:"p4",type:"word_order",en:"A failure in the fuel system caused the engine to shut down.",pt:"Uma falha no sistema de combustível fez o motor parar.",scrambled:["A","failure","in","the","fuel","system","caused","the","engine","to","shut","down."],answer:"A failure in the fuel system caused the engine to shut down.",words:[{w:"failure",cls:"noun",tr:"falha"}]},
+              {id:"p5",type:"pronunciation",en:"3rd Engineer — we have a problem with No. 2 generator. It's making a strange noise and losing pressure. We should shut it down soon. 🔧",pt:"3º Engenheiro — temos um problema com o gerador nº 2. Está fazendo um barulho estranho e perdendo pressão. Devemos desligá-lo em breve.",words:[{w:"losing pressure",cls:"phrase",tr:"perdendo pressão"},{w:"shut it down",cls:"verb",tr:"desligar"}]},
+            ]
+          },
+          {
+            id:"diag_n_f7", name:"⚙️ Diagnóstico Técnico", icon:"⚙️",
+            description:"Descreva e diagnostique problemas", xpTotal:90,
+            phrases:[
+              {id:"d1",type:"translate_pt_en",en:"It's making a strange noise — we need to investigate.",pt:"Está fazendo um barulho estranho — precisamos investigar.",answer:"it's making a strange noise — we need to investigate",words:[{w:"strange noise",cls:"noun",tr:"barulho estranho"}]},
+              {id:"d2",type:"fill_blank",en:"The generator is ___ — something is wrong with the fuel system. ⚙️",pt:"O gerador está ___ — algo está errado com o sistema de combustível.",answer:"broken",words:[{w:"broken",cls:"adj",tr:"quebrado"}]},
+              {id:"d3",type:"multiple_choice",en:"Best way to report a technical problem clearly: 📢",pt:"Melhor forma de reportar um problema técnico:",options:["📢 No. 2 generator — strange noise — losing pressure","⚙️ Something is wrong","🔧 I don't know what happened","📋 We need maintenance"],correct:0,words:[{w:"generator",cls:"noun",tr:"gerador"}]},
+              {id:"d4",type:"word_order",en:"The diagnostic found a fault in the hydraulic circuit.",pt:"O diagnóstico encontrou um defeito no circuito hidráulico.",scrambled:["The","diagnostic","found","a","fault","in","the","hydraulic","circuit."],answer:"The diagnostic found a fault in the hydraulic circuit.",words:[{w:"fault",cls:"noun",tr:"defeito"},{w:"hydraulic",cls:"adj",tr:"hidráulico"}]},
+            ]
+          },
+          {
+            id:"match_n_f7", name:"🔗 Match C1 Naval", icon:"🔗",
+            description:"Termos de emergência e diagnóstico", xpTotal:60,
+            phrases:[{id:"mc1",type:"match_columns",en:"Emergency terms 🚨",pt:"Termos de emergência",pairs:[{a:"failure",b:"falha/avaria"},{a:"fault",b:"defeito"},{a:"broken",b:"quebrado"},{a:"stuck",b:"preso/travado"}],words:[]}]
+          },
+        ]
+      },
+      // ── f8 · C2 · Comunicação Técnica Avançada ────────────────────────────
+      {
+        id:"f8", name:"Fase 8 🌟", subtitle:"C2 — Comunicação técnica avançada", unlocked:false,
+        missions:[
+          {
+            id:"fluencia_n_f8", name:"🌍 Fluência Técnica Naval", icon:"🌍",
+            description:"Comunicação avançada para engenheiros de máquinas", xpTotal:130,
+            phrases:[
+              {id:"f1",type:"pronunciation",en:"3rd Engineer, I'm reporting a fault on No. 2 generator. It started making an abnormal noise at 0400. The pressure gauge dropped from 8 to 5 bar. I initiated a corrective maintenance work order and asked the crew to prepare the toolbox. We may need a partial overhaul before the next port call. 📋",pt:"3º Engenheiro, estou relatando um defeito no gerador nº 2. Começou a fazer um barulho anormal às 4h. O manômetro caiu de 8 para 5 bar. Iniciei uma ordem de serviço de manutenção corretiva e pedi à equipe que preparasse a caixa de ferramentas. Pode ser necessária uma revisão parcial antes da próxima escala.",words:[{w:"corrective maintenance",cls:"noun",tr:"manutenção corretiva"},{w:"work order",cls:"noun",tr:"ordem de serviço"}]},
+              {id:"f2",type:"translate_pt_en",en:"The worn gasket was causing an oil leak — we replaced it and the pressure is back to normal.",pt:"A gaxeta desgastada estava causando um vazamento de óleo — substituímos e a pressão voltou ao normal.",answer:"the worn gasket was causing an oil leak — we replaced it and the pressure is back to normal",words:[{w:"gasket",cls:"noun",tr:"gaxeta"},{w:"oil leak",cls:"noun",tr:"vazamento de óleo"}]},
+              {id:"f3",type:"word_order",en:"The propeller shaft must be aligned after any major repair in dry-dock.",pt:"O eixo da hélice deve ser alinhado após qualquer reparo maior na doca seca.",scrambled:["The","propeller","shaft","must","be","aligned","after","any","major","repair","in","dry-dock."],answer:"The propeller shaft must be aligned after any major repair in dry-dock.",words:[{w:"shaft",cls:"noun",tr:"eixo"},{w:"aligned",cls:"verb",tr:"alinhado"}]},
+              {id:"f4",type:"multiple_choice",en:"Best practice before starting any maintenance job: 📋",pt:"Melhor prática antes de iniciar qualquer serviço de manutenção:",options:["📋 Fill out a work order and check spare parts availability","🔧 Start immediately with available tools","⚙️ Wait for the chief engineer only","📊 Monitor the pressure gauge for 10 minutes"],correct:0,words:[{w:"work order",cls:"noun",tr:"ordem de serviço"}]},
+              {id:"f5",type:"pronunciation",en:"During the weekly inspection, we identified corrosion on the hull near the ballast tanks. We recommend treating the affected areas before the next dry-docking. The turbine overhaul is also due within 500 operating hours — I suggest scheduling it during the upcoming port call. 🚢",pt:"Durante a inspeção semanal, identificamos corrosão no casco próximo aos tanques de lastro. Recomendamos tratar as áreas afetadas antes da próxima docagem. A revisão da turbina também é devida em 500 horas — sugiro agendá-la na próxima escala.",words:[{w:"corrosion",cls:"noun",tr:"corrosão"},{w:"hull",cls:"noun",tr:"casco"},{w:"overhaul",cls:"noun",tr:"revisão geral"}]},
+            ]
+          },
+          {
+            id:"match_n_f8", name:"🔗 Match Final Naval", icon:"🔗",
+            description:"Revisão completa naval C2", xpTotal:60,
+            phrases:[{id:"mc1",type:"match_columns",en:"Complete naval review ⚙️",pt:"Revisão completa naval",pairs:[{a:"overhaul",b:"revisão geral"},{a:"drydock",b:"doca seca"},{a:"spare parts",b:"peças sobressalentes"},{a:"torque wrench",b:"chave de torque"}],words:[]}]
+          },
+        ]
+      },
+    ]
+  });
+})();

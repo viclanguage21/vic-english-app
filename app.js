@@ -2005,7 +2005,7 @@ function renderDashboard(){
 function renderSegments(){
   const c=document.getElementById("segments-grid"); if(!c) return; c.innerHTML="";
   const grammarSeg=VICTOR_DATA.segments.find(s=>s.isGrammarCore);
-  const regularSegs=VICTOR_DATA.segments.filter(s=>!s.isGrammarCore);
+  const regularSegs=VICTOR_DATA.segments.filter(s=>!s.isGrammarCore && !s.hidden);
   regularSegs.forEach(seg=>{
     const div=document.createElement("div");
     div.className=`segment-card ${seg.available?"available":"locked"}`;
