@@ -585,7 +585,6 @@
           <span id="dash-avatar-icon">👤</span>
           <span class="dash-avatar-edit">✏️</span>
         </div>
-        <button class="btn-logout-icon" id="btn-logout" title="Sair">⏻</button>
       </div>
     </div>
 
@@ -598,6 +597,9 @@
       <div class="greeting-level" id="greeting-level"></div>
       <div                          id="greeting-motivational" style="display:none"></div>
     </div>
+
+    <!-- START NOW — CTA principal, topo da dashboard -->
+    <button class="btn-start-now" id="btn-start-now">▶ Start Now!</button>
 
     <!-- Curiosity ticker -->
     <div class="curiosity-ticker">
@@ -693,11 +695,8 @@
       </div>
     </div>
 
-    <!-- START NOW button -->
-    <button class="btn-start-now" id="btn-start-now" data-i18n="start_now">▶ Start Now!<//button>
-
     <!-- quick access -->
-    <div class="section-label" id="dash-quick-label" data-i18n="quick_access">🎯 Acesso Rápido</div>
+    <div class="section-label" id="dash-quick-label" data-i18n="quick_access">⚡ Acesso Rápido</div>
     <div class="quick-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%">
       <button class="quick-btn" id="btn-goto-flashcards">🃏 Flashcards</button>
       <button class="quick-btn" id="btn-goto-memory">🧠 Memória</button>
@@ -740,27 +739,20 @@
       </div>
       <div class="gcb-chips">
         <span class="gcb-chip">📧 Emails</span>
-        <span class="gcb-chip">📋 Relatórios</span>
         <span class="gcb-chip">🌐 Tradução</span>
-        <span class="gcb-chip">✏️ Redação livre</span>
         <span class="gcb-chip gcb-chip-ai">🤖 IA Correção</span>
       </div>
     </div>
 
-    <!-- Feedback widget -->
-    <div class="feedback-strip" id="feedback-strip">
-      <div class="feedback-strip-title">Como está seu aprendizado? ⭐</div>
+    <!-- Feedback widget — discreto, só estrelas -->
+    <div class="feedback-strip feedback-strip-minimal" id="feedback-strip">
+      <div class="feedback-strip-title">Curtindo o app? ⭐</div>
       <div class="feedback-stars" id="feedback-stars">
         <span class="feedback-star" data-v="1">⭐</span>
         <span class="feedback-star" data-v="2">⭐</span>
         <span class="feedback-star" data-v="3">⭐</span>
         <span class="feedback-star" data-v="4">⭐</span>
         <span class="feedback-star" data-v="5">⭐</span>
-      </div>
-      <div class="feedback-actions">
-        <button class="feedback-btn" id="btn-feedback-comment">💬 Comentário</button>
-        <button class="feedback-btn" id="btn-feedback-like">👍 Gostei</button>
-        <button class="feedback-btn bug" id="btn-feedback-bug">🐛 Reportar bug</button>
       </div>
     </div>
 
@@ -1711,6 +1703,7 @@
         <button class="settings-big-btn" id="btn-edit-username">🏷️ Mudar Username</button>
         <button class="settings-big-btn" id="btn-edit-email">📧 Mudar Email</button>
         <button class="settings-big-btn" id="btn-edit-password">🔒 Mudar Senha</button>
+        <button class="settings-big-btn btn-logout-profile" id="btn-logout">⏻ Sair da conta</button>
       </div>
     </div>
 

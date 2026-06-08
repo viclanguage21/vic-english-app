@@ -7276,3 +7276,49 @@ a.settings-big-btn:active {
   transition: background 0.2s, box-shadow 0.2s;
 }
 .badge-share-btn:hover { background: rgba(201,147,58,0.22); box-shadow: 0 0 16px rgba(201,147,58,0.3); }
+
+/* ══ FEEDBACK STRIP MINIMAL ═══════════════════════════════════ */
+.feedback-strip-minimal {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 8px 0 4px !important;
+  text-align: center;
+}
+.feedback-strip-minimal .feedback-strip-title {
+  font-size: 12px !important;
+  opacity: 0.4 !important;
+  margin-bottom: 6px !important;
+}
+.feedback-strip-minimal .feedback-stars { justify-content: center; }
+
+/* ══ LOGOUT BUTTON IN PROFILE ═════════════════════════════════ */
+.btn-logout-profile {
+  color: rgba(255, 100, 100, 0.85) !important;
+  border-color: rgba(255, 100, 100, 0.25) !important;
+  margin-top: 8px !important;
+}
+.btn-logout-profile:hover {
+  background: rgba(255, 100, 100, 0.1) !important;
+  border-color: rgba(255, 100, 100, 0.5) !important;
+}
+
+/* ══ START NOW — destaque no topo ═════════════════════════════ */
+.btn-start-now {
+  width: 100% !important;
+  padding: 16px !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  margin: 8px 0 14px !important;
+  background: linear-gradient(135deg, #0ea5e9, #6366f1) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  color: #fff !important;
+  box-shadow: 0 4px 20px rgba(14,165,233,0.4), 0 0 0 0 rgba(14,165,233,0.3) !important;
+  animation: start-now-pulse 2.6s ease-in-out infinite !important;
+  letter-spacing: 0.5px !important;
+}
+@keyframes start-now-pulse {
+  0%,100% { box-shadow: 0 4px 20px rgba(14,165,233,0.4), 0 0 0 0 rgba(14,165,233,0.3); }
+  50%      { box-shadow: 0 6px 28px rgba(14,165,233,0.55), 0 0 0 6px rgba(14,165,233,0.08); }
+}
