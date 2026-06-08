@@ -183,6 +183,12 @@
       <div class="ob-dot" id="ob-dot-4"></div>
     </div>
 
+    <!-- Aviso sobre o botão de atualizar -->
+    <div class="ob-refresh-tip">
+      <span class="ob-refresh-icon">↻</span>
+      <span data-i18n-html="ob_refresh_tip">Travou? Toque no botão <strong>↻</strong> no canto da tela para atualizar o app.</span>
+    </div>
+
     <!-- Seletor de língua no onboarding -->
     <div style="display:flex;gap:8px;justify-content:center;margin-bottom:12px;">
       <button onclick="setLang('pt')" id="ob-lang-pt" class="auth-lang-btn">🇧🇷 PT</button>
@@ -561,8 +567,8 @@
 <div class="view" id="view-dashboard">
   <div class="dashboard-inner">
 
-    <div class="dash-header dash-header-centered">
-      <div class="dash-logo-center">
+    <div class="dash-header dash-header-row">
+      <div class="dash-logo-left">
         <img src="vic_english_header.png" alt="VIC English" id="dash-logo-img"/>
         <div class="dash-date" id="dash-date"></div>
       </div>
