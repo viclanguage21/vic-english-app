@@ -7408,3 +7408,58 @@ a.settings-big-btn:active {
 /* ✍️ Writing — dourado */
 #view-writing .phases-title { color: #f0c97a !important; text-shadow: 0 0 14px rgba(228,180,92,0.35); }
 #view-writing .phases-header::after { background: linear-gradient(90deg, transparent, #e4b45c, transparent); }
+
+/* ══ HEADER CENTRALIZADO — logo em destaque, perfil à direita ════
+   Logo grande e centralizado, avatar flutuando à direita.        */
+.dash-header-centered {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 18px 16px 14px !important;
+  min-height: unset !important;
+}
+.dash-logo-center {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+/* logo na proporção real (3:2) — sem cortar mais */
+.dash-header-centered #dash-logo-img,
+.dash-header-centered .dash-logo-img {
+  width: auto !important;
+  height: 80px !important;
+  max-width: 240px !important;
+  border-radius: 12px !important;
+  object-fit: contain !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 4px 18px rgba(201,147,58,0.4)) !important;
+}
+/* data discreta, em Inter, abaixo do logo */
+.dash-header-centered .dash-date {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  border: none !important;
+}
+.dash-date-line {
+  font-family: var(--font) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  color: rgba(240,208,112,0.6) !important;
+  text-transform: none !important;
+  font-style: normal !important;
+}
+/* avatar flutuando à direita, centralizado na vertical */
+.dash-header-centered .dash-user {
+  position: absolute !important;
+  right: 16px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin: 0 !important;
+}
+/* garante que o badge ✏️ de editar apareça (não corta nas bordas) */
+.dash-header-centered .dash-avatar-wrap { overflow: visible !important; }
