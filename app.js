@@ -5366,52 +5366,52 @@ async function sendPushFromAdmin(){
 
 const LOADING_PHRASES = [
   // Motivacionais com filmes/heróis
-  { en:'"With great power comes great responsibility."', sub:'— Uncle Ben, Spider-Man' },
-  { en:'"Do or do not. There is no try."', sub:"— Yoda, Star Wars" },
-  { en:'"I am Iron Man."', sub:"— Tony Stark  |  Be the hero of your career." },
-  { en:'"Whatever it takes."', sub:"— Avengers Endgame  |  Your English journey." },
-  { en:'"To infinity and beyond!"', sub:"— Buzz Lightyear  |  No limits in learning." },
-  { en:'"May the Force be with you."', sub:"— Obi-Wan Kenobi  |  And with your English!" },
-  { en:'"You shall not pass!"', sub:"— Gandalf  |  Except through this app, every day." },
-  { en:'"Why so serious?"', sub:"— Joker  |  Learning English can be fun!" },
-  { en:'"Elementary, my dear Watson."', sub:"— Sherlock Holmes  |  English is elementary." },
-  { en:'"Just keep swimming."', sub:"— Dory, Finding Nemo  |  Just keep practicing." },
+  { en:"With great power comes great responsibility.", pt:"Com grandes poderes vêm grandes responsabilidades.", sub:'— Uncle Ben, Spider-Man' },
+  { en:"Do or do not. There is no try.", pt:"Faça ou não faça. Tentar não existe.", sub:"— Yoda, Star Wars" },
+  { en:"I am Iron Man.", pt:"Eu sou o Homem de Ferro.", sub:"— Tony Stark  |  Be the hero of your career." },
+  { en:"Whatever it takes.", pt:"Custe o que custar.", sub:"— Avengers Endgame  |  Your English journey." },
+  { en:"To infinity and beyond!", pt:"Ao infinito e além!", sub:"— Buzz Lightyear  |  No limits in learning." },
+  { en:"May the Force be with you.", pt:"Que a Força esteja com você.", sub:"— Obi-Wan Kenobi  |  And with your English!" },
+  { en:"You shall not pass!", pt:"Você não vai passar!", sub:"— Gandalf  |  Except through this app, every day." },
+  { en:"Why so serious?", pt:"Por que tão sério?", sub:"— Joker  |  Learning English can be fun!" },
+  { en:"Elementary, my dear Watson.", pt:"Elementar, meu caro Watson.", sub:"— Sherlock Holmes  |  English is elementary." },
+  { en:"Just keep swimming.", pt:"Continue nadando.", sub:"— Dory, Finding Nemo  |  Just keep practicing." },
   // Mercado de trabalho
-  { en:"Professionals who speak English earn up to 40% more.", sub:"— Source: IBGE / FGV  |  Every mission = real value." },
-  { en:"70% of maritime communications worldwide are in English.", sub:"— IMO International Standards  |  Are you ready?" },
-  { en:"Bilingual professionals are hired 3x faster.", sub:"— LinkedIn Workforce Report  |  Start your mission." },
-  { en:"In Brazil, English fluency can double your salary.", sub:"— Catho Salary Survey  |  Each lesson counts." },
-  { en:"95% of international business is conducted in English.", sub:"— Harvard Business Review  |  Be part of it." },
+  { en:"Professionals who speak English earn up to 40% more.", pt:"Profissionais que falam inglês ganham até 40% a mais.", sub:"— Source: IBGE / FGV  |  Every mission = real value." },
+  { en:"70% of maritime communications worldwide are in English.", pt:"70% das comunicações marítimas no mundo são em inglês.", sub:"— IMO International Standards  |  Are you ready?" },
+  { en:"Bilingual professionals are hired 3x faster.", pt:"Profissionais bilíngues são contratados 3x mais rápido.", sub:"— LinkedIn Workforce Report  |  Start your mission." },
+  { en:"In Brazil, English fluency can double your salary.", pt:"No Brasil, a fluência em inglês pode dobrar seu salário.", sub:"— Catho Salary Survey  |  Each lesson counts." },
+  { en:"95% of international business is conducted in English.", pt:"95% dos negócios internacionais são feitos em inglês.", sub:"— Harvard Business Review  |  Be part of it." },
   // Porto de Santos — dados reais
-  { en:"Santos Port handles over 150 million tons of cargo per year.", sub:"🚢 Porto de Santos — the largest port in Latin America." },
-  { en:"Santos Port employs over 100,000 people directly and indirectly.", sub:"⚓ Santos  |  Your city. Your opportunity." },
-  { en:"More than 60 countries receive cargo from Santos Port every year.", sub:"🌍 Santos connects Brazil to the world — in English." },
-  { en:"Santos handles 28% of all Brazilian foreign trade.", sub:"📦 COMEX, maritime, logistics — all in English." },
-  { en:"Santos Port moved R$ 800 billion in goods in 2023.", sub:"💰 The biggest port business speaks English." },
-  { en:"Over 4,000 vessels dock at Santos Port every year.", sub:"⚓ Each ship needs English communication on board." },
-  { en:"Santos is the 4th busiest container port in South America.", sub:"🏆 And VIC English is training the people behind it." },
+  { en:"Santos Port handles over 150 million tons of cargo per year.", pt:"O Porto de Santos movimenta mais de 150 milhões de toneladas de carga por ano.", sub:"🚢 Porto de Santos — the largest port in Latin America." },
+  { en:"Santos Port employs over 100,000 people directly and indirectly.", pt:"O Porto de Santos emprega mais de 100 mil pessoas direta e indiretamente.", sub:"⚓ Santos  |  Your city. Your opportunity." },
+  { en:"More than 60 countries receive cargo from Santos Port every year.", pt:"Mais de 60 países recebem carga do Porto de Santos todo ano.", sub:"🌍 Santos connects Brazil to the world — in English." },
+  { en:"Santos handles 28% of all Brazilian foreign trade.", pt:"Santos concentra 28% de todo o comércio exterior brasileiro.", sub:"📦 COMEX, maritime, logistics — all in English." },
+  { en:"Santos Port moved R$ 800 billion in goods in 2023.", pt:"O Porto de Santos movimentou R$ 800 bilhões em mercadorias em 2023.", sub:"💰 The biggest port business speaks English." },
+  { en:"Over 4,000 vessels dock at Santos Port every year.", pt:"Mais de 4.000 navios atracam no Porto de Santos todo ano.", sub:"⚓ Each ship needs English communication on board." },
+  { en:"Santos is the 4th busiest container port in South America.", pt:"Santos é o 4º porto de contêineres mais movimentado da América do Sul.", sub:"🏆 And VIC English is training the people behind it." },
   // Ciência de aprendizagem
-  { en:"The brain consolidates language during sleep.", sub:"🧠 Neuroscience  |  Practice before bed = wake up fluent." },
-  { en:"Spaced repetition is 3x more effective than mass studying.", sub:"📚 Cambridge Research  |  VIC uses this method." },
-  { en:"10 minutes a day beats 2 hours on weekends.", sub:"🎯 Harvard Learning Lab  |  Consistency is the superpower." },
-  { en:"Bilingual people develop Alzheimer's 5 years later on average.", sub:"🧬 Journal of Neurology  |  English is good for your brain!" },
-  { en:"Speaking out loud increases retention by 50%.", sub:"🗣️ Production Effect Study  |  Try our speaking exercises!" },
-  { en:"Learning a language increases grey matter density.", sub:"🧠 Max Planck Institute  |  You literally grow your brain." },
-  { en:"Context learning is 4x faster than memorizing word lists.", sub:"💡 VIC English approach  |  Real situations, real results." },
+  { en:"The brain consolidates language during sleep.", pt:"O cérebro consolida o idioma durante o sono.", sub:"🧠 Neuroscience  |  Practice before bed = wake up fluent." },
+  { en:"Spaced repetition is 3x more effective than mass studying.", pt:"A repetição espaçada é 3x mais eficaz que estudar tudo de uma vez.", sub:"📚 Cambridge Research  |  VIC uses this method." },
+  { en:"10 minutes a day beats 2 hours on weekends.", pt:"10 minutos por dia valem mais que 2 horas no fim de semana.", sub:"🎯 Harvard Learning Lab  |  Consistency is the superpower." },
+  { en:"Bilingual people develop Alzheimer's 5 years later on average.", pt:"Pessoas bilíngues desenvolvem Alzheimer 5 anos mais tarde, em média.", sub:"🧬 Journal of Neurology  |  English is good for your brain!" },
+  { en:"Speaking out loud increases retention by 50%.", pt:"Falar em voz alta aumenta a retenção em 50%.", sub:"🗣️ Production Effect Study  |  Try our speaking exercises!" },
+  { en:"Learning a language increases grey matter density.", pt:"Aprender um idioma aumenta a densidade da massa cinzenta.", sub:"🧠 Max Planck Institute  |  You literally grow your brain." },
+  { en:"Context learning is 4x faster than memorizing word lists.", pt:"Aprender por contexto é 4x mais rápido que decorar listas de palavras.", sub:"💡 VIC English approach  |  Real situations, real results." },
   // Motivacionais diretos
-  { en:"Your next promotion might depend on this moment.", sub:"⚡ Keep going. Your future self will thank you." },
-  { en:"Every world-class professional speaks English.", sub:"🌐 Join them. One mission at a time." },
-  { en:"The best sailors speak the language of the sea.", sub:"⚓ English is the official language of maritime navigation." },
-  { en:"Offshore platforms communicate in English 100% of the time.", sub:"🛢️ Be ready when the opportunity arrives." },
-  { en:"International hotels prefer bilingual staff for every position.", sub:"🏨 Your English is your competitive advantage." },
+  { en:"Your next promotion might depend on this moment.", pt:"Sua próxima promoção pode depender deste momento.", sub:"⚡ Keep going. Your future self will thank you." },
+  { en:"Every world-class professional speaks English.", pt:"Todo profissional de alto nível fala inglês.", sub:"🌐 Join them. One mission at a time." },
+  { en:"The best sailors speak the language of the sea.", pt:"Os melhores marinheiros falam a língua do mar.", sub:"⚓ English is the official language of maritime navigation." },
+  { en:"Offshore platforms communicate in English 100% of the time.", pt:"Plataformas offshore se comunicam 100% em inglês.", sub:"🛢️ Be ready when the opportunity arrives." },
+  { en:"International hotels prefer bilingual staff for every position.", pt:"Hotéis internacionais preferem equipe bilíngue em todas as posições.", sub:"🏨 Your English is your competitive advantage." },
 ]
 
 const LOADING_TIPS = [
-  "Tap the 🐢 button to hear words more slowly",
-  "Use the microphone to practice pronunciation",
-  "Check your badges in your profile",
-  "Complete daily missions to keep your streak",
-  "Switch to English in Settings → Language",
+  "Toque no botão 🐢 para ouvir as palavras mais devagar",
+  "Use o microfone para praticar a pronúncia",
+  "Veja suas conquistas no seu perfil",
+  "Complete as missões diárias para manter seu streak",
+  "Mude o idioma em Configurações → Idioma",
 ]
 
 let _splashTimeout = null;
@@ -5434,10 +5434,13 @@ function showLoadingSplash(onDone, minMs = 2200) {
 
   overlay.innerHTML = `
     <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 30%,rgba(201,147,58,0.1),transparent);pointer-events:none;"></div>
-    <img src="logo_full_2.png" alt="VIC English"
-      style="width:180px;margin-bottom:32px;filter:drop-shadow(0 4px 24px rgba(201,147,58,0.3));animation:pulse 2s ease infinite;"/>
-    <div style="font-size:20px;font-weight:800;color:#fff;line-height:1.4;margin-bottom:10px;max-width:340px;font-style:italic;">
+    <img src="vic_english_logo.png" alt="VIC English"
+      style="width:170px;border-radius:24px;margin-bottom:32px;filter:drop-shadow(0 0 30px rgba(201,147,58,0.5)) drop-shadow(0 0 60px rgba(124,58,237,0.3));animation:pulse 2s ease infinite;"/>
+    <div style="font-size:20px;font-weight:800;color:#fff;line-height:1.4;margin-bottom:8px;max-width:340px;font-style:italic;">
       "${phrase.en}"
+    </div>
+    <div style="font-size:14px;color:rgba(255,255,255,0.6);font-weight:500;line-height:1.4;margin-bottom:12px;max-width:320px;font-style:italic;">
+      ${phrase.pt}
     </div>
     <div style="font-size:13px;color:#e4b45c;font-weight:600;margin-bottom:36px;opacity:0.85;">
       ${phrase.sub}
