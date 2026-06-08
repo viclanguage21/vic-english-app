@@ -171,6 +171,9 @@ async function createUserDoc(uid, extra) {
 }
 
 export async function getUserData(uid) {
+  if (uid?.startsWith("guest_")) {
+    try { return JSON.parse(localStorage.getItem("vic_guest_data") || "null"); } catch(e) { return null; }
+  }
   try {
     const snap = await getDoc(doc(db, "users", uid));
     if (snap.exists()) return { uid, ...snap.data() };
@@ -182,6 +185,13 @@ export async function getUserData(uid) {
 }
 
 export async function saveProgress(uid, updates) {
+  if (uid?.startsWith("guest_")) {
+    try {
+      const cur = JSON.parse(localStorage.getItem("vic_guest_data") || "{}");
+      localStorage.setItem("vic_guest_data", JSON.stringify({ ...cur, ...updates, uid }));
+    } catch(e) {}
+    return;
+  }
   try {
     await updateDoc(doc(db, "users", uid), {
       ...updates,

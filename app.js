@@ -1,6 +1,6 @@
 // app.js — VIC English v12 — Full fix
 
-import { auth, registerUser, loginUser, loginWithGoogle, loginAnonymous, logoutUser, onAuthChange, getUserData, saveProgress, getAllUsers, getUserById, OWNER_UID, registerFCMToken, onForegroundMessage, resetPassword } from "./firebase.js";
+import { auth, registerUser, loginUser, loginWithGoogle, logoutUser, onAuthChange, getUserData, saveProgress, getAllUsers, getUserById, OWNER_UID, registerFCMToken, onForegroundMessage, resetPassword } from "./firebase.js";
 import { I18N, SEG_NAMES, LEVEL_TIPS, LOADING_QUOTES, GLOSSARY, PRO_MESSAGES, BADGES, NOTIF_MESSAGES, MP_LINK } from "./constants.js";
 import { calcLevel, stripEmoji, cleanEnunciado, shuffle, vibrate } from "./utils.js";
 
@@ -940,20 +940,16 @@ async function handleGoogle(){
 
 async function handleAnon(){
   const btn=document.getElementById("btn-anon");
-  const reset=()=>{if(btn){btn.disabled=false;btn.textContent="👤 Entrar sem cadastro";}hideAuthLoading();};
   if(btn){btn.disabled=true;btn.textContent="Entrando...";}
   showAuthLoading("Preparando seu acesso... 💪");
-  const t=setTimeout(()=>{hideAuthLoading();reset();showAuthError("Tente novamente.");},15000);
-  try{
-    await loginAnonymous();
-    clearTimeout(t);
-  }catch(e){
-    clearTimeout(t);
-    hideAuthLoading();
-    reset();
-    if(e.code==="auth/network-request-failed") showAuthError("Sem conexão. Verifique sua internet.");
-    else showAuthError("Erro ao entrar. Tente novamente.");
-  }
+  // Reuse existing guest UID or create a new one — no Firebase Auth call
+  let uid=localStorage.getItem("vic_guest_uid");
+  if(!uid){ uid="guest_"+Date.now(); localStorage.setItem("vic_guest_uid",uid); }
+  const fakeUser={uid, displayName:"Visitante", email:"", isAnonymous:true, isLocalGuest:true, photoURL:null};
+  hideAuthLoading();
+  if(btn){btn.disabled=false;btn.textContent=t("login_anon");}
+  try{ await loadDashboard(fakeUser); }
+  catch(e){ console.error("Guest dashboard error:",e); showAuthError("Tente novamente."); }
 }
 function showAuthError(msg){const e=document.getElementById("auth-error");e.textContent=msg;e.style.display="block";setTimeout(()=>e.style.display="none",7000);}
 function translateErr(c){return{"auth/email-already-in-use":"Email já cadastrado. Use o botão Entrar.","auth/invalid-email":"Email inválido. Verifique e tente novamente.","auth/weak-password":"Senha muito fraca. Use pelo menos 6 caracteres.","auth/user-not-found":"Usuário não encontrado. Verifique o email.","auth/wrong-password":"Senha incorreta.","auth/invalid-credential":"Email ou senha incorretos.","auth/too-many-requests":"Muitas tentativas. Aguarde alguns minutos e tente novamente.","auth/network-request-failed":"Sem conexão com a internet. Verifique o Wi-Fi e tente novamente.","auth/operation-not-allowed":"Cadastro por email está desativado no servidor.","auth/unauthorized-domain":"Domínio não autorizado. Contate o suporte.","auth/internal-error":"Erro interno do servidor. Tente novamente em instantes.","permission-denied":"Erro de permissão no banco de dados. Contate o suporte."}[c]||`Erro ao criar conta (${c||"desconhecido"}). Recarregue a página e tente novamente.`;}
