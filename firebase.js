@@ -113,6 +113,10 @@ const gProvider = new GoogleAuthProvider();
 const _verifyActionSettings = {
   url: "https://app.viclanguage.com.br/?emailVerified=1",
   handleCodeInApp: false,
+  // NOTE: in Firebase Console → Authentication → Templates → Email address verification
+  //       → Customize action URL → set to: https://app.viclanguage.com.br/action.html
+  //       This makes the link in the email open our branded /action.html page instead
+  //       of Firebase's default generic verification page.
 };
 
 export async function registerUser(email, password, name) {
