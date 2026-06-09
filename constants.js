@@ -1461,19 +1461,19 @@ export const PRO_MESSAGES=[
 export const BADGES = [
 
   // ══ MOMENTO ══════════════════════════════════════════════════════════════════
-  {id:"first_mission", cat:"momento", icon:"⚓", name:"All Hands on Deck",
-   desc:"Completou sua primeira missão. O convés está pronto!", xp:30,
+  {id:"first_mission", cat:"momento", icon:"🚢", name:"Make Ship Happen",
+   desc:"Completou sua primeira missão. Isso não se para mais!", xp:30,
    condition:s=>s.missionsCompleted>=1},
   {id:"first_perfect", cat:"momento", icon:"🪄", name:"Wingardium Leviosa!",
    desc:"5 respostas perfeitas. Magia pura!", xp:20,
    condition:s=>s.perfectAnswers>=5},
-  {id:"first_voice",   cat:"momento", icon:"🎙️", name:"Speak Up, Sailor",
+  {id:"first_voice",   cat:"momento", icon:"🎙️", name:"Ahoy, Sailor!",
    desc:"Usou o microfone pela primeira vez. Sua voz manda!", xp:25,
    condition:s=>s.voiceUsed>=1},
-  {id:"first_game",    cat:"momento", icon:"🎮", name:"Welcome Aboard",
+  {id:"first_game",    cat:"momento", icon:"🌊", name:"Oceans of Joy",
    desc:"Jogou seu primeiro jogo (memória, flashcard ou diálogo).", xp:20,
    condition:s=>s.gamesPlayed>=1},
-  {id:"first_writing", cat:"momento", icon:"✍️", name:"Captain's Log",
+  {id:"first_writing", cat:"momento", icon:"🌹", name:"Scarlet Night",
    desc:"Escreveu sua primeira redação em inglês.", xp:25,
    condition:s=>s.writingCompleted>=1},
 
@@ -1507,11 +1507,11 @@ export const BADGES = [
    condition:s=>s.dialoguesPlayed>=5},
 
   // ══ PERFORMANCE ══════════════════════════════════════════════════════════════
-  {id:"streak3",  cat:"performance", icon:"💪", name:"Steady As She Goes",
-   desc:"25 acertos seguidos. Curso firme!", xp:30,
+  {id:"streak3",  cat:"performance", icon:"🧜", name:"Mermaid for Each Other",
+   desc:"25 acertos seguidos. Você e o inglês: feitos um pro outro!", xp:30,
    condition:s=>s.answerStreak>=25},
-  {id:"streak5",  cat:"performance", icon:"🔥", name:"Full Speed Ahead",
-   desc:"60 acertos seguidos — máquinas a toda!", xp:50,
+  {id:"streak5",  cat:"performance", icon:"🕺", name:"Stayin' Alive!",
+   desc:"60 acertos seguidos — Bee Gees aprovam!", xp:50,
    condition:s=>s.answerStreak>=60},
   {id:"streak10", cat:"performance", icon:"⚡", name:"I Am Iron Man",
    desc:"120 seguidos — Tony Stark aprova.", xp:100,
