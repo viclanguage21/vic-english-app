@@ -1754,9 +1754,9 @@ async function loadDashboard(user){
   hideAuthLoading();
   initOneSignal();
 
-  // Diagnosis for new users
+  // Level test for new users (diagnosis screen removed)
   if(!userData.diagnosisAnswers){
-    setTimeout(()=>{ try{ startDiagnosis(); }catch(e){ vicLog("diagnosis","startDiagnosis failed",e); } }, 800);
+    setTimeout(()=>{ try{ startLevelTest(); }catch(e){ vicLog("level-test","startLevelTest failed",e); } }, 800);
   }
   console.log("✅ Dashboard shown for:", userData.name);
 }
@@ -6635,8 +6635,7 @@ function init(){
   document.getElementById("btn-upgrade-dash")?.addEventListener("click",showUpgradeScreen);
   document.getElementById("btn-start-diag")?.addEventListener("click",()=>{
     document.getElementById("diag-invite-banner").style.display="none";
-    if(userData.diagnosisAnswers && !userData.levelTestCompleted){ startLevelTest(); }
-    else { startDiagnosis(); }
+    startLevelTest();
   });
   document.getElementById("btn-skip-diag")?.addEventListener("click",async()=>{
     // mark as skipped so banner doesn't show again
