@@ -1237,9 +1237,9 @@ async function finishDiagnosisNote(){
   document.getElementById("diag-step-3")?.classList.remove("active");
   // Mostrar resultado personalizado
   const diagResult = getDiagResultText();
-  document.getElementById("diag-result-icon").textContent = diagResult.icon;
-  document.getElementById("diag-result-level").textContent = diagResult.title;
-  document.getElementById("diag-result-sub").textContent = diagResult.sub;
+  const _ri = document.getElementById("diag-result-icon");   if(_ri) _ri.textContent = diagResult.icon;
+  const _rl = document.getElementById("diag-result-level");  if(_rl) _rl.textContent = diagResult.title;
+  const _rs = document.getElementById("diag-result-sub");    if(_rs) _rs.textContent = diagResult.sub;
   document.getElementById("diag-step-result")?.classList.add("active");
 }
 async function finishDiagnosis(){
