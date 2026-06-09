@@ -6769,3 +6769,186 @@ VICTOR_DATA.flashcardDecks.push({
     ]
   });
 })();
+
+// ── CORPORATIVO f4: VOCABULÁRIO AVANÇADO — Perplexity Content ─────────────
+(function(){
+  const seg=VICTOR_DATA.segments.find(s=>s.id==="corporativo"); if(!seg) return;
+  const f4=seg.phases.find(p=>p.id==="f4"); if(!f4) return;
+
+  // ── Mission 4: Action Verbs ──
+  f4.missions.push({
+    id:"action_verbs_corp", name:"💪 Verbos de Impacto", icon:"💪",
+    description:"Action verbs para CV, entrevistas e e-mails profissionais", xpTotal:90,
+    phrases:[
+      {id:"av1",type:"memory_match",en:"Action Verbs — CV & Interviews",pt:"Verbos de impacto",
+        pairs:[{a:"managed",b:"gerenciei"},{a:"delivered",b:"entreguei"},{a:"implemented",b:"implementei"},
+               {a:"achieved",b:"alcancei"},{a:"streamlined",b:"otimizei"},{a:"negotiated",b:"negociei"}],words:[]},
+      {id:"av2",type:"match_columns",en:"More Action Verbs",pt:"Mais verbos de ação",
+        pairs:[{a:"led",b:"liderei"},{a:"coordinated",b:"coordenei"},{a:"launched",b:"lancei"},{a:"expanded",b:"expandi"}],words:[]},
+      {id:"av3",type:"fill_blank",
+        en:"I ___ a cross-functional team of eight people across three departments.",
+        pt:"Eu liderei uma equipe multifuncional de oito pessoas em tres departamentos.",
+        answer:"led",
+        words:[{w:"led",cls:"verb",tr:"liderei"},{w:"cross-functional",cls:"adj",tr:"multifuncional"}]},
+      {id:"av4",type:"fill_blank",
+        en:"We ___ the onboarding process and reduced training time by 40%.",
+        pt:"Otimizamos o processo de integracao e reduzimos o tempo de treinamento em 40%.",
+        answer:"streamlined",
+        words:[{w:"streamlined",cls:"verb",tr:"otimizamos"},{w:"onboarding",cls:"noun",tr:"integracao"}]},
+      {id:"av5",type:"translate_pt_en",
+        en:"I implemented a new reporting system that improved team visibility.",
+        pt:"Implementei um novo sistema de relatorios que melhorou a visibilidade da equipe.",
+        answer:"i implemented a new reporting system that improved team visibility",
+        words:[{w:"implemented",cls:"verb",tr:"implementei"},{w:"visibility",cls:"noun",tr:"visibilidade"}]},
+    ]
+  });
+
+  // ── Mission 5: STAR Method ──
+  f4.missions.push({
+    id:"star_corp", name:"⭐ Método STAR", icon:"⭐",
+    description:"Estruture suas respostas com Situacao, Tarefa, Acao e Resultado", xpTotal:100,
+    phrases:[
+      {id:"st1",type:"match_columns",en:"STAR Method Components",pt:"Componentes do Metodo STAR",
+        pairs:[{a:"Situation",b:"contexto/cenario"},{a:"Task",b:"sua responsabilidade"},
+               {a:"Action",b:"o que voce fez"},{a:"Result",b:"o impacto alcancado"}],words:[]},
+      {id:"st2",type:"fill_blank",
+        en:"The ___ was that our team was losing clients due to slow response times.",
+        pt:"A situacao era que nossa equipe estava perdendo clientes por tempos de resposta lentos.",
+        answer:"situation",
+        tip:"STAR: sempre comece contextualizando a situacao.",
+        words:[{w:"situation",cls:"noun",tr:"situacao"}]},
+      {id:"st3",type:"fill_blank",
+        en:"My ___ was to analyze the bottlenecks and design a faster workflow.",
+        pt:"Minha tarefa era analisar os gargalos e desenvolver um fluxo de trabalho mais agil.",
+        answer:"task",
+        words:[{w:"task",cls:"noun",tr:"tarefa"},{w:"bottlenecks",cls:"noun",tr:"gargalos"}]},
+      {id:"st4",type:"word_order",
+        en:"I took action by mapping the process and creating a priority system.",
+        pt:"Tomei a iniciativa mapeando o processo e criando um sistema de prioridades.",
+        scrambled:["I","took","action","by","mapping","the","process","and","creating","a","priority","system."],
+        answer:"I took action by mapping the process and creating a priority system.",
+        words:[{w:"mapping",cls:"verb",tr:"mapeando"},{w:"priority system",cls:"noun",tr:"sistema de prioridades"}]},
+      {id:"st5",type:"pronunciation",
+        en:"The result was a 35% improvement in client satisfaction scores within two months.",
+        pt:"O resultado foi uma melhoria de 35% na satisfacao do cliente em dois meses.",
+        tip:"Sempre termine o STAR com numeros — torna a resposta mais convincente.",
+        words:[{w:"improvement",cls:"noun",tr:"melhoria"},{w:"client satisfaction",cls:"noun",tr:"satisfacao do cliente"}]},
+    ]
+  });
+
+  // ── Mission 6: Professional Adjectives ──
+  f4.missions.push({
+    id:"prof_adj_corp", name:"🏅 Adjetivos Profissionais", icon:"🏅",
+    description:"Descreva-se com vocabulario de alto impacto em ingles", xpTotal:80,
+    phrases:[
+      {id:"pa1",type:"memory_match",en:"Professional Self-Description",pt:"Autodescrição profissional",
+        pairs:[{a:"proactive",b:"proativo(a)"},{a:"detail-oriented",b:"atento aos detalhes"},
+               {a:"adaptable",b:"adaptavel"},{a:"reliable",b:"confiavel"},
+               {a:"assertive",b:"assertivo(a)"},{a:"resilient",b:"resiliente"}],words:[]},
+      {id:"pa2",type:"multiple_choice",
+        en:"Which adjective describes someone who plans ahead and acts without being told?",
+        pt:"Qual adjetivo descreve alguem que planeja com antecedencia e age sem ser mandado?",
+        options:["Proactive","Resilient","Assertive","Collaborative"],correct:0,
+        words:[{w:"proactive",cls:"adj",tr:"proativo(a)"}]},
+      {id:"pa3",type:"multiple_choice",
+        en:"'Results-driven' describes someone who:",
+        pt:"'Results-driven' descreve alguem que:",
+        options:["Focuses on achieving measurable outcomes","Works long hours every day","Only does what is required","Avoids difficult decisions"],correct:0,
+        words:[{w:"results-driven",cls:"adj",tr:"orientado a resultados"}]},
+      {id:"pa4",type:"translate_pt_en",
+        en:"I am proactive, detail-oriented, and results-driven.",
+        pt:"Eu sou proativo, atento aos detalhes e orientado a resultados.",
+        answer:"i am proactive detail-oriented and results-driven",
+        words:[{w:"proactive",cls:"adj",tr:"proativo"},{w:"detail-oriented",cls:"adj",tr:"atento aos detalhes"},{w:"results-driven",cls:"adj",tr:"orientado a resultados"}]},
+    ]
+  });
+
+  // ── Mission 7: Signposting ──
+  f4.missions.push({
+    id:"signpost_corp", name:"🗺️ Sinalização — Apresentações", icon:"🗺️",
+    description:"Conecte as partes da sua apresentacao com fluidez", xpTotal:90,
+    phrases:[
+      {id:"sp1",type:"memory_match",en:"Signposting Phrases",pt:"Frases de sinalizacao",
+        pairs:[{a:"Moving on to...",b:"Passando para..."},{a:"To summarize...",b:"Para resumir..."},
+               {a:"In conclusion...",b:"Em conclusao..."},{a:"Building on that...",b:"Com base nisso..."},
+               {a:"Let me now turn to...",b:"Agora vou falar sobre..."},{a:"Before I move on...",b:"Antes de prosseguir..."}],words:[]},
+      {id:"sp2",type:"fill_blank",
+        en:"___ our Q3 results, I'd like to highlight a positive trend in client retention.",
+        pt:"Passando para os resultados do 3T, gostaria de destacar uma tendencia positiva de retencao de clientes.",
+        answer:"Moving on to",
+        words:[{w:"Moving on to",cls:"expr",tr:"Passando para"},{w:"client retention",cls:"noun",tr:"retencao de clientes"}]},
+      {id:"sp3",type:"fill_blank",
+        en:"___, the key action items are: implement the new system, review the budget, and set up a weekly check-in.",
+        pt:"Para resumir, as principais acoes sao: implementar o novo sistema, revisar o orcamento e definir um check-in semanal.",
+        answer:"To summarize",
+        words:[{w:"To summarize",cls:"expr",tr:"Para resumir"},{w:"action items",cls:"noun",tr:"acoes definidas"}]},
+      {id:"sp4",type:"match_columns",en:"Signposting Functions",pt:"Funcoes de sinalizacao",
+        pairs:[{a:"This brings us to...",b:"transicao de secao"},{a:"I'd like to draw your attention to...",b:"destacar informacao"},
+               {a:"To wrap up...",b:"encerrar a fala"},{a:"So far we've seen...",b:"recapitular o que foi dito"}],words:[]},
+      {id:"sp5",type:"word_order",
+        en:"I'd like to draw your attention to the increase in operational costs.",
+        pt:"Gostaria de chamar atencao para o aumento nos custos operacionais.",
+        scrambled:["I'd","like","to","draw","your","attention","to","the","increase","in","operational","costs."],
+        answer:"I'd like to draw your attention to the increase in operational costs.",
+        words:[{w:"draw your attention",cls:"expr",tr:"chamar atencao"},{w:"operational costs",cls:"noun",tr:"custos operacionais"}]},
+    ]
+  });
+
+  // ── Mission 8: Data & Q&A ──
+  f4.missions.push({
+    id:"data_qa_corp", name:"📊 Dados & Q&A", icon:"📊",
+    description:"Apresente dados com confianca e responda perguntas com clareza", xpTotal:90,
+    phrases:[
+      {id:"dq1",type:"pronunciation",
+        en:"As you can see from this chart, our revenue increased by 18% compared to last quarter.",
+        pt:"Como podem ver neste grafico, nossa receita aumentou 18% em comparacao ao trimestre passado.",
+        tip:"Aponte para o dado antes de interpreta-lo.",
+        words:[{w:"revenue",cls:"noun",tr:"receita"},{w:"compared to",cls:"expr",tr:"em comparacao a"}]},
+      {id:"dq2",type:"fill_blank",
+        en:"The numbers ___ a 25% reduction in processing time since we launched the new system.",
+        pt:"Os numeros indicam uma reducao de 25% no tempo de processamento desde que lancamos o novo sistema.",
+        answer:"indicate",
+        words:[{w:"indicate",cls:"verb",tr:"indicam"},{w:"processing time",cls:"noun",tr:"tempo de processamento"}]},
+      {id:"dq3",type:"match_columns",en:"Emphasis and Data Phrases",pt:"Frases de enfase e dados",
+        pairs:[{a:"It's important to note that...",b:"E importante notar que..."},
+               {a:"The key point is...",b:"O ponto chave e..."},
+               {a:"I want to emphasize that...",b:"Quero enfatizar que..."},
+               {a:"What stands out is...",b:"O que se destaca e..."}],words:[]},
+      {id:"dq4",type:"pronunciation",
+        en:"Thank you for that question. I'd be happy to clarify — the data refers specifically to the Santos operations unit.",
+        pt:"Obrigado pela pergunta. Terei prazer em esclarecer — os dados referem-se especificamente a unidade de operacoes de Santos.",
+        tip:"Para Q&A: sempre agradeca a pergunta antes de responder.",
+        words:[{w:"clarify",cls:"verb",tr:"esclarecer"},{w:"refers to",cls:"expr",tr:"refere-se a"}]},
+      {id:"dq5",type:"translate_pt_en",
+        en:"To put it another way, our costs went down while output went up.",
+        pt:"Em outras palavras, nossos custos diminuiram enquanto a producao aumentou.",
+        answer:"to put it another way our costs went down while output went up",
+        tip:"'To put it another way...' e uma expressao sofisticada para reformular.",
+        words:[{w:"to put it another way",cls:"expr",tr:"em outras palavras"},{w:"output",cls:"noun",tr:"producao/resultado"}]},
+    ]
+  });
+})();
+
+// ── PREPARE & PRESENT: TOPICOS EXTRAS ─────────────────────────────────────
+VICTOR_DATA.prepareTopics.push(
+  { id:"pp6", level:"B2", icon:"🧗", title:"Interview: Handling Difficult Questions",
+    ptTitle:"Entrevista: Respondendo perguntas dificeis", category:"interview",
+    prompt:"Write 5-6 sentences answering TWO of these tough interview questions:\n1. 'What is your greatest weakness?'\n2. 'Tell me about a time you failed.'\n3. 'Why are you leaving your current job?'",
+    ptPrompt:"Escreva 5-6 frases respondendo DUAS dessas perguntas dificeis:\n1. 'Qual e sua maior fraqueza?'\n2. 'Fale sobre uma vez que voce falhou.'\n3. 'Por que voce esta saindo do emprego atual?'",
+    example:"One area I am actively working on is public speaking. I sometimes feel nervous presenting to large groups, so I have been taking every opportunity to lead meetings and practice. Last year, I presented our Q2 results to senior management for the first time. It was challenging, but I received positive feedback and have continued to improve. I believe turning a weakness into a development goal shows self-awareness and commitment.",
+    tips:["Never say 'I have no weaknesses'","Frame weaknesses as areas of growth","For failure: focus on what you LEARNED","Use: 'One area I am working on is...'","Keep it positive and solution-focused"] },
+
+  { id:"pp7", level:"B2", icon:"🗺️", title:"Presentation: Transitions & Signposting",
+    ptTitle:"Apresentacao: Transicoes e sinalizacao", category:"presentation",
+    prompt:"Write a short presentation section (7-9 sentences) on a work topic of your choice. Use at least 4 signposting phrases to guide the audience: transition between points, highlight data, and summarize before closing.",
+    ptPrompt:"Escreva uma secao de apresentacao (7-9 frases) sobre um tema de trabalho. Use pelo menos 4 frases de sinalizacao para guiar o publico: transite entre os pontos, destaque dados e resuma antes de encerrar.",
+    example:"Let me start by reviewing what we achieved in Q3. First of all, our team exceeded the sales target by 12%. Moving on to the challenges we faced — our main obstacle was the delay in product delivery. I'd like to draw your attention to this chart, which shows the impact on client satisfaction. Building on that, we propose a new supplier evaluation process. To summarize, we hit our target despite the challenges, and we have a clear action plan. In conclusion, I am confident we can reach 15% growth next quarter.",
+    tips:["Use: 'Moving on to...', 'Building on that...', 'To summarize...'","Transition before changing topics — never jump abruptly","Reference visuals: 'As you can see from this chart...'","Signal the end: 'To wrap up...', 'In conclusion...'","Speak signposting phrases slowly — the audience needs time to follow"] },
+
+  { id:"pp8", level:"B2", icon:"🙋", title:"Presentation: Handling Q&A",
+    ptTitle:"Apresentacao: Respondendo perguntas ao vivo", category:"presentation",
+    prompt:"Write 5-6 sentences handling a tough Q&A scenario: someone asks a question you weren't expecting. Show how you acknowledge the question, respond confidently, and redirect if necessary.",
+    ptPrompt:"Escreva 5-6 frases lidando com um Q&A dificil: alguem faz uma pergunta inesperada. Mostre como voce reconhece a pergunta, responde com confianca e redireciona se necessario.",
+    example:"Thank you for that question — it is an important one. I want to make sure I give you an accurate answer, so let me confirm the exact figures and get back to you directly after the meeting. What I can tell you now is that the trend has been consistently positive over the last three quarters. To put it another way, the direction is clear even if I don't have the exact number in front of me. Does that answer part of your question, or would you like me to follow up with more detail?",
+    tips:["Always acknowledge: 'Thank you for that question...'","If unsure: 'I'd like to confirm that and get back to you'","Never guess or invent data","Redirect professionally: 'That falls slightly outside today scope, but...'","End with a check: 'Does that answer your question?'"] }
+);
