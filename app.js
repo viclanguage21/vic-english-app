@@ -1706,6 +1706,7 @@ async function loadDashboard(user){
   try{ renderDailyMissions(); }catch(e){ console.error("renderDailyMissions error:", e.message, e); }
   showView("view-dashboard");
   hideAuthLoading();
+  initOneSignal();
 
   // Diagnosis for new users
   if(!userData.diagnosisAnswers){
@@ -5510,60 +5511,47 @@ function trackAnswer(isCorrect, isVoice=false){
 // ── PUSH NOTIFICATIONS ─────────────────────────────────
 
 
-async function requestNotificationPermission(){
-  if(!("Notification" in window)) return;
-  if(Notification.permission==="granted"){
-    scheduleNotifications();
-    if(currentUser?.uid) registerFCMToken(currentUser.uid).catch(()=>{});
-    return;
-  }
-  if(Notification.permission!=="denied"){
-    const perm=await Notification.requestPermission();
-    if(perm==="granted"){
-      scheduleNotifications();
-      if(currentUser?.uid) registerFCMToken(currentUser.uid).catch(()=>{});
-    }
-  }
+// ── ONESIGNAL ────────────────────────────────────────────────────────────────
+const OS_APP_ID = "0d10ba5b-6831-4a78-aa5f-1b001370a487";
+
+function initOneSignal(){
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  window.OneSignalDeferred.push(async function(OneSignal){
+    await OneSignal.init({
+      appId: OS_APP_ID,
+      notifyButton: { enable: false },
+      allowLocalhostAsSecureOrigin: true,
+    });
+    // Tag com data da última visita — usado para segmentar lembretes no dashboard
+    const today = new Date().toISOString().slice(0,10);
+    OneSignal.User.addTag("last_visit", today).catch(()=>{});
+    if(currentUser?.uid) OneSignal.User.addTag("uid", currentUser.uid).catch(()=>{});
+  });
 }
 
-function scheduleNotifications(){
-  if(!("Notification" in window)||Notification.permission!=="granted") return;
-  if(_cfg.notifEnabled==="0") return;
-
-  localStorage.setItem("vic_last_visit", String(Date.now()));
-
-  // Schedule a 7pm reminder via service worker if user hasn't completed today's missions
-  const dp = getDailyProgress();
-  if(!dp.allComplete){
-    const now = new Date();
-    const target = new Date(); target.setHours(19,0,0,0);
-    const delay = target.getTime() - now.getTime();
-    if(delay > 0){
-      navigator.serviceWorker?.ready.then(reg => {
-        reg.active?.postMessage({
-          type: "SCHEDULE_NOTIF",
-          delay,
-          title: "VIC English 📚",
-          body: "Você não praticou hoje! 🔥 Seu streak está em risco.",
-        });
-      }).catch(()=>{});
-    }
-  }
+async function requestNotificationPermission(){
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  window.OneSignalDeferred.push(async function(OneSignal){
+    await OneSignal.Notifications.requestPermission();
+  });
 }
 
 // Ask for notifications with friendly banner after first mission
 function showNotifBanner(){
-  if(!("Notification" in window)||Notification.permission!=="default") return;
   if(_cfg.notifAsked) return;
   _setCfg("notifAsked","1");
   const banner=document.createElement("div");
   banner.className="notif-banner";
-  banner.innerHTML=`<span style="font-size:22px">🔔</span><div style="flex:1"><div style="font-weight:800;color:#fff">Ativar lembretes?</div><div style="font-size:12px;opacity:0.6">Receba frases motivacionais de filmes + lembretes diários</div></div><button style="padding:8px 16px;background:var(--p);border:none;border-radius:999px;color:#fff;font-weight:800;cursor:pointer;font-family:var(--font)" onclick="requestNotificationPermission();this.closest('.notif-banner').remove()">Ativar</button><button style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:18px;padding:4px 8px" onclick="this.closest('.notif-banner').remove()">✕</button>`;
+  banner.innerHTML=`<span style="font-size:22px">🔔</span><div style="flex:1"><div style="font-weight:800;color:#fff">Ativar lembretes?</div><div style="font-size:12px;opacity:0.6">Receba lembretes diários e não perca seu streak!</div></div><button style="padding:8px 16px;background:var(--p);border:none;border-radius:999px;color:#fff;font-weight:800;cursor:pointer;font-family:var(--font)" onclick="requestNotificationPermission();this.closest('.notif-banner').remove()">Ativar</button><button style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:18px;padding:4px 8px" onclick="this.closest('.notif-banner').remove()">✕</button>`;
   const daily=document.querySelector(".daily-block");
   daily?.parentNode?.insertBefore(banner, daily);
 }
 
+function scheduleNotifications(){ /* OneSignal gerencia — noop */ }
+
 // ── PUSH DO PAINEL ADMIN ─────────────────────────────────────────────────────
+// O envio manual agora é feito pelo dashboard OneSignal (onesignal.com)
+// ou via API REST abaixo:
 async function sendPushFromAdmin(){
   const title = document.getElementById("push-title")?.value?.trim();
   const body  = document.getElementById("push-body")?.value?.trim();
@@ -5573,12 +5561,30 @@ async function sendPushFromAdmin(){
   if(btn){ btn.disabled=true; btn.textContent="Enviando..."; }
 
   try{
-    const data = await callSendPushToAll({ title, body });
-    showXpToast(`✅ Push enviado para ${data.sent} dispositivos!`);
-    if(document.getElementById("push-title")) document.getElementById("push-title").value="";
-    if(document.getElementById("push-body"))  document.getElementById("push-body").value="";
+    const res = await fetch("https://api.onesignal.com/notifications", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Basic OS_REST_API_KEY", // substitua no dashboard
+      },
+      body: JSON.stringify({
+        app_id: OS_APP_ID,
+        included_segments: ["All"],
+        headings: { en: title, pt: title },
+        contents:  { en: body,  pt: body  },
+        url: "https://app.viclanguage.com.br",
+      }),
+    });
+    const data = await res.json();
+    if(data.id){
+      showXpToast(`✅ Push enviado para ${data.recipients||"todos"} usuários!`);
+      if(document.getElementById("push-title")) document.getElementById("push-title").value="";
+      if(document.getElementById("push-body"))  document.getElementById("push-body").value="";
+    } else {
+      showXpToast("❌ Erro: " + (data.errors?.[0]||"desconhecido"));
+    }
   }catch(e){
-    showXpToast("❌ Erro ao enviar: " + (e.message||"desconhecido"));
+    showXpToast("❌ Erro ao enviar: " + e.message);
   }finally{
     if(btn){ btn.disabled=false; btn.textContent="📣 Enviar para todos"; }
   }
