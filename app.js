@@ -451,7 +451,7 @@ function renderMissionTexts() {
     const el = document.getElementById(id);
     if (el) el.textContent = t("previous");
   });
-  ["btn-next-exercise","btn-next-mc","btn-next-fill","btn-next-order","btn-next-main"].forEach(id => {
+  ["btn-next-main"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.textContent = t("next");
   });
@@ -2181,30 +2181,15 @@ function renderMission(){
   document.getElementById("phrase-counter").textContent      =`${currentPhraseIndex+1}/${total}`;
   document.getElementById("mission-progress-bar").style.width=`${Math.round(((currentPhraseIndex+1)/total)*100)}%`;
   const ptEl=document.getElementById("phrase-pt");
-  const dicaBtn=document.getElementById("btn-dica");
-  const showDica = phrase.pt && !["translate_en_pt","translate_pt_en","memory_match","match_columns"].includes(phrase.type);
   if(ptEl){
-    if(showDica){
+    if(phrase.pt&&phrase.type!=="translate_en_pt"&&phrase.type!=="translate_pt_en"){
       ptEl.innerHTML=`<span class="phrase-pt-label">🇧🇷</span> ${phrase.pt}`;
-      ptEl.style.display="none";
-    } else if(phrase.pt && ["translate_pt_en"].includes(phrase.type)){
+      ptEl.style.display="";
+    } else if(phrase.pt&&phrase.type==="translate_pt_en"){
       ptEl.innerHTML=`<span class="phrase-pt-label">🇧🇷</span> ${phrase.pt}`;
       ptEl.style.display="";
     } else {
-      ptEl.textContent="";
-      ptEl.style.display="none";
-    }
-  }
-  if(dicaBtn){
-    if(showDica){
-      dicaBtn.style.display="inline-flex";
-      dicaBtn.classList.remove("used");
-      dicaBtn.onclick=()=>{
-        if(ptEl){ ptEl.style.display=""; }
-        dicaBtn.classList.add("used");
-      };
-    } else {
-      dicaBtn.style.display="none";
+      ptEl.textContent=""; ptEl.style.display="none";
     }
   }
   document.getElementById("phrase-tip").textContent          =phrase.tip?`💡 ${stripEmoji(phrase.tip)}`:"";
@@ -2246,14 +2231,25 @@ function renderPhraseEN(phrase,spoken){
 
 function renderVocab(phrase){
   const el=document.getElementById("vocab-list"); if(!el) return;
-  if(!phrase.words?.length){el.style.display="none";return;}
+  const dicaBtn=document.getElementById("btn-dica");
+  if(!phrase.words?.length){
+    el.style.display="none";
+    if(dicaBtn) dicaBtn.style.display="none";
+    return;
+  }
   el.style.display="flex";
+  el.classList.add("dica-mode");
   el.innerHTML=phrase.words.map(w=>`<div class="vocab-item" data-word="${w.w}" data-tr="${w.tr}"><span class="vocab-word">${w.w}</span><span class="vocab-class ${w.cls}">${w.cls}</span><span class="vocab-translation">= ${w.tr}</span><span class="vocab-speaker">🔊</span></div>`).join("");
   el.querySelectorAll(".vocab-item").forEach(item=>{
     item.querySelector(".vocab-word")?.addEventListener("click",()=>SoundFX.speakEN(item.dataset.word),{ signal: _phraseAC?.signal });
     item.querySelector(".vocab-translation")?.addEventListener("click",()=>SoundFX.speakPT(item.dataset.tr),{ signal: _phraseAC?.signal });
     item.querySelector(".vocab-speaker")?.addEventListener("click",()=>SoundFX.speakEN(item.dataset.word),{ signal: _phraseAC?.signal });
   });
+  if(dicaBtn){
+    dicaBtn.style.display="inline-flex";
+    dicaBtn.classList.remove("used");
+    dicaBtn.onclick=()=>{ el.classList.remove("dica-mode"); dicaBtn.classList.add("used"); };
+  }
 }
 
 // ── EXERCISE UI ───────────────────────────────────────────────────────────────
@@ -2560,8 +2556,8 @@ async function autoAdvance(score){
 }
 
 function updateNavButtons(nextUnlocked, score){
-  // NEXT — all next buttons including main bottom one
-  document.querySelectorAll(".btn-next-exercise, .btn-next-exercise-main, #btn-next-mc").forEach(btn=>{
+  // NEXT — single bottom next button only
+  document.querySelectorAll("#btn-next-main").forEach(btn=>{
     btn.style.display="block";
     if(nextUnlocked){
       btn.classList.add("visible");
