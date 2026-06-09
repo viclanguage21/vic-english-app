@@ -1714,11 +1714,10 @@
       </div>
     </div>
 
-    <!-- Stats row -->
-    <div class="profile-stats-row">
-      <div class="profile-stat"><span id="ps-xp">0</span><small data-i18n="stat_xp">XP Total</small></div>
-      <div class="profile-stat"><span id="ps-days">0</span><small data-i18n="stat_days">Dias Praticados</small></div>
-      <div class="profile-stat"><span id="ps-missions">0</span><small data-i18n="stat_missions">Missões</small></div>
+    <!-- Language mini selector -->
+    <div class="profile-lang-mini-row">
+      <button class="plb-mini" id="lang-btn-pt" onclick="setLang('pt')">🇧🇷 PT</button>
+      <button class="plb-mini" id="lang-btn-en" onclick="setLang('en')">🇺🇸 EN</button>
     </div>
 
     <!-- Commitment — right after XP -->
@@ -1766,21 +1765,6 @@
     <div class="profile-section" id="profile-goal-section" style="display:none">
       <div class="profile-section-title" id="prof-title-goal">💬 Seu objetivo pessoal</div>
       <div class="profile-goal-text" id="profile-goal-text"></div>
-    </div>
-
-    <!-- Language selector -->
-    <div class="profile-section">
-      <div class="profile-section-title" id="lang-section-label">🌐 Idioma do app</div>
-      <div class="profile-lang-row">
-        <button class="profile-lang-btn" id="lang-btn-pt" onclick="setLang('pt')">
-          <span class="plb-flag">🇧🇷</span>
-          <span class="plb-label">Português</span>
-        </button>
-        <button class="profile-lang-btn" id="lang-btn-en" onclick="setLang('en')">
-          <span class="plb-flag">🇺🇸</span>
-          <span class="plb-label">English</span>
-        </button>
-      </div>
     </div>
 
     <!-- Account settings -->

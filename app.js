@@ -123,12 +123,7 @@ function applyLang() {
     const active = _lang === lang;
     // Botões no perfil/configurações
     const btn = document.getElementById(`lang-btn-${lang}`);
-    if (btn) {
-      btn.style.background  = active ? "rgba(201,147,58,0.25)" : "rgba(255,255,255,0.05)";
-      btn.style.borderColor = active ? "rgba(201,147,58,0.5)"  : "rgba(255,255,255,0.15)";
-      btn.style.color       = active ? "#e4b45c" : "#fff";
-      btn.style.transform   = active ? "scale(1.08)" : "scale(1)";
-    }
+    if (btn) btn.classList.toggle("active", active);
     // Botões na tela de login
     const authBtn = document.getElementById(`auth-lang-${lang}`);
     if (authBtn) {
@@ -4889,13 +4884,15 @@ function renderCommitment(){
   else if(streak>=3||todayDone>=2){level="⚡ Médio";color="#f59e0b";msg="Bom ritmo! Tente praticar todos os dias para subir o nível.";}
   else{level="💤 Baixo";color="#ef4444";msg="Tente fazer pelo menos 3 exercícios por dia para evoluir mais rápido.";}
 
+  const xp=userData.xp||0;
+  const daysPracticed=(userData.practicedDays||[]).length||0;
   container.innerHTML=`
     <div class="commitment-level" style="color:${color}">${level}</div>
     <div class="commitment-msg">${msg}</div>
     <div class="commitment-stats">
-      <div class="commitment-stat"><span>${streak}</span><small>dias seguidos</small></div>
-      <div class="commitment-stat"><span>${todayDone}</span><small>hoje</small></div>
-      <div class="commitment-stat"><span>${completed}</span><small>missões totais</small></div>
+      <div class="commitment-stat"><span>${xp.toLocaleString()}</span><small>XP Total</small></div>
+      <div class="commitment-stat"><span>${daysPracticed}</span><small>Dias Praticados</small></div>
+      <div class="commitment-stat"><span>${completed}</span><small>Missões</small></div>
     </div>
   `;
 }
