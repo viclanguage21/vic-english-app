@@ -6084,3 +6084,67 @@ VICTOR_DATA.flashcardDecks.push({
     }
   );
 })();
+
+// ── Segmento EVENTOS (hidden — em desenvolvimento) ─────────────────────────────
+(function(){
+  VICTOR_DATA.segments.push({
+    id:"eventos", name:"Eventos", icon:"🎪", available:true, hidden:true,
+    phases:[
+      {
+        id:"f1", name:"Fase 1 🎤", subtitle:"A1 — Vocabulário Essencial de Eventos", unlocked:true,
+        missions:[
+          {
+            id:"vocab_ev_f1", name:"📝 Termos Básicos", icon:"📝",
+            description:"Vocabulário fundamental para trabalhar em eventos", xpTotal:60,
+            phrases:[
+              {id:"mc1",type:"multiple_choice",en:"What does 'venue' mean? 🏛️",pt:"O que significa 'venue'?",options:["Local do evento 🏛️","Ingresso","Palestrante","Cronograma"],correct:0,words:[{w:"venue",cls:"noun",tr:"local do evento"}]},
+              {id:"mc2",type:"multiple_choice",en:"What is an 'attendee'? 👤",pt:"O que é um 'attendee'?",options:["Participante 👤","Organizador","Patrocinador","Fornecedor"],correct:0,words:[{w:"attendee",cls:"noun",tr:"participante"}]},
+              {id:"mc3",type:"multiple_choice",en:"'Schedule' in an events context means: 📅",pt:"'Schedule' no contexto de eventos significa:",options:["Programação / cronograma 📅","Entrada","Palco","Equipamento"],correct:0,words:[{w:"schedule",cls:"noun",tr:"programação"}]},
+              {id:"mc4",type:"multiple_choice",en:"What is a 'keynote speaker'? 🎤",pt:"O que é um 'keynote speaker'?",options:["Palestrante principal 🎤","Mestre de cerimônias","Moderador","Convidado especial"],correct:0,words:[{w:"keynote",cls:"adj",tr:"principal"}]},
+              {id:"tr1",type:"translate_pt_en",en:"The event will be held at the convention center.",pt:"O evento será realizado no centro de convenções.",answer:"the event will be held at the convention center",words:[{w:"held",cls:"verb",tr:"realizado"},{w:"convention center",cls:"noun",tr:"centro de convenções"}]},
+            ]
+          },
+          {
+            id:"check_ev_f1", name:"✅ Check-in & Recepção", icon:"✅",
+            description:"Frases de boas-vindas e check-in em eventos", xpTotal:60,
+            phrases:[
+              {id:"p1",type:"pronunciation",en:"Welcome to the event! Please show your badge at the entrance. 🎪",pt:"Bem-vindo ao evento! Por favor, mostre seu crachá na entrada.",words:[{w:"badge",cls:"noun",tr:"crachá"},{w:"entrance",cls:"noun",tr:"entrada"}]},
+              {id:"p2",type:"pronunciation",en:"May I see your registration confirmation? 📋",pt:"Posso ver sua confirmação de inscrição?",words:[{w:"registration",cls:"noun",tr:"inscrição"},{w:"confirmation",cls:"noun",tr:"confirmação"}]},
+              {id:"mc1",type:"multiple_choice",en:"'RSVP' stands for: 📩",pt:"'RSVP' significa:",options:["Please confirm your attendance 📩","Reserved seating for VIP","Registration starts very promptly","Random seat venue plan"],correct:0,words:[{w:"RSVP",cls:"abbrev",tr:"confirmação de presença"}]},
+              {id:"tr1",type:"translate_pt_en",en:"Your seat is in row B, number 12.",pt:"Seu assento está na fileira B, número 12.",answer:"your seat is in row b number 12",words:[{w:"row",cls:"noun",tr:"fileira"},{w:"seat",cls:"noun",tr:"assento"}]},
+            ]
+          },
+        ]
+      },
+      {
+        id:"f2", name:"Fase 2 🎭", subtitle:"A2 — Gestão e Logística de Eventos", unlocked:false,
+        missions:[
+          {
+            id:"setup_ev_f2", name:"🔧 Setup & Logística", icon:"🔧",
+            description:"Vocabulário de montagem e logística de eventos", xpTotal:70,
+            phrases:[
+              {id:"mc1",type:"multiple_choice",en:"'Breakout session' means: 📌",pt:"'Breakout session' significa:",options:["Sessão paralela / grupo menor 📌","Intervalo para café","Encerramento do evento","Sessão plenária"],correct:0,words:[{w:"breakout",cls:"adj",tr:"paralela/separada"}]},
+              {id:"mc2",type:"multiple_choice",en:"What is 'catering'? 🍽️",pt:"O que é 'catering'?",options:["Serviço de alimentação 🍽️","Decoração do evento","Som e iluminação","Segurança"],correct:0,words:[{w:"catering",cls:"noun",tr:"serviço de alimentação"}]},
+              {id:"p1",type:"pronunciation",en:"The audiovisual setup needs to be tested before the opening ceremony. 🎬",pt:"O equipamento audiovisual precisa ser testado antes da cerimônia de abertura.",words:[{w:"audiovisual",cls:"adj",tr:"audiovisual"},{w:"setup",cls:"noun",tr:"configuração/montagem"},{w:"ceremony",cls:"noun",tr:"cerimônia"}]},
+              {id:"tr1",type:"translate_pt_en",en:"Please set up the stage and check all the microphones.",pt:"Por favor, monte o palco e verifique todos os microfones.",answer:"please set up the stage and check all the microphones",words:[{w:"set up",cls:"verb",tr:"montar"},{w:"stage",cls:"noun",tr:"palco"}]},
+            ]
+          },
+        ]
+      },
+      {
+        id:"f3", name:"Fase 3 🌟", subtitle:"B1 — Comunicação Profissional em Eventos", unlocked:false,
+        missions:[
+          {
+            id:"comm_ev_f3", name:"💬 Comunicação Avançada", icon:"💬",
+            description:"Inglês para situações complexas em eventos", xpTotal:80,
+            phrases:[
+              {id:"mc1",type:"multiple_choice",en:"A 'panel discussion' is: 🎙️",pt:"Um 'panel discussion' é:",options:["Debate com vários especialistas 🎙️","Apresentação solo","Workshop prático","Sessão de networking"],correct:0,words:[{w:"panel",cls:"noun",tr:"painel"},{w:"discussion",cls:"noun",tr:"discussão"}]},
+              {id:"p1",type:"pronunciation",en:"On behalf of the organizing committee, I'd like to welcome all our distinguished guests. 🤝",pt:"Em nome da comissão organizadora, gostaria de dar boas-vindas a todos os nossos ilustres convidados.",words:[{w:"on behalf of",cls:"phrase",tr:"em nome de"},{w:"distinguished",cls:"adj",tr:"ilustre/distinto"}]},
+              {id:"tr1",type:"translate_pt_en",en:"The networking session will take place after the closing ceremony.",pt:"A sessão de networking acontecerá após a cerimônia de encerramento.",answer:"the networking session will take place after the closing ceremony",words:[{w:"networking",cls:"noun",tr:"networking"},{w:"closing ceremony",cls:"phrase",tr:"cerimônia de encerramento"}]},
+            ]
+          },
+        ]
+      },
+    ]
+  });
+})();

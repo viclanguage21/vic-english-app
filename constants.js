@@ -931,14 +931,14 @@ export const SEG_NAMES = {
     hotelaria:"Hotelaria", restaurantes:"Restaurantes", aeroporto:"Aeroporto",
     cruzeiros:"Cruzeiros", corporativo:"Corporativo", saude:"Saúde",
     transporte:"Transporte", varejo:"Varejo", turismo_santos:"Turismo Santos", turismo:"Turismo Santos",
-    gramatica:"Gramática", naval:"Naval",
+    gramatica:"Gramática", naval:"Naval", eventos:"Eventos",
   },
   en: {
     maritimo:"Maritime", comex:"COMEX", offshore:"Offshore",
     hotelaria:"Hospitality", restaurantes:"Restaurants", aeroporto:"Airport",
     cruzeiros:"Cruises", corporativo:"Corporate", saude:"Healthcare",
     transporte:"Transport", varejo:"Retail", turismo_santos:"Santos Tourism",
-    gramatica:"Grammar", naval:"Naval Engineering",
+    gramatica:"Grammar", naval:"Naval Engineering", eventos:"Events",
   },
   es: {
     maritimo:"Marítimo", comex:"COMEX", offshore:"Petróleo",
