@@ -5979,6 +5979,7 @@ async function _handleAuth(user){
 
   // Block unverified email users (Google logins are pre-verified, guests are local)
   if(!user.emailVerified && !user.isLocalGuest &&
+     user.uid !== OWNER_UID &&
      user.providerData?.[0]?.providerId === "password"){
     hideLoadingSplash();
     const addrEl = document.getElementById("verify-email-addr");
