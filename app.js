@@ -2352,7 +2352,7 @@ function renderVocab(phrase){
     return;
   }
   el.style.display="flex";
-  el.classList.add("dica-mode");
+  el.classList.remove("dica-open"); // start collapsed
   el.innerHTML=phrase.words.map(w=>`<div class="vocab-item" data-word="${w.w}" data-tr="${w.tr}"><span class="vocab-word">${w.w}</span><span class="vocab-class ${w.cls}">${w.cls}</span><span class="vocab-translation">= ${w.tr}</span><span class="vocab-speaker">🔊</span></div>`).join("");
   el.querySelectorAll(".vocab-item").forEach(item=>{
     item.querySelector(".vocab-word")?.addEventListener("click",()=>SoundFX.speakEN(item.dataset.word),{ signal: _phraseAC?.signal });
@@ -2361,8 +2361,14 @@ function renderVocab(phrase){
   });
   if(dicaBtn){
     dicaBtn.style.display="inline-flex";
-    dicaBtn.classList.remove("used");
-    dicaBtn.onclick=()=>{ el.classList.remove("dica-mode"); dicaBtn.classList.add("used"); };
+    dicaBtn.classList.remove("open");
+    dicaBtn.innerHTML="💡 Ver Dica";
+    dicaBtn.onclick=()=>{
+      const isOpen=el.classList.contains("dica-open");
+      el.classList.toggle("dica-open",!isOpen);
+      dicaBtn.classList.toggle("open",!isOpen);
+      dicaBtn.innerHTML=isOpen?"💡 Ver Dica":"🔼 Esconder Dica";
+    };
   }
 }
 
@@ -2389,16 +2395,14 @@ function renderExerciseUI(phrase){
       btn.querySelector(".mc-speak-btn").addEventListener("click",e=>{
         e.stopPropagation();
         const clean=stripEmoji(opt);
-        // if phrase is translate_pt_en, options are PT; otherwise EN
-        const phrase=getPhrase();
-        if(phrase?.type==="translate_en_pt"||SoundFX._isPT(clean)) SoundFX.speakPT(clean);
-        else SoundFX.speakEN(clean);
+        const ph=getPhrase();
+        _optionIsPT(clean,ph)?SoundFX.speakPT(clean):SoundFX.speakEN(clean);
       });
       btn.addEventListener("click",()=>{
         if(exerciseAnswered) return; exerciseAnswered=true;
         wrap.querySelectorAll(".mc-option").forEach((b,i)=>{b.disabled=true;if(i===newCorrect)b.classList.add("correct");else if(i===newIdx&&newIdx!==newCorrect)b.classList.add("wrong");});
         const correctText=stripEmoji(phrase.options[phrase.correct]);
-        SoundFX._isPT(correctText)?SoundFX.speakPT(correctText):SoundFX.speakEN(correctText);
+        _optionIsPT(correctText,phrase)?SoundFX.speakPT(correctText):SoundFX.speakEN(correctText);
         showNextBtn('btn-next-exercise', newIdx===newCorrect?10:0);
       });
       wrap.appendChild(btn);
@@ -2550,6 +2554,28 @@ function checkWordOrder(){
   fb.style.display="block";
   SoundFX._isPT(correct)?SoundFX.speakPT(correct):SoundFX.speakEN(correct);
   showNextBtn('btn-next-order', result.score);
+}
+
+// ── TTS LANGUAGE DETECTION FOR MC OPTIONS ─────────────────────────────────────
+// Returns true if the option text should be spoken in Portuguese.
+// Uses explicit type, then structural clues, then character/word heuristics.
+function _optionIsPT(optText, phrase){
+  if(phrase?.type==="translate_pt_en") return false;
+  if(phrase?.type==="translate_en_pt") return true;
+  const clean=stripEmoji(optText).trim();
+  // Accented characters → definitely PT
+  if(/[àáâãçèéêëìíîïòóôõöùúûü]/i.test(clean)) return true;
+  // Slash translations like "Carga / mercadoria" → PT
+  if(clean.includes("/")) return true;
+  // Question asks "What does X mean?" or "X means:" → options are PT translations
+  if(/(what does|what is the '|' means:|'[^']* means:)/i.test(phrase?.en||"")) return true;
+  // Long sentence with common EN pronouns → likely an EN response option
+  if(clean.length>20 && /\b(I am|I will|You can|Please|Of course|Not my|Best regards)\b/i.test(clean)) return false;
+  // Words array: if option matches a translation field → PT
+  for(const w of (phrase?.words||[])){
+    if((w.tr||"").length>2 && clean.toLowerCase().includes(w.tr.toLowerCase())) return true;
+  }
+  return SoundFX._isPT(clean);
 }
 
 // ── TTS ────────────────────────────────────────────────────────────────────────
