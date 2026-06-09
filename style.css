@@ -4036,7 +4036,7 @@ body.light-mode .dlg-card * { color: inherit; }
   .writing-check-btn { width: 100% !important; padding: 14px !important; font-size: 15px !important; }
   .auth-logo-img { width: 200px !important; height: 200px !important; }
   .dash-header { padding: 8px 12px !important; }
-  .dash-logo-img { width: 48px !important; height: 48px !important; }
+  .dash-logo-img { width: auto !important; height: 38px !important; max-width: 160px !important; }
 }
 
 /* ══ PREV/NEXT EXERCISE BUTTONS ════════════════════════ */
@@ -4348,7 +4348,7 @@ body.light-mode .grammar-core-banner .gc-tags span { background: rgba(91,33,182,
 
 /* Dashboard header — more filled */
 .dash-header { padding: 16px !important; min-height: 80px; }
-.dash-logo-img { width: 70px !important; height: 70px !important; }
+.dash-logo-img { width: auto !important; height: 46px !important; max-width: 180px !important; }
 
 /* Initiante label bigger */
 .greeting-time-en { font-size: 18px !important; font-weight: 800 !important; }
@@ -5135,9 +5135,11 @@ body.light-mode .curiosity-text { color: rgba(42,16,96,0.55) !important; }
   margin-bottom: 4px !important;
 }
 .dash-logo-img, #dash-logo-img {
-  width: 70px !important; height: 70px !important;
+  height: 46px !important;
+  width: auto !important;
+  max-width: 180px !important;
   object-fit: contain !important;
-  border-radius: 12px !important;
+  border-radius: 0 !important;
 }
 
 /* ══ ABOUT BUTTON ═══════════════════════════════════════ */
