@@ -190,10 +190,14 @@ const utcHour = new Date().getUTCHours();
 const brtHour = ((utcHour - 3) + 24) % 24;
 const slot    = String(brtHour).padStart(2, "0");
 
-const pool = POOLS[slot];
+let pool = POOLS[slot];
+
+// Se não há pool para este horário (ex: disparo manual fora dos horários programados),
+// escolhe um pool aleatório para que o teste manual sempre envie algo.
 if (!pool) {
-  console.log(`ℹ️  Sem pool para slot ${slot}h BRT (${utcHour}h UTC) — nada enviado.`);
-  process.exit(0);
+  const allPools = Object.values(POOLS);
+  pool = allPools[Math.floor(Math.random() * allPools.length)];
+  console.log(`ℹ️  Slot ${slot}h BRT fora dos horários — usando pool aleatório para teste.`);
 }
 
 const msg = pick(pool);
