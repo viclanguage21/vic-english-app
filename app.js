@@ -5426,13 +5426,19 @@ function checkBadges(){
   const newBadges = BADGES.filter(b => !earned.includes(b.id) && b.condition(stats));
   if(!newBadges.length) return;
 
-  // Save to userData
+  // Save ALL newly earned badges silently (including catch-up from other segments)
   const updated = [...earned, ...newBadges.map(b=>b.id)];
   userData.badges = updated;
   if(currentUser) saveProgressSafe(currentUser.uid, {badges:updated});
 
-  // Show only 1 badge per session — avoid badge flooding
-  showBadgeUnlock(newBadges[0]);
+  // Only SHOW seg_ badges from the active segment — never interrupt with an unrelated segment badge
+  const toShow = newBadges.filter(b => {
+    if(!b.id.startsWith("seg_")) return true;
+    const {segId} = _parseSegBadgeId(b.id);
+    return segId === currentSegmentId;
+  });
+  if(!toShow.length) return;
+  showBadgeUnlock(toShow[0]);
 }
 
 function showBadgeUnlock(badge){
