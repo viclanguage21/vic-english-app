@@ -6616,3 +6616,116 @@ VICTOR_DATA.flashcardDecks.push({
     ]
   });
 })();
+
+// ── CORPORATIVO: PREPARE & PRESENT (f4) ───────────────────────────────────
+(function(){
+  const seg=VICTOR_DATA.segments.find(s=>s.id==="corporativo"); if(!seg) return;
+  const f4=seg.phases.find(p=>p.id==="f4"); if(!f4) return;
+  f4.name="Fase 4 🎙️";
+  f4.subtitle="B1–B2 — Entrevistas & Apresentações";
+
+  // ── Mission 1: Interview Prep ──
+  f4.missions.push({
+    id:"interview_corp", name:"🎙️ Entrevista — Prepare-se", icon:"🎙️",
+    description:"Pratique as respostas mais importantes de uma entrevista em inglês", xpTotal:100,
+    phrases:[
+      {id:"iv1",type:"pronunciation",
+        en:"I am a professional with five years of experience in project management and communication with stakeholders.",
+        pt:"Sou um profissional com cinco anos de experiência em gestão de projetos e comunicação com stakeholders.",
+        tip:"'Tell me about yourself' — comece com experiência, depois mencione habilidades.",
+        words:[{w:"stakeholders",cls:"noun",tr:"partes interessadas"},{w:"project management",cls:"noun",tr:"gestão de projetos"}]},
+      {id:"iv2",type:"translate_pt_en",
+        en:"In five years, I want to lead strategic projects and help grow the department's budget.",
+        pt:"Em cinco anos, quero liderar projetos estratégicos e ajudar a expandir o orçamento do departamento.",
+        answer:"in five years i want to lead strategic projects and help grow the department's budget",
+        tip:"'Where do you see yourself in 5 years?' — mostre ambição e alinhamento com a empresa.",
+        words:[{w:"strategic",cls:"adj",tr:"estratégico"},{w:"budget",cls:"noun",tr:"orçamento"}]},
+      {id:"iv3",type:"word_order",
+        en:"I organized a meeting to align expectations and presented a clear proposal.",
+        pt:"Organizei uma reunião para alinhar expectativas e apresentei uma proposta clara.",
+        scrambled:["I","organized","a","meeting","to","align","expectations","and","presented","a","clear","proposal."],
+        answer:"I organized a meeting to align expectations and presented a clear proposal.",
+        tip:"'Tell me about a challenge' — use STAR: Situação, Tarefa, Ação, Resultado.",
+        words:[{w:"align",cls:"verb",tr:"alinhar"},{w:"proposal",cls:"noun",tr:"proposta"}]},
+      {id:"iv4",type:"fill_blank",
+        en:"My greatest strength is meeting ___ without compromising the quality of my work. 💪",
+        pt:"Minha maior força é cumprir prazos sem comprometer a qualidade do meu trabalho.",
+        answer:"deadlines",
+        tip:"'What are your strengths?' — seja específico e dê um exemplo real.",
+        words:[{w:"deadlines",cls:"noun",tr:"prazos"}]},
+      {id:"iv5",type:"multiple_choice",
+        en:"Interviewer: 'How do you prioritize your workload?' — The most professional answer is: 📋",
+        pt:"Entrevistador: 'Como você prioriza seu trabalho?' — A resposta mais profissional é:",
+        options:[
+          "I use a detailed agenda, set priorities based on deadlines, and communicate progress transparently. ✅",
+          "I do whatever my manager tells me to do.",
+          "I work on whatever seems most interesting first.",
+          "I try my best and hope for the best."
+        ],correct:0,
+        words:[{w:"agenda",cls:"noun",tr:"agenda/pauta"},{w:"deadlines",cls:"noun",tr:"prazos"},{w:"transparently",cls:"adv",tr:"com transparência"}]},
+    ]
+  });
+
+  // ── Mission 2: Presentation Coach — Abertura ──
+  f4.missions.push({
+    id:"pres_open_corp", name:"📊 Apresentação — Abertura", icon:"📊",
+    description:"Abra sua apresentação com confiança e clareza", xpTotal:80,
+    phrases:[
+      {id:"po1",type:"pronunciation",
+        en:"Good morning everyone. Today I will present our proposal for the next quarter. I will structure my talk into four main parts.",
+        pt:"Bom dia a todos. Hoje vou apresentar nossa proposta para o próximo trimestre. Vou estruturar minha fala em quatro partes principais.",
+        tip:"Sempre comece anunciando a estrutura — os ouvintes ficam mais atentos.",
+        words:[{w:"proposal",cls:"noun",tr:"proposta"},{w:"quarter",cls:"noun",tr:"trimestre"}]},
+      {id:"po2",type:"translate_pt_en",
+        en:"The goal of this presentation is to review our KPIs and discuss process improvements.",
+        pt:"O objetivo desta apresentação é revisar nossos KPIs e discutir melhorias no processo.",
+        answer:"the goal of this presentation is to review our kpis and discuss process improvements",
+        words:[{w:"KPIs",cls:"abbrev",tr:"indicadores de desempenho"},{w:"process improvements",cls:"noun",tr:"melhorias no processo"}]},
+      {id:"po3",type:"fill_blank",
+        en:"Please feel free to ask ___ at the end — I'll leave time for discussion. 🙋",
+        pt:"Sinta-se à vontade para fazer perguntas no final — deixarei tempo para discussão.",
+        answer:"questions",
+        words:[{w:"discussion",cls:"noun",tr:"discussão"}]},
+      {id:"po4",type:"word_order",
+        en:"I will keep this presentation to fifteen minutes and then open for questions.",
+        pt:"Vou manter esta apresentação em quinze minutos e depois abrir para perguntas.",
+        scrambled:["I","will","keep","this","presentation","to","fifteen","minutes","and","then","open","for","questions."],
+        answer:"I will keep this presentation to fifteen minutes and then open for questions.",
+        words:[{w:"open for questions",cls:"expr",tr:"abrir para perguntas"}]},
+    ]
+  });
+
+  // ── Mission 3: Presentation Coach — Desenvolvimento & Encerramento ──
+  f4.missions.push({
+    id:"pres_body_corp", name:"📈 Apresentação — Dados & Conclusão", icon:"📈",
+    description:"Apresente dados, proponha soluções e feche com impacto", xpTotal:90,
+    phrases:[
+      {id:"pb1",type:"pronunciation",
+        en:"Last quarter we faced challenges related to budget constraints and stakeholder alignment. Three main issues were identified.",
+        pt:"No último trimestre enfrentamos desafios relacionados a restrições de orçamento e alinhamento com stakeholders. Três problemas principais foram identificados.",
+        tip:"Contextualize antes de propor a solução — isso cria urgência.",
+        words:[{w:"budget constraints",cls:"noun",tr:"restrições de orçamento"},{w:"alignment",cls:"noun",tr:"alinhamento"}]},
+      {id:"pb2",type:"translate_pt_en",
+        en:"Our proposal is to implement a new weekly follow-up system to monitor KPIs in real time.",
+        pt:"Nossa proposta é implementar um novo sistema de acompanhamento semanal para monitorar KPIs em tempo real.",
+        answer:"our proposal is to implement a new weekly follow-up system to monitor kpis in real time",
+        words:[{w:"follow-up",cls:"noun",tr:"acompanhamento"},{w:"monitor",cls:"verb",tr:"monitorar"}]},
+      {id:"pb3",type:"fill_blank",
+        en:"As you can see from this ___, revenue increased by fifteen percent this quarter. 📊",
+        pt:"Como podem ver neste gráfico, a receita aumentou 15% neste trimestre.",
+        answer:"chart",
+        tip:"Use 'As you can see from this chart/slide/data...' para guiar a atenção.",
+        words:[{w:"chart",cls:"noun",tr:"gráfico"},{w:"revenue",cls:"noun",tr:"receita"}]},
+      {id:"pb4",type:"pronunciation",
+        en:"In summary, our solution will reduce costs and improve results. The next step is to approve the proposal by end of this week.",
+        pt:"Em resumo, nossa solução reduzirá custos e melhorará os resultados. O próximo passo é aprovar a proposta até o final desta semana.",
+        tip:"Sempre finalize com um 'next step' claro — isso fecha a apresentação com ação.",
+        words:[{w:"approve",cls:"verb",tr:"aprovar"},{w:"next step",cls:"noun",tr:"próximo passo"}]},
+      {id:"pb5",type:"translate_pt_en",
+        en:"Thank you for your feedback. I will send a follow-up email after the meeting with all the action items.",
+        pt:"Obrigado pelo feedback de todos. Enviarei um e-mail de acompanhamento após a reunião com todas as ações definidas.",
+        answer:"thank you for your feedback i will send a follow-up email after the meeting with all the action items",
+        words:[{w:"action items",cls:"noun",tr:"tarefas/ações definidas"},{w:"follow-up",cls:"noun",tr:"acompanhamento"}]},
+    ]
+  });
+})();
