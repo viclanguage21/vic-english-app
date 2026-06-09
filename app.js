@@ -4724,7 +4724,7 @@ function renderBadges(){
   const container=document.getElementById("profile-badges-grid"); if(!container) return;
   const earned=userData?.badges||[];
   const stats=getBadgeStats();
-  const cats={momento:"⚡ Momento",performance:"🔥 Performance",resiliencia:"⚔️ Resiliência",dominio:"🧠 Domínio",raro:"👑 Raros"};
+  const cats={segmento:"🎯 Segmentos",momento:"⚡ Momento",performance:"🔥 Performance",resiliencia:"⚔️ Resiliência",dominio:"🧠 Domínio",raro:"👑 Raros"};
   let html="";
   Object.entries(cats).forEach(([cat,catLabel])=>{
     const catBadges=BADGES.filter(b=>b.cat===cat);
@@ -4738,6 +4738,12 @@ function renderBadges(){
         else if(b.id==="xp250"||b.id==="xp1000"){const need=b.id==="xp250"?250:1000;progress=`${Math.min(s.xp,need)}/${need} XP`;}
         else if(b.id==="daily7"){progress=`${Math.min(s.loginStreak,7)}/7 dias`;}
         else if(b.id==="missions10"){progress=`${Math.min(s.missionsCompleted,10)}/10`;}
+        else if(b.id.startsWith("seg_")){
+          const parts=b.id.replace(/^seg_/,"").split("_");
+          const need=parseInt(parts.pop()); const segId=parts.join("_");
+          const done=s.segMissions?.[segId]||0;
+          progress=`${Math.min(done,need)}/${need} missões`;
+        }
       }
       html+=`<div class="badge-item ${isEarned?"earned":"locked"}" onclick="showBadgeDetail('${b.id}')" style="cursor:pointer" title="${b.desc}">
         <div class="badge-item-icon-wrap">
@@ -4773,6 +4779,11 @@ window.showBadgeDetail=function(badgeId){
     } else if(b.id==="missions3"||b.id==="missions5"||b.id==="missions10"){
       const need=b.id==="missions3"?3:b.id==="missions5"?5:10;
       progressText=`Progresso: ${Math.min(stats.missionsCompleted,need)}/${need} missões`;
+    } else if(b.id.startsWith("seg_")){
+      const parts=b.id.replace(/^seg_/,"").split("_");
+      const need=parseInt(parts.pop()); const segId=parts.join("_");
+      const done=stats.segMissions?.[segId]||0;
+      progressText=`Progresso: ${Math.min(done,need)}/${need} missões em ${segId}`;
     }
   }
 
@@ -5310,6 +5321,12 @@ function getBadgeStats(){
     return total>0 && done/total>=0.6;
   }).map(s=>s.id);
 
+  // Per-segment mission counts for segment-specific badges
+  const segMissions = {};
+  (VICTOR_DATA.segments||[]).forEach(seg => {
+    segMissions[seg.id] = completed.filter(m => m.startsWith(seg.id + "_")).length;
+  });
+
   return {
     xp: userData?.xp||0,
     loginStreak: userData?.streak||0,
@@ -5320,6 +5337,7 @@ function getBadgeStats(){
     retries: (userData?.retries||0)+_sessionStats.retries,
     answerStreak: userData?.answerStreak||0,
     segmentsDone: segDone,
+    segMissions,
     writingCompleted: userData?.writingCompleted||0,
     grammarCompleted: completed.filter(m=>m.startsWith("gramatica_")).length,
   };
