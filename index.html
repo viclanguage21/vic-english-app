@@ -206,23 +206,17 @@
       <div class="ob-dot" id="ob-dot-4"></div>
     </div>
 
-    <!-- Aviso sobre o botão de atualizar -->
-    <div class="ob-refresh-tip">
-      <span class="ob-refresh-icon">↻</span>
-      <span data-i18n-html="ob_refresh_tip">Travou? Toque no botão <strong>↻</strong> no canto da tela para atualizar o app.</span>
+    <!-- Botões -->
+    <div class="ob-actions">
+      <button class="ob-btn-next" id="ob-btn-next" onclick="obNext()" data-i18n="ob_next">Próximo →</button>
+      <button class="ob-btn-back" id="ob-btn-back" onclick="obBack()" style="display:none" data-i18n="back">← Voltar</button>
+      <button class="ob-btn-skip" id="ob-btn-skip" onclick="obSkip()" data-i18n="ob_skip_all">Pular tudo</button>
     </div>
 
     <!-- Seletor de língua no onboarding -->
-    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:12px;">
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;">
       <button onclick="setLang('pt')" id="ob-lang-pt" class="auth-lang-btn">🇧🇷 PT</button>
       <button onclick="setLang('en')" id="ob-lang-en" class="auth-lang-btn">🇺🇸 EN</button>
-    </div>
-
-    <!-- Botões -->
-    <div class="ob-actions">
-      <button class="ob-btn-back" id="ob-btn-back" onclick="obBack()" style="display:none" data-i18n="back">← Voltar</button>
-      <button class="ob-btn-next" id="ob-btn-next" onclick="obNext()" data-i18n="ob_next">Próximo →</button>
-      <button class="ob-btn-skip" id="ob-btn-skip" onclick="obSkip()" data-i18n="ob_skip_all">Pular tudo</button>
     </div>
 
   </div>
