@@ -2200,7 +2200,11 @@ function openSegmentPhases(segId){
   }
 
   const completed=userData.completedMissions||[];
-  (seg.phases||[]).forEach((phase,pi)=>{
+  let _phases=seg.phases||[];
+  if(seg.isGrammarCore){
+    _phases=[..._phases].sort((a,b)=>{const af=isSegmentFree("gramatica",a.id),bf=isSegmentFree("gramatica",b.id);return (bf?1:0)-(af?1:0);});
+  }
+  _phases.forEach((phase,pi)=>{
     // Grammar Core: all phases independent
     if(seg.isGrammarCore){ phase.unlocked=true; }
     else if(pi===0){ phase.unlocked=true; }
@@ -2346,10 +2350,7 @@ function renderMission(){
   document.getElementById("mission-progress-bar").style.width=`${Math.round(((currentPhraseIndex+1)/total)*100)}%`;
   const ptEl=document.getElementById("phrase-pt");
   if(ptEl){
-    if(phrase.pt&&phrase.type!=="translate_en_pt"&&phrase.type!=="translate_pt_en"){
-      ptEl.innerHTML=`<span class="phrase-pt-label">🇧🇷</span> ${phrase.pt}`;
-      ptEl.style.display="";
-    } else if(phrase.pt&&phrase.type==="translate_pt_en"){
+    if(phrase.pt&&!["translate_en_pt","translate_pt_en","memory_match","match_columns"].includes(phrase.type)){
       ptEl.innerHTML=`<span class="phrase-pt-label">🇧🇷</span> ${phrase.pt}`;
       ptEl.style.display="";
     } else {
@@ -2368,6 +2369,8 @@ function renderMission(){
   const [label,cls]=typeMap[phrase.type]||["",""];
   const badge=document.getElementById("ex-type-badge");
   badge.textContent=label; badge.className=`ex-type-badge ${cls}`;
+  const phraseLabel=document.querySelector(".phrase-label");
+  if(phraseLabel) phraseLabel.textContent=["memory_match","match_columns"].includes(phrase.type)?"Tema":"Frase";
 
   document.getElementById("speak-controls")?.style && (document.getElementById("speak-controls").style.display="flex");
   renderPhraseEN(phrase,[]);
@@ -2380,6 +2383,7 @@ function renderMission(){
 function renderPhraseEN(phrase,spoken){
   const container=document.getElementById("phrase-en"); if(!container) return;
   if(["memory_match","match_columns"].includes(phrase.type)){container.textContent=cleanEnunciado(phrase.en);return;}
+  if(phrase.type==="translate_pt_en"){container.textContent=cleanEnunciado(phrase.pt||"");return;}
   const spokenClean=spoken.map(w=>w.toLowerCase().replace(/[^a-z]/g,""));
   const wordMap={}; (phrase.words||[]).forEach(w=>{wordMap[w.w.toLowerCase().replace(/[^a-z]/g,"")]=w.cls;});
   const cleanText=cleanEnunciado(phrase.en);
