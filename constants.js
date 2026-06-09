@@ -1461,8 +1461,8 @@ export const PRO_MESSAGES=[
 export const BADGES = [
 
   // ══ MOMENTO ══════════════════════════════════════════════════════════════════
-  {id:"first_mission", cat:"momento", icon:"🚢", name:"Make Ship Happen",
-   desc:"Completou sua primeira missão. Isso não se para mais!", xp:30,
+  {id:"first_mission", cat:"momento", icon:"🦸", name:"With Great Power Comes Great Responsibility",
+   desc:"Completou sua primeira missão. O caminho começa aqui!", xp:30,
    condition:s=>s.missionsCompleted>=1},
   {id:"first_perfect", cat:"momento", icon:"🪄", name:"Wingardium Leviosa!",
    desc:"5 respostas perfeitas. Magia pura!", xp:20,
@@ -1522,8 +1522,8 @@ export const BADGES = [
   {id:"xp250",    cat:"performance", icon:"🕷️", name:"Spider-Sense!",
    desc:"250 XP — seu sexto sentido para o inglês está acordado!", xp:30,
    condition:s=>s.xp>=250},
-  {id:"xp500",    cat:"performance", icon:"🦸", name:"With Great Power...",
-   desc:"500 XP — grande poder, grande responsabilidade. Tio Ben aprovaria!", xp:60,
+  {id:"xp500",    cat:"performance", icon:"🚢", name:"Make Ship Happen",
+   desc:"500 XP — você faz acontecer. Isso não se para mais!", xp:60,
    condition:s=>s.xp>=500},
   {id:"missions3",  cat:"performance", icon:"🧙", name:"You're a Wizard!",
    desc:"3 missões — carta de Hogwarts aceita, bruxo(a)!", xp:40,
