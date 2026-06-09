@@ -5372,80 +5372,180 @@ function showBadgeUnlock(badge){
 
 async function shareBadge(badge){
   try{
+    // Load logo for branding footer
+    const logoImg = await new Promise(res => {
+      const img = new Image();
+      img.onload  = () => res(img);
+      img.onerror = () => res(null);
+      img.src = "/logo_full_2.png";
+    });
+
     const canvas = document.createElement("canvas");
     canvas.width = 1080; canvas.height = 1080;
     const ctx = canvas.getContext("2d");
 
-    // Background gradient
-    const grad = ctx.createLinearGradient(0,0,1080,1080);
-    grad.addColorStop(0,"#0a0f1e");
-    grad.addColorStop(0.5,"#0d1b2e");
-    grad.addColorStop(1,"#0a0f1e");
-    ctx.fillStyle = grad; ctx.fillRect(0,0,1080,1080);
+    // ── BACKGROUND ───────────────────────────────────────────────
+    const bg = ctx.createLinearGradient(0,0,1080,1080);
+    bg.addColorStop(0,"#08052a");
+    bg.addColorStop(0.5,"#130845");
+    bg.addColorStop(1,"#08052a");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0,0,1080,1080);
 
-    // Gold border glow
-    ctx.shadowColor = "rgba(201,147,58,0.6)";
-    ctx.shadowBlur = 40;
-    ctx.strokeStyle = "rgba(201,147,58,0.7)";
-    ctx.lineWidth = 8;
-    const r = 48;
-    ctx.beginPath();
-    ctx.moveTo(r,4); ctx.lineTo(1080-r,4);
-    ctx.quadraticCurveTo(1076,4,1076,r);
-    ctx.lineTo(1076,1080-r);
-    ctx.quadraticCurveTo(1076,1076,1080-r,1076);
-    ctx.lineTo(r,1076); ctx.quadraticCurveTo(4,1076,4,1080-r);
-    ctx.lineTo(4,r); ctx.quadraticCurveTo(4,4,r,4);
-    ctx.closePath(); ctx.stroke();
-    ctx.shadowBlur = 0;
+    // Purple spotlight top-center
+    const spl = ctx.createRadialGradient(540,180,0,540,180,700);
+    spl.addColorStop(0,"rgba(124,58,237,0.40)");
+    spl.addColorStop(0.55,"rgba(124,58,237,0.10)");
+    spl.addColorStop(1,"rgba(0,0,0,0)");
+    ctx.fillStyle = spl; ctx.fillRect(0,0,1080,1080);
 
-    // "CONQUISTA DESBLOQUEADA" label
-    ctx.fillStyle = "rgba(201,147,58,0.75)";
-    ctx.font = "bold 38px system-ui, sans-serif";
-    ctx.textAlign = "center";
-    ctx.letterSpacing = "6px";
-    ctx.fillText("CONQUISTA DESBLOQUEADA", 540, 160);
+    // Pink glow center
+    const pg = ctx.createRadialGradient(540,430,0,540,430,460);
+    pg.addColorStop(0,"rgba(236,72,153,0.22)");
+    pg.addColorStop(0.6,"rgba(236,72,153,0.06)");
+    pg.addColorStop(1,"rgba(0,0,0,0)");
+    ctx.fillStyle = pg; ctx.fillRect(0,0,1080,1080);
 
-    // Badge icon (emoji rendered large)
-    ctx.font = "220px serif";
-    ctx.textAlign = "center";
-    ctx.fillText(badge.icon, 540, 460);
+    // ── LIGHT RAYS from center ────────────────────────────────────
+    ctx.save(); ctx.translate(540,430);
+    for(let i=0;i<12;i++){
+      const a = (i/12)*Math.PI*2;
+      const rg = ctx.createLinearGradient(0,0,Math.cos(a)*500,Math.sin(a)*500);
+      rg.addColorStop(0,"rgba(255,255,255,0.055)");
+      rg.addColorStop(1,"rgba(255,255,255,0)");
+      ctx.beginPath();
+      ctx.moveTo(0,0);
+      const w = Math.PI/18;
+      ctx.lineTo(Math.cos(a-w)*500, Math.sin(a-w)*500);
+      ctx.lineTo(Math.cos(a+w)*500, Math.sin(a+w)*500);
+      ctx.closePath();
+      ctx.fillStyle = rg; ctx.fill();
+    }
+    ctx.restore();
 
-    // Badge name
-    ctx.shadowColor = "rgba(201,147,58,0.5)";
-    ctx.shadowBlur = 20;
-    ctx.fillStyle = "#f2c87a";
-    ctx.font = "bold 72px system-ui, sans-serif";
-    ctx.fillText(badge.name, 540, 580);
-    ctx.shadowBlur = 0;
+    // ── BORDER — purple→pink gradient glow ────────────────────────
+    const brd = ctx.createLinearGradient(0,0,1080,1080);
+    brd.addColorStop(0,"rgba(124,58,237,0.95)");
+    brd.addColorStop(0.5,"rgba(236,72,153,0.95)");
+    brd.addColorStop(1,"rgba(124,58,237,0.95)");
+    ctx.shadowColor="rgba(124,58,237,0.8)"; ctx.shadowBlur=36;
+    ctx.strokeStyle=brd; ctx.lineWidth=7;
+    ctx.beginPath(); ctx.roundRect(6,6,1068,1068,50); ctx.stroke();
+    ctx.shadowBlur=0;
+    // inner soft ring
+    ctx.strokeStyle="rgba(255,255,255,0.07)"; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.roundRect(20,20,1040,1040,42); ctx.stroke();
 
-    // Badge desc
-    ctx.fillStyle = "rgba(255,255,255,0.65)";
-    ctx.font = "38px system-ui, sans-serif";
-    // Word-wrap desc
-    const words = badge.desc.split(" ");
-    let line = "", lines = [], maxW = 860;
-    words.forEach(w => {
-      const test = line ? line+" "+w : w;
-      if(ctx.measureText(test).width > maxW){ lines.push(line); line=w; }
-      else line=test;
+    // ── HEADER PILL ───────────────────────────────────────────────
+    const pw=660,ph=60,px=(1080-pw)/2,py=88;
+    const pg2 = ctx.createLinearGradient(px,0,px+pw,0);
+    pg2.addColorStop(0,"rgba(124,58,237,0.55)");
+    pg2.addColorStop(1,"rgba(236,72,153,0.55)");
+    ctx.fillStyle=pg2;
+    ctx.beginPath(); ctx.roundRect(px,py,pw,ph,30); ctx.fill();
+    ctx.strokeStyle="rgba(255,255,255,0.18)"; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.roundRect(px,py,pw,ph,30); ctx.stroke();
+    ctx.fillStyle="#fff";
+    ctx.font="700 27px system-ui,sans-serif";
+    ctx.textAlign="center"; ctx.letterSpacing="7px";
+    ctx.fillText("CONQUISTA DESBLOQUEADA",540,py+40);
+    ctx.letterSpacing="0px";
+
+    // ── GLOW RING behind emoji ────────────────────────────────────
+    const cx=540,cy=420;
+    // soft halo layers
+    [[260,0.10],[210,0.18],[160,0.28]].forEach(([r,a])=>{
+      const h = ctx.createRadialGradient(cx,cy,r*0.4,cx,cy,r);
+      h.addColorStop(0,`rgba(150,60,240,${a})`);
+      h.addColorStop(1,"rgba(0,0,0,0)");
+      ctx.fillStyle=h;
+      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
     });
-    if(line) lines.push(line);
-    lines.forEach((l,i) => ctx.fillText(l, 540, 660 + i*52));
+    // circle stroke
+    ctx.shadowColor="rgba(124,58,237,0.6)"; ctx.shadowBlur=24;
+    ctx.strokeStyle="rgba(180,100,255,0.35)"; ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.arc(cx,cy,195,0,Math.PI*2); ctx.stroke();
+    ctx.shadowBlur=0;
 
-    // XP badge
-    ctx.fillStyle = "rgba(201,147,58,0.15)";
-    ctx.beginPath(); ctx.roundRect(390,780,300,80,40); ctx.fill();
-    ctx.strokeStyle = "rgba(201,147,58,0.6)"; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.roundRect(390,780,300,80,40); ctx.stroke();
-    ctx.fillStyle = "#f2c87a";
-    ctx.font = "bold 44px system-ui, sans-serif";
-    ctx.fillText(`+${badge.xp} XP`, 540, 833);
+    // ── SPARKLE PARTICLES ─────────────────────────────────────────
+    const sparks=[
+      {a:0.20,r:218,s:7},{a:0.55,r:212,s:5},{a:0.85,r:222,s:8},
+      {a:1.20,r:208,s:5},{a:1.55,r:220,s:6},{a:1.90,r:214,s:7},
+      {a:2.30,r:210,s:5},{a:2.70,r:218,s:8},{a:3.10,r:212,s:5},
+      {a:3.50,r:208,s:7},{a:3.90,r:220,s:5},{a:4.30,r:214,s:6},
+      {a:4.75,r:210,s:7},{a:5.20,r:218,s:5},{a:5.65,r,s:6},
+    ];
+    const sparkColors=["rgba(180,100,255,1)","rgba(236,72,153,1)","rgba(255,215,100,1)"];
+    sparks.forEach((sp,i)=>{
+      const sx=cx+Math.cos(sp.a)*sp.r, sy=cy+Math.sin(sp.a)*sp.r;
+      ctx.shadowColor=sparkColors[i%3]; ctx.shadowBlur=12;
+      ctx.fillStyle="#fff";
+      ctx.beginPath(); ctx.arc(sx,sy,sp.s/2,0,Math.PI*2); ctx.fill();
+    });
+    ctx.shadowBlur=0;
 
-    // VIC Language branding
-    ctx.fillStyle = "rgba(255,255,255,0.3)";
-    ctx.font = "32px system-ui, sans-serif";
-    ctx.fillText("VIC English · app.viclanguage.com.br", 540, 960);
+    // ── EMOJI ─────────────────────────────────────────────────────
+    ctx.font="200px serif"; ctx.textAlign="center";
+    ctx.fillText(badge.icon, cx, cy+68);
+
+    // ── BADGE NAME — gold gradient ────────────────────────────────
+    const ng = ctx.createLinearGradient(160,0,920,0);
+    ng.addColorStop(0,"#e8a84a"); ng.addColorStop(0.5,"#fff3d0"); ng.addColorStop(1,"#e8a84a");
+    ctx.shadowColor="rgba(230,170,60,0.65)"; ctx.shadowBlur=28;
+    ctx.fillStyle=ng; ctx.font="800 70px system-ui,sans-serif";
+    ctx.fillText(badge.name,540,622);
+    ctx.shadowBlur=0;
+
+    // ── DESCRIPTION ───────────────────────────────────────────────
+    ctx.fillStyle="rgba(255,255,255,0.58)";
+    ctx.font="36px system-ui,sans-serif";
+    const dwords=badge.desc.split(" ");
+    let dline="",dlines=[],dmaxW=860;
+    dwords.forEach(w=>{
+      const t=dline?dline+" "+w:w;
+      if(ctx.measureText(t).width>dmaxW){dlines.push(dline);dline=w;}
+      else dline=t;
+    });
+    if(dline)dlines.push(dline);
+    dlines.forEach((l,i)=>ctx.fillText(l,540,686+i*50));
+
+    // ── XP PILL ───────────────────────────────────────────────────
+    const xpTop=686+Math.max(dlines.length,1)*50+28;
+    const xpW=272,xpH=74,xpX=(1080-xpW)/2;
+    const xpG=ctx.createLinearGradient(xpX,0,xpX+xpW,0);
+    xpG.addColorStop(0,"rgba(124,58,237,0.55)"); xpG.addColorStop(1,"rgba(236,72,153,0.55)");
+    ctx.fillStyle=xpG; ctx.beginPath(); ctx.roundRect(xpX,xpTop,xpW,xpH,37); ctx.fill();
+    ctx.shadowColor="rgba(201,147,58,0.5)"; ctx.shadowBlur=12;
+    ctx.strokeStyle="rgba(230,170,60,0.8)"; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.roundRect(xpX,xpTop,xpW,xpH,37); ctx.stroke();
+    ctx.shadowBlur=0;
+    ctx.fillStyle="#f2c87a"; ctx.font="800 44px system-ui,sans-serif";
+    ctx.fillText(`+${badge.xp} XP`,540,xpTop+50);
+
+    // ── DIVIDER ───────────────────────────────────────────────────
+    const dvY=930;
+    const dvG=ctx.createLinearGradient(60,0,1020,0);
+    dvG.addColorStop(0,"rgba(255,255,255,0)");
+    dvG.addColorStop(0.3,"rgba(124,58,237,0.5)");
+    dvG.addColorStop(0.7,"rgba(236,72,153,0.5)");
+    dvG.addColorStop(1,"rgba(255,255,255,0)");
+    ctx.strokeStyle=dvG; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(60,dvY); ctx.lineTo(1020,dvY); ctx.stroke();
+
+    // ── LOGO + URL ────────────────────────────────────────────────
+    if(logoImg){
+      const lh=52, lw=Math.round(logoImg.width*(lh/logoImg.height));
+      ctx.globalAlpha=0.82;
+      ctx.drawImage(logoImg,540-lw/2,dvY+16,lw,lh);
+      ctx.globalAlpha=1;
+      ctx.fillStyle="rgba(255,255,255,0.28)"; ctx.font="23px system-ui,sans-serif";
+      ctx.fillText("app.viclanguage.com.br",540,dvY+82);
+    } else {
+      ctx.fillStyle="rgba(255,255,255,0.35)"; ctx.font="700 30px system-ui,sans-serif";
+      ctx.fillText("VIC English",540,dvY+46);
+      ctx.fillStyle="rgba(255,255,255,0.28)"; ctx.font="23px system-ui,sans-serif";
+      ctx.fillText("app.viclanguage.com.br",540,dvY+76);
+    }
 
     // Convert to blob and share
     canvas.toBlob(async blob => {
