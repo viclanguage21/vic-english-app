@@ -5537,15 +5537,35 @@ async function requestNotificationPermission(){
   });
 }
 
-// Ask for notifications with friendly banner after first mission
+// Ask for notifications with a full-screen modal after first mission
 function showNotifBanner(){
   if(_cfg.notifAsked) return;
-  _setCfg("notifAsked","1");
-  const banner=document.createElement("div");
-  banner.className="notif-banner";
-  banner.innerHTML=`<span style="font-size:22px">🔔</span><div style="flex:1"><div style="font-weight:800;color:#fff">Ativar lembretes?</div><div style="font-size:12px;opacity:0.6">Receba lembretes diários e não perca seu streak!</div></div><button style="padding:8px 16px;background:var(--p);border:none;border-radius:999px;color:#fff;font-weight:800;cursor:pointer;font-family:var(--font)" onclick="requestNotificationPermission();this.closest('.notif-banner').remove()">Ativar</button><button style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:18px;padding:4px 8px" onclick="this.closest('.notif-banner').remove()">✕</button>`;
-  const daily=document.querySelector(".daily-block");
-  daily?.parentNode?.insertBefore(banner, daily);
+  // Delay so the mission-complete celebration plays first
+  setTimeout(()=>{
+    if(_cfg.notifAsked) return;
+    _setCfg("notifAsked","1");
+    const overlay=document.createElement("div");
+    overlay.className="notif-modal-overlay";
+    overlay.innerHTML=`
+      <div class="notif-modal">
+        <div class="notif-modal-icon">🔔</div>
+        <h2>Receba dicas todo dia</h2>
+        <p class="notif-sub">Ative as notificações e não perca seu streak — mesmo com o app fechado.</p>
+        <ul class="notif-modal-perks">
+          <li><span class="perk-icon">💡</span>Dica diária de inglês: false friends, phrasal verbs e mais</li>
+          <li><span class="perk-icon">🔥</span>Lembrete de streak para você nunca quebrar a sequência</li>
+          <li><span class="perk-icon">🧠</span>Curiosidades científicas sobre aprender uma nova língua</li>
+        </ul>
+        <button class="btn-notif-yes" id="btn-notif-yes">Sim, quero receber! 🚀</button>
+        <button class="btn-notif-skip">Talvez depois</button>
+      </div>`;
+    document.body.appendChild(overlay);
+    overlay.querySelector(".btn-notif-skip").onclick=()=>overlay.remove();
+    overlay.querySelector("#btn-notif-yes").onclick=async()=>{
+      overlay.remove();
+      await requestNotificationPermission();
+    };
+  }, 1800);
 }
 
 function scheduleNotifications(){ /* OneSignal gerencia — noop */ }

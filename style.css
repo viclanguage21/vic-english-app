@@ -5594,6 +5594,79 @@ body.font-large .quick-btn { font-size:18px !important; }
 }
 .notif-banner:hover { border-color: rgba(124,58,237,0.4); }
 
+/* ══ NOTIF PERMISSION MODAL ════════════════════════════ */
+.notif-modal-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.72);
+  display: flex; align-items: flex-end; justify-content: center;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  animation: notif-fade-in 0.25s ease;
+}
+@keyframes notif-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.notif-modal {
+  background: #1a0a40;
+  border: 1px solid rgba(124,58,237,0.35);
+  border-radius: 24px 24px 0 0;
+  padding: 32px 24px 36px;
+  width: 100%; max-width: 480px;
+  text-align: center;
+  animation: notif-slide-up 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes notif-slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+.notif-modal-icon {
+  font-size: 52px; line-height: 1;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 0 18px rgba(124,58,237,0.6));
+}
+.notif-modal h2 {
+  font-size: 22px; font-weight: 900;
+  color: #fff; margin: 0 0 8px;
+  line-height: 1.2;
+}
+.notif-modal .notif-sub {
+  font-size: 14px; color: rgba(255,255,255,0.55);
+  margin-bottom: 22px; line-height: 1.5;
+}
+.notif-modal-perks {
+  list-style: none; padding: 0; margin: 0 0 26px;
+  display: flex; flex-direction: column; gap: 10px;
+  text-align: left;
+}
+.notif-modal-perks li {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(124,58,237,0.12);
+  border: 1px solid rgba(124,58,237,0.2);
+  border-radius: 12px; padding: 10px 14px;
+  font-size: 14px; color: rgba(255,255,255,0.85);
+}
+.notif-modal-perks li span.perk-icon {
+  font-size: 20px; flex-shrink: 0;
+}
+.btn-notif-yes {
+  width: 100%; padding: 16px;
+  background: linear-gradient(135deg,#7c3aed,#ec4899);
+  border: none; border-radius: 14px;
+  color: #fff; font-size: 17px; font-weight: 800;
+  cursor: pointer; font-family: var(--font);
+  margin-bottom: 12px;
+  box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn-notif-yes:active { transform: scale(0.97); box-shadow: none; }
+.btn-notif-skip {
+  background: none; border: none;
+  color: rgba(255,255,255,0.35); font-size: 14px;
+  cursor: pointer; font-family: var(--font);
+  padding: 4px 8px;
+}
+.btn-notif-skip:hover { color: rgba(255,255,255,0.55); }
+
 /* ══ ABOUT BUTTON — rectangular, compact ═══════════════ */
 .about-btn {
   border-radius: 10px !important;
