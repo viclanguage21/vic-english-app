@@ -761,9 +761,74 @@ const VICTOR_DATA = {
             {id:"tr1",type:"translate_pt_en",en:"Turn left at the traffic light.",pt:"Vire à esquerda no semáforo.",answer:"turn left at the traffic light",words:[{w:"turn left",cls:"verb",tr:"vire à esquerda"},{w:"traffic light",cls:"noun",tr:"semáforo"}]},
           ]},
         ]},
-        {id:"f3",name:"Fase 3 ⭐",subtitle:"Intermediário",unlocked:false,missions:[]},
-        {id:"f4",name:"Fase 4 🔥",subtitle:"Intermediário Avançado",unlocked:false,missions:[]},
-        {id:"f5",name:"Fase 5 🏆",subtitle:"Avançado",unlocked:false,missions:[]},
+        {id:"f3",name:"Fase 3 ⭐",subtitle:"Pontos Turísticos",unlocked:false,missions:[
+          {id:"atrações_f3",name:"🌺 Atrações de Santos",icon:"🌺",description:"Principais pontos turísticos de Santos",xpTotal:80,phrases:[
+            {id:"a1",type:"pronunciation",en:"The Orquidário Municipal has over 3,000 orchid species and is free to visit. 🌺",pt:"O Orquidário Municipal tem mais de 3.000 espécies de orquídeas e é gratuito.",words:[{w:"orchid",cls:"noun",tr:"orquídea"},{w:"species",cls:"noun",tr:"espécies"},{w:"free",cls:"adj",tr:"gratuito"}]},
+            {id:"a2",type:"fill_blank",en:"The ___ do Monte Serrat takes you to the hilltop sanctuary with panoramic views. 🚡",pt:"O bondinho do Monte Serrat leva você ao santuário no topo com vistas panorâmicas.",answer:"cable car",words:[{w:"cable car",cls:"noun",tr:"bondinho/teleférico"},{w:"panoramic",cls:"adj",tr:"panorâmico"}]},
+            {id:"a3",type:"multiple_choice",en:"Tourist: 'Where can I learn about Santos FC and Pelé?' You say: ⚽",pt:"Turista pergunta sobre Pelé. Você diz:",options:["I recommend the Museu Pelé — it is dedicated to the King of Football! 👑","There is no museum here. ❌","Go to the beach instead. 🏖️","I don't know. 🤷"],correct:0,words:[{w:"dedicated",cls:"adj",tr:"dedicado"}]},
+            {id:"a4",type:"translate_pt_en",en:"The Museu do Café is inside the famous 1922 Coffee Exchange building.",pt:"O Museu do Café fica dentro do famoso edifício da Bolsa de Café de 1922.",answer:"the museu do café is inside the famous 1922 coffee exchange building",words:[{w:"exchange",cls:"noun",tr:"bolsa/câmbio"},{w:"inside",cls:"prep",tr:"dentro de"}]},
+            {id:"a5",type:"word_order",en:"The Jardim da Orla is the longest urban garden in the world. 🌿",pt:"O Jardim da Orla é o jardim urbano mais longo do mundo.",scrambled:["The","Jardim","da","Orla","is","the","longest","urban","garden","in","the","world."],answer:"The Jardim da Orla is the longest urban garden in the world.",words:[{w:"longest",cls:"adj",tr:"o mais longo"},{w:"urban",cls:"adj",tr:"urbano"}]},
+          ]},
+          {id:"mem_tur_f3",name:"🃏 Memória Atrações",icon:"🃏",description:"Pontos turísticos de Santos",xpTotal:50,phrases:[{id:"mem1",type:"memory_match",en:"Santos attractions 🌺",pt:"Atrações de Santos",pairs:[{a:"🌺 Orquidário",b:"orchid garden"},{a:"🚡 bondinho",b:"cable car"},{a:"☕ Museu do Café",b:"Coffee Museum"},{a:"👑 Museu Pelé",b:"Pelé Museum"}],words:[]}]},
+          {id:"match_tur_f3",name:"🔗 Match Atrações",icon:"🔗",description:"Conecte atrações aos nomes em inglês",xpTotal:50,phrases:[{id:"mc1",type:"match_columns",en:"Santos attractions 🗺️",pt:"Atrações",pairs:[{a:"🌺 orchid garden",b:"Orquidário Municipal"},{a:"🚡 cable car",b:"Bondinho Monte Serrat"},{a:"☕ coffee exchange",b:"Bolsa Oficial de Café"},{a:"🌿 urban garden",b:"Jardim da Orla"}],words:[]}]},
+          {id:"mc_tur_f3",name:"☑️ Quiz Atrações",icon:"☑️",description:"Fatos sobre os pontos turísticos",xpTotal:60,phrases:[
+            {id:"q1",type:"multiple_choice",en:"The Orquidário Municipal was founded in which year? 🌺",pt:"Em que ano foi fundado o Orquidário Municipal?",options:["1939 🌺","1922 ☕","1912 ⚽","1910 🎭"],correct:0,tip:"O Orquidário foi fundado em 1939! 🌺",words:[{w:"founded",cls:"verb",tr:"fundado"}]},
+            {id:"q2",type:"multiple_choice",en:"The Jardim da Orla stretches along the beachfront for: 🌿",pt:"O Jardim da Orla se estende pela orla por:",options:["5.4 km 🌿","2 km","10 km","1 km"],correct:0,words:[{w:"stretches",cls:"verb",tr:"se estende"}]},
+          ]},
+          {id:"order_tur_f3",name:"🔀 Ordene Atrações",icon:"🔀",description:"Frases sobre atrações",xpTotal:50,phrases:[
+            {id:"o1",type:"word_order",en:"Monte Serrat has a stunning view of the whole city. 🏔️",pt:"Monte Serrat tem uma vista deslumbrante de toda a cidade.",scrambled:["Monte","Serrat","has","a","stunning","view","of","the","whole","city."],answer:"Monte Serrat has a stunning view of the whole city.",words:[{w:"stunning",cls:"adj",tr:"deslumbrante"},{w:"whole",cls:"adj",tr:"inteira"}]},
+          ]},
+          {id:"traducao_tur_f3",name:"🔄 Traduções Atrações",icon:"🔄",description:"Traduza frases sobre atrações",xpTotal:60,phrases:[
+            {id:"tr1",type:"translate_pt_en",en:"The cable car goes up to the Monte Serrat sanctuary.",pt:"O bondinho sobe até o santuário do Monte Serrat.",answer:"the cable car goes up to the monte serrat sanctuary",words:[{w:"sanctuary",cls:"noun",tr:"santuário"}]},
+            {id:"tr2",type:"translate_en_pt",en:"The Museu do Café is one of the most beautiful buildings in Santos. ☕",pt:"O Museu do Café é um dos edifícios mais bonitos de Santos.",answer:"o museu do café é um dos edifícios mais bonitos de santos",words:[{w:"beautiful",cls:"adj",tr:"bonito"}]},
+          ]},
+        ]},
+        {id:"f4",name:"Fase 4 🔥",subtitle:"Santos FC & Esporte",unlocked:false,missions:[
+          {id:"futebol_f4",name:"⚽ Santos FC",icon:"⚽",description:"O Peixe — história e glórias",xpTotal:80,phrases:[
+            {id:"s1",type:"pronunciation",en:"Santos FC was founded on April 14th, 1912, and is known as 'O Peixe' — The Fish. ⚽",pt:"O Santos FC foi fundado em 14 de abril de 1912 e é conhecido como 'O Peixe'.",words:[{w:"founded",cls:"verb",tr:"fundado"},{w:"known as",cls:"phrase",tr:"conhecido como"}]},
+            {id:"s2",type:"fill_blank",en:"Santos FC won the Copa Libertadores in 1962 and ___. 🏆",pt:"O Santos FC venceu a Copa Libertadores em 1962 e 1963.",answer:"1963",words:[{w:"won",cls:"verb",tr:"venceu"}]},
+            {id:"s3",type:"multiple_choice",en:"What is the nickname of Santos FC? ⚽",pt:"Qual é o apelido do Santos FC?",options:["O Peixe — The Fish 🐟","O Leão — The Lion","O Tricolor","O Galo"],correct:0,tip:"Santos FC é 'O Peixe' por causa do mar! 🐟",words:[{w:"nickname",cls:"noun",tr:"apelido"}]},
+            {id:"s4",type:"translate_pt_en",en:"Pelé played for Santos FC from 1956 to 1974.",pt:"Pelé jogou no Santos FC de 1956 a 1974.",answer:"pelé played for santos fc from 1956 to 1974",words:[{w:"played for",cls:"verb",tr:"jogou pelo"}]},
+            {id:"s5",type:"word_order",en:"The Vila Belmiro stadium holds around sixteen thousand fans. ⚽",pt:"O estádio Vila Belmiro comporta cerca de 16.000 torcedores.",scrambled:["The","Vila","Belmiro","stadium","holds","around","sixteen","thousand","fans."],answer:"The Vila Belmiro stadium holds around sixteen thousand fans.",words:[{w:"holds",cls:"verb",tr:"comporta"},{w:"fans",cls:"noun",tr:"torcedores"}]},
+          ]},
+          {id:"pelé_f4",name:"👑 Pelé — O Rei",icon:"👑",description:"A lenda do futebol mundial",xpTotal:80,phrases:[
+            {id:"p1",type:"pronunciation",en:"Pelé scored over one thousand goals in his career, most of them wearing the Santos shirt. 👑",pt:"Pelé marcou mais de mil gols em sua carreira, a maioria deles com a camisa do Santos.",words:[{w:"scored",cls:"verb",tr:"marcou"},{w:"career",cls:"noun",tr:"carreira"}]},
+            {id:"p2",type:"multiple_choice",en:"Pelé is considered: 👑",pt:"Pelé é considerado:",options:["The greatest footballer of all time 👑","A good player from São Paulo","A Brazilian president","A local poet"],correct:0,words:[{w:"greatest",cls:"adj",tr:"o maior/melhor"}]},
+            {id:"p3",type:"fill_blank",en:"Pelé won the ___ Cup three times with Brazil: 1958, 1962 and 1970. 🌍",pt:"Pelé venceu a Copa do Mundo três vezes com o Brasil: 1958, 1962 e 1970.",answer:"World",words:[{w:"World Cup",cls:"noun",tr:"Copa do Mundo"}]},
+            {id:"p4",type:"translate_pt_en",en:"Neymar also started his career at Santos FC.",pt:"Neymar também iniciou sua carreira no Santos FC.",answer:"neymar also started his career at santos fc",words:[{w:"started",cls:"verb",tr:"iniciou"}]},
+          ]},
+          {id:"mem_tur_f4",name:"🃏 Memória Futebol",icon:"🃏",description:"Santos FC e Pelé",xpTotal:50,phrases:[{id:"mem1",type:"memory_match",en:"Santos FC facts ⚽",pt:"Santos FC",pairs:[{a:"⚽ O Peixe",b:"The Fish"},{a:"🏟️ Vila Belmiro",b:"Santos FC stadium"},{a:"👑 Pelé",b:"King of Football"},{a:"📅 1912",b:"Santos FC founded"}],words:[]}]},
+          {id:"match_tur_f4",name:"🔗 Match Futebol",icon:"🔗",description:"Conecte fatos do Santos FC",xpTotal:50,phrases:[{id:"mc1",type:"match_columns",en:"Santos FC match ⚽",pt:"Santos FC",pairs:[{a:"⚽ colors",b:"black and white"},{a:"🏆 Libertadores",b:"1962 and 1963"},{a:"👑 greatest player",b:"Pelé"},{a:"📍 neighborhood",b:"Vila Belmiro"}],words:[]}]},
+          {id:"mc_tur_f4",name:"☑️ Quiz Futebol",icon:"☑️",description:"Fatos sobre Santos FC",xpTotal:60,phrases:[
+            {id:"q1",type:"multiple_choice",en:"How many times has Santos FC won the Campeonato Brasileiro? 🏆",pt:"Quantas vezes o Santos FC venceu o Campeonato Brasileiro?",options:["8 times 🏆","3 times","5 times","12 times"],correct:0,words:[{w:"times",cls:"noun",tr:"vezes"}]},
+            {id:"q2",type:"multiple_choice",en:"Neymar Jr. left Santos FC to join which club? ⚽",pt:"Para qual clube Neymar Jr. foi ao deixar o Santos FC?",options:["FC Barcelona 🔵","Real Madrid ⚪","Manchester United 🔴","Juventus"],correct:0,words:[{w:"join",cls:"verb",tr:"entrar/se juntar"}]},
+          ]},
+          {id:"traducao_tur_f4",name:"🔄 Traduções Futebol",icon:"🔄",description:"Traduza frases sobre Santos FC",xpTotal:60,phrases:[
+            {id:"tr1",type:"translate_pt_en",en:"Santos FC won the Intercontinental Cup in 1962 and 1963.",pt:"O Santos FC venceu a Copa Intercontinental em 1962 e 1963.",answer:"santos fc won the intercontinental cup in 1962 and 1963",words:[{w:"won",cls:"verb",tr:"venceu"}]},
+            {id:"tr2",type:"translate_en_pt",en:"Pelé is the greatest player in the history of Santos FC. 👑",pt:"Pelé é o maior jogador da história do Santos FC.",answer:"pelé é o maior jogador da história do santos fc",words:[{w:"greatest",cls:"adj",tr:"o maior"}]},
+          ]},
+        ]},
+        {id:"f5",name:"Fase 5 🏆",subtitle:"Bairros e Praias",unlocked:false,missions:[
+          {id:"praias_f5",name:"🏖️ Praias de Santos",icon:"🏖️",description:"As sete praias da cidade",xpTotal:80,phrases:[
+            {id:"pr1",type:"pronunciation",en:"Santos has seven beaches connected in an eight-kilometer stretch. 🏖️",pt:"Santos tem sete praias conectadas em um trecho de oito quilômetros.",words:[{w:"stretch",cls:"noun",tr:"trecho"},{w:"connected",cls:"adj",tr:"conectadas"}]},
+            {id:"pr2",type:"fill_blank",en:"The most famous beach in Santos is Praia do ___. 🏖️",pt:"A praia mais famosa de Santos é a Praia do Gonzaga.",answer:"Gonzaga",words:[{w:"famous",cls:"adj",tr:"famosa"}]},
+            {id:"pr3",type:"multiple_choice",en:"Which Santos beach is closest to the port channel? ⚓",pt:"Qual praia de Santos fica mais próxima do canal do porto?",options:["Praia da Ponta da Praia ⚓","Praia do Gonzaga 🏖️","Praia do Itararé","Praia da Aparecida"],correct:0,words:[{w:"closest",cls:"adj",tr:"mais próxima"},{w:"channel",cls:"noun",tr:"canal"}]},
+            {id:"pr4",type:"translate_pt_en",en:"The boardwalk restaurants are the best on the beachfront.",pt:"Os restaurantes da orla são os melhores à beira-mar.",answer:"the boardwalk restaurants are the best on the beachfront",words:[{w:"boardwalk",cls:"noun",tr:"calçadão"},{w:"beachfront",cls:"noun",tr:"à beira-mar/orla"}]},
+            {id:"pr5",type:"word_order",en:"The beach at Boqueirão is great for families with children. 👨‍👩‍👧",pt:"A praia do Boqueirão é ótima para famílias com crianças.",scrambled:["The","beach","at","Boqueirão","is","great","for","families","with","children."],answer:"The beach at Boqueirão is great for families with children.",words:[{w:"families",cls:"noun",tr:"famílias"}]},
+          ]},
+          {id:"bairros_f5",name:"🏘️ Bairros de Santos",icon:"🏘️",description:"Principais bairros da cidade",xpTotal:80,phrases:[
+            {id:"b1",type:"pronunciation",en:"Gonzaga is the tourist heart of Santos, with restaurants and hotels along Avenida Ana Costa. 🛎️",pt:"Gonzaga é o coração turístico de Santos, com restaurantes e hotéis na Avenida Ana Costa.",words:[{w:"tourist heart",cls:"phrase",tr:"coração turístico"},{w:"along",cls:"prep",tr:"ao longo de"}]},
+            {id:"b2",type:"multiple_choice",en:"Which neighborhood is home to the Santos FC stadium? ⚽",pt:"Qual bairro abriga o estádio do Santos FC?",options:["Vila Belmiro ⚽","Gonzaga 🛎️","Ponta da Praia ⚓","Macuco 🏭"],correct:0,words:[{w:"home to",cls:"phrase",tr:"onde fica"}]},
+            {id:"b3",type:"fill_blank",en:"Avenida ___ Costa is the main commercial avenue in Gonzaga. 🛍️",pt:"A Avenida Ana Costa é a principal avenida comercial de Gonzaga.",answer:"Ana",words:[{w:"commercial",cls:"adj",tr:"comercial"}]},
+            {id:"b4",type:"translate_pt_en",en:"Ponta da Praia has traditional fish restaurants near the port.",pt:"Ponta da Praia tem restaurantes de peixe tradicionais perto do porto.",answer:"ponta da praia has traditional fish restaurants near the port",words:[{w:"traditional",cls:"adj",tr:"tradicionais"}]},
+          ]},
+          {id:"mem_tur_f5",name:"🃏 Memória Bairros",icon:"🃏",description:"Bairros e praias de Santos",xpTotal:50,phrases:[{id:"mem1",type:"memory_match",en:"Santos neighborhoods 🏘️",pt:"Bairros de Santos",pairs:[{a:"🏖️ Gonzaga",b:"tourist heart"},{a:"⚽ Vila Belmiro",b:"Santos FC stadium"},{a:"⚓ Ponta da Praia",b:"near the port"},{a:"🌊 Boqueirão",b:"family beach"}],words:[]}]},
+          {id:"match_tur_f5",name:"🔗 Match Bairros",icon:"🔗",description:"Conecte bairros e características",xpTotal:50,phrases:[{id:"mc1",type:"match_columns",en:"Santos neighborhoods 🗺️",pt:"Bairros",pairs:[{a:"🛍️ Av. Ana Costa",b:"main street in Gonzaga"},{a:"🏖️ Embaré",b:"upscale beachfront"},{a:"🏭 Macuco",b:"near port, industrial"},{a:"🎓 Encruzilhada",b:"central neighborhood"}],words:[]}]},
+          {id:"traducao_tur_f5",name:"🔄 Traduções Bairros",icon:"🔄",description:"Traduza frases sobre bairros",xpTotal:60,phrases:[
+            {id:"tr1",type:"translate_pt_en",en:"The Embaré neighborhood has an upscale beachfront.",pt:"O bairro Embaré tem uma orla sofisticada.",answer:"the embaré neighborhood has an upscale beachfront",words:[{w:"upscale",cls:"adj",tr:"sofisticado/nobre"}]},
+            {id:"tr2",type:"translate_en_pt",en:"Turn right on Avenida Presidente Wilson to reach the boardwalk. 🏖️",pt:"Vire à direita na Avenida Presidente Wilson para chegar à orla.",answer:"vire à direita na avenida presidente wilson para chegar à orla",words:[{w:"reach",cls:"verb",tr:"chegar a"}]},
+          ]},
+        ]},
       ]
     },
 
@@ -5866,4 +5931,156 @@ VICTOR_DATA.flashcardDecks.push({
       },
     ]
   });
+})();
+
+// ── TURISMO f6 / f7 / f8 ─────────────────────────────
+(function(){
+  const seg = VICTOR_DATA.segments.find(s => s.id === "turismo");
+  if (!seg) return;
+  seg.phases.push(
+    {
+      id:"f6", name:"Fase 6 🌊", subtitle:"História e Monumentos",
+      unlocked:false,
+      missions:[
+        { id:"porto_f6", name:"⚓ Porto de Santos", icon:"⚓",
+          description:"O maior porto da América Latina",xpTotal:90,
+          phrases:[
+            {id:"p1",type:"pronunciation",en:"The Port of Santos is the largest port in Latin America, handling about 30% of Brazil's GDP. ⚓",pt:"O Porto de Santos é o maior da América Latina, movimentando cerca de 30% do PIB do Brasil.",words:[{w:"handling",cls:"verb",tr:"movimentando"},{w:"GDP",cls:"noun",tr:"PIB"}]},
+            {id:"p2",type:"fill_blank",en:"The Port of Santos handles around ___ percent of Brazil's total trade. ⚓",pt:"O Porto de Santos movimenta cerca de 30% do comércio total do Brasil.",answer:"30",words:[{w:"trade",cls:"noun",tr:"comércio"}]},
+            {id:"p3",type:"multiple_choice",en:"The Port of Santos is located: ⚓",pt:"O Porto de Santos está localizado:",options:["In Santos Bay, along the Ponta da Praia waterfront ⚓","In the center of São Paulo","In the Gonzaga neighborhood","On Monte Serrat hill"],correct:0,words:[{w:"located",cls:"verb",tr:"localizado"}]},
+            {id:"p4",type:"translate_pt_en",en:"The port channel is visible from the Ponta da Praia beach.",pt:"O canal do porto é visível da praia da Ponta da Praia.",answer:"the port channel is visible from the ponta da praia beach",words:[{w:"channel",cls:"noun",tr:"canal"},{w:"visible",cls:"adj",tr:"visível"}]},
+            {id:"p5",type:"word_order",en:"Santos was Brazil's main coffee export port from the 1870s to the 1930s. ☕",pt:"Santos foi o principal porto de exportação de café do Brasil de 1870 a 1930.",scrambled:["Santos","was","Brazil's","main","coffee","export","port","from","the","1870s","to","the","1930s."],answer:"Santos was Brazil's main coffee export port from the 1870s to the 1930s.",words:[{w:"export",cls:"noun",tr:"exportação"}]},
+          ]
+        },
+        { id:"monumentos_f6", name:"🏛️ Monumentos Históricos", icon:"🏛️",
+          description:"Edifícios e monumentos coloniais",xpTotal:90,
+          phrases:[
+            {id:"m1",type:"pronunciation",en:"The Santa Casa de Santos was founded in 1543 and is the oldest hospital still operating in Brazil. 🏥",pt:"A Santa Casa de Santos foi fundada em 1543 e é o hospital mais antigo em funcionamento no Brasil.",words:[{w:"founded",cls:"verb",tr:"fundada"},{w:"operating",cls:"adj",tr:"em funcionamento"}]},
+            {id:"m2",type:"multiple_choice",en:"The Bolsa Oficial de Café (Coffee Exchange) was built in: ☕",pt:"A Bolsa Oficial de Café foi construída em:",options:["1922 ☕","1912","1939","1543"],correct:0,tip:"O edifício da Bolsa do Café data de 1922!",words:[{w:"built",cls:"verb",tr:"construída"}]},
+            {id:"m3",type:"fill_blank",en:"The Teatro Guarany was built in 1910 and features ___ architecture. 🎭",pt:"O Teatro Guarany foi construído em 1910 e tem arquitetura Art Nouveau.",answer:"Art Nouveau",words:[{w:"features",cls:"verb",tr:"apresenta"},{w:"architecture",cls:"noun",tr:"arquitetura"}]},
+            {id:"m4",type:"translate_pt_en",en:"The Casarão do Valongo is a colonial building that was once a slave market.",pt:"O Casarão do Valongo é um edifício colonial que já foi um mercado de escravos.",answer:"the casarão do valongo is a colonial building that was once a slave market",words:[{w:"colonial",cls:"adj",tr:"colonial"},{w:"slave market",cls:"noun",tr:"mercado de escravos"}]},
+            {id:"m5",type:"word_order",en:"The Catedral Metropolitana was built in the nineteenth century in a neo-Gothic style. ⛪",pt:"A Catedral Metropolitana foi construída no século XIX em estilo neogótico.",scrambled:["The","Catedral","Metropolitana","was","built","in","the","nineteenth","century","in","a","neo-Gothic","style."],answer:"The Catedral Metropolitana was built in the nineteenth century in a neo-Gothic style.",words:[{w:"neo-Gothic",cls:"adj",tr:"neogótico"},{w:"century",cls:"noun",tr:"século"}]},
+          ]
+        },
+        { id:"mem_tur_f6", name:"🃏 Memória História", icon:"🃏",
+          description:"Datas e monumentos históricos",xpTotal:50,
+          phrases:[{id:"mem1",type:"memory_match",en:"Santos history 🏛️",pt:"História de Santos",pairs:[{a:"⚓ Port of Santos",b:"largest in Latin America"},{a:"☕ Coffee Exchange",b:"built in 1922"},{a:"🏥 Santa Casa",b:"founded 1543"},{a:"🎭 Teatro Guarany",b:"built in 1910"}],words:[]}]
+        },
+        { id:"match_tur_f6", name:"🔗 Match Monumentos", icon:"🔗",
+          description:"Conecte monumentos e datas",xpTotal:50,
+          phrases:[{id:"mc1",type:"match_columns",en:"Santos monuments 🏛️",pt:"Monumentos",pairs:[{a:"🏛️ neo-Gothic cathedral",b:"Catedral Metropolitana"},{a:"🏥 oldest hospital",b:"Santa Casa de Santos"},{a:"🏰 colonial building",b:"Casarão do Valongo"},{a:"☕ Art Deco",b:"Bolsa Oficial de Café"}],words:[]}]
+        },
+        { id:"mc_tur_f6", name:"☑️ Quiz História", icon:"☑️",
+          description:"Fatos históricos de Santos",xpTotal:60,
+          phrases:[
+            {id:"q1",type:"multiple_choice",en:"Santos was one of the first cities in Brazil to have: 💡",pt:"Santos foi uma das primeiras cidades do Brasil a ter:",options:["Electricity and trams, in 1909 💡","A football stadium","A shopping mall","An airport"],correct:0,words:[{w:"electricity",cls:"noun",tr:"eletricidade"},{w:"trams",cls:"noun",tr:"bondes"}]},
+            {id:"q2",type:"multiple_choice",en:"The Convento do Valongo was built in: 🏛️",pt:"O Convento do Valongo foi construído em:",options:["1640 🏛️","1543","1922","1910"],correct:0,words:[{w:"convent",cls:"noun",tr:"convento"}]},
+          ]
+        },
+        { id:"traducao_tur_f6", name:"🔄 Traduções História", icon:"🔄",
+          description:"Traduza frases históricas",xpTotal:60,
+          phrases:[
+            {id:"tr1",type:"translate_pt_en",en:"The Coffee Exchange is the most iconic building in Santos.",pt:"A Bolsa do Café é o edifício mais icônico de Santos.",answer:"the coffee exchange is the most iconic building in santos",words:[{w:"iconic",cls:"adj",tr:"icônico"}]},
+            {id:"tr2",type:"translate_en_pt",en:"The Santa Casa de Santos is the oldest hospital still operating in Brazil. 🏥",pt:"A Santa Casa de Santos é o hospital mais antigo em funcionamento no Brasil.",answer:"a santa casa de santos é o hospital mais antigo em funcionamento no brasil",words:[{w:"oldest",cls:"adj",tr:"mais antigo"}]},
+          ]
+        },
+      ]
+    },
+    {
+      id:"f7", name:"Fase 7 🏆", subtitle:"Gastronomia & Cultura",
+      unlocked:false,
+      missions:[
+        { id:"gastronomia_f7", name:"🍤 Gastronomia Santista", icon:"🍤",
+          description:"Comida típica e cultura local",xpTotal:90,
+          phrases:[
+            {id:"g1",type:"pronunciation",en:"Santos is famous for its seafood — especially shrimp, fish and crab from the Santos Bay. 🦐",pt:"Santos é famosa pelos frutos do mar — especialmente camarão, peixe e caranguejo da Baía de Santos.",words:[{w:"seafood",cls:"noun",tr:"frutos do mar"},{w:"especially",cls:"adv",tr:"especialmente"}]},
+            {id:"g2",type:"fill_blank",en:"The ___ de camarão is a popular local street food — a fried pastry filled with shrimp. 🍤",pt:"O pastel de camarão é um popular alimento de rua — uma massa frita recheada com camarão.",answer:"pastel",words:[{w:"fried",cls:"adj",tr:"frito"},{w:"filled with",cls:"phrase",tr:"recheado com"}]},
+            {id:"g3",type:"multiple_choice",en:"'Pão de ló de Margarida' is: 🍰",pt:"O 'Pão de ló de Margarida' é:",options:["A traditional sponge cake — a Santos specialty 🍰","A type of bread from Gonzaga","A local beer","A seafood soup"],correct:0,words:[{w:"sponge cake",cls:"noun",tr:"pão de ló"},{w:"specialty",cls:"noun",tr:"especialidade"}]},
+            {id:"g4",type:"translate_pt_en",en:"The fish restaurants in Ponta da Praia are excellent.",pt:"Os restaurantes de peixe em Ponta da Praia são excelentes.",answer:"the fish restaurants in ponta da praia are excellent",words:[{w:"excellent",cls:"adj",tr:"excelentes"}]},
+            {id:"g5",type:"word_order",en:"Santos was the coffee capital of Brazil from the 1870s to the 1930s. ☕",pt:"Santos foi a capital do café do Brasil de 1870 a 1930.",scrambled:["Santos","was","the","coffee","capital","of","Brazil","from","the","1870s","to","the","1930s."],answer:"Santos was the coffee capital of Brazil from the 1870s to the 1930s.",words:[{w:"capital",cls:"noun",tr:"capital"}]},
+          ]
+        },
+        { id:"cultura_f7", name:"🎉 Cultura Santista", icon:"🎉",
+          description:"Carnaval, canais e tradições",xpTotal:80,
+          phrases:[
+            {id:"c1",type:"pronunciation",en:"The Carnaval de Santos is a traditional carnival, considered the second most important in Brazil after Rio. 🎉",pt:"O Carnaval de Santos é um carnaval tradicional, considerado o segundo mais importante do Brasil depois do Rio.",words:[{w:"traditional",cls:"adj",tr:"tradicional"},{w:"considered",cls:"verb",tr:"considerado"}]},
+            {id:"c2",type:"multiple_choice",en:"Santos has how many waterway canals through its city center? 🌊",pt:"Santos tem quantos canais fluviais pelo centro da cidade?",options:["Six canals — Canal 1 to Canal 6 🌊","Three canals","Two canals","Ten canals"],correct:0,tip:"Santos tem 6 canais, do Canal 1 ao Canal 6!",words:[{w:"canals",cls:"noun",tr:"canais"}]},
+            {id:"c3",type:"fill_blank",en:"The Avenida Bartolomeu de Gusmão runs alongside ___ 6 in the city center. 🌊",pt:"A Avenida Bartolomeu de Gusmão corre ao lado do Canal 6 no centro da cidade.",answer:"Canal",words:[{w:"alongside",cls:"prep",tr:"ao lado de"}]},
+            {id:"c4",type:"translate_pt_en",en:"Santos was the second city in Brazil to have electricity and trams.",pt:"Santos foi a segunda cidade do Brasil a ter eletricidade e bondes.",answer:"santos was the second city in brazil to have electricity and trams",words:[{w:"trams",cls:"noun",tr:"bondes"}]},
+          ]
+        },
+        { id:"mem_tur_f7", name:"🃏 Memória Cultura", icon:"🃏",
+          description:"Gastronomia e cultura santista",xpTotal:50,
+          phrases:[{id:"mem1",type:"memory_match",en:"Santos culture 🎉",pt:"Cultura de Santos",pairs:[{a:"🦐 frutos do mar",b:"seafood"},{a:"🍤 pastel de camarão",b:"shrimp pastry"},{a:"🍰 pão de ló",b:"sponge cake"},{a:"🎉 carnaval",b:"traditional carnival"}],words:[]}]
+        },
+        { id:"match_tur_f7", name:"🔗 Match Gastronomia", icon:"🔗",
+          description:"Conecte pratos e descrições",xpTotal:50,
+          phrases:[{id:"mc1",type:"match_columns",en:"Santos food 🍤",pt:"Gastronomia",pairs:[{a:"🦐 seafood",b:"frutos do mar"},{a:"🍤 fried pastry + shrimp",b:"pastel de camarão"},{a:"🍰 local sponge cake",b:"pão de ló de Margarida"},{a:"☕ coffee city era",b:"1870s–1930s Santos"}],words:[]}]
+        },
+        { id:"mc_tur_f7", name:"☑️ Quiz Cultura", icon:"☑️",
+          description:"Cultura e gastronomia de Santos",xpTotal:60,
+          phrases:[
+            {id:"q1",type:"multiple_choice",en:"The best place in Santos for traditional seafood restaurants is: 🦐",pt:"O melhor lugar em Santos para restaurantes de frutos do mar tradicionais é:",options:["Ponta da Praia neighborhood 🦐","Gonzaga shopping district","Vila Belmiro","Monte Serrat"],correct:0,words:[{w:"traditional",cls:"adj",tr:"tradicional"}]},
+            {id:"q2",type:"multiple_choice",en:"The Santos Carnaval is considered: 🎉",pt:"O Carnaval de Santos é considerado:",options:["The second most important carnival in Brazil 🎉","The most important in Brazil","A small local event","A recent tradition from the 2000s"],correct:0,words:[{w:"carnival",cls:"noun",tr:"carnaval"}]},
+          ]
+        },
+        { id:"traducao_tur_f7", name:"🔄 Traduções Cultura", icon:"🔄",
+          description:"Traduza frases sobre cultura",xpTotal:60,
+          phrases:[
+            {id:"tr1",type:"translate_pt_en",en:"The shrimp pastry is the most popular street food in Santos.",pt:"O pastel de camarão é o alimento de rua mais popular de Santos.",answer:"the shrimp pastry is the most popular street food in santos",words:[{w:"popular",cls:"adj",tr:"popular"}]},
+            {id:"tr2",type:"translate_en_pt",en:"Santos has six waterway canals through the city center. 🌊",pt:"Santos tem seis canais fluviais pelo centro da cidade.",answer:"santos tem seis canais fluviais pelo centro da cidade",words:[{w:"waterway",cls:"adj",tr:"fluvial/aquático"}]},
+          ]
+        },
+      ]
+    },
+    {
+      id:"f8", name:"Fase 8 🌟", subtitle:"Guia Expert — Santos Completo",
+      unlocked:false,
+      missions:[
+        { id:"expert_f8", name:"🌍 Guia Expert", icon:"🌍",
+          description:"Situações avançadas com turistas internacionais",xpTotal:130,
+          phrases:[
+            {id:"e1",type:"pronunciation",en:"Welcome to Santos! I highly recommend starting at the Orquidário Municipal — it's free, world-class, and only ten minutes from here on Avenida Bartolomeu de Gusmão. 🌺",pt:"Bem-vindo a Santos! Recomendo muito começar pelo Orquidário Municipal — é gratuito, de nível mundial, e fica a apenas 10 minutos daqui na Avenida Bartolomeu de Gusmão.",words:[{w:"highly recommend",cls:"phrase",tr:"recomendo muito"},{w:"world-class",cls:"adj",tr:"de nível mundial"}]},
+            {id:"e2",type:"translate_pt_en",en:"For panoramic views of the city, take the cable car up to Monte Serrat — the view is breathtaking.",pt:"Para vistas panorâmicas da cidade, pegue o bondinho até o Monte Serrat — a vista é de tirar o fôlego.",answer:"for panoramic views of the city, take the cable car up to monte serrat — the view is breathtaking",words:[{w:"breathtaking",cls:"adj",tr:"de tirar o fôlego"},{w:"panoramic",cls:"adj",tr:"panorâmico"}]},
+            {id:"e3",type:"multiple_choice",en:"A tourist wants a full Santos experience in one day. The best route is: 🗺️",pt:"Um turista quer conhecer Santos em um dia. A melhor rota é:",options:["Orquidário → Museu do Café → Museu Pelé → Monte Serrat → Gonzaga beachfront 🗺️","Stay at the hotel all day 🛌","Just go to the beach 🏖️","Take a bus to São Paulo 🚌"],correct:0,words:[{w:"route",cls:"noun",tr:"rota"}]},
+            {id:"e4",type:"fill_blank",en:"If a tourist asks about Pelé, tell them: 'Pelé played for Santos FC for ___ years!' 👑",pt:"Se um turista perguntar sobre Pelé, diga: 'Pelé jogou no Santos FC por 18 anos!'",answer:"18",words:[{w:"played for",cls:"phrase",tr:"jogou pelo"}]},
+            {id:"e5",type:"word_order",en:"Santos Bay offers some of the best views of the port and the ocean. ⚓",pt:"A Baía de Santos oferece algumas das melhores vistas do porto e do oceano.",scrambled:["Santos","Bay","offers","some","of","the","best","views","of","the","port","and","the","ocean."],answer:"Santos Bay offers some of the best views of the port and the ocean.",words:[{w:"bay",cls:"noun",tr:"baía"},{w:"offers",cls:"verb",tr:"oferece"}]},
+          ]
+        },
+        { id:"directions_f8", name:"📍 Direções Avançadas", icon:"📍",
+          description:"Orientando turistas pela cidade",xpTotal:110,
+          phrases:[
+            {id:"d1",type:"pronunciation",en:"To get to the Museu do Café, take Avenida Conselheiro Nébias toward Praça Rui Barbosa — the building is unmissable, it's right on the square. ☕",pt:"Para chegar ao Museu do Café, pegue a Avenida Conselheiro Nébias em direção à Praça Rui Barbosa — o edifício é inconfundível, fica bem na praça.",words:[{w:"unmissable",cls:"adj",tr:"inconfundível"},{w:"square",cls:"noun",tr:"praça"}]},
+            {id:"d2",type:"translate_pt_en",en:"Walk along Avenida Presidente Wilson to enjoy the full beachfront.",pt:"Caminhe pela Avenida Presidente Wilson para aproveitar toda a orla.",answer:"walk along avenida presidente wilson to enjoy the full beachfront",words:[{w:"along",cls:"prep",tr:"ao longo de"},{w:"enjoy",cls:"verb",tr:"aproveitar"}]},
+            {id:"d3",type:"multiple_choice",en:"A tourist at Gonzaga beach asks how to get to Vila Belmiro stadium. You say: ⚽",pt:"Turista na praia do Gonzaga quer ir ao estádio Vila Belmiro. Você diz:",options:["Take a taxi or ride-share — it's about 15 minutes from here in the Vila Belmiro neighborhood ⚽","Walk to the port and turn left","Take the cable car up Monte Serrat","It's right here on the beach"],correct:0,words:[{w:"ride-share",cls:"noun",tr:"carona por app"},{w:"neighborhood",cls:"noun",tr:"bairro"}]},
+            {id:"d4",type:"fill_blank",en:"The Museu Pelé is located near the historic ___ area of Santos. 👑",pt:"O Museu Pelé está localizado perto da área histórica do centro de Santos.",answer:"center",words:[{w:"located",cls:"verb",tr:"localizado"}]},
+          ]
+        },
+        { id:"mem_tur_f8", name:"🃏 Memória Expert", icon:"🃏",
+          description:"Revisão completa de Santos",xpTotal:50,
+          phrases:[{id:"mem1",type:"memory_match",en:"Santos expert review 🌟",pt:"Revisão expert Santos",pairs:[{a:"🌺 Orquidário",b:"free, 3,000+ orchids"},{a:"⚓ Porto de Santos",b:"30% of Brazil's GDP"},{a:"☕ Bolsa do Café",b:"built 1922"},{a:"👑 Pelé",b:"1,000+ goals at Santos"}],words:[]}]
+        },
+        { id:"match_tur_f8", name:"🔗 Match Final Santos", icon:"🔗",
+          description:"Revisão total de Santos",xpTotal:60,
+          phrases:[{id:"mc1",type:"match_columns",en:"Santos final review 🏖️",pt:"Revisão final Santos",pairs:[{a:"🌺 3,000+ orchid species",b:"Orquidário Municipal"},{a:"🚡 cable car + hilltop",b:"Bondinho Monte Serrat"},{a:"☕ 1922 exchange building",b:"Museu do Café"},{a:"⚓ largest port LatAm",b:"Porto de Santos"}],words:[]}]
+        },
+        { id:"mc_tur_f8", name:"☑️ Quiz Expert", icon:"☑️",
+          description:"Teste seu conhecimento total de Santos",xpTotal:80,
+          phrases:[
+            {id:"q1",type:"multiple_choice",en:"Which of these Santos facts is correct? 🌟",pt:"Qual desses fatos sobre Santos é correto?",options:["Santos has 7 beaches in an 8 km stretch, plus the largest port in Latin America 🏖️","Santos has 3 beaches and a small regional port","Santos FC was founded in 1950","The Orquidário opened in 1980"],correct:0,words:[{w:"stretch",cls:"noun",tr:"trecho"}]},
+            {id:"q2",type:"multiple_choice",en:"A tourist says: 'I want to see the best of Santos in one afternoon.' Your best suggestion: 🗺️",pt:"Turista quer ver o melhor de Santos em uma tarde. Sua melhor sugestão:",options:["Museu do Café + Orquidário + Gonzaga beachfront walk + seafood dinner at Ponta da Praia 🌟","Stay inside the hotel","Only go to Vila Belmiro","Take a boat to Rio de Janeiro"],correct:0,words:[{w:"suggestion",cls:"noun",tr:"sugestão"}]},
+            {id:"q3",type:"multiple_choice",en:"Which avenue runs along the Santos beachfront? 🏖️",pt:"Qual avenida corre ao longo da orla de Santos?",options:["Avenida Presidente Wilson 🏖️","Avenida Ana Costa","Avenida Conselheiro Nébias","Avenida Bartolomeu de Gusmão"],correct:0,words:[{w:"avenue",cls:"noun",tr:"avenida"}]},
+          ]
+        },
+        { id:"traducao_tur_f8", name:"🔄 Traduções Expert", icon:"🔄",
+          description:"Traduções avançadas sobre Santos",xpTotal:70,
+          phrases:[
+            {id:"tr1",type:"translate_pt_en",en:"Santos is both a historic port city and a modern beach resort.",pt:"Santos é ao mesmo tempo uma cidade portuária histórica e uma moderna estância de praia.",answer:"santos is both a historic port city and a modern beach resort",words:[{w:"historic",cls:"adj",tr:"histórico"},{w:"resort",cls:"noun",tr:"estância"}]},
+            {id:"tr2",type:"translate_en_pt",en:"The Jardim da Orla stretches 5.4 kilometers along the entire beachfront. 🌿",pt:"O Jardim da Orla se estende por 5,4 quilômetros ao longo de toda a orla.",answer:"o jardim da orla se estende por 5,4 quilômetros ao longo de toda a orla",words:[{w:"stretches",cls:"verb",tr:"se estende"}]},
+            {id:"tr3",type:"translate_pt_en",en:"Pelé is considered the greatest footballer who ever lived.",pt:"Pelé é considerado o maior futebolista que já existiu.",answer:"pelé is considered the greatest footballer who ever lived",words:[{w:"considered",cls:"verb",tr:"considerado"},{w:"ever lived",cls:"phrase",tr:"que já existiu"}]},
+          ]
+        },
+      ]
+    }
+  );
 })();
