@@ -2356,15 +2356,17 @@ input { color: #ffffff !important; }
   padding:8px 20px 4px;
 }
 .plb-mini {
-  display:inline-flex; align-items:center; gap:4px;
-  padding:5px 12px; border-radius:20px;
+  display:inline-flex; flex-direction:column; align-items:center; gap:4px;
+  padding:10px 22px; border-radius:20px;
   border:1.5px solid rgba(255,255,255,0.12);
   background:rgba(255,255,255,0.05);
   color:rgba(255,255,255,0.55);
-  font-size:13px; font-weight:700; letter-spacing:.3px;
+  font-size:12px; font-weight:700; letter-spacing:.3px;
   cursor:pointer; font-family:inherit;
-  transition:all .2s;
+  transition:all .2s; min-width:90px;
 }
+.plb-flag { font-size:28px; line-height:1; }
+.plb-label { font-size:12px; font-weight:700; }
 .plb-mini:hover { background:rgba(255,255,255,0.1); color:#fff; }
 .plb-mini.active {
   border-color:rgba(201,147,58,0.55);
@@ -2566,11 +2568,12 @@ body.light-mode .dash-date { color:#1e0f50 !important; }
 }
 .dash-logo { flex-shrink: 0; }
 .dash-logo-img, .dash-logo img {
-  width: 64px !important;
-  height: 64px !important;
-  border-radius: 14px !important;
-  object-fit: cover !important;
-  box-shadow: 0 2px 12px rgba(201,147,58,0.3), 0 0 0 1px rgba(201,147,58,0.15) !important;
+  width: auto !important;
+  height: 46px !important;
+  max-width: 170px !important;
+  border-radius: 8px !important;
+  object-fit: contain !important;
+  box-shadow: none !important;
   border: none !important;
 }
 .dash-center {
@@ -4840,13 +4843,13 @@ body.light-mode .settings-big-btn {
 .social-link-btn {
   display: flex; align-items: center; gap: 10px;
   padding: 14px; border-radius: var(--r);
-  text-decoration: none;
+  text-decoration: none; font-family: var(--font);
   transition: var(--t); border: 1px solid transparent;
 }
 .social-link-btn:hover { transform: translateY(-2px); }
 .sl-icon { font-size: 22px; flex-shrink: 0; }
-.sl-name { font-size: 13px; font-weight: 800; color: #fff !important; }
-.sl-handle { font-size: 11px; color: rgba(255,255,255,0.6) !important; }
+.sl-name { font-size: 13px; font-weight: 800; color: #fff !important; font-family: var(--font); }
+.sl-handle { font-size: 11px; color: rgba(255,255,255,0.6) !important; font-family: var(--font); }
 .social-instagram { background: linear-gradient(135deg, #833ab4, #fd1d1d, #f77737); }
 .social-linkedin  { background: linear-gradient(135deg, #0077b5, #004182); }
 .social-website   { background: linear-gradient(135deg, #2a1060, #5b21b6); }
@@ -5258,13 +5261,7 @@ body.light-mode .about-btn { color: #5b21b6 !important; border-color: rgba(91,33
   display: block;
 }
 
-/* ══ DASHBOARD LOGO — smaller, blend ══════════════════ */
-#dash-logo-img {
-  width: 60px !important; height: 60px !important;
-  object-fit: cover !important;
-  border-radius: 10px !important;
-  mix-blend-mode: normal !important;
-}
+/* ══ DASHBOARD LOGO — removed, consolidated in main rule ══════════════════ */
 
 /* ══ HEADER — avatar only, with edit hint ══════════════ */
 .dash-avatar-wrap {
@@ -5334,7 +5331,7 @@ body.light-mode .curiosity-text {
 .about-btn:hover { background: rgba(34,197,94,0.3) !important; color: #fff !important; }
 body.light-mode .about-btn { background: rgba(34,197,94,0.12) !important; color: #15803d !important; border-color: rgba(34,197,94,0.4) !important; }
 
-/* ══ DASH LOGO — wider rectangle ══════════════════════ */
+/* ══ DASH LOGO — removed, consolidated in main rule ══════════════════════
 #dash-logo-img {
   width: 120px !important;
   height: 52px !important;
@@ -5342,7 +5339,7 @@ body.light-mode .about-btn { background: rgba(34,197,94,0.12) !important; color:
   object-position: center !important;
   border-radius: 12px !important;
   mix-blend-mode: normal !important;
-}
+} */
 
 /* ══ GREETING COLORS — cream not yellow ═══════════════ */
 .greeting-time-en { color: #f5e6c8 !important; }
@@ -7076,13 +7073,13 @@ a.settings-big-btn:active {
   filter: drop-shadow(0 4px 16px rgba(201,147,58,0.3));
 }
 
-/* ── Dashboard header logo — compact, sides cropped ── */
+/* ── Dashboard header logo ── */
 #dash-logo-img {
-  width: 96px !important;
-  height: 44px !important;
-  object-fit: cover !important;
-  object-position: center !important;
-  border-radius: 10px !important;
+  width: auto !important;
+  height: 48px !important;
+  max-width: 180px !important;
+  object-fit: contain !important;
+  border-radius: 8px !important;
 }
 
 /* ── Grammar/Writing banners — definitive layout (no collapse) ── */
@@ -7651,6 +7648,17 @@ a.settings-big-btn:active {
 .dash-header-streak .dhs-val {
   font-size: 15px; font-weight: 800;
   color: #fb923c;
+}
+.streak-shields {
+  display:flex; align-items:center; gap:3px;
+  font-size:11px; font-weight:800;
+  color:#7c3aed;
+  margin-top:2px;
+}
+.dhs-shield {
+  font-size:11px; font-weight:800;
+  color:rgba(124,58,237,0.9);
+  margin-left:4px;
 }
 .dash-date-weekday {
   font-family: var(--font) !important;

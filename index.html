@@ -219,7 +219,7 @@
 
     <!-- Botões -->
     <div class="ob-actions">
-      <button class="ob-btn-back" id="ob-btn-back" onclick="obBack()" style="display:none">← Voltar</button>
+      <button class="ob-btn-back" id="ob-btn-back" onclick="obBack()" style="display:none" data-i18n="back">← Voltar</button>
       <button class="ob-btn-next" id="ob-btn-next" onclick="obNext()" data-i18n="ob_next">Próximo →</button>
       <button class="ob-btn-skip" id="ob-btn-skip" onclick="obSkip()" data-i18n="ob_skip_all">Pular tudo</button>
     </div>
@@ -639,6 +639,7 @@
           <div class="dash-date" id="dash-date"></div>
           <div class="dash-header-streak" id="dash-header-streak" style="display:none">
             <span class="dhs-fire">🔥</span><span class="dhs-val" id="dash-header-streak-val">0</span>
+            <span class="dhs-shield" id="dash-header-shields" style="display:none">🛡️<span id="dash-header-shield-count">0</span></span>
           </div>
         </div>
       </div>
@@ -702,6 +703,9 @@
         <span class="stat-tap-hint">›</span>
         <span class="stat-value" id="dash-streak">0</span>
         <span class="stat-label">Streak 🔥</span>
+        <div class="streak-shields" id="dash-streak-shields" style="display:none">
+          🛡️ <span id="dash-shield-count">0</span>
+        </div>
       </div>
     </div>
 
@@ -1716,19 +1720,25 @@
 
     <!-- Language mini selector -->
     <div class="profile-lang-mini-row">
-      <button class="plb-mini" id="lang-btn-pt" onclick="setLang('pt')">🇧🇷 PT</button>
-      <button class="plb-mini" id="lang-btn-en" onclick="setLang('en')">🇺🇸 EN</button>
+      <button class="plb-mini" id="lang-btn-pt" onclick="setLang('pt')">
+        <span class="plb-flag">🇧🇷</span>
+        <span class="plb-label">Português</span>
+      </button>
+      <button class="plb-mini" id="lang-btn-en" onclick="setLang('en')">
+        <span class="plb-flag">🇺🇸</span>
+        <span class="plb-label">English</span>
+      </button>
     </div>
 
     <!-- Commitment — right after XP -->
     <div class="profile-section">
-      <div class="profile-section-title" id="prof-title-commitment">🎯 Comprometimento</div>
+      <div class="profile-section-title" id="prof-title-commitment" data-i18n="prof_commitment">🎯 Comprometimento</div>
       <div class="commitment-card" id="commitment-card" style="cursor:pointer" onclick="showCommitmentTips()"></div>
     </div>
 
     <!-- Activity Calendar -->
     <div class="profile-section">
-      <div class="profile-section-title" id="prof-title-calendar">📅 Calendário de Atividade</div>
+      <div class="profile-section-title" id="prof-title-calendar" data-i18n="prof_calendar">📅 Calendário de Atividade</div>
       <div class="activity-calendar" id="activity-calendar"></div>
       <div class="activity-legend">
         <span class="al-box al-0"></span><span data-i18n="activity_none">Sem atividade</span>
@@ -1757,30 +1767,30 @@
 
     <!-- Skills analysis -->
     <div class="profile-section">
-      <div class="profile-section-title" id="prof-title-skills">🧠 Habilidades</div>
+      <div class="profile-section-title" id="prof-title-skills" data-i18n="prof_skills">🧠 Habilidades</div>
       <div id="profile-skills"></div>
     </div>
 
     <!-- Personal goal -->
     <div class="profile-section" id="profile-goal-section" style="display:none">
-      <div class="profile-section-title" id="prof-title-goal">💬 Seu objetivo pessoal</div>
+      <div class="profile-section-title" id="prof-title-goal" data-i18n="prof_goal">💬 Seu objetivo pessoal</div>
       <div class="profile-goal-text" id="profile-goal-text"></div>
     </div>
 
     <!-- Account settings -->
     <div class="profile-section">
-      <div class="profile-section-title" id="prof-title-account">👤 Conta</div>
+      <div class="profile-section-title" id="prof-title-account" data-i18n="prof_account">👤 Conta</div>
       <div class="settings-big-btns">
-        <button class="settings-big-btn" id="btn-edit-name">✏️ Mudar Nome</button>
-        <button class="settings-big-btn" id="btn-edit-email">📧 Mudar Email</button>
-        <button class="settings-big-btn" id="btn-edit-password">🔒 Mudar Senha</button>
-        <button class="settings-big-btn btn-logout-profile" id="btn-logout">⏻ Sair da conta</button>
+        <button class="settings-big-btn" id="btn-edit-name" data-i18n="acc_edit_name">✏️ Editar nome</button>
+        <button class="settings-big-btn" id="btn-edit-email" data-i18n="acc_edit_email">✏️ Editar email</button>
+        <button class="settings-big-btn" id="btn-edit-password" data-i18n="acc_edit_pass">🔑 Trocar senha</button>
+        <button class="settings-big-btn btn-logout-profile" id="btn-logout" data-i18n="logout_account">⏻ Sair da conta</button>
       </div>
     </div>
 
     <!-- Social links -->
     <div class="profile-section">
-      <div class="profile-section-title" id="prof-title-networks">📱 Nossas Redes</div>
+      <div class="profile-section-title" id="prof-title-networks" data-i18n="prof_networks">📱 Nossas Redes</div>
       <div class="social-links-grid">
         <a href="https://www.instagram.com/viclanguage" target="_blank" class="social-link-btn social-instagram">
           <span class="sl-icon">📸</span>
@@ -1796,37 +1806,37 @@
         </a>
         <a href="https://wa.me/5511943644477" target="_blank" class="social-link-btn social-whatsapp">
           <span class="sl-icon">📱</span>
-          <div><div class="sl-name">WhatsApp</div><div class="sl-handle">Fale conosco</div></div>
+          <div><div class="sl-name">WhatsApp</div><div class="sl-handle" data-i18n="contact_us">Fale conosco</div></div>
         </a>
       </div>
     </div>
 
     <!-- Preferences -->
     <div class="profile-section">
-      <div class="profile-section-title" id="prof-title-prefs">⚙️ Preferências</div>
+      <div class="profile-section-title" id="prof-title-prefs" data-i18n="prof_prefs">⚙️ Preferências</div>
       <div class="settings-item">
-        <span>🔊 Sons</span>
+        <span data-i18n="pref_sounds">🔊 Sons</span>
         <label class="toggle-switch">
           <input type="checkbox" id="toggle-sounds" checked/>
           <span class="toggle-slider"></span>
         </label>
       </div>
       <div class="settings-item">
-        <span>🌙 Modo Escuro</span>
+        <span data-i18n="pref_dark">🌙 Modo escuro</span>
         <label class="toggle-switch">
           <input type="checkbox" id="toggle-darkmode" checked/>
           <span class="toggle-slider"></span>
         </label>
       </div>
       <div class="settings-item">
-        <span id="notif-label">🔔 Notificações</span>
+        <span id="notif-label" data-i18n="notif_title">🔔 Notificações</span>
         <label class="toggle-switch">
           <input type="checkbox" id="toggle-notif" checked/>
           <span class="toggle-slider"></span>
         </label>
       </div>
       <div class="settings-item" id="notif-freq-row">
-        <span>📅 Frequência</span>
+        <span data-i18n="notif_freq_label">📅 Frequência</span>
         <select id="notif-freq" class="notif-freq-select">
           <option value="1">1x por dia</option>
           <option value="2">2x por dia</option>
@@ -1837,7 +1847,7 @@
         </select>
       </div>
       <div class="settings-item">
-        <span>🔤 Tamanho da letra</span>
+        <span data-i18n="pref_font">🔤 Tamanho da fonte</span>
         <div class="font-size-buttons">
           <button class="font-size-btn" data-size="xs" style="font-size:10px">A</button>
           <button class="font-size-btn" data-size="small" style="font-size:12px">A</button>
@@ -1896,8 +1906,8 @@
         <div class="profile-edit-title" id="profile-edit-title"></div>
         <input class="profile-edit-input" id="profile-edit-input" type="text"/>
         <div class="profile-edit-actions">
-          <button class="btn-primary" id="btn-save-edit">Salvar</button>
-          <button class="btn-back-sm" id="btn-cancel-edit">Cancelar</button>
+          <button class="btn-primary" id="btn-save-edit" data-i18n="save">Salvar</button>
+          <button class="btn-back-sm" id="btn-cancel-edit" data-i18n="cancel">Cancelar</button>
         </div>
         <div class="profile-edit-msg" id="profile-edit-msg"></div>
       </div>
