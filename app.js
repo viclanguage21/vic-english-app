@@ -5519,6 +5519,7 @@ function initOneSignal(){
   window.OneSignalDeferred.push(async function(OneSignal){
     await OneSignal.init({
       appId: OS_APP_ID,
+      safari_web_id: "web.onesignal.auto.54eebb47-16d1-4f2f-8c9e-9bb7522bb051",
       notifyButton: { enable: false },
       allowLocalhostAsSecureOrigin: true,
     });
