@@ -7086,13 +7086,10 @@ a.settings-big-btn:active {
 /* ── Dashboard header logo ── */
 #dash-logo-img {
   width: auto !important;
-  height: 52px !important;
-  max-width: 190px !important;
+  height: 64px !important;
+  max-width: 220px !important;
   object-fit: contain !important;
-  border-radius: 14px !important;
-  background: #2d1157 !important;
-  padding: 6px 10px !important;
-  box-shadow: 0 4px 20px rgba(201,147,58,0.55), 0 0 0 1.5px rgba(201,147,58,0.3) !important;
+  border-radius: 12px !important;
 }
 
 /* ── Grammar/Writing banners — definitive layout (no collapse) ── */
@@ -7703,14 +7700,10 @@ a.settings-big-btn:active {
 .dash-header-3col #dash-logo-img,
 .dash-header-3col .dash-logo-img {
   width: auto !important;
-  height: 56px !important;
-  max-width: 200px !important;
-  border-radius: 14px !important;
+  height: 64px !important;
+  max-width: 220px !important;
+  border-radius: 12px !important;
   object-fit: contain !important;
-  background: #2d1157 !important;
-  padding: 6px 10px !important;
-  box-shadow: 0 4px 20px rgba(201,147,58,0.55), 0 0 0 1.5px rgba(201,147,58,0.3) !important;
-  filter: none !important;
 }
 /* coluna direita: avatar arredondado (squircle, não círculo) */
 .dash-header-3col .dash-user {
