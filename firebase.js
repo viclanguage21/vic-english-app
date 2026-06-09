@@ -46,7 +46,7 @@ export const db   = getFirestore(app);
 
 // ── Firebase Cloud Messaging ──────────────────────────────────────────────────
 // VAPID key — gere no Firebase Console → Project Settings → Cloud Messaging → Web Push certificates
-export const VAPID_KEY = "COLE_SUA_VAPID_KEY_AQUI";
+export const VAPID_KEY = "BBkTirD1c2BmutFFraMJc4zzyNMGE5AzRimqGyOgBYRiQL_2VMoJ4m81TtHTyghHbAIEhdH4whZbjPBd_ILPTyU";
 
 let _messaging = null;
 function getMsg() {
