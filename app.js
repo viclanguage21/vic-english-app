@@ -451,7 +451,7 @@ function renderProfileTexts() {
 }
 
 function renderMissionTexts() {
-  ["btn-prev-exercise","btn-prev-exercise"].forEach(id => {
+  ["btn-prev-exercise"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.textContent = t("previous");
   });
@@ -475,6 +475,7 @@ onAuthChange(user => {
 
 // ── STATE ──────────────────────────────────────────────────────────────────────
 let currentUser=null, userData=null;
+let _logoImgCache=null;
 let currentSegmentId="maritimo", currentPhaseId="f1", currentMissionId="vocab_basico", currentPhraseIndex=0;
 let exerciseAnswered=false;
 let diagAnswers={}, diagStep=0;
@@ -2373,10 +2374,10 @@ function renderVocab(phrase){
     dicaBtn.classList.remove("open");
     dicaBtn.innerHTML="💡 Ver Dica";
     dicaBtn.onclick=()=>{
-      const isOpen=el.classList.contains("dica-open");
-      el.classList.toggle("dica-open",!isOpen);
-      dicaBtn.classList.toggle("open",!isOpen);
-      dicaBtn.innerHTML=isOpen?"💡 Ver Dica":"🔼 Esconder Dica";
+      el.classList.toggle("dica-open");
+      const nowOpen=el.classList.contains("dica-open");
+      dicaBtn.classList.toggle("open",nowOpen);
+      dicaBtn.innerHTML=nowOpen?"🔼 Esconder Dica":"💡 Ver Dica";
     };
   }
 }
@@ -4774,8 +4775,7 @@ function renderBadges(){
         else if(b.id==="daily7"){progress=`${Math.min(s.loginStreak,7)}/7 dias`;}
         else if(b.id==="missions10"){progress=`${Math.min(s.missionsCompleted,10)}/10`;}
         else if(b.id.startsWith("seg_")){
-          const parts=b.id.replace(/^seg_/,"").split("_");
-          const need=parseInt(parts.pop()); const segId=parts.join("_");
+          const {segId,need}=_parseSegBadgeId(b.id);
           const done=s.segMissions?.[segId]||0;
           progress=`${Math.min(done,need)}/${need} missões`;
         }
@@ -4815,8 +4815,7 @@ window.showBadgeDetail=function(badgeId){
       const need=b.id==="missions3"?3:b.id==="missions5"?5:10;
       progressText=`Progresso: ${Math.min(stats.missionsCompleted,need)}/${need} missões`;
     } else if(b.id.startsWith("seg_")){
-      const parts=b.id.replace(/^seg_/,"").split("_");
-      const need=parseInt(parts.pop()); const segId=parts.join("_");
+      const {segId,need}=_parseSegBadgeId(b.id);
       const done=stats.segMissions?.[segId]||0;
       progressText=`Progresso: ${Math.min(done,need)}/${need} missões em ${segId}`;
     }
@@ -5347,20 +5346,27 @@ let _sessionStats = {
   retries: 0,
 };
 
+function _parseSegBadgeId(id){
+  const p=id.replace(/^seg_/,"").split("_");
+  const need=parseInt(p.pop());
+  return {segId:p.join("_"),need};
+}
+
 function getBadgeStats(){
   const completed = userData?.completedMissions||[];
+
+  // Single pass: count completed missions per segment
+  const segMissions = {};
+  completed.forEach(m=>{
+    const idx=m.indexOf("_");
+    if(idx>0){ const seg=m.slice(0,idx); segMissions[seg]=(segMissions[seg]||0)+1; }
+  });
+
   const segDone = VICTOR_DATA.segments.filter(seg=>{
     const phases = seg.phases||[];
     const total = phases.reduce((a,p)=>(p.missions||[]).length+a,0);
-    const done = completed.filter(m=>m.startsWith(seg.id+"_")).length;
-    return total>0 && done/total>=0.6;
+    return total>0 && (segMissions[seg.id]||0)/total>=0.6;
   }).map(s=>s.id);
-
-  // Per-segment mission counts for segment-specific badges
-  const segMissions = {};
-  (VICTOR_DATA.segments||[]).forEach(seg => {
-    segMissions[seg.id] = completed.filter(m => m.startsWith(seg.id + "_")).length;
-  });
 
   return {
     xp: userData?.xp||0,
@@ -5425,13 +5431,14 @@ function showBadgeUnlock(badge){
 
 async function shareBadge(badge){
   try{
-    // Load logo for branding footer
-    const logoImg = await new Promise(res => {
+    // Load logo for branding footer (cached after first load)
+    if(!_logoImgCache) _logoImgCache = await new Promise(res => {
       const img = new Image();
       img.onload  = () => res(img);
       img.onerror = () => res(null);
       img.src = "/logo_full_2.png";
     });
+    const logoImg = _logoImgCache;
 
     const canvas = document.createElement("canvas");
     canvas.width = 1080; canvas.height = 1080;
@@ -5526,12 +5533,13 @@ async function shareBadge(badge){
       {a:1.20,r:208,s:5},{a:1.55,r:220,s:6},{a:1.90,r:214,s:7},
       {a:2.30,r:210,s:5},{a:2.70,r:218,s:8},{a:3.10,r:212,s:5},
       {a:3.50,r:208,s:7},{a:3.90,r:220,s:5},{a:4.30,r:214,s:6},
-      {a:4.75,r:210,s:7},{a:5.20,r:218,s:5},{a:5.65,r,s:6},
+      {a:4.75,r:210,s:7},{a:5.20,r:218,s:5},{a:5.65,r:212,s:6},
     ];
     const sparkColors=["rgba(180,100,255,1)","rgba(236,72,153,1)","rgba(255,215,100,1)"];
+    ctx.shadowBlur=12;
     sparks.forEach((sp,i)=>{
       const sx=cx+Math.cos(sp.a)*sp.r, sy=cy+Math.sin(sp.a)*sp.r;
-      ctx.shadowColor=sparkColors[i%3]; ctx.shadowBlur=12;
+      ctx.shadowColor=sparkColors[i%3];
       ctx.fillStyle="#fff";
       ctx.beginPath(); ctx.arc(sx,sy,sp.s/2,0,Math.PI*2); ctx.fill();
     });
@@ -5695,7 +5703,6 @@ function showNotifBanner(){
   if(_cfg.notifAsked) return;
   // Delay so the mission-complete celebration plays first
   setTimeout(()=>{
-    if(_cfg.notifAsked) return;
     _setCfg("notifAsked","1");
     const overlay=document.createElement("div");
     overlay.className="notif-modal-overlay";
