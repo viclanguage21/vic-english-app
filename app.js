@@ -2441,7 +2441,7 @@ function renderExerciseUI(phrase){
     indices.forEach((origIdx,newIdx)=>{
       const opt=phrase.options[origIdx];
       const btn=document.createElement("button"); btn.className="mc-option";
-      btn.innerHTML=`<span class="mc-text">${opt}</span><button class="mc-speak-btn" tabindex="-1">🔊</button>`;
+      btn.innerHTML=`<span class="mc-text">${opt}</span><span class="mc-speak-btn" tabindex="-1">🔊</span>`;
       btn.querySelector(".mc-speak-btn").addEventListener("click",e=>{
         e.stopPropagation();
         const clean=stripEmoji(opt);
