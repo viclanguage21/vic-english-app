@@ -942,7 +942,8 @@
         </div>
       </div>
 
-      <div class="phrase-pt"  id="phrase-pt"></div>
+      <div class="phrase-pt"  id="phrase-pt" style="display:none"></div>
+      <button class="btn-dica" id="btn-dica" style="display:none">💡 Dica</button>
       <div class="vocab-list" id="vocab-list"></div>
 
       <!-- translate -->
@@ -951,13 +952,11 @@
         <input class="translate-input" id="translate-input" type="text" placeholder="Digite sua resposta..."/>
         <button class="btn-check" id="btn-check-translate">Verificar ✓</button>
         <div class="answer-feedback" id="answer-feedback"></div>
-        <button class="btn-next-exercise" id="btn-next-exercise">Próximo →</button>
       </div>
 
       <!-- multiple choice -->
       <div class="mc-options" id="mc-options" style="display:none"></div>
       <div class="answer-feedback" id="answer-feedback-mc" style="display:none"></div>
-      <button class="btn-next-exercise" id="btn-next-mc">Próximo →</button>
 
       <!-- fill blank -->
       <div id="fill-wrap" style="display:none">
@@ -965,7 +964,6 @@
         <input type="hidden" id="fill-input-hidden"/>
         <button class="btn-check" style="margin-top:12px;width:100%" id="btn-check-fill">Verificar ✓</button>
         <div class="answer-feedback" id="answer-feedback-fill" style="display:none"></div>
-        <button class="btn-next-exercise" id="btn-next-fill">Próximo →</button>
       </div>
 
       <!-- word order -->
@@ -974,7 +972,6 @@
         <div class="word-order-bank" id="word-order-bank"></div>
         <button class="btn-check" style="margin-top:10px;width:100%" id="btn-check-order">Verificar ✓</button>
         <div class="answer-feedback" id="answer-feedback-order" style="display:none"></div>
-        <button class="btn-next-exercise" id="btn-next-order">Próximo →</button>
       </div>
 
       <!-- memory match -->
@@ -1717,11 +1714,10 @@
       </div>
     </div>
 
-    <!-- Stats row -->
-    <div class="profile-stats-row">
-      <div class="profile-stat"><span id="ps-xp">0</span><small>XP Total</small></div>
-      <div class="profile-stat"><span id="ps-days">0</span><small>Dias Praticados</small></div>
-      <div class="profile-stat"><span id="ps-missions">0</span><small>Missões</small></div>
+    <!-- Language mini selector -->
+    <div class="profile-lang-mini-row">
+      <button class="plb-mini" id="lang-btn-pt" onclick="setLang('pt')">🇧🇷 PT</button>
+      <button class="plb-mini" id="lang-btn-en" onclick="setLang('en')">🇺🇸 EN</button>
     </div>
 
     <!-- Commitment — right after XP -->
@@ -1735,10 +1731,10 @@
       <div class="profile-section-title" id="prof-title-calendar">📅 Calendário de Atividade</div>
       <div class="activity-calendar" id="activity-calendar"></div>
       <div class="activity-legend">
-        <span class="al-box al-0"></span><span>Sem atividade</span>
-        <span class="al-box al-1"></span><span>Baixo</span>
-        <span class="al-box al-2"></span><span>Médio</span>
-        <span class="al-box al-3"></span><span>Alto</span>
+        <span class="al-box al-0"></span><span data-i18n="activity_none">Sem atividade</span>
+        <span class="al-box al-1"></span><span data-i18n="activity_low">Baixo</span>
+        <span class="al-box al-2"></span><span data-i18n="activity_mid">Médio</span>
+        <span class="al-box al-3"></span><span data-i18n="activity_high">Alto</span>
       </div>
     </div>
 
@@ -1746,9 +1742,9 @@
     <div class="profile-section">
       <div class="profile-section-title" data-i18n="xp_history">📊 Progresso de XP</div>
       <div class="chart-tabs">
-        <button class="chart-tab active" data-period="week">Esta semana</button>
-        <button class="chart-tab" data-period="week1">Semana passada</button>
-        <button class="chart-tab" data-period="week2">2 semanas atrás</button>
+        <button class="chart-tab active" data-period="week" data-i18n="week_this">Esta semana</button>
+        <button class="chart-tab" data-period="week1" data-i18n="week_last">Semana passada</button>
+        <button class="chart-tab" data-period="week2" data-i18n="week_2ago">2 semanas atrás</button>
       </div>
       <div class="xp-chart" id="xp-chart"></div>
     </div>
@@ -1910,6 +1906,7 @@
   </div>
 </div>
 
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script src="sounds.js"></script>
 <script src="data.js"></script>
 <script type="module" src="app.js"></script>

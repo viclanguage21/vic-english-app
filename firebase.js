@@ -2,6 +2,7 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
+import { getFunctions, httpsCallable }       from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -45,7 +46,7 @@ export const db   = getFirestore(app);
 
 // ── Firebase Cloud Messaging ──────────────────────────────────────────────────
 // VAPID key — gere no Firebase Console → Project Settings → Cloud Messaging → Web Push certificates
-export const VAPID_KEY = "COLE_SUA_VAPID_KEY_AQUI";
+export const VAPID_KEY = "BBkTirD1c2BmutFFraMJc4zzyNMGE5AzRimqGyOgBYRiQL_2VMoJ4m81TtHTyghHbAIEhdH4whZbjPBd_ILPTyU";
 
 let _messaging = null;
 function getMsg() {
@@ -261,4 +262,13 @@ export async function getAllUsers() {
 
 export async function getUserById(uid) {
   return getUserData(uid);
+}
+
+// ── CLOUD FUNCTIONS ───────────────────────────────────────────────────────────
+const _functions = getFunctions(app, "us-central1");
+
+export async function callSendPushToAll({ title, body, url }) {
+  const fn = httpsCallable(_functions, "sendPushToAll");
+  const result = await fn({ title, body, url });
+  return result.data;
 }

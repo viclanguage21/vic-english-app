@@ -1,6 +1,6 @@
 // app.js — VIC English v12 — Full fix
 
-import { auth, registerUser, loginUser, loginWithGoogle, logoutUser, onAuthChange, getUserData, saveProgress, getAllUsers, getUserById, OWNER_UID, registerFCMToken, onForegroundMessage, resetPassword, resendVerificationEmail, reloadCurrentUser } from "./firebase.js";
+import { auth, registerUser, loginUser, loginWithGoogle, logoutUser, onAuthChange, getUserData, saveProgress, getAllUsers, getUserById, OWNER_UID, registerFCMToken, onForegroundMessage, resetPassword, resendVerificationEmail, reloadCurrentUser, callSendPushToAll } from "./firebase.js";
 import { I18N, SEG_NAMES, LEVEL_TIPS, LOADING_QUOTES, GLOSSARY, PRO_MESSAGES, BADGES, NOTIF_MESSAGES, MP_LINK } from "./constants.js";
 import { calcLevel, stripEmoji, cleanEnunciado, shuffle, vibrate } from "./utils.js";
 
@@ -123,12 +123,7 @@ function applyLang() {
     const active = _lang === lang;
     // Botões no perfil/configurações
     const btn = document.getElementById(`lang-btn-${lang}`);
-    if (btn) {
-      btn.style.background  = active ? "rgba(201,147,58,0.25)" : "rgba(255,255,255,0.05)";
-      btn.style.borderColor = active ? "rgba(201,147,58,0.5)"  : "rgba(255,255,255,0.15)";
-      btn.style.color       = active ? "#e4b45c" : "#fff";
-      btn.style.transform   = active ? "scale(1.08)" : "scale(1)";
-    }
+    if (btn) btn.classList.toggle("active", active);
     // Botões na tela de login
     const authBtn = document.getElementById(`auth-lang-${lang}`);
     if (authBtn) {
@@ -451,7 +446,7 @@ function renderMissionTexts() {
     const el = document.getElementById(id);
     if (el) el.textContent = t("previous");
   });
-  ["btn-next-exercise","btn-next-mc","btn-next-fill","btn-next-order","btn-next-main"].forEach(id => {
+  ["btn-next-main"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.textContent = t("next");
   });
@@ -1711,6 +1706,7 @@ async function loadDashboard(user){
   try{ renderDailyMissions(); }catch(e){ console.error("renderDailyMissions error:", e.message, e); }
   showView("view-dashboard");
   hideAuthLoading();
+  initOneSignal();
 
   // Diagnosis for new users
   if(!userData.diagnosisAnswers){
@@ -1740,47 +1736,165 @@ function fitUserName(name){
 }
 
 const CURIOSITIES=[
-  // False friends
-  "🇧🇷 'Actually' não significa 'atualmente' — significa 'na verdade'. Um dos erros mais comuns dos brasileiros!",
-  "🇧🇷 'Library' não é livraria — é biblioteca! Livraria em inglês é 'bookstore'.",
-  "🇧🇷 'Parents' não são parentes — são seus pais! Parentes são 'relatives'.",
-  "🇧🇷 'Push' não é puxar — é empurrar! E 'pull' é puxar. Olha nas portas!",
-  // Homophones
-  "👂 'There', 'their' e 'they're' soam idênticos — mas significam: lá / deles / eles são.",
-  "👂 'To', 'too' e 'two' soam igual — preposição, também, e o número 2.",
-  "👂 'Hear' e 'here' soam iguais — ouvir e aqui. Preste atenção no contexto!",
-  "👂 'Read' no presente soa /riid/ — no passado, /rɛd/. Mesma escrita, sons diferentes!",
-  // Origem germânica
-  "🏰 O inglês é uma língua germânica — veio dos Anglos e Saxões que invadiram a Grã-Bretanha no séc. V.",
-  "🌲 Palavras do dia a dia como 'water', 'house', 'father', 'mother' vêm do germânico antigo.",
-  "⚔️ Após a conquista normanda (1066), o inglês absorveu o francês — por isso tem tantas palavras latinas também.",
-  "🌳 O inglês está na mesma família linguística do alemão e do holandês — irmãos linguísticos!",
+  // ── FALSE FRIENDS ────────────────────────────────────────────────────────
+  "🚨 FALSE FRIEND: 'Actually' não significa 'atualmente' — significa 'na verdade'. Um dos erros mais comuns dos brasileiros!",
+  "🚨 FALSE FRIEND: 'Library' não é livraria — é biblioteca! Livraria em inglês é 'bookstore'.",
+  "🚨 FALSE FRIEND: 'Parents' não são parentes — são seus pais! Parentes são 'relatives'.",
+  "🚨 FALSE FRIEND: 'Push' não é puxar — é empurrar! E 'pull' é puxar. Olha nas portas dos estabelecimentos!",
+  "🚨 FALSE FRIEND: 'Pretend' não é pretender — é fingir! 'I pretend to be sick' = Fingi estar doente.",
+  "🚨 FALSE FRIEND: 'Assist' não é assistir — é ajudar! 'Assistir' em inglês é 'watch' ou 'attend'.",
+  "🚨 FALSE FRIEND: 'Realize' não é realizar — é perceber! 'I realized I was wrong' = Percebi que estava errado.",
+  "🚨 FALSE FRIEND: 'Sensible' não é sensível — é sensato! Sensível em inglês é 'sensitive'.",
+  "🚨 FALSE FRIEND: 'Fabric' não é fábrica — é tecido/pano! Fábrica em inglês é 'factory' ou 'plant'.",
+  "🚨 FALSE FRIEND: 'Lecture' não é leitura — é palestra/aula expositiva! Leitura em inglês é 'reading'.",
+  "🚨 FALSE FRIEND: 'Prejudice' não é prejuízo — é preconceito! Prejuízo financeiro é 'loss' ou 'damage'.",
+  "🚨 FALSE FRIEND: 'Sympathetic' não é simpático — é compreensivo/empático! Simpático é 'nice' ou 'friendly'.",
+  "🚨 FALSE FRIEND: 'College' não é colégio — é faculdade/universidade! Colégio é 'high school'.",
+  "🚨 FALSE FRIEND: 'Novel' não é novela — é romance (livro)! Novela brasileira é 'soap opera'.",
+  "🚨 FALSE FRIEND: 'Office' não é oficina — é escritório! Oficina mecânica é 'repair shop' ou 'garage'.",
+  "🚨 FALSE FRIEND: 'Eventually' não é eventualmente — é no final/por fim! 'Eventually' indica algo que vai acontecer mais tarde.",
+  "🚨 FALSE FRIEND: 'Deception' não é decepção — é enganação/fraude! Decepção é 'disappointment'.",
+  "🚨 FALSE FRIEND: 'Terrific' não é terrível — é ótimo/incrível! 'That's terrific!' = Que ótimo!",
+  "🚨 FALSE FRIEND: 'Exquisite' não é esquisito — é requintado/magnífico! Esquisito é 'weird' ou 'odd'.",
+  "🚨 FALSE FRIEND: 'Comprehensive' não é compreensivo — é abrangente/completo! Compreensivo é 'understanding'.",
+  "🚨 FALSE FRIEND: 'Argument' não é só argumento — geralmente é briga/discussão! 'They had an argument' = Eles brigaram.",
+  "🚨 FALSE FRIEND: 'Attend' não é atender — é comparecer/ir a! 'Atender' o telefone é 'answer the phone'.",
+  "🚨 FALSE FRIEND: 'Ingenuity' não é ingenuidade — é criatividade/engenho! Ingenuidade é 'naivety'.",
+  "🚨 FALSE FRIEND: 'Polemic' quase não existe em inglês — use 'controversial'! 'That's a controversial topic.'",
+  "🚨 FALSE FRIEND: 'Paste' não é pasta — é colar ou massa! Pasta (bolsa) é 'briefcase', pasta de dente é 'toothpaste'.",
+  "🚨 FALSE FRIEND: 'Gymnasium' em inglês americano é academia de ginástica. Em inglês britânico, às vezes 'escola secundária'.",
+  "🚨 FALSE FRIEND: 'Sane' não é são (saudável) — é mentalmente são/normal! São (de saúde) é 'healthy'.",
+  "🚨 FALSE FRIEND: 'Journal' não é jornal — é diário/revista especializada! Jornal (newspaper) é 'newspaper'.",
+  "🚨 FALSE FRIEND: 'Reunion' não é reunião de trabalho — é reencontro de pessoas! Reunião de trabalho é 'meeting'.",
+  "🚨 FALSE FRIEND: 'Intend' não é entender — é ter a intenção de! Entender é 'understand'.",
+  "🚨 FALSE FRIEND: 'Embarrassed' não é embaraçado — é envergonhado/constrangido! 'I'm so embarrassed!' = Que vergonha!",
+  "🚨 FALSE FRIEND: 'Preservative' não é preservativo (camisinha) — é conservante de alimento! Preservativo é 'condom'.",
+  "🚨 FALSE FRIEND: 'Bore' não é bora (vamos) — é entediar/aborrecer! 'This movie bores me' = Este filme me entedia.",
+  // ── HOMÓFONAS ────────────────────────────────────────────────────────────
+  "👂 HOMÓFONAS: 'There', 'their' e 'they're' soam iguais — lá / deles / eles são.",
+  "👂 HOMÓFONAS: 'To', 'too' e 'two' soam iguais — para / também / dois.",
+  "👂 HOMÓFONAS: 'Hear' e 'here' soam iguais — ouvir e aqui.",
+  "👂 HOMÓFONAS: 'Read' no presente soa /riid/ — no passado, /rɛd/. Mesma escrita, pronúncias diferentes!",
+  "👂 HOMÓFONAS: 'Flower' e 'flour' soam quase iguais — flor e farinha.",
+  "👂 HOMÓFONAS: 'Bare' e 'bear' soam iguais — nu/exposto e urso.",
+  "👂 HOMÓFONAS: 'Sea' e 'see' soam iguais — mar e ver.",
+  "👂 HOMÓFONAS: 'Sun' e 'son' soam iguais — sol e filho.",
+  "👂 HOMÓFONAS: 'Night' e 'knight' soam iguais — noite e cavaleiro.",
+  "👂 HOMÓFONAS: 'Write', 'right' e 'rite' soam iguais — escrever, certo/direito, ritual.",
+  "👂 HOMÓFONAS: 'Knew' e 'new' soam iguais — sabia e novo.",
+  "👂 HOMÓFONAS: 'Knot' e 'not' soam iguais — nó e não.",
+  "👂 HOMÓFONAS: 'Whole' e 'hole' soam iguais — inteiro e buraco.",
+  "👂 HOMÓFONAS: 'Meet' e 'meat' soam iguais — encontrar e carne.",
+  "👂 HOMÓFONAS: 'Week' e 'weak' soam iguais — semana e fraco.",
+  "👂 HOMÓFONAS: 'Pair', 'pear' e 'pare' soam iguais — par, pera, descascar.",
+  "👂 HOMÓFONAS: 'Sail' e 'sale' soam iguais — vela/navegar e venda/promoção.",
+  "👂 HOMÓFONAS: 'Tail' e 'tale' soam iguais — cauda e história/conto.",
+  "👂 HOMÓFONAS: 'Brake' e 'break' soam iguais — freio e quebrar/intervalo.",
+  "👂 HOMÓFONAS: 'Whether' e 'weather' soam iguais — se (condição) e clima.",
+  "👂 HOMÓFONAS: 'Dye' e 'die' soam iguais — tingir e morrer.",
+  "👂 HOMÓFONAS: 'Plane' e 'plain' soam iguais — avião e simples/planície.",
+  "👂 HOMÓFONAS: 'Scent', 'sent' e 'cent' soam iguais — perfume, enviou, centavo.",
+  "👂 HOMÓFONAS: 'Allowed' e 'aloud' soam iguais — permitido e em voz alta.",
+  "👂 HOMÓFONAS: 'Maid' e 'made' soam iguais — empregada doméstica e feito/fabricado.",
+  "👂 HOMÓFONAS: 'Peace' e 'piece' soam iguais — paz e pedaço.",
+  "👂 HOMÓFONAS: 'Steak' e 'stake' soam iguais — bife e estaca/aposta.",
+  "👂 HOMÓFONAS: 'Cellar' e 'seller' soam iguais — adega/porão e vendedor.",
+  "👂 HOMÓFONAS: 'Mail' e 'male' soam iguais — correio/email e masculino.",
+  "👂 HOMÓFONAS: 'Fare' e 'fair' soam iguais — tarifa/passagem e justo/feira.",
+  "👂 HOMÓFONAS: 'I' e 'eye' soam iguais — eu e olho.",
+  "👂 HOMÓFONAS: 'Hour' e 'our' soam iguais — hora e nosso. O H em 'hour' é mudo!",
+  "👂 HOMÓFONAS: 'Buy', 'by' e 'bye' soam iguais — comprar, por/perto, tchau.",
+  "👂 HOMÓFONAS: 'Board' e 'bored' soam quase iguais — placa/diretoria e entediado.",
+  "👂 HOMÓFONAS: 'Been' e 'bean' soam iguais (no brit.) — sido e feijão.",
+  // ── LETRAS MUDAS ─────────────────────────────────────────────────────────
+  "🔇 LETRA MUDA: 'Knife', 'know', 'knee', 'knight' — o K antes de N é sempre mudo em inglês!",
+  "🔇 LETRA MUDA: 'Write', 'wrong', 'wrap' — o W antes de R também é mudo!",
+  "🔇 LETRA MUDA: 'Hour', 'honest', 'heir' — o H inicial pode ser mudo em algumas palavras.",
+  "🔇 LETRA MUDA: 'Lamb', 'bomb', 'thumb', 'comb' — o B depois de M no final é mudo!",
+  "🔇 LETRA MUDA: 'Castle', 'listen', 'fasten', 'whistle' — o T no meio é mudo nessas!",
+  "🔇 LETRA MUDA: 'Queue' tem 4 letras mudas — só pronuncia o Q! /kjuː/",
+  "🔇 LETRA MUDA: 'Psychology', 'pneumonia', 'pterodactyl' — o P inicial antes de outra consoante é mudo!",
+  // ── PRONÚNCIA ────────────────────────────────────────────────────────────
+  "🎤 PRONÚNCIA: 'TH' tem dois sons — em 'the/this/that' é sonoro /ð/, em 'think/three/throw' é surdo /θ/.",
+  "🎤 PRONÚNCIA: O som do R em inglês é bem diferente do português — a língua não vibra, ela se encurva para dentro!",
+  "🎤 PRONÚNCIA: 'Comfortable' = /KUMF-ter-bul/ — 4 sílabas viram 3 na fala rápida!",
+  "🎤 PRONÚNCIA: 'Wednesday' se pronuncia /WENZ-day/ — o D no meio é mudo na fala nativa!",
+  "🎤 PRONÚNCIA: 'February' geralmente é pronunciado /FEB-yoo-ery/ — o primeiro R desaparece!",
+  "🎤 PRONÚNCIA: 'Often' pode ser /OF-en/ ou /OF-ten/ — ambas estão corretas!",
+  "🎤 PRONÚNCIA: 'Clothes' soa como /KLOHZ/ — o TH é quase inaudível na fala rápida.",
+  "🎤 PRONÚNCIA: 'Chocolate' = /CHOK-let/ em inglês rápido — 3 sílabas viram 2!",
+  "🎤 PRONÚNCIA: Em inglês americano, o T entre vogais soa como R — 'water' soa como 'wader'!",
+  "🎤 PRONÚNCIA: 'Schedule' — americanos dizem /SKED-yool/, britânicos dizem /SHED-yool/!",
+  "🎤 PRONÚNCIA: 'Aluminum' (EUA) vs 'Aluminium' (UK) — mesma substância, palavras diferentes!",
+  // ── ORIGEM DAS PALAVRAS ──────────────────────────────────────────────────
+  "🏰 ETIMOLOGIA: O inglês é germânico — 'water', 'house', 'father', 'mother' vêm do Germanic antigo.",
+  "⚔️ ETIMOLOGIA: Após 1066, o inglês absorveu o francês — por isso tem 'beef' (bœuf) mas a vaca é 'cow'!",
+  "🌍 ETIMOLOGIA: 'Tsunami' é japonês, 'jungle' é hindi, 'coffee' é árabe — o inglês importa palavras do mundo todo!",
+  "📅 ETIMOLOGIA: Os dias da semana são mitologia! Monday=Lua, Sunday=Sol, Saturday=Saturno, Friday=Freya.",
+  "🌿 ETIMOLOGIA: 'Avocado' vem do asteca 'ahuacatl' — que também significava testículo (pelo formato)!",
+  "💰 ETIMOLOGIA: 'Salary' vem do latim 'sal' (sal) — romanos pagavam soldados com sal, daí 'salary'!",
+  "⭐ ETIMOLOGIA: 'Disaster' = 'dis' (mau) + 'aster' (estrela) — antigamente culpavam as estrelas pelos acidentes.",
+  "🪟 ETIMOLOGIA: 'Window' vem do nórdico antigo 'vindauga' = 'wind eye' — olho do vento!",
+  "💪 ETIMOLOGIA: 'Muscle' vem do latim 'musculus' = camundongo pequeno — o formato lembra um ratinho correndo!",
+  "👋 ETIMOLOGIA: 'Goodbye' = 'God be with ye' — uma bênção encurtada ao longo dos séculos!",
+  "✅ ETIMOLOGIA: 'OK' pode vir de 'Oll Korrect' — uma brincadeira dos anos 1800 com grafia errada intencional!",
+  "🧶 ETIMOLOGIA: 'Clue' vem de 'clew' (novelo de lã) — como o fio de Ariadne no labirinto do Minotauro!",
+  "🎲 ETIMOLOGIA: 'Hazard' vem do árabe 'az-zahr' (dados de jogar) — um jogo de azar!",
+  "🍕 ETIMOLOGIA: 'Companion' = 'com' + 'panis' (pão) — alguém com quem você divide o pão!",
+  "📰 ETIMOLOGIA: 'Tabloid' vem do nome de um comprimido farmacêutico — notícia comprimida em pouco espaço!",
+  // ── INGLÊS DO TRABALHO ───────────────────────────────────────────────────
+  "💼 TRABALHO: 'ASAP' = As Soon As Possible — o mais rápido possível. Muito comum em emails profissionais!",
+  "💼 TRABALHO: 'FYI' = For Your Information — para sua informação. Usado em emails de aviso.",
+  "💼 TRABALHO: 'TBD' = To Be Defined/Determined — a ser definido. Aparece em cronogramas e propostas.",
+  "💼 TRABALHO: 'ETA' = Estimated Time of Arrival — previsão de chegada. Usado em logística e reuniões.",
+  "💼 TRABALHO: 'CC' no email = Carbon Copy — quem está em cópia. 'BCC' = cópia oculta (Blind Carbon Copy).",
+  "💼 TRABALHO: 'KPI' = Key Performance Indicator — indicador-chave de desempenho. Muito usado em gestão!",
+  "💼 TRABALHO: 'EOD' ou 'EOP' = End of Day / End of Play — até o fim do dia. 'Please send by EOD.'",
+  "💼 TRABALHO: 'Per your request' = conforme solicitado. 'Please find attached' = segue em anexo.",
+  "💼 TRABALHO: 'Let's table this' — nos EUA significa adiar. No Reino Unido significa discutir agora! Cuidado!",
+  "💼 TRABALHO: 'Touch base' = entrar em contato brevemente. 'Let's touch base tomorrow' = vamos conversar amanhã.",
+  "💼 TRABALHO: 'On the same page' = alinhados/com o mesmo entendimento. 'Are we on the same page?'",
+  "💼 TRABALHO: 'Circle back' = retomar o assunto mais tarde. 'Let's circle back on this next week.'",
+  "💼 TRABALHO: 'Deliverable' = entrega/produto final de um projeto. Muito usada em contratos e projetos.",
+  "💼 TRABALHO: 'Sign off' = aprovar/dar OK final. 'I need your sign-off on this document.'",
+  // ── CURIOSIDADES GERAIS ──────────────────────────────────────────────────
+  "📖 Shakespeare inventou +1.700 palavras: 'lonely', 'bedroom', 'generous', 'obscene', 'eyeball'...",
+  "🌐 O inglês é língua oficial em 67 países — mais do que qualquer outro idioma no planeta.",
+  "🔤 'Set' é a palavra com mais significados em inglês: 430+ definições num único dicionário!",
+  "💬 'I' é a única letra que forma uma palavra completa em inglês — e sempre escrita maiúscula!",
+  "🧠 Aprender inglês muda o cérebro — aumenta a massa cinzenta nas áreas de memória e atenção!",
+  "🔡 'Rhythm' é uma das únicas palavras inglesas sem vogal — e ainda tem 2 sílabas!",
+  "🏆 Com apenas 3.000 palavras você entende 95% dos textos em inglês do dia a dia.",
+  "🌍 O inglês tem o maior vocabulário do mundo — estima-se mais de 1 milhão de palavras!",
   "📜 O inglês antigo (Old English) de 1.000 anos atrás é tão diferente que parece outro idioma.",
-  // Tipo de língua
+  "💡 Diferente do português, o inglês não tem gênero gramatical — 'the car', 'the house', sempre 'the'!",
+  "📝 O inglês é mais direto: 'I love you' (3 palavras). Em português: 'Eu te amo' — mesma estrutura!",
   "🔤 O inglês é uma língua analítica — usa poucas terminações verbais. 'I go, you go, he goes' — quase igual!",
-  "💡 Diferente do português, o inglês não tem gênero gramatical. 'The car', 'the house' — sempre 'the'!",
-  "📝 O inglês é mais direto que o português — vai logo ao verbo: 'I love you' vs 'Eu te amo' (mesma ordem).",
-  "🌍 O inglês tem o maior vocabulário do mundo — mais que o dobro do português!",
-  // Curiosidades gerais
-  "📖 Shakespeare inventou +1.700 palavras: 'lonely', 'bedroom', 'generous', 'obscene', 'crítica'...",
-  "🌐 O inglês é língua oficial de 67 países — mais do que qualquer outro idioma no mundo.",
-  "🔤 'Set' é a palavra com mais significados em inglês: 430+ definições no dicionário.",
-  "💬 'I' é a única letra que é uma palavra completa em inglês — e sempre escrita maiúscula!",
-  "🧠 Aprender inglês muda o cérebro — aumenta a massa cinzenta nas áreas de memória e atenção.",
-  "🌊 'Tsunami' é japonês, 'jungle' é hindi, 'coffee' é árabe — o inglês absorve palavras do mundo todo!",
-  "📅 'Monday' = Moon's day, 'Sunday' = Sun's day, 'Saturday' = Saturn's day. Dias da semana são mitologia!",
-  "🎯 Estudar 15 minutos por dia é mais eficiente que 2 horas uma vez por semana. Consistência é tudo!",
-  "🔡 'Rhythm' é uma das poucas palavras inglesas sem vogal — e ainda tem 2 sílabas!",
-  "🏆 Com apenas 3.000 palavras, você entende 95% dos textos em inglês do dia a dia.",
-  // Phrasal verbs
-  "🔥 'Give up' = desistir. 'Give in' = ceder. 'Give out' = distribuir. Uma palavra, três significados!",
-  "💡 'Look up' = pesquisar/olhar pra cima. 'Look out' = cuidado! 'Look after' = cuidar de.",
-  "⚡ 'Turn on' liga. 'Turn off' desliga. 'Turn up' aparece do nada. 'Turn down' recusa.",
-  "🎯 'Pick up' pode ser: buscar alguém, aprender algo novo, ou atender o telefone.",
-  "🚀 'Run out of' = ficar sem. 'Run into' = encontrar por acaso. 'Run away' = fugir.",
-  "🧠 Phrasal verbs são dois verbos que formam um novo significado — diferente do português!",
-  "🌊 'Go on' = continuar. 'Go off' = explodir/tocar. 'Go over' = revisar. 'Go through' = passar por.",
-  "🎭 'Put off' = adiar. 'Put up with' = tolerar. 'Put on' = vestir. 'Put out' = apagar.",
+  "📅 O inglês mais falado no mundo é o inglês L2 — de não-nativos! Você já está na maioria.",
+  "🧩 Apenas 100 palavras formam 50% de todo o texto escrito em inglês. As mais comuns: the, of, and, a, to.",
+  "🎯 Estudar 15 minutos por dia é mais eficiente que 2 horas uma vez por semana — consistência é tudo!",
+  "🌙 'Lunatic' vem de 'luna' (lua) — antigamente acreditavam que a lua cheia causava loucura.",
+  "🍷 'Toast' (brinde) veio do hábito medieval de colocar torrada no vinho para melhorar o sabor!",
+  "🐛 'Bug' (erro de software) vem de 1947 — um inseto real entrou num computador e causou um defeito!",
+  "📱 'Emoji' é japonês (絵文字) — mas o Oxford English Dictionary adicionou ao vocabulário inglês oficial.",
+  "✏️ A palavra mais longa do dicionário inglês tem 45 letras: 'pneumonoultramicroscopicsilicovolcanoconiosis' — uma doença pulmonar!",
+  "🔁 'Racecar', 'level', 'civic', 'radar' — palíndromos: lidos igual de frente e de trás!",
+  "🌅 'Breakfast' = break + fast — literalmente 'quebrar o jejum' da noite!",
+  // ── PHRASAL VERBS ────────────────────────────────────────────────────────
+  "🔥 PHRASAL VERB: 'Give up' = desistir. 'Give in' = ceder. 'Give out' = distribuir. Uma palavra, três destinos!",
+  "💡 PHRASAL VERB: 'Look up' = pesquisar. 'Look out' = cuidado! 'Look after' = cuidar de. 'Look into' = investigar.",
+  "⚡ PHRASAL VERB: 'Turn on' liga. 'Turn off' desliga. 'Turn up' aparece do nada. 'Turn down' recusa.",
+  "🎯 PHRASAL VERB: 'Pick up' = buscar alguém, aprender algo, atender o telefone — contexto é tudo!",
+  "🚀 PHRASAL VERB: 'Run out of' = ficar sem. 'Run into' = encontrar por acaso. 'Run away' = fugir.",
+  "🌊 PHRASAL VERB: 'Go on' = continuar. 'Go off' = explodir/tocar. 'Go over' = revisar. 'Go through' = passar por.",
+  "🎭 PHRASAL VERB: 'Put off' = adiar. 'Put up with' = tolerar. 'Put on' = vestir. 'Put out' = apagar fogo.",
+  "💪 PHRASAL VERB: 'Work out' = malhar/resolver. 'Work on' = trabalhar em. 'Work through' = superar.",
+  "🏃 PHRASAL VERB: 'Bring up' = criar filho ou mencionar assunto. 'Bring about' = causar. 'Bring back' = trazer de volta.",
+  "🎪 PHRASAL VERB: 'Call off' = cancelar. 'Call on' = visitar/pedir para falar. 'Call up' = ligar/convocar.",
+  "🌟 PHRASAL VERB: 'Stand out' = se destacar. 'Stand up' = levantar/dar um bolo. 'Stand for' = representar.",
+  "🔑 PHRASAL VERB: 'Break down' = quebrar/ter colapso. 'Break in' = invadir. 'Break out' = escapar/surgir.",
+  "📦 PHRASAL VERB: 'Take off' = decolar/remover. 'Take on' = assumir. 'Take over' = assumir o controle.",
+  "🎬 PHRASAL VERB: 'Set up' = montar/configurar. 'Set off' = partir/disparar. 'Set out' = sair com objetivo.",
 ];
 
 let _curiosityIdx=0, _curiosityTimer=null;
@@ -2005,7 +2119,7 @@ function renderDashboard(){
 function renderSegments(){
   const c=document.getElementById("segments-grid"); if(!c) return; c.innerHTML="";
   const grammarSeg=VICTOR_DATA.segments.find(s=>s.isGrammarCore);
-  const regularSegs=VICTOR_DATA.segments.filter(s=>!s.isGrammarCore);
+  const regularSegs=VICTOR_DATA.segments.filter(s=>!s.isGrammarCore && !s.hidden);
   regularSegs.forEach(seg=>{
     const div=document.createElement("div");
     div.className=`segment-card ${seg.available?"available":"locked"}`;
@@ -2184,8 +2298,12 @@ function renderMission(){
   if(ptEl){
     if(phrase.pt&&phrase.type!=="translate_en_pt"&&phrase.type!=="translate_pt_en"){
       ptEl.innerHTML=`<span class="phrase-pt-label">🇧🇷</span> ${phrase.pt}`;
+      ptEl.style.display="";
+    } else if(phrase.pt&&phrase.type==="translate_pt_en"){
+      ptEl.innerHTML=`<span class="phrase-pt-label">🇧🇷</span> ${phrase.pt}`;
+      ptEl.style.display="";
     } else {
-      ptEl.textContent="";
+      ptEl.textContent=""; ptEl.style.display="none";
     }
   }
   document.getElementById("phrase-tip").textContent          =phrase.tip?`💡 ${stripEmoji(phrase.tip)}`:"";
@@ -2227,14 +2345,25 @@ function renderPhraseEN(phrase,spoken){
 
 function renderVocab(phrase){
   const el=document.getElementById("vocab-list"); if(!el) return;
-  if(!phrase.words?.length){el.style.display="none";return;}
+  const dicaBtn=document.getElementById("btn-dica");
+  if(!phrase.words?.length){
+    el.style.display="none";
+    if(dicaBtn) dicaBtn.style.display="none";
+    return;
+  }
   el.style.display="flex";
+  el.classList.add("dica-mode");
   el.innerHTML=phrase.words.map(w=>`<div class="vocab-item" data-word="${w.w}" data-tr="${w.tr}"><span class="vocab-word">${w.w}</span><span class="vocab-class ${w.cls}">${w.cls}</span><span class="vocab-translation">= ${w.tr}</span><span class="vocab-speaker">🔊</span></div>`).join("");
   el.querySelectorAll(".vocab-item").forEach(item=>{
     item.querySelector(".vocab-word")?.addEventListener("click",()=>SoundFX.speakEN(item.dataset.word),{ signal: _phraseAC?.signal });
     item.querySelector(".vocab-translation")?.addEventListener("click",()=>SoundFX.speakPT(item.dataset.tr),{ signal: _phraseAC?.signal });
     item.querySelector(".vocab-speaker")?.addEventListener("click",()=>SoundFX.speakEN(item.dataset.word),{ signal: _phraseAC?.signal });
   });
+  if(dicaBtn){
+    dicaBtn.style.display="inline-flex";
+    dicaBtn.classList.remove("used");
+    dicaBtn.onclick=()=>{ el.classList.remove("dica-mode"); dicaBtn.classList.add("used"); };
+  }
 }
 
 // ── EXERCISE UI ───────────────────────────────────────────────────────────────
@@ -2541,8 +2670,8 @@ async function autoAdvance(score){
 }
 
 function updateNavButtons(nextUnlocked, score){
-  // NEXT — all next buttons including main bottom one
-  document.querySelectorAll(".btn-next-exercise, .btn-next-exercise-main, #btn-next-mc").forEach(btn=>{
+  // NEXT — single bottom next button only
+  document.querySelectorAll("#btn-next-main").forEach(btn=>{
     btn.style.display="block";
     if(nextUnlocked){
       btn.classList.add("visible");
@@ -4756,13 +4885,15 @@ function renderCommitment(){
   else if(streak>=3||todayDone>=2){level="⚡ Médio";color="#f59e0b";msg="Bom ritmo! Tente praticar todos os dias para subir o nível.";}
   else{level="💤 Baixo";color="#ef4444";msg="Tente fazer pelo menos 3 exercícios por dia para evoluir mais rápido.";}
 
+  const xp=userData.xp||0;
+  const daysPracticed=(userData.practicedDays||[]).length||0;
   container.innerHTML=`
     <div class="commitment-level" style="color:${color}">${level}</div>
     <div class="commitment-msg">${msg}</div>
     <div class="commitment-stats">
-      <div class="commitment-stat"><span>${streak}</span><small>dias seguidos</small></div>
-      <div class="commitment-stat"><span>${todayDone}</span><small>hoje</small></div>
-      <div class="commitment-stat"><span>${completed}</span><small>missões totais</small></div>
+      <div class="commitment-stat"><span>${xp.toLocaleString()}</span><small>XP Total</small></div>
+      <div class="commitment-stat"><span>${daysPracticed}</span><small>Dias Praticados</small></div>
+      <div class="commitment-stat"><span>${completed}</span><small>Missões</small></div>
     </div>
   `;
 }
@@ -5380,63 +5511,48 @@ function trackAnswer(isCorrect, isVoice=false){
 // ── PUSH NOTIFICATIONS ─────────────────────────────────
 
 
-async function requestNotificationPermission(){
-  if(!("Notification" in window)) return;
-  if(Notification.permission==="granted"){
-    scheduleNotifications();
-    if(currentUser?.uid) registerFCMToken(currentUser.uid).catch(()=>{});
-    return;
-  }
-  if(Notification.permission!=="denied"){
-    const perm=await Notification.requestPermission();
-    if(perm==="granted"){
-      scheduleNotifications();
-      if(currentUser?.uid) registerFCMToken(currentUser.uid).catch(()=>{});
-    }
-  }
+// ── ONESIGNAL ────────────────────────────────────────────────────────────────
+const OS_APP_ID = "0d10ba5b-6831-4a78-aa5f-1b001370a487";
+
+function initOneSignal(){
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  window.OneSignalDeferred.push(async function(OneSignal){
+    await OneSignal.init({
+      appId: OS_APP_ID,
+      safari_web_id: "web.onesignal.auto.54eebb47-16d1-4f2f-8c9e-9bb7522bb051",
+      notifyButton: { enable: false },
+      allowLocalhostAsSecureOrigin: true,
+    });
+    // Tag com data da última visita — usado para segmentar lembretes no dashboard
+    const today = new Date().toISOString().slice(0,10);
+    OneSignal.User.addTag("last_visit", today).catch(()=>{});
+    if(currentUser?.uid) OneSignal.User.addTag("uid", currentUser.uid).catch(()=>{});
+  });
 }
 
-function scheduleNotifications(){
-  if(!("Notification" in window)||Notification.permission!=="granted") return;
-  if(_cfg.notifEnabled==="0") return;
-
-  localStorage.setItem("vic_last_visit", String(Date.now()));
-
-  // Schedule a 7pm reminder via service worker if user hasn't completed today's missions
-  const dp = getDailyProgress();
-  if(!dp.allComplete){
-    const now = new Date();
-    const target = new Date(); target.setHours(19,0,0,0);
-    const delay = target.getTime() - now.getTime();
-    if(delay > 0){
-      navigator.serviceWorker?.ready.then(reg => {
-        reg.active?.postMessage({
-          type: "SCHEDULE_NOTIF",
-          delay,
-          title: "VIC English 📚",
-          body: "Você não praticou hoje! 🔥 Seu streak está em risco.",
-        });
-      }).catch(()=>{});
-    }
-  }
+async function requestNotificationPermission(){
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  window.OneSignalDeferred.push(async function(OneSignal){
+    await OneSignal.Notifications.requestPermission();
+  });
 }
 
 // Ask for notifications with friendly banner after first mission
 function showNotifBanner(){
-  if(!("Notification" in window)||Notification.permission!=="default") return;
   if(_cfg.notifAsked) return;
   _setCfg("notifAsked","1");
   const banner=document.createElement("div");
   banner.className="notif-banner";
-  banner.innerHTML=`<span style="font-size:22px">🔔</span><div style="flex:1"><div style="font-weight:800;color:#fff">Ativar lembretes?</div><div style="font-size:12px;opacity:0.6">Receba frases motivacionais de filmes + lembretes diários</div></div><button style="padding:8px 16px;background:var(--p);border:none;border-radius:999px;color:#fff;font-weight:800;cursor:pointer;font-family:var(--font)" onclick="requestNotificationPermission();this.closest('.notif-banner').remove()">Ativar</button><button style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:18px;padding:4px 8px" onclick="this.closest('.notif-banner').remove()">✕</button>`;
+  banner.innerHTML=`<span style="font-size:22px">🔔</span><div style="flex:1"><div style="font-weight:800;color:#fff">Ativar lembretes?</div><div style="font-size:12px;opacity:0.6">Receba lembretes diários e não perca seu streak!</div></div><button style="padding:8px 16px;background:var(--p);border:none;border-radius:999px;color:#fff;font-weight:800;cursor:pointer;font-family:var(--font)" onclick="requestNotificationPermission();this.closest('.notif-banner').remove()">Ativar</button><button style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:18px;padding:4px 8px" onclick="this.closest('.notif-banner').remove()">✕</button>`;
   const daily=document.querySelector(".daily-block");
   daily?.parentNode?.insertBefore(banner, daily);
 }
 
-// ── PUSH DO PAINEL ADMIN ─────────────────────────────────────────────────────
-const FCM_FUNCTION_URL = "https://us-central1-victor-app-aef3c.cloudfunctions.net/sendPushToAll";
-const FCM_SECRET = "COLE_SEU_SECRET_AQUI"; // mesmo valor que firebase functions:config:set vic.secret=XXX
+function scheduleNotifications(){ /* OneSignal gerencia — noop */ }
 
+// ── PUSH DO PAINEL ADMIN ─────────────────────────────────────────────────────
+// O envio manual agora é feito pelo dashboard OneSignal (onesignal.com)
+// ou via API REST abaixo:
 async function sendPushFromAdmin(){
   const title = document.getElementById("push-title")?.value?.trim();
   const body  = document.getElementById("push-body")?.value?.trim();
@@ -5446,21 +5562,27 @@ async function sendPushFromAdmin(){
   if(btn){ btn.disabled=true; btn.textContent="Enviando..."; }
 
   try{
-    const res = await fetch(FCM_FUNCTION_URL, {
+    const res = await fetch("https://api.onesignal.com/notifications", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-vic-secret": FCM_SECRET,
+        "Authorization": "Basic OS_REST_API_KEY", // substitua no dashboard
       },
-      body: JSON.stringify({ title, body }),
+      body: JSON.stringify({
+        app_id: OS_APP_ID,
+        included_segments: ["All"],
+        headings: { en: title, pt: title },
+        contents:  { en: body,  pt: body  },
+        url: "https://app.viclanguage.com.br",
+      }),
     });
     const data = await res.json();
-    if(data.success){
-      showXpToast(`✅ Push enviado para ${data.sent} dispositivos!`);
+    if(data.id){
+      showXpToast(`✅ Push enviado para ${data.recipients||"todos"} usuários!`);
       if(document.getElementById("push-title")) document.getElementById("push-title").value="";
       if(document.getElementById("push-body"))  document.getElementById("push-body").value="";
     } else {
-      showXpToast("❌ Erro: " + (data.error||"desconhecido"));
+      showXpToast("❌ Erro: " + (data.errors?.[0]||"desconhecido"));
     }
   }catch(e){
     showXpToast("❌ Erro ao enviar: " + e.message);
