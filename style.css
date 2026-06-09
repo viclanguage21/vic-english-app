@@ -7092,8 +7092,6 @@ a.settings-big-btn:active {
   max-width: 340px !important;
   object-fit: contain !important;
   border-radius: 16px !important;
-  background: #0f0520 !important;
-  padding: 8px 16px !important;
 }
 
 /* ── Grammar/Writing banners — definitive layout (no collapse) ── */
@@ -7708,8 +7706,6 @@ a.settings-big-btn:active {
   max-width: 340px !important;
   border-radius: 16px !important;
   object-fit: contain !important;
-  background: #0f0520 !important;
-  padding: 8px 16px !important;
 }
 /* coluna direita: avatar arredondado (squircle, não círculo) */
 .dash-header-3col .dash-user {
