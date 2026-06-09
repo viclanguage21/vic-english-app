@@ -811,6 +811,8 @@ input { color: #ffffff !important; }
   font-size: 12px; cursor: pointer;
   opacity: 0.6; padding: 0 4px;
   transition: var(--t);
+  display: inline-flex; align-items: center;
+  flex-shrink: 0;
 }
 .mc-speak-btn:hover { opacity: 1; }
 .mc-text { flex: 1; }
