@@ -5594,7 +5594,7 @@ VICTOR_DATA.flashcardDecks.push({
 // ── Segmento NAVAL (hidden — em desenvolvimento) ──────────────────────────────
 (function(){
   VICTOR_DATA.segments.push({
-    id:"naval", name:"Naval", icon:"⚙️", available:true, hidden:true,
+    id:"naval", name:"Naval", icon:"⚙️", available:true, hidden:false,
     phases:[
       // ── f1 · A1 · Ferramentas ──────────────────────────────────────────────
       {
@@ -6088,7 +6088,7 @@ VICTOR_DATA.flashcardDecks.push({
 // ── Segmento EVENTOS (hidden — em desenvolvimento) ─────────────────────────────
 (function(){
   VICTOR_DATA.segments.push({
-    id:"eventos", name:"Eventos", icon:"🎪", available:true, hidden:true,
+    id:"eventos", name:"Eventos", icon:"🎪", available:true, hidden:false,
     phases:[
       {
         id:"f1", name:"Fase 1 🎤", subtitle:"A1 — Vocabulário Essencial de Eventos", unlocked:true,
