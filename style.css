@@ -7873,6 +7873,23 @@ a.settings-big-btn:active {
   word-break: break-all;
 }
 
+.verify-spam-warning {
+  width: 100%;
+  background: rgba(251,191,36,0.12);
+  border: 1.5px solid rgba(251,191,36,0.45);
+  border-radius: 14px;
+  padding: 14px 18px;
+  text-align: center;
+  color: #fbbf24;
+  font-size: 15px;
+  font-weight: 600;
+  margin: 4px 0 16px;
+}
+.verify-spam-warning strong {
+  font-weight: 900;
+  font-size: 16px;
+}
+
 .verify-benefits {
   display: flex;
   flex-direction: column;
