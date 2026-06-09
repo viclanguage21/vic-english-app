@@ -7086,10 +7086,12 @@ a.settings-big-btn:active {
 /* ── Dashboard header logo ── */
 #dash-logo-img {
   width: auto !important;
-  height: 64px !important;
+  height: 60px !important;
   max-width: 220px !important;
   object-fit: contain !important;
-  border-radius: 12px !important;
+  border-radius: 14px !important;
+  background: #1e0840 !important;
+  padding: 4px 8px !important;
 }
 
 /* ── Grammar/Writing banners — definitive layout (no collapse) ── */
@@ -7700,10 +7702,12 @@ a.settings-big-btn:active {
 .dash-header-3col #dash-logo-img,
 .dash-header-3col .dash-logo-img {
   width: auto !important;
-  height: 64px !important;
+  height: 60px !important;
   max-width: 220px !important;
-  border-radius: 12px !important;
+  border-radius: 14px !important;
   object-fit: contain !important;
+  background: #1e0840 !important;
+  padding: 4px 8px !important;
 }
 /* coluna direita: avatar arredondado (squircle, não círculo) */
 .dash-header-3col .dash-user {
