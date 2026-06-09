@@ -6254,3 +6254,365 @@ VICTOR_DATA.flashcardDecks.push({
     ]
   });
 })();
+
+// ── EVENTOS: FESTAS CORPORATIVAS & GALAS ──────────────────────────────────
+(function(){
+  const seg=VICTOR_DATA.segments.find(s=>s.id==="eventos"); if(!seg) return;
+
+  seg.phases[0].missions.push({
+    id:"gala_vocab_f1", name:"🥂 Festas & Galas — Vocabulário", icon:"🥂",
+    description:"Termos essenciais para festas corporativas e galas", xpTotal:70,
+    phrases:[
+      {id:"gv1",type:"memory_match",en:"Gala terms",pt:"Termos de gala",
+        pairs:[{a:"badge",b:"crachá"},{a:"attendee",b:"participante"},{a:"dress code",b:"código de vestimenta"},{a:"cocktail hour",b:"horário do coquetel"},{a:"VIP lounge",b:"sala VIP"},{a:"catering",b:"serviço de alimentação"}],words:[]},
+      {id:"gv2",type:"multiple_choice",en:"For a formal black-tie event, which word is most appropriate? 🎩",pt:"Para um evento formal com traje a rigor, qual palavra é mais adequada?",
+        options:["Gala 🎩","Party","Get-together","Hang-out"],correct:0,
+        words:[{w:"gala",cls:"noun",tr:"gala/baile formal"}]},
+      {id:"gv3",type:"multiple_choice",en:"'Give a speech' or 'make a speech'? Which is correct English? 🎤",pt:"'Give a speech' ou 'make a speech'? Qual é o inglês correto?",
+        options:["Both are correct — 'give a speech' is more natural 🎤","Only 'make a speech'","Only 'do a speech'","Only 'say a speech'"],correct:0,
+        words:[{w:"give a speech",cls:"expr",tr:"fazer um discurso"}]},
+      {id:"gv4",type:"multiple_choice",en:"RSVP on an invitation means: 📩",pt:"RSVP em um convite significa:",
+        options:["Please confirm your attendance 📩","Reserved seat for VIP","Registration starts very promptly","Respond slowly via phone"],correct:0,
+        words:[{w:"RSVP",cls:"abbrev",tr:"confirmação de presença"}]},
+      {id:"gv5",type:"translate_pt_en",en:"The event will start at 7 p.m.; doors open at 6:30.",pt:"O evento começará às 19h; as portas abrem às 18h30.",
+        answer:"the event will start at 7 p.m. doors open at 6:30",
+        words:[{w:"doors open",cls:"expr",tr:"portões abrem"}]},
+    ]
+  });
+
+  seg.phases[1].missions.push({
+    id:"gala_coord_f2", name:"📋 Festas & Galas — Logística", icon:"📋",
+    description:"Coordenação e logística de festas e galas", xpTotal:80,
+    phrases:[
+      {id:"gc1",type:"pronunciation",
+        en:"Where would you like the VIP table to be placed? Would you prefer a standing cocktail or a seated dinner?",
+        pt:"Onde você gostaria que a mesa VIP fosse colocada? Você prefere um coquetel em pé ou um jantar sentado?",
+        words:[{w:"placed",cls:"verb",tr:"colocada"},{w:"standing cocktail",cls:"noun",tr:"coquetel em pé"},{w:"seated dinner",cls:"noun",tr:"jantar sentado"}]},
+      {id:"gc2",type:"match_columns",en:"Gala logistics",pt:"Logística de gala",
+        pairs:[{a:"soundcheck",b:"teste de som"},{a:"coat check",b:"guarda-volumes"},{a:"networking area",b:"espaço de networking"},{a:"security check",b:"checagem de segurança"}],words:[]},
+      {id:"gc3",type:"fill_blank",
+        en:"The speaker will be ___ in ten minutes — please inform the guests to take their seats. 🎤",
+        pt:"O palestrante estará no palco em dez minutos — por favor avise os convidados para sentarem.",
+        answer:"onstage",words:[{w:"onstage",cls:"adv",tr:"no palco"}]},
+      {id:"gc4",type:"translate_pt_en",
+        en:"Could you confirm the number of attendees for dinner by Thursday?",
+        pt:"Você poderia confirmar o número de participantes para o jantar até quinta-feira?",
+        answer:"could you confirm the number of attendees for dinner by thursday",
+        words:[{w:"attendees",cls:"noun",tr:"participantes"},{w:"confirm",cls:"verb",tr:"confirmar"}]},
+      {id:"gc5",type:"pronunciation",
+        en:"Please keep your badge visible at all times. If you need assistance, find any staff member wearing a badge.",
+        pt:"Por favor, mantenha seu crachá visível o tempo todo. Se precisar de ajuda, encontre qualquer membro da equipe com crachá.",
+        words:[{w:"badge",cls:"noun",tr:"crachá"},{w:"visible",cls:"adj",tr:"visível"},{w:"assistance",cls:"noun",tr:"assistência"}]},
+    ]
+  });
+
+  seg.phases[2].missions.push({
+    id:"gala_pro_f3", name:"🥂 Festas & Galas — Comunicação Profissional", icon:"🥂",
+    description:"Inglês avançado para coordenadores de festas corporativas", xpTotal:90,
+    phrases:[
+      {id:"gp1",type:"pronunciation",
+        en:"Thank you for attending our event. Please keep the aisles clear as you exit and follow the emergency exit signs.",
+        pt:"Obrigado por participar do nosso evento. Por favor, mantenha os corredores livres ao sair e siga as placas de saída de emergência.",
+        words:[{w:"aisles",cls:"noun",tr:"corredores"},{w:"emergency exit",cls:"noun",tr:"saída de emergência"}]},
+      {id:"gp2",type:"translate_pt_en",
+        en:"The sound check is scheduled for 5 p.m. — please ensure all vendors are ready by then.",
+        pt:"O teste de som está agendado para às 17h — por favor, garanta que todos os fornecedores estejam prontos até lá.",
+        answer:"the sound check is scheduled for 5 p.m. please ensure all vendors are ready by then",
+        words:[{w:"scheduled",cls:"verb",tr:"agendado"},{w:"vendors",cls:"noun",tr:"fornecedores"}]},
+      {id:"gp3",type:"word_order",
+        en:"Please keep photography to the designated zone only.",
+        pt:"Por favor, restrinja a fotografia à zona designada.",
+        scrambled:["Please","keep","photography","to","the","designated","zone","only."],
+        answer:"Please keep photography to the designated zone only.",
+        words:[{w:"designated",cls:"adj",tr:"designada"},{w:"photography",cls:"noun",tr:"fotografia"}]},
+      {id:"gp4",type:"multiple_choice",
+        en:"A guest at a gala says: 'I'm allergic to shellfish.' The correct waiter response is: 🦐",
+        pt:"Um convidado numa gala diz: 'I'm allergic to shellfish.' A resposta correta do garçom é:",
+        options:[
+          "Of course — I'll mark your meal as shellfish-free and inform the kitchen. 🍽️",
+          "Sorry, all dishes contain shellfish.",
+          "Please speak to the chef yourself.",
+          "You should have told us when you booked."
+        ],correct:0,
+        words:[{w:"allergic",cls:"adj",tr:"alérgico"},{w:"shellfish",cls:"noun",tr:"frutos do mar/mariscos"}]},
+      {id:"gp5",type:"translate_pt_en",
+        en:"We need the supplier invoices by Friday to process the payments before the event.",
+        pt:"Precisamos das notas fiscais dos fornecedores até sexta-feira para processar os pagamentos antes do evento.",
+        answer:"we need the supplier invoices by friday to process the payments before the event",
+        words:[{w:"invoices",cls:"noun",tr:"notas fiscais"},{w:"process",cls:"verb",tr:"processar"}]},
+    ]
+  });
+})();
+
+// ── EVENTOS: FORMATURAS (Graduation Ceremonies) ────────────────────────────
+(function(){
+  const seg=VICTOR_DATA.segments.find(s=>s.id==="eventos"); if(!seg) return;
+
+  seg.phases[0].missions.push({
+    id:"grad_vocab_f1", name:"🎓 Formaturas — Vocabulário", icon:"🎓",
+    description:"Termos essenciais para cerimoniais de formatura", xpTotal:70,
+    phrases:[
+      {id:"grv1",type:"memory_match",en:"Graduation terms",pt:"Termos de formatura",
+        pairs:[{a:"graduate",b:"formando(a)"},{a:"cap",b:"capelo"},{a:"gown",b:"beca"},{a:"diploma",b:"diploma"},{a:"procession",b:"procissão"},{a:"vows / oath",b:"juramento"}],words:[]},
+      {id:"grv2",type:"multiple_choice",en:"'Commencement' in a US university context means: 🎓",pt:"'Commencement' no contexto de universidade americana significa:",
+        options:["Graduation ceremony / colação de grau 🎓","Início das aulas","Período de provas","Cerimônia de boas-vindas"],correct:0,
+        words:[{w:"commencement",cls:"noun",tr:"colação de grau"}]},
+      {id:"grv3",type:"multiple_choice",en:"'Gown' at a graduation ceremony refers to: 👘",pt:"'Gown' em uma formatura se refere a:",
+        options:["The academic robe (beca) worn by graduates 👘","Any formal dress","The graduation cap","The diploma cover"],correct:0,
+        words:[{w:"gown",cls:"noun",tr:"beca/toga"}]},
+      {id:"grv4",type:"multiple_choice",en:"'The recessional' at a graduation is: 🚶",pt:"'The recessional' em uma formatura é:",
+        options:["The graduates' exit march after the ceremony 🚶","The opening procession","The diploma handout","The speech by the dean"],correct:0,
+        words:[{w:"recessional",cls:"noun",tr:"marcha de saída"}]},
+      {id:"grv5",type:"translate_pt_en",
+        en:"Congratulations on your graduation!",
+        pt:"Parabéns pela sua formatura!",
+        answer:"congratulations on your graduation",
+        words:[{w:"congratulations",cls:"expr",tr:"parabéns"},{w:"graduation",cls:"noun",tr:"formatura"}]},
+    ]
+  });
+
+  seg.phases[1].missions.push({
+    id:"grad_coord_f2", name:"📋 Formaturas — Coordenação", icon:"📋",
+    description:"Logística e frases para coordenadores de formatura", xpTotal:80,
+    phrases:[
+      {id:"grc1",type:"pronunciation",
+        en:"Where should we line up for the procession? The graduates must wear their caps and gowns for the entire ceremony.",
+        pt:"Onde devemos nos enfileirar para a procissão? Os formandos devem usar capelo e beca durante toda a cerimônia.",
+        words:[{w:"line up",cls:"verb",tr:"enfileirar"},{w:"procession",cls:"noun",tr:"procissão"},{w:"caps and gowns",cls:"noun",tr:"capelo e beca"}]},
+      {id:"grc2",type:"match_columns",en:"Graduation logistics",pt:"Logística de formatura",
+        pairs:[{a:"MC",b:"mestre de cerimônias"},{a:"rehearsal",b:"ensaio"},{a:"reserved seating",b:"assentos reservados"},{a:"roll call",b:"chamada nominal"}],words:[]},
+      {id:"grc3",type:"fill_blank",
+        en:"We'll call each graduate to the ___ by name — please listen carefully. 🎓",
+        pt:"Chamaremos cada formando ao palco pelo nome — por favor, ouça com atenção.",
+        answer:"stage",words:[{w:"stage",cls:"noun",tr:"palco"}]},
+      {id:"grc4",type:"translate_pt_en",
+        en:"The rehearsal is tomorrow at 3 p.m. in the auditorium.",
+        pt:"O ensaio é amanhã às 15h no auditório.",
+        answer:"the rehearsal is tomorrow at 3 p.m. in the auditorium",
+        words:[{w:"rehearsal",cls:"noun",tr:"ensaio"},{w:"auditorium",cls:"noun",tr:"auditório"}]},
+      {id:"grc5",type:"pronunciation",
+        en:"Please stay seated until the recessional starts. Do not leave before the faculty has exited.",
+        pt:"Por favor, fique sentado até que a procissão de saída comece. Não saia antes que a mesa diretora tenha se retirado.",
+        words:[{w:"recessional",cls:"noun",tr:"marcha de saída"},{w:"faculty",cls:"noun",tr:"mesa diretora/corpo docente"}]},
+    ]
+  });
+
+  seg.phases[2].missions.push({
+    id:"grad_pro_f3", name:"🎓 Formaturas — Comunicação Profissional", icon:"🎓",
+    description:"Inglês avançado para cerimônias de formatura", xpTotal:90,
+    phrases:[
+      {id:"grp1",type:"pronunciation",
+        en:"On behalf of the faculty, we congratulate all graduates on this remarkable achievement. The future is yours.",
+        pt:"Em nome do corpo docente, parabenizamos todos os formandos por esta conquista notável. O futuro é de vocês.",
+        words:[{w:"on behalf of",cls:"expr",tr:"em nome de"},{w:"remarkable",cls:"adj",tr:"notável"},{w:"achievement",cls:"noun",tr:"conquista"}]},
+      {id:"grp2",type:"translate_pt_en",
+        en:"Family photos will be taken after the ceremony, near the stage entrance.",
+        pt:"As fotos de família serão tiradas após a cerimônia, perto da entrada do palco.",
+        answer:"family photos will be taken after the ceremony near the stage entrance",
+        words:[{w:"ceremony",cls:"noun",tr:"cerimônia"},{w:"stage entrance",cls:"noun",tr:"entrada do palco"}]},
+      {id:"grp3",type:"word_order",
+        en:"Please return your rented gown at the counter after the ceremony.",
+        pt:"Por favor, devolva a beca alugada no balcão após a cerimônia.",
+        scrambled:["Please","return","your","rented","gown","at","the","counter","after","the","ceremony."],
+        answer:"Please return your rented gown at the counter after the ceremony.",
+        words:[{w:"rented",cls:"adj",tr:"alugada"},{w:"gown",cls:"noun",tr:"beca"}]},
+      {id:"grp4",type:"multiple_choice",
+        en:"A parent asks: 'Where do we pick up cap and gown?' The best staff response is: 👘",
+        pt:"Um familiar pergunta: 'Where do we pick up cap and gown?' A melhor resposta da equipe é:",
+        options:[
+          "At the registration desk in the lobby — bring your student ID between 1 and 2 p.m. 🪪",
+          "We don't know, ask someone else.",
+          "We ran out of gowns, sorry.",
+          "Pick it up after the ceremony."
+        ],correct:0,
+        words:[{w:"registration desk",cls:"noun",tr:"mesa de credenciamento"},{w:"student ID",cls:"noun",tr:"carteira de estudante"}]},
+      {id:"grp5",type:"translate_pt_en",
+        en:"The ceremony will last approximately one hour — please make sure everyone is seated by 9:45.",
+        pt:"A cerimônia durará aproximadamente uma hora — por favor, garanta que todos estejam sentados até às 9h45.",
+        answer:"the ceremony will last approximately one hour please make sure everyone is seated by 9:45",
+        words:[{w:"approximately",cls:"adv",tr:"aproximadamente"},{w:"seated",cls:"adj",tr:"sentados"}]},
+    ]
+  });
+})();
+
+// ── EVENTOS: SHOWS & CONCERTOS ─────────────────────────────────────────────
+(function(){
+  const seg=VICTOR_DATA.segments.find(s=>s.id==="eventos"); if(!seg) return;
+
+  seg.phases[0].missions.push({
+    id:"show_vocab_f1", name:"🎸 Shows & Concertos — Vocabulário", icon:"🎸",
+    description:"Termos essenciais para shows e eventos musicais", xpTotal:70,
+    phrases:[
+      {id:"sv1",type:"memory_match",en:"Concert terms",pt:"Termos de concerto",
+        pairs:[{a:"stage",b:"palco"},{a:"soundcheck",b:"teste de som"},{a:"setlist",b:"lista de músicas"},{a:"backstage",b:"bastidores"},{a:"dressing room",b:"camarim"},{a:"crowd barrier",b:"barreira de segurança"}],words:[]},
+      {id:"sv2",type:"multiple_choice",en:"'General admission' (GA) at a concert means: 🎫",pt:"'General admission' (GA) em um show significa:",
+        options:["Standing area — no assigned seat 🎫","VIP seating with table","Backstage access","Seat in the first row"],correct:0,
+        words:[{w:"general admission",cls:"noun",tr:"pista / área sem assento fixo"}]},
+      {id:"sv3",type:"multiple_choice",en:"'FOH' at a live show stands for: 🎚️",pt:"'FOH' em um show ao vivo significa:",
+        options:["Front of House — the sound booth facing the stage 🎚️","Front On Hold","First Order Host","Fog and Haze"],correct:0,
+        words:[{w:"FOH",cls:"abbrev",tr:"cabine de som na frente do palco"}]},
+      {id:"sv4",type:"multiple_choice",en:"'Stage' vs 'stadium' — which is correct? 🏟️",pt:"'Stage' vs 'stadium' — qual é o correto?",
+        options:["Stage = palco; stadium = estádio 🏟️","Stage = estádio; stadium = palco","They mean the same thing","Stage = arena"],correct:0,
+        words:[{w:"stage",cls:"noun",tr:"palco"},{w:"stadium",cls:"noun",tr:"estádio"}]},
+      {id:"sv5",type:"translate_pt_en",
+        en:"The doors open at 7 p.m.; the show starts at 8.",
+        pt:"As portas abrem às 19h; o show começa às 20h.",
+        answer:"the doors open at 7 p.m. the show starts at 8",
+        words:[{w:"doors open",cls:"expr",tr:"portões abrem"}]},
+    ]
+  });
+
+  seg.phases[1].missions.push({
+    id:"show_coord_f2", name:"🎤 Shows — Coordenação Técnica", icon:"🎤",
+    description:"Frases de coordenação para shows e eventos musicais", xpTotal:80,
+    phrases:[
+      {id:"sc1",type:"pronunciation",
+        en:"The soundcheck will start at 3 p.m. — can you be ready? How many dressing rooms do you need?",
+        pt:"O teste de som começa às 15h — você consegue estar pronto? Quantos camarins você precisa?",
+        words:[{w:"soundcheck",cls:"noun",tr:"teste de som"},{w:"dressing rooms",cls:"noun",tr:"camarins"}]},
+      {id:"sc2",type:"match_columns",en:"Concert tech",pt:"Técnica de shows",
+        pairs:[{a:"PA system",b:"sistema de som principal"},{a:"wireless mic",b:"microfone sem fio"},{a:"lighting tech",b:"técnico de luz"},{a:"tour manager",b:"gerente de turnê"}],words:[]},
+      {id:"sc3",type:"fill_blank",
+        en:"Could you lower the ___ in the main mix? The vocals are getting lost. 🎚️",
+        pt:"Você poderia diminuir o baixo no mix principal? Os vocais estão sumindo.",
+        answer:"bass",words:[{w:"bass",cls:"noun",tr:"frequências de baixo"}]},
+      {id:"sc4",type:"translate_pt_en",
+        en:"The setlist needs to be confirmed with the production manager before soundcheck.",
+        pt:"A lista de músicas precisa ser confirmada com o produtor antes do teste de som.",
+        answer:"the setlist needs to be confirmed with the production manager before soundcheck",
+        words:[{w:"setlist",cls:"noun",tr:"lista de músicas"},{w:"production manager",cls:"noun",tr:"diretor de produção"}]},
+      {id:"sc5",type:"pronunciation",
+        en:"The artist needs a quiet zone for vocal warm-ups — please keep the backstage area clear.",
+        pt:"O artista precisa de uma área silenciosa para o aquecimento vocal — por favor, mantenha os bastidores desocupados.",
+        words:[{w:"vocal warm-ups",cls:"noun",tr:"aquecimento vocal"},{w:"backstage",cls:"noun",tr:"bastidores"}]},
+    ]
+  });
+
+  seg.phases[2].missions.push({
+    id:"show_pro_f3", name:"🎸 Shows — Comunicação Profissional", icon:"🎸",
+    description:"Inglês avançado para produção e segurança em shows", xpTotal:90,
+    phrases:[
+      {id:"sp1",type:"pronunciation",
+        en:"Please report any suspicious activity to security immediately and keep all emergency exits clear at all times.",
+        pt:"Por favor, reporte qualquer atividade suspeita à segurança imediatamente e mantenha todas as saídas de emergência desobstruídas.",
+        words:[{w:"suspicious",cls:"adj",tr:"suspeita"},{w:"emergency exits",cls:"noun",tr:"saídas de emergência"}]},
+      {id:"sp2",type:"translate_pt_en",
+        en:"We lost power on stage — do we have a backup generator? We need it now.",
+        pt:"Perdemos energia no palco — temos um gerador de backup? Precisamos agora.",
+        answer:"we lost power on stage do we have a backup generator we need it now",
+        words:[{w:"backup generator",cls:"noun",tr:"gerador de backup"},{w:"power",cls:"noun",tr:"energia"}]},
+      {id:"sp3",type:"word_order",
+        en:"Please do not use flash photography during the performance.",
+        pt:"Por favor, não use flash durante a apresentação.",
+        scrambled:["Please","do","not","use","flash","photography","during","the","performance."],
+        answer:"Please do not use flash photography during the performance.",
+        words:[{w:"flash photography",cls:"noun",tr:"fotografia com flash"},{w:"performance",cls:"noun",tr:"apresentação"}]},
+      {id:"sp4",type:"multiple_choice",
+        en:"Sound engineer says: 'The vocals are too low in the main mix.' The coordinator replies: 🎚️",
+        pt:"O técnico de som diz: 'Os vocais estão baixos demais no mix principal.' O coordenador responde:",
+        options:[
+          "Please raise the vocal fader — let's test again and keep an eye on it during the show. 🎤",
+          "That's fine, leave it.",
+          "Turn off the PA system.",
+          "We don't control the sound."
+        ],correct:0,
+        words:[{w:"vocal fader",cls:"noun",tr:"controle de volume dos vocais"},{w:"raise",cls:"verb",tr:"aumentar"}]},
+      {id:"sp5",type:"translate_pt_en",
+        en:"Please wait behind the barrier until the crowd control team signals it is safe to move forward.",
+        pt:"Por favor, aguarde atrás da barreira até que a equipe de controle de multidão sinalize que é seguro avançar.",
+        answer:"please wait behind the barrier until the crowd control team signals it is safe to move forward",
+        words:[{w:"barrier",cls:"noun",tr:"barreira"},{w:"crowd control",cls:"noun",tr:"controle de multidão"}]},
+    ]
+  });
+})();
+
+// ── EVENTOS: FEIRAS & CONGRESSOS (Trade Fairs / Conferences) ───────────────
+(function(){
+  const seg=VICTOR_DATA.segments.find(s=>s.id==="eventos"); if(!seg) return;
+
+  seg.phases[0].missions.push({
+    id:"fair_vocab_f1", name:"🏛️ Feiras & Congressos — Vocabulário", icon:"🏛️",
+    description:"Termos essenciais para feiras e congressos profissionais", xpTotal:70,
+    phrases:[
+      {id:"fv1",type:"memory_match",en:"Trade fair terms",pt:"Termos de feira e congresso",
+        pairs:[{a:"booth",b:"estande"},{a:"keynote",b:"palestra principal"},{a:"exhibitor",b:"expositor"},{a:"attendee",b:"participante/visitante"},{a:"giveaway",b:"brinde"},{a:"breakout session",b:"sessão paralela"}],words:[]},
+      {id:"fv2",type:"multiple_choice",en:"In American English, an exhibitor's space is called: 🏪",pt:"Em inglês americano, o espaço do expositor é chamado de:",
+        options:["Booth 🏪","Stand","Exhibit room","Display zone"],correct:0,
+        words:[{w:"booth",cls:"noun",tr:"estande (inglês americano)"}]},
+      {id:"fv3",type:"multiple_choice",en:"'I will agenda a meeting with you' is wrong. The correct phrase is: 📅",pt:"'I will agenda a meeting with you' está errado. A frase correta é:",
+        options:["I will schedule a meeting with you 📅","I will agenda you","I will calendar a meeting","I will diary a meeting"],correct:0,
+        words:[{w:"schedule",cls:"verb",tr:"agendar"}]},
+      {id:"fv4",type:"multiple_choice",en:"In sales, the word 'lead' is pronounced: 🗣️",pt:"Em vendas, a palavra 'lead' é pronunciada:",
+        options:["/liːd/ — rhymes with 'need' 🗣️","/lɛd/ — rhymes with 'bed'","The same as 'led'","Like the metal 'lead'"],correct:0,
+        words:[{w:"lead",cls:"noun",tr:"contato/potencial cliente"}]},
+      {id:"fv5",type:"translate_pt_en",
+        en:"Welcome to our booth. Would you like a brochure or a live product demo?",
+        pt:"Bem-vindo ao nosso estande. Você gostaria de um folheto ou uma demonstração ao vivo do produto?",
+        answer:"welcome to our booth would you like a brochure or a live product demo",
+        words:[{w:"booth",cls:"noun",tr:"estande"},{w:"brochure",cls:"noun",tr:"folheto"},{w:"demo",cls:"noun",tr:"demonstração"}]},
+    ]
+  });
+
+  seg.phases[1].missions.push({
+    id:"fair_coord_f2", name:"📋 Feiras & Congressos — Coordenação", icon:"📋",
+    description:"Logística e frases de coordenação para feiras e eventos", xpTotal:80,
+    phrases:[
+      {id:"fc1",type:"pronunciation",
+        en:"The conference starts at 9 a.m.; please arrive 30 minutes early. Load-in for exhibitors starts at 6 a.m.",
+        pt:"O congresso começa às 9h; por favor, chegue 30 minutos antes. A montagem para expositores começa às 6h.",
+        words:[{w:"load-in",cls:"noun",tr:"montagem/carga"},{w:"exhibitors",cls:"noun",tr:"expositores"}]},
+      {id:"fc2",type:"match_columns",en:"Conference tech & logistics",pt:"Tecnologia e logística de congresso",
+        pairs:[{a:"loading dock",b:"docas de carga"},{a:"lapel mic",b:"microfone de lapela"},{a:"simultaneous interpretation",b:"tradução simultânea"},{a:"early registration",b:"inscrição antecipada"}],words:[]},
+      {id:"fc3",type:"fill_blank",
+        en:"Please scan your ___ at the kiosk to register your attendance. 🪪",
+        pt:"Por favor, passe seu crachá no quiosque para registrar sua presença.",
+        answer:"badge",words:[{w:"badge",cls:"noun",tr:"crachá"}]},
+      {id:"fc4",type:"translate_pt_en",
+        en:"Our presentation will be in Room B at 2 p.m. — please arrive early for a good seat.",
+        pt:"Nossa apresentação será na Sala B às 14h — chegue cedo para pegar um bom lugar.",
+        answer:"our presentation will be in room b at 2 p.m. please arrive early for a good seat",
+        words:[{w:"presentation",cls:"noun",tr:"apresentação"},{w:"arrive early",cls:"expr",tr:"chegar cedo"}]},
+      {id:"fc5",type:"pronunciation",
+        en:"Can I scan your badge to save your contact? I'll send you a follow-up email with our product catalog.",
+        pt:"Posso passar seu crachá para salvar seu contato? Enviarei um e-mail de acompanhamento com nosso catálogo.",
+        words:[{w:"follow-up",cls:"adj",tr:"de acompanhamento"},{w:"catalog",cls:"noun",tr:"catálogo"}]},
+    ]
+  });
+
+  seg.phases[2].missions.push({
+    id:"fair_pro_f3", name:"🏛️ Feiras & Congressos — Comunicação Profissional", icon:"🏛️",
+    description:"Inglês avançado para feiras, congressos e eventos B2B", xpTotal:90,
+    phrases:[
+      {id:"fp1",type:"pronunciation",
+        en:"Thank you for stopping by our booth. I'll send you our product catalog and pricing by email this afternoon.",
+        pt:"Obrigado por visitar nosso estande. Enviarei nosso catálogo e preços por e-mail ainda hoje à tarde.",
+        words:[{w:"stopping by",cls:"expr",tr:"visitar/passar pelo"},{w:"pricing",cls:"noun",tr:"tabela de preços"}]},
+      {id:"fp2",type:"translate_pt_en",
+        en:"The keynote speaker will present for 45 minutes, followed by a Q&A session.",
+        pt:"O palestrante principal apresentará por 45 minutos, seguido de uma sessão de perguntas e respostas.",
+        answer:"the keynote speaker will present for 45 minutes followed by a q&a session",
+        words:[{w:"keynote speaker",cls:"noun",tr:"palestrante principal"},{w:"Q&A",cls:"abbrev",tr:"perguntas e respostas"}]},
+      {id:"fp3",type:"word_order",
+        en:"Could you fill out this feedback form before you leave?",
+        pt:"Você poderia preencher este formulário de avaliação antes de sair?",
+        scrambled:["Could","you","fill","out","this","feedback","form","before","you","leave?"],
+        answer:"Could you fill out this feedback form before you leave?",
+        words:[{w:"fill out",cls:"verb",tr:"preencher"},{w:"feedback form",cls:"noun",tr:"formulário de avaliação"}]},
+      {id:"fp4",type:"multiple_choice",
+        en:"An AV tech says: 'Your slides need an HDMI adapter — do you have one?' The speaker replies: 💻",
+        pt:"O técnico de AV diz: 'Seus slides precisam de adaptador HDMI — você tem um?' O palestrante responde:",
+        options:[
+          "I only have USB-C — can you provide an HDMI adapter from the AV desk? 🔌",
+          "I don't know what HDMI is.",
+          "I don't need slides.",
+          "The projector is broken, not my problem."
+        ],correct:0,
+        words:[{w:"USB-C",cls:"noun",tr:"conector USB-C"},{w:"HDMI adapter",cls:"noun",tr:"adaptador HDMI"}]},
+      {id:"fp5",type:"translate_pt_en",
+        en:"If you need technical support during the presentation, please visit the AV desk near the main stage.",
+        pt:"Se precisar de suporte técnico durante a apresentação, por favor visite o suporte de AV perto do palco principal.",
+        answer:"if you need technical support during the presentation please visit the av desk near the main stage",
+        words:[{w:"technical support",cls:"noun",tr:"suporte técnico"},{w:"AV desk",cls:"noun",tr:"suporte de audiovisual"}]},
+    ]
+  });
+})();
