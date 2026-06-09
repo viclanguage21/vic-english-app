@@ -92,6 +92,7 @@ export const I18N = {
 
     // Onboarding
     "ob_next": "Próximo →", "ob_skip": "Pular", "ob_start": "Começar! 🚀", "ob_skip_all": "Pular tudo",
+    "see_tutorial": "📖 Ver tutorial novamente",
     "ob_refresh_tip": "Travou? Toque no botão <strong>↻</strong> no canto da tela para atualizar o app.",
     "ob_title_0": "Bem-vindo ao VIC English!", "ob_title_1": "Inglês do seu trabalho",
     "ob_title_2": "Missões, XP e Conquistas", "ob_title_3": "Descubra seu nível real",
@@ -278,6 +279,7 @@ export const I18N = {
     "leaderboard_title": "🏆 Leaderboard", "leaderboard_week": "This week",
     "leaderboard_all": "All time", "my_position": "My position", "loading": "Loading...",
     "ob_next": "Next →", "ob_skip": "Skip", "ob_start": "Let's go! 🚀", "ob_skip_all": "Skip all",
+    "see_tutorial": "📖 See tutorial again",
     "ob_refresh_tip": "Stuck? Tap the <strong>↻</strong> button in the corner to refresh the app.",
     "ob_title_0": "Welcome to VIC English!", "ob_title_1": "English for your job",
     "ob_title_2": "Missions, XP and Achievements", "ob_title_3": "Discover your real level",

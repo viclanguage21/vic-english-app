@@ -56,6 +56,7 @@
 <!-- ══ AUTH ══════════════════════════════════════════════ -->
 <!-- ══ ONBOARDING ══════════════════════════════════════════ -->
 <div class="view" id="view-onboarding">
+  <button class="btn-reload" id="btn-reload-onboarding" title="Recarregar">↻</button>
   <div class="ob-wrap">
 
     <div class="ob-slides" id="ob-slides">
@@ -395,7 +396,7 @@
 
     <!-- Botão de rever onboarding -->
     <div style="text-align:center;margin-top:12px;">
-      <button onclick="startOnboarding()" style="
+      <button onclick="startOnboarding()" data-i18n="see_tutorial" style="
         background:none;border:none;cursor:pointer;
         color:rgba(255,255,255,0.4);font-size:12px;
         display:inline-flex;align-items:center;gap:6px;
@@ -648,7 +649,7 @@
         </div>
       </div>
       <div class="dash-logo-mid">
-        <img src="vic_english_header.png" alt="VIC English" id="dash-logo-img"/>
+        <img src="new_logo_big.png" alt="VIC English" id="dash-logo-img"/>
       </div>
       <div class="dash-user">
         <div class="dash-avatar-wrap" id="btn-open-profile" title="Editar perfil">
@@ -1560,6 +1561,8 @@
     <a href="https://www.viclanguage.com.br" target="_blank" class="vic-site-link">
       viclanguage.com.br →
     </a>
+
+    <button class="upgrade-back-bottom" id="btn-back-upgrade-bottom">← Voltar</button>
   </div>
 </div>
 
