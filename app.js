@@ -4324,12 +4324,9 @@ async function openUserModal(uid){
   const uidEl=document.getElementById("modal-uid");
   if(uidEl) uidEl.textContent=`UID: ${u.uid.slice(0,12)}...`;
   const lv=calcLevel(u.xp||0), lvInfo_=levelInfo(u.xp||0), completed=(u.completedMissions||[]);
-  // Avatar real no modal
-  const avatarEl = document.getElementById("modal-avatar");
-  if(avatarEl) avatarEl.outerHTML = renderUserAvatar(u, 52).replace('flex-shrink:0;', 'flex-shrink:0;') + `<div id="modal-avatar" style="display:none"></div>`;
-  // Fallback simples caso renderUserAvatar falhe
-  const avEl = document.getElementById("modal-avatar");
-  if(avEl) avEl.innerHTML = (u.avatar && u.avatar.length<=4) ? u.avatar : (u.name||"?")[0]?.toUpperCase()||"?";
+  // Avatar no modal — usa wrapper para não acumular elementos no DOM
+  const avatarWrap = document.getElementById("modal-avatar-wrap");
+  if(avatarWrap) avatarWrap.innerHTML = renderUserAvatar(u, 52);
 
   document.getElementById("modal-name").textContent = u.provider==="anonymous"?"Visitante":u.name||"—";
   document.getElementById("modal-email").textContent = u.username ? `@${u.username} · ${u.email||u.provider||"—"}` : (u.email||u.provider||"—");
@@ -6579,6 +6576,9 @@ function init(){
     renderDashboard();
     showView("view-dashboard");
     showAdminReturnBtn();
+  });
+  document.getElementById("btn-admin-signout")?.addEventListener("click", () => {
+    logoutUser();
   });
   // Também registrar o botão flutuante do admin
   document.getElementById("btn-admin-float")?.addEventListener("click", () => {
