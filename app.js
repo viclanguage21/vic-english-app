@@ -155,6 +155,7 @@ function applyLang() {
   const activeView = document.querySelector(".view.active")?.id;
   if (activeView === "view-dashboard") renderDashboardTexts();
   if (activeView === "view-mission") renderMissionTexts();
+  if (activeView === "view-profile") renderProfileTexts();
 }
 
 function renderDashboardTexts() {
@@ -439,6 +440,14 @@ function renderDashboardTexts() {
   if(userData?.name) buildGreeting(userData.name.split(" ")[0]||userData.name);
   // Missões diárias — re-render
   if(userData) renderDailyMissions();
+}
+
+function renderProfileTexts() {
+  // Re-render JS-built sections that have language-specific text
+  if (userData) {
+    renderSkillsAnalysis();
+    renderCommitment();
+  }
 }
 
 function renderMissionTexts() {
@@ -4579,11 +4588,11 @@ function renderSkillsAnalysis(){
   const translating=Math.min(100,Math.round((completed.filter(m=>m.includes("traducao")||m.includes("translate")).length*15)+10));
 
   const skills=[
-    {name:"🗣️ Speaking",    value:speaking,  tip:"Pratique pronúncia e diálogos"},
-    {name:"✍️ Writing",     value:writing,   tip:"Use a seção Writing & Translation"},
-    {name:"👂 Listening",   value:listening, tip:"Pratique diálogos e situações reais"},
-    {name:"📖 Reading",     value:reading,   tip:"Complete mais missões de vocabulário"},
-    {name:"🔄 Translating", value:translating,tip:"Faça exercícios de tradução"},
+    {name:"🗣️ Speaking",    value:speaking,  tip:t("skill_tip_speaking")},
+    {name:"✍️ Writing",     value:writing,   tip:t("skill_tip_writing")},
+    {name:"👂 Listening",   value:listening, tip:t("skill_tip_listening")},
+    {name:"📖 Reading",     value:reading,   tip:t("skill_tip_reading")},
+    {name:"🔄 Translating", value:translating,tip:t("skill_tip_translating")},
   ];
 
 
@@ -4918,9 +4927,9 @@ function renderCommitment(){
   const completed=(userData.completedMissions||[]).length;
 
   let level,color,msg;
-  if(streak>=7&&todayDone>=3){level="🔥 Alto";color="#22c55e";msg="Você está praticando com consistência! Continue assim.";}
-  else if(streak>=3||todayDone>=2){level="⚡ Médio";color="#f59e0b";msg="Bom ritmo! Tente praticar todos os dias para subir o nível.";}
-  else{level="💤 Baixo";color="#ef4444";msg="Tente fazer pelo menos 3 exercícios por dia para evoluir mais rápido.";}
+  if(streak>=7&&todayDone>=3){level=t("commitment_high");color="#22c55e";msg=t("commitment_msg_high");}
+  else if(streak>=3||todayDone>=2){level=t("commitment_mid");color="#f59e0b";msg=t("commitment_msg_mid");}
+  else{level=t("commitment_low");color="#ef4444";msg=t("commitment_msg_low");}
 
   const xp=userData.xp||0;
   const daysPracticed=(userData.practicedDays||[]).length||0;
@@ -4928,9 +4937,9 @@ function renderCommitment(){
     <div class="commitment-level" style="color:${color}">${level}</div>
     <div class="commitment-msg">${msg}</div>
     <div class="commitment-stats">
-      <div class="commitment-stat"><span>${xp.toLocaleString()}</span><small>XP Total</small></div>
-      <div class="commitment-stat"><span>${daysPracticed}</span><small>Dias Praticados</small></div>
-      <div class="commitment-stat"><span>${completed}</span><small>Missões</small></div>
+      <div class="commitment-stat"><span>${xp.toLocaleString()}</span><small>${t("stat_xp")}</small></div>
+      <div class="commitment-stat"><span>${daysPracticed}</span><small>${t("stat_days")}</small></div>
+      <div class="commitment-stat"><span>${completed}</span><small>${t("stat_missions")}</small></div>
     </div>
   `;
 }
@@ -6562,9 +6571,9 @@ function init(){
   document.getElementById("btn-daily-complete-ok")?.addEventListener("click",()=>{
     document.getElementById("daily-complete-overlay")?.classList.remove("visible");
   });
-  document.getElementById("btn-edit-name")?.addEventListener("click",()=>openEditModal("name","Novo nome",userData?.name||"","text"));
-  document.getElementById("btn-edit-email")?.addEventListener("click",()=>openEditModal("email","Novo email",userData?.email||"","email"));
-  document.getElementById("btn-edit-password")?.addEventListener("click",()=>openEditModal("password","Nova senha","","password"));
+  document.getElementById("btn-edit-name")?.addEventListener("click",()=>openEditModal("name",t("edit_name_title"),userData?.name||"","text"));
+  document.getElementById("btn-edit-email")?.addEventListener("click",()=>openEditModal("email",t("edit_email_title"),userData?.email||"","email"));
+  document.getElementById("btn-edit-password")?.addEventListener("click",()=>openEditModal("password",t("edit_pass_title"),"","password"));
   document.getElementById("btn-save-edit")?.addEventListener("click",saveEdit);
   document.getElementById("btn-cancel-edit")?.addEventListener("click",()=>document.getElementById("profile-edit-modal").style.display="none");
   document.getElementById("btn-share-app")?.addEventListener("click",shareAppPanel);
