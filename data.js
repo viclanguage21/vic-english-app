@@ -1969,6 +1969,46 @@ VICTOR_DATA.writingTopics = [
     tips:["Acknowledge first, then raise the concern","Use 'however' and 'given that...' to soften","Offer something in return (win-win)"] },
 ];
 
+// ── PREPARE & PRESENT ────────────────────────────────────────────────────────
+VICTOR_DATA.prepareTopics = [
+  // ── ENTREVISTAS ──
+  { id:"pp1", level:"B1", icon:"🎙️", title:"Interview: Tell Me About Yourself",
+    ptTitle:"Entrevista: Fale sobre você", category:"interview",
+    prompt:"Write 5-6 sentences answering: 'Tell me about yourself.' Include your profession, years of experience, key skills, and what you're looking for.",
+    ptPrompt:"Escreva 5-6 frases respondendo: 'Fale sobre você.' Inclua sua profissão, anos de experiência, habilidades principais e o que você busca.",
+    example:"I am a logistics professional with four years of experience at the Port of Santos. I specialize in cargo documentation and communication with international clients. I am fluent in Portuguese and have a strong working knowledge of English. I am detail-oriented, proactive, and I work well under pressure. Currently, I am looking for an opportunity to grow in a bilingual environment where I can contribute to international operations.",
+    tips:["Structure: Profession → Experience → Skills → Goals","Use Present Simple: 'I am...', 'I work...', 'I have...'","Keep it under 90 seconds when spoken","End with what you're looking for, not just your past"] },
+
+  { id:"pp2", level:"B1", icon:"🎯", title:"Interview: Your Strengths",
+    ptTitle:"Entrevista: Seus pontos fortes", category:"interview",
+    prompt:"Write 4-5 sentences describing your greatest professional strength. Give one specific example of how it helped you at work.",
+    ptPrompt:"Escreva 4-5 frases sobre seu maior ponto forte. Dê um exemplo concreto de como ele te ajudou no trabalho.",
+    example:"My greatest strength is meeting deadlines without compromising quality. I am highly organized and always plan my tasks in advance. For example, last quarter I coordinated three simultaneous shipment processes and delivered all documentation on time. I believe this ability to work under pressure is a valuable asset in logistics. My colleagues often rely on me when urgent tasks need to be handled efficiently.",
+    tips:["Name one strength clearly first","Back it up with a specific, real example","Use 'For example...' or 'Last year/quarter...'","Connect the strength to the job you want"] },
+
+  { id:"pp3", level:"B2", icon:"🚀", title:"Interview: Where Do You See Yourself in 5 Years?",
+    ptTitle:"Entrevista: Seus planos para 5 anos", category:"interview",
+    prompt:"Write 5-6 sentences answering: 'Where do you see yourself in 5 years?' Show ambition but also alignment with the company's goals.",
+    ptPrompt:"Escreva 5-6 frases respondendo: 'Onde você se vê em 5 anos?' Mostre ambição e alinhamento com a empresa.",
+    example:"In five years, I see myself in a senior role managing international client relationships and leading a small team. I want to deepen my English proficiency to communicate with global partners without any barriers. I am also interested in developing my skills in project management and KPI tracking. I believe this company offers the environment and challenges I need to grow professionally. Ultimately, I want to contribute to the company's international expansion and help achieve its strategic goals.",
+    tips:["Show ambition, but connect it to the company","Use: 'I see myself...', 'I want to...', 'I plan to...'","Mention skills you want to develop","Avoid: 'I want your job' or unrealistic goals"] },
+
+  // ── APRESENTAÇÕES ──
+  { id:"pp4", level:"B1", icon:"📊", title:"Presentation: Opening & Structure",
+    ptTitle:"Apresentação: Abertura e estrutura", category:"presentation",
+    prompt:"Write the opening of a 5-minute work presentation (6-8 sentences). Include: a greeting, your name/role, the topic, the structure, and how long it will take.",
+    ptPrompt:"Escreva a abertura de uma apresentação de 5 minutos (6-8 frases). Inclua: saudação, nome/cargo, tema, estrutura e duração.",
+    example:"Good morning, everyone. My name is Juliana Costa and I am the sales coordinator at VIC Logistics. Today I will present our Q3 results and our proposal for the next quarter. I will structure my talk into four parts: context, key results, challenges, and our action plan. The presentation will take approximately five minutes, and I will leave time for questions at the end. Please feel free to take notes and ask anything that is not clear.",
+    tips:["Always announce the structure upfront","Use: 'I will structure my talk into...'","State the time: 'This will take approximately...'","Invite questions: 'I will leave time for questions at the end'"] },
+
+  { id:"pp5", level:"B2", icon:"📈", title:"Presentation: Data, Solution & Closing",
+    ptTitle:"Apresentação: Dados, solução e encerramento", category:"presentation",
+    prompt:"Write the middle and closing of a work presentation (7-9 sentences). Present one problem with data, propose a solution, and close with a clear next step.",
+    ptPrompt:"Escreva o desenvolvimento e encerramento de uma apresentação (7-9 frases). Apresente um problema com dados, proponha uma solução e feche com próximo passo.",
+    example:"As you can see from this chart, our response time to client requests increased by 30% last quarter. This was mainly due to a lack of standardized follow-up procedures. To address this, we propose implementing a weekly KPI review meeting with the account team. This will allow us to identify bottlenecks early and realign our priorities before deadlines are missed. We have already discussed this with the stakeholders and received their support. In summary, the solution is low-cost, fast to implement, and directly addresses the root cause. The next step is to approve the action plan by the end of this week. Thank you for your attention — I am happy to take any questions.",
+    tips:["Reference data: 'As you can see from this chart...'","Name the problem, then your solution clearly","Use: 'To address this, we propose...'","Close with ONE clear next step + thank you","Practice speaking this aloud — fluency matters as much as content"] },
+];
+
 // ══════════════════════════════════════════════════════
 // NEW SEGMENTS — added to existing segments array
 // ══════════════════════════════════════════════════════

@@ -2181,6 +2181,9 @@ function renderSegments(){
     const gc=document.getElementById("grammar-core-banner");
     if(gc){gc.style.display="flex";gc.onclick=()=>openSegmentPhases(grammarSeg.id);}
   }
+  // Prepare & Present banner
+  const ppBanner=document.getElementById("prepare-present-banner");
+  if(ppBanner&&VICTOR_DATA.prepareTopics?.length) ppBanner.style.display="flex";
 }
 
 // ── PHASES ────────────────────────────────────────────────────────────────────
@@ -5202,12 +5205,30 @@ function loadAvatar(){
 let currentWritingTopic=null, writingTopicIndex=0;
 
 function openWriting(){
+  _openWritingList(VICTOR_DATA.writingTopics,"✍️ Writing & Translation");
+}
+
+function openPreparePresent(){
+  _openWritingList(VICTOR_DATA.prepareTopics||[],"🎙️ Prepare & Present");
+}
+
+function _openWritingList(topics, titleText){
   document.getElementById("writing-selector").style.display="block";
   document.getElementById("writing-exercise").style.display="none";
+  const titleEl=document.querySelector("#view-writing .phases-title");
+  if(titleEl) titleEl.textContent=titleText;
   const list=document.getElementById("writing-topic-list"); list.innerHTML="";
 
   const levelColors={A1:"#22c55e",A2:"#f59e0b",B1:"#c9933a",B2:"#7c3aed"};
-  VICTOR_DATA.writingTopics.forEach((topic,i)=>{
+  const catLabels={interview:"🎙️ Entrevista",presentation:"📊 Apresentação"};
+  let lastCat=null;
+  topics.forEach((topic,i)=>{
+    if(topic.category&&topic.category!==lastCat){
+      lastCat=topic.category;
+      const sep=document.createElement("div"); sep.className="writing-section-sep";
+      sep.textContent=catLabels[topic.category]||topic.category;
+      list.appendChild(sep);
+    }
     const div=document.createElement("div"); div.className="phase-card unlocked";
     div.innerHTML=`
       <div class="phase-left">
@@ -5217,15 +5238,18 @@ function openWriting(){
       </div>
       <div class="phase-right">→</div>
     `;
-    div.addEventListener("click",()=>startWritingTopic(i));
+    div.addEventListener("click",()=>startWritingTopic(i,topics));
     list.appendChild(div);
   });
   showView("view-writing");
 }
 
-function startWritingTopic(index){
+let _currentWritingTopics=null;
+function startWritingTopic(index,topicsArr){
+  if(topicsArr) _currentWritingTopics=topicsArr;
+  const topics=_currentWritingTopics||VICTOR_DATA.writingTopics;
   writingTopicIndex=index;
-  currentWritingTopic=VICTOR_DATA.writingTopics[index];
+  currentWritingTopic=topics[index];
   const t=currentWritingTopic;
 
   document.getElementById("writing-selector").style.display="none";
@@ -5256,10 +5280,11 @@ function startWritingTopic(index){
   if(inlineEl) inlineEl.style.display="none";
 
   // next button
+  const _wTopics=_currentWritingTopics||VICTOR_DATA.writingTopics;
   const nextBtn=document.getElementById("btn-next-writing");
-  if(writingTopicIndex<VICTOR_DATA.writingTopics.length-1){
+  if(writingTopicIndex<_wTopics.length-1){
     nextBtn.style.display="block";
-    nextBtn.textContent=`Próximo: ${VICTOR_DATA.writingTopics[writingTopicIndex+1].icon} ${VICTOR_DATA.writingTopics[writingTopicIndex+1].title} →`;
+    nextBtn.textContent=`Próximo: ${_wTopics[writingTopicIndex+1].icon} ${_wTopics[writingTopicIndex+1].title} →`;
   } else nextBtn.style.display="none";
 }
 
@@ -6657,6 +6682,8 @@ function init(){
   });
   // Writing
   document.getElementById("writing-core-banner")?.addEventListener("click",openWriting);
+  // Prepare & Present
+  document.getElementById("prepare-present-banner")?.addEventListener("click",openPreparePresent);
   document.getElementById("btn-back-writing")?.addEventListener("click",backToDashboard);
   document.getElementById("btn-back-writing-ex")?.addEventListener("click",openWriting);
   document.getElementById("btn-next-writing")?.addEventListener("click",()=>startWritingTopic(writingTopicIndex+1));
