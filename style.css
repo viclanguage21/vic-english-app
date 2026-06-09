@@ -1703,6 +1703,14 @@ input { color: #ffffff !important; }
   color:var(--ink-soft) !important; font-size:16px;
   cursor:pointer; display:flex; align-items:center; justify-content:center;
 }
+.upgrade-back-bottom {
+  margin-top:24px; padding:12px 32px;
+  background:var(--s); border:1px solid var(--rim2);
+  border-radius:var(--rsm); color:var(--ink-soft) !important;
+  font-size:14px; cursor:pointer; width:100%;
+  transition:var(--t);
+}
+.upgrade-back-bottom:hover { border-color:var(--rim3); color:var(--ink) !important; }
 .upgrade-logo img {
   width:80px; height:80px; border-radius:20px;
   margin-bottom:20px; object-fit:cover;
@@ -7078,10 +7086,11 @@ a.settings-big-btn:active {
 /* ── Dashboard header logo ── */
 #dash-logo-img {
   width: auto !important;
-  height: 48px !important;
+  height: 50px !important;
   max-width: 180px !important;
   object-fit: contain !important;
-  border-radius: 8px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 18px rgba(201,147,58,0.5), 0 0 0 1px rgba(201,147,58,0.2) !important;
 }
 
 /* ── Grammar/Writing banners — definitive layout (no collapse) ── */

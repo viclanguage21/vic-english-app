@@ -151,6 +151,10 @@ function applyLang() {
     el.title = t(el.getAttribute("data-i18n-title"));
   });
 
+  // Hide PT tagline on auth screen when English is selected
+  const taglinePt = document.querySelector(".auth-tagline-pt");
+  if(taglinePt) taglinePt.style.display = _lang === "pt" ? "" : "none";
+
   // Re-renderizar partes dinâmicas se estiverem visíveis
   const activeView = document.querySelector(".view.active")?.id;
   if (activeView === "view-dashboard") renderDashboardTexts();
@@ -6025,6 +6029,9 @@ function startOnboarding(){
   obStep = 0;
   _obLocked = false;
   _onboardingActive = true; // block all automatic navigation
+  // Auto-show Android install instructions if on Android
+  const isAndroid = /android/i.test(navigator.userAgent);
+  if(isAndroid) showInstallOS("android");
   renderObStep();
   showView("view-onboarding");
 }
@@ -6719,6 +6726,9 @@ function init(){
   document.getElementById("btn-reload-auth")?.addEventListener("click",()=>{
     hardReloadWithCacheClear();
   });
+  document.getElementById("btn-reload-onboarding")?.addEventListener("click",()=>{
+    hardReloadWithCacheClear();
+  });
   document.getElementById("btn-start-now")?.addEventListener("click",()=>openSegmentPhases(currentSegmentId));
   document.getElementById("btn-goto-flashcards")?.addEventListener("click",openFlashcards);
   document.getElementById("btn-goto-memory")?.addEventListener("click",openMemoryFree);
@@ -6742,6 +6752,7 @@ function init(){
 
   // upgrade
   document.getElementById("btn-back-upgrade")?.addEventListener("click",backToDashboard);
+  document.getElementById("btn-back-upgrade-bottom")?.addEventListener("click",backToDashboard);
   // lb-sheet usa closeLeaderboard() diretamente
   document.getElementById("btn-leaderboard")?.addEventListener("click",openLeaderboard);
   const mpBtn=document.getElementById("btn-pay-mp"); if(mpBtn) mpBtn.href=MP_LINK;
