@@ -6148,3 +6148,109 @@ VICTOR_DATA.flashcardDecks.push({
     ]
   });
 })();
+
+// ── EVENTOS: CASAMENTOS (Weddings) ─────────────────────────────────────────
+(function(){
+  const seg = VICTOR_DATA.segments.find(s=>s.id==="eventos");
+  if(!seg) return;
+
+  // ── Fase 1: Vocabulário de Casamentos ──
+  seg.phases[0].missions.push({
+    id:"wedding_vocab_f1", name:"💍 Casamentos — Vocabulário", icon:"💍",
+    description:"Termos essenciais para trabalhar em casamentos", xpTotal:70,
+    phrases:[
+      {id:"wv1",type:"memory_match",en:"Wedding terms",pt:"Termos de casamento",
+        pairs:[
+          {a:"bride",      b:"noiva"},
+          {a:"groom",      b:"noivo"},
+          {a:"ceremony",   b:"cerimônia"},
+          {a:"reception",  b:"recepção"},
+          {a:"vows",       b:"votos"},
+          {a:"bouquet",    b:"buquê"}
+        ],words:[]},
+      {id:"wv2",type:"multiple_choice",en:"'Bridesmaid' means: 👰",pt:"'Bridesmaid' significa:",
+        options:["Dama de honra 💐","Noiva","Madrinha","Florista"],correct:0,
+        words:[{w:"bridesmaid",cls:"noun",tr:"dama de honra"}]},
+      {id:"wv3",type:"multiple_choice",en:"The correct English term for 'cerimonialista' is: 🎪",pt:"O termo correto em inglês para 'cerimonialista' é:",
+        options:["Wedding planner / coordinator 📋","Ceremonialist","Wedding manager","Event director"],correct:0,
+        words:[{w:"wedding planner",cls:"noun",tr:"cerimonialista"}]},
+      {id:"wv4",type:"multiple_choice",en:"A guest says: 'I have a dietary restriction.' What does this mean? 🍽️",pt:"Um convidado diz: 'I have a dietary restriction.' O que isso significa?",
+        options:["Restrição alimentar — não pode comer algo 🍽️","Preferência por assento","Restrição de horário","Pedido especial de música"],correct:0,
+        words:[{w:"dietary restriction",cls:"noun",tr:"restrição alimentar"}]},
+      {id:"wv5",type:"translate_pt_en",en:"The wedding ceremony will begin at 4 p.m.",pt:"A cerimônia de casamento começará às 16h.",
+        answer:"the wedding ceremony will begin at 4 p.m.",
+        words:[{w:"ceremony",cls:"noun",tr:"cerimônia"}]},
+    ]
+  });
+
+  // ── Fase 2: Coordenação & Logística ──
+  seg.phases[1].missions.push({
+    id:"wedding_coord_f2", name:"📋 Casamentos — Coordenação", icon:"📋",
+    description:"Frases de logística e coordenação de casamentos", xpTotal:80,
+    phrases:[
+      {id:"wc1",type:"pronunciation",
+        en:"Where would you like the ceremony to be set up? What time should the vendors arrive?",
+        pt:"Onde você gostaria que a cerimônia fosse montada? A que horas os fornecedores devem chegar?",
+        words:[{w:"vendors",cls:"noun",tr:"fornecedores"},{w:"ceremony",cls:"noun",tr:"cerimônia"}]},
+      {id:"wc2",type:"match_columns",en:"Wedding coordination",pt:"Coordenação de casamento",
+        pairs:[
+          {a:"rehearsal",     b:"ensaio"},
+          {a:"seating plan",  b:"mapa de mesas"},
+          {a:"first dance",   b:"primeiro baile"},
+          {a:"cocktail hour", b:"coquetel"}
+        ],words:[]},
+      {id:"wc3",type:"fill_blank",
+        en:"Do any guests have ___ restrictions? We need to inform the kitchen. 🍽️",
+        pt:"Algum convidado tem restrições alimentares? Precisamos informar a cozinha.",
+        answer:"dietary",
+        words:[{w:"dietary",cls:"adj",tr:"alimentar"}]},
+      {id:"wc4",type:"translate_pt_en",
+        en:"Could you confirm the number of guests one week before the wedding?",
+        pt:"Você poderia confirmar o número de convidados uma semana antes do casamento?",
+        answer:"could you confirm the number of guests one week before the wedding",
+        words:[{w:"confirm",cls:"verb",tr:"confirmar"},{w:"guests",cls:"noun",tr:"convidados"}]},
+      {id:"wc5",type:"pronunciation",
+        en:"I'll coordinate with the DJ about the timeline and make sure the first dance starts right on cue.",
+        pt:"Vou coordenar com o DJ sobre o cronograma e garantir que o primeiro baile comece na hora certa.",
+        words:[{w:"coordinate",cls:"verb",tr:"coordenar"},{w:"timeline",cls:"noun",tr:"cronograma"},{w:"on cue",cls:"expr",tr:"na hora certa"}]},
+    ]
+  });
+
+  // ── Fase 3: Comunicação Profissional ──
+  seg.phases[2].missions.push({
+    id:"wedding_pro_f3", name:"💍 Casamentos — Comunicação Profissional", icon:"💍",
+    description:"Inglês avançado para cerimonialistas e equipes de casamento", xpTotal:90,
+    phrases:[
+      {id:"wp1",type:"pronunciation",
+        en:"Thank you for trusting us with your wedding. We will coordinate every detail to make it a perfect and unforgettable day.",
+        pt:"Obrigado por confiar a nós o seu casamento. Coordenaremos cada detalhe para torná-lo um dia perfeito e inesquecível.",
+        words:[{w:"coordinate",cls:"verb",tr:"coordenar"},{w:"unforgettable",cls:"adj",tr:"inesquecível"}]},
+      {id:"wp2",type:"translate_pt_en",
+        en:"The photographer will take family photos right after the ceremony.",
+        pt:"O fotógrafo tirará fotos de família logo após a cerimônia.",
+        answer:"the photographer will take family photos right after the ceremony",
+        words:[{w:"photographer",cls:"noun",tr:"fotógrafo"},{w:"ceremony",cls:"noun",tr:"cerimônia"}]},
+      {id:"wp3",type:"word_order",
+        en:"Please keep noise to a minimum during the vows.",
+        pt:"Por favor, mantenha o barulho ao mínimo durante os votos.",
+        scrambled:["Please","keep","noise","to","a","minimum","during","the","vows."],
+        answer:"Please keep noise to a minimum during the vows.",
+        words:[{w:"vows",cls:"noun",tr:"votos"},{w:"minimum",cls:"noun",tr:"mínimo"}]},
+      {id:"wp4",type:"translate_pt_en",
+        en:"Would you like a rehearsal before the ceremony to make sure everything runs smoothly?",
+        pt:"Você gostaria de um ensaio antes da cerimônia para garantir que tudo corra bem?",
+        answer:"would you like a rehearsal before the ceremony to make sure everything runs smoothly",
+        words:[{w:"rehearsal",cls:"noun",tr:"ensaio"},{w:"smoothly",cls:"adv",tr:"sem problemas"}]},
+      {id:"wp5",type:"multiple_choice",
+        en:"A guest says they cannot eat beef. The best waiter response is: 🍽️",
+        pt:"Um convidado diz que não pode comer carne bovina. A melhor resposta do garçom é:",
+        options:[
+          "I apologize — may I offer you chicken or our vegetarian option instead? 🥗",
+          "Sorry, there's nothing we can do.",
+          "Please wait — we will prepare beef for you.",
+          "You should have told us earlier."
+        ],correct:0,
+        words:[{w:"apologize",cls:"verb",tr:"pedir desculpas"},{w:"vegetarian option",cls:"noun",tr:"opção vegetariana"}]},
+    ]
+  });
+})();
