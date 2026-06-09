@@ -1,6 +1,6 @@
 // app.js — VIC English v12 — Full fix
 
-import { auth, registerUser, loginUser, loginWithGoogle, logoutUser, onAuthChange, getUserData, saveProgress, getAllUsers, getUserById, OWNER_UID, registerFCMToken, onForegroundMessage, resetPassword, resendVerificationEmail, reloadCurrentUser } from "./firebase.js";
+import { auth, registerUser, loginUser, loginWithGoogle, logoutUser, onAuthChange, getUserData, saveProgress, getAllUsers, getUserById, OWNER_UID, registerFCMToken, onForegroundMessage, resetPassword, resendVerificationEmail, reloadCurrentUser, callSendPushToAll } from "./firebase.js";
 import { I18N, SEG_NAMES, LEVEL_TIPS, LOADING_QUOTES, GLOSSARY, PRO_MESSAGES, BADGES, NOTIF_MESSAGES, MP_LINK } from "./constants.js";
 import { calcLevel, stripEmoji, cleanEnunciado, shuffle, vibrate } from "./utils.js";
 
@@ -5564,9 +5564,6 @@ function showNotifBanner(){
 }
 
 // ── PUSH DO PAINEL ADMIN ─────────────────────────────────────────────────────
-const FCM_FUNCTION_URL = "https://us-central1-victor-app-aef3c.cloudfunctions.net/sendPushToAll";
-const FCM_SECRET = "COLE_SEU_SECRET_AQUI"; // mesmo valor que firebase functions:config:set vic.secret=XXX
-
 async function sendPushFromAdmin(){
   const title = document.getElementById("push-title")?.value?.trim();
   const body  = document.getElementById("push-body")?.value?.trim();
@@ -5576,24 +5573,12 @@ async function sendPushFromAdmin(){
   if(btn){ btn.disabled=true; btn.textContent="Enviando..."; }
 
   try{
-    const res = await fetch(FCM_FUNCTION_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-vic-secret": FCM_SECRET,
-      },
-      body: JSON.stringify({ title, body }),
-    });
-    const data = await res.json();
-    if(data.success){
-      showXpToast(`✅ Push enviado para ${data.sent} dispositivos!`);
-      if(document.getElementById("push-title")) document.getElementById("push-title").value="";
-      if(document.getElementById("push-body"))  document.getElementById("push-body").value="";
-    } else {
-      showXpToast("❌ Erro: " + (data.error||"desconhecido"));
-    }
+    const data = await callSendPushToAll({ title, body });
+    showXpToast(`✅ Push enviado para ${data.sent} dispositivos!`);
+    if(document.getElementById("push-title")) document.getElementById("push-title").value="";
+    if(document.getElementById("push-body"))  document.getElementById("push-body").value="";
   }catch(e){
-    showXpToast("❌ Erro ao enviar: " + e.message);
+    showXpToast("❌ Erro ao enviar: " + (e.message||"desconhecido"));
   }finally{
     if(btn){ btn.disabled=false; btn.textContent="📣 Enviar para todos"; }
   }

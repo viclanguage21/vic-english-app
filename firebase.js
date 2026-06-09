@@ -2,6 +2,7 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
+import { getFunctions, httpsCallable }       from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -261,4 +262,13 @@ export async function getAllUsers() {
 
 export async function getUserById(uid) {
   return getUserData(uid);
+}
+
+// ── CLOUD FUNCTIONS ───────────────────────────────────────────────────────────
+const _functions = getFunctions(app, "us-central1");
+
+export async function callSendPushToAll({ title, body, url }) {
+  const fn = httpsCallable(_functions, "sendPushToAll");
+  const result = await fn({ title, body, url });
+  return result.data;
 }
