@@ -599,11 +599,18 @@ async function updateStreak(){
     // If lastExerciseDate is set and older than yesterday, the streak is broken
     const lastEx=userData.lastExerciseDate||"";
     if(lastEx && lastEx<yesterday && (userData.streak||0)>0){
-      userData.streak=0;
+      const freezes = userData.streakFreezes||0;
+      if(freezes>0){
+        userData.streakFreezes = freezes-1;
+        setTimeout(()=>showXpToast("🛡️ Streak protegido pelo escudo!"),800);
+      } else {
+        userData.streak=0;
+      }
     }
 
     const save={lastLoginDate:today,xpYesterday:userData.xpYesterday,xpToday:0};
     if(userData.streak===0) save.streak=0;
+    if(userData.streakFreezes!==undefined) save.streakFreezes=userData.streakFreezes;
     await saveProgressSafe(currentUser.uid,save,true);
   }
 
@@ -629,6 +636,17 @@ async function updateStreakOnExercise(){
   updateStreakFireDisplay();
 
   await saveProgressSafe(currentUser.uid,{streak,lastExerciseDate:today},true);
+
+  // Earn a shield every 7-day streak milestone
+  if(streak%7===0 && streak>0){
+    const cur=userData.streakFreezes||0;
+    if(cur<3){
+      userData.streakFreezes=cur+1;
+      await saveProgressSafe(currentUser.uid,{streakFreezes:cur+1},false);
+      setTimeout(()=>showXpToast("🛡️ Escudo de streak ganho! ("+userData.streakFreezes+"/3)"),600);
+    }
+  }
+  updateShieldDisplay();
 }
 
 // Updates the header fire icon: bright if exercised today, dimmed if not
@@ -646,6 +664,24 @@ function updateStreakFireDisplay(){
     elStHV.textContent=streak;
     elStH.style.display=streak>=1?"flex":"none";
     if(streak>=1) elStH.setAttribute("data-fire",active?"on":"off");
+  }
+  updateShieldDisplay();
+}
+
+function updateShieldDisplay(){
+  const freezes=userData?.streakFreezes||0;
+  const el=document.getElementById("dash-streak-shields");
+  if(el){
+    el.style.display=freezes>0?"flex":"none";
+    const cnt=document.getElementById("dash-shield-count");
+    if(cnt) cnt.textContent=freezes;
+  }
+  // Header pill shield
+  const hel=document.getElementById("dash-header-shields");
+  if(hel){
+    hel.style.display=freezes>0?"flex":"none";
+    const hcnt=document.getElementById("dash-header-shield-count");
+    if(hcnt) hcnt.textContent=freezes;
   }
 }
 

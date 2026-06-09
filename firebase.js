@@ -182,7 +182,7 @@ export function onAuthChange(callback) {
 // ── FIRESTORE ─────────────────────────────────────────
 async function createUserDoc(uid, extra) {
   await setDoc(doc(db, "users", uid), {
-    xp: 0, streak: 0, completedMissions: [],
+    xp: 0, streak: 0, completedMissions: [], streakFreezes: 0,
     plan: "free", createdAt: serverTimestamp(),
     lastSeen: serverTimestamp(),
     currentMission: { segmentId: "maritimo", phaseId: "f1", missionId: "vocab_basico", phraseIndex: 0 },
