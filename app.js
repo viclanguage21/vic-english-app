@@ -2112,11 +2112,14 @@ function renderDashboard(){
     document.getElementById("nbi-prog").textContent=p2;
   } else if(nbiEl) nbiEl.style.display="none";
 
-  const xpInLevel=xp%(level*100)||xp%100;
-  const xpForLevel=level*100;
+  // Quadratic thresholds: xp to reach level L = (L-1)² × 100
+  const xpFloor=(level-1)*(level-1)*100;
+  const xpCeil=level*level*100;
+  const xpInLevel=xp-xpFloor;
+  const xpForLevel=xpCeil-xpFloor;
   const pct=Math.min(Math.round((xpInLevel/xpForLevel)*100),100);
   const xpBar=document.getElementById("dash-xp-bar"); if(xpBar) xpBar.style.width=`${pct}%`;
-  const xpNext=document.getElementById("dash-xp-next"); if(xpNext) xpNext.textContent=`${xpForLevel-xpInLevel} XP para o próximo nível`;
+  const xpNext=document.getElementById("dash-xp-next"); if(xpNext) xpNext.textContent=`${xpCeil-xp} XP para o próximo nível`;
 
   // Show next badge milestone on bar
   const earned=userData.badges||[];

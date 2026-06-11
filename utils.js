@@ -1,6 +1,8 @@
 // utils.js — VIC English — pure utilities, no app state dependencies
 
-export const calcLevel = xp => Math.floor(xp/100)+1;
+// Quadratic curve: level L requires (L-1)² × 100 total XP
+// Level 1: 0–99 | Level 2: 100–399 | Level 3: 400–899 | Level 5: 1600–2499 | Level 10: 8100+
+export const calcLevel = xp => Math.floor(Math.sqrt(Math.max(xp,0) / 100)) + 1;
 
 export const stripEmoji = s =>
   (s||"").replace(/[\u{1F300}-\u{1FFFF}]/gu,'').replace(/[\u2600-\u27FF]/gu,'').replace(/[#*0-9]\uFE0F?\u20E3/gu,'').replace(/\s+/g,' ').trim();
