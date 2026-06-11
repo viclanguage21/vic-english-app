@@ -2141,9 +2141,32 @@ function renderDashboard(){
   // User level in header
   const ulEl=document.getElementById("dash-user-level");
   if(ulEl) ulEl.textContent=lv.label.split(" ")[0]+" "+lv.label.split(" ")[1];
-  // Start Now — goes to segment phases
+  // Start Now — contextual: continuar se tem histórico, segmento do diagnóstico se novo
   const snBtn=document.getElementById("btn-start-now");
-  if(snBtn){ const seg=getSegment(currentSegmentId); snBtn.textContent=`▶ Start Now! ${seg?.icon||""}${seg?.name||""}`; }
+  if(snBtn){
+    const hasMissions=(userData.completedMissions||[]).length>0;
+    const hasCurrentMission=userData.currentMission?.missionId;
+    if(hasMissions && hasCurrentMission){
+      // Usuário com histórico — mostra a missão atual
+      const seg=getSegment(currentSegmentId);
+      const phase=seg?.phases?.find(p=>p.id===currentPhaseId);
+      const mission=phase?.missions?.find(m=>m.id===currentMissionId);
+      const missionName=mission?.name||phase?.name||seg?.name||"";
+      snBtn.textContent=`▶ Continuar — ${missionName}`;
+      snBtn.style.display="block";
+    } else if(userData.diagnosisAnswers?.segment){
+      // Usuário novo com diagnóstico — mostra segmento escolhido
+      const diagSegId=userData.diagnosisAnswers.segment;
+      const diagSeg=getSegment(diagSegId);
+      if(diagSeg){
+        snBtn.textContent=`${diagSeg.icon||"▶"} Começar ${diagSeg.name}`;
+        snBtn.style.display="block";
+      } else { snBtn.style.display="none"; }
+    } else {
+      // Sem diagnóstico — oculta o botão
+      snBtn.style.display="none";
+    }
+  }
   const banner=document.getElementById("pro-banner");
   if(banner) banner.style.display=isPro()?"none":"flex";
 
@@ -2166,6 +2189,33 @@ function renderDashboard(){
   }catch(e){ console.error("renderDashboard error:", e.message); }
 }
 
+function toggleDashSection(colId, arrowId, openDisplay){
+  const col=document.getElementById(colId);
+  const arrow=document.getElementById(arrowId);
+  if(!col) return;
+  const isHidden=col.style.display==="none";
+  col.style.display=isHidden?(openDisplay||"block"):"none";
+  if(arrow) arrow.style.transform=isHidden?"rotate(0deg)":"rotate(180deg)";
+}
+
+function toggleSegments(){
+  const col=document.getElementById("segments-collapsible");
+  const arrow=document.getElementById("segments-toggle-arrow");
+  if(!col) return;
+  const open=col.style.display==="none";
+  col.style.display=open?"block":"none";
+  if(arrow) arrow.style.transform=open?"rotate(0deg)":"rotate(180deg)";
+}
+
+function toggleXpStats(){
+  const row=document.getElementById("stats-row-collapsible");
+  const arrow=document.getElementById("xp-toggle-arrow");
+  if(!row) return;
+  const open=row.style.display==="none"||row.style.display==="";
+  row.style.display=open?"flex":"none";
+  if(arrow) arrow.style.transform=open?"rotate(180deg)":"rotate(0deg)";
+}
+
 function renderSegments(){
   const c=document.getElementById("segments-grid"); if(!c) return; c.innerHTML="";
   const grammarSeg=VICTOR_DATA.segments.find(s=>s.isGrammarCore);
@@ -2181,6 +2231,9 @@ function renderSegments(){
     const gc=document.getElementById("grammar-core-banner");
     if(gc){gc.style.display="flex";gc.onclick=()=>openSegmentPhases(grammarSeg.id);}
   }
+  // Prepare & Present banner
+  const ppBanner=document.getElementById("prepare-present-banner");
+  if(ppBanner&&VICTOR_DATA.prepareTopics?.length) ppBanner.style.display="flex";
 }
 
 // ── PHASES ────────────────────────────────────────────────────────────────────
@@ -2200,7 +2253,11 @@ function openSegmentPhases(segId){
   }
 
   const completed=userData.completedMissions||[];
-  (seg.phases||[]).forEach((phase,pi)=>{
+  let _phases=seg.phases||[];
+  if(seg.isGrammarCore){
+    _phases=[..._phases].sort((a,b)=>{const af=isSegmentFree("gramatica",a.id),bf=isSegmentFree("gramatica",b.id);return (bf?1:0)-(af?1:0);});
+  }
+  _phases.forEach((phase,pi)=>{
     // Grammar Core: all phases independent
     if(seg.isGrammarCore){ phase.unlocked=true; }
     else if(pi===0){ phase.unlocked=true; }
@@ -2346,10 +2403,7 @@ function renderMission(){
   document.getElementById("mission-progress-bar").style.width=`${Math.round(((currentPhraseIndex+1)/total)*100)}%`;
   const ptEl=document.getElementById("phrase-pt");
   if(ptEl){
-    if(phrase.pt&&phrase.type!=="translate_en_pt"&&phrase.type!=="translate_pt_en"){
-      ptEl.innerHTML=`<span class="phrase-pt-label">🇧🇷</span> ${phrase.pt}`;
-      ptEl.style.display="";
-    } else if(phrase.pt&&phrase.type==="translate_pt_en"){
+    if(phrase.pt&&!["translate_en_pt","translate_pt_en","memory_match","match_columns"].includes(phrase.type)){
       ptEl.innerHTML=`<span class="phrase-pt-label">🇧🇷</span> ${phrase.pt}`;
       ptEl.style.display="";
     } else {
@@ -2368,6 +2422,8 @@ function renderMission(){
   const [label,cls]=typeMap[phrase.type]||["",""];
   const badge=document.getElementById("ex-type-badge");
   badge.textContent=label; badge.className=`ex-type-badge ${cls}`;
+  const phraseLabel=document.querySelector(".phrase-label");
+  if(phraseLabel) phraseLabel.textContent=["memory_match","match_columns"].includes(phrase.type)?"Tema":"Frase";
 
   document.getElementById("speak-controls")?.style && (document.getElementById("speak-controls").style.display="flex");
   renderPhraseEN(phrase,[]);
@@ -2380,6 +2436,7 @@ function renderMission(){
 function renderPhraseEN(phrase,spoken){
   const container=document.getElementById("phrase-en"); if(!container) return;
   if(["memory_match","match_columns"].includes(phrase.type)){container.textContent=cleanEnunciado(phrase.en);return;}
+  if(phrase.type==="translate_pt_en"){container.textContent=cleanEnunciado(phrase.pt||"");return;}
   const spokenClean=spoken.map(w=>w.toLowerCase().replace(/[^a-z]/g,""));
   const wordMap={}; (phrase.words||[]).forEach(w=>{wordMap[w.w.toLowerCase().replace(/[^a-z]/g,"")]=w.cls;});
   const cleanText=cleanEnunciado(phrase.en);
@@ -5198,12 +5255,30 @@ function loadAvatar(){
 let currentWritingTopic=null, writingTopicIndex=0;
 
 function openWriting(){
+  _openWritingList(VICTOR_DATA.writingTopics,"✍️ Writing & Translation");
+}
+
+function openPreparePresent(){
+  _openWritingList(VICTOR_DATA.prepareTopics||[],"🎙️ Prepare & Present");
+}
+
+function _openWritingList(topics, titleText){
   document.getElementById("writing-selector").style.display="block";
   document.getElementById("writing-exercise").style.display="none";
+  const titleEl=document.querySelector("#view-writing .phases-title");
+  if(titleEl) titleEl.textContent=titleText;
   const list=document.getElementById("writing-topic-list"); list.innerHTML="";
 
   const levelColors={A1:"#22c55e",A2:"#f59e0b",B1:"#c9933a",B2:"#7c3aed"};
-  VICTOR_DATA.writingTopics.forEach((topic,i)=>{
+  const catLabels={interview:"🎙️ Entrevista",presentation:"📊 Apresentação"};
+  let lastCat=null;
+  topics.forEach((topic,i)=>{
+    if(topic.category&&topic.category!==lastCat){
+      lastCat=topic.category;
+      const sep=document.createElement("div"); sep.className="writing-section-sep";
+      sep.textContent=catLabels[topic.category]||topic.category;
+      list.appendChild(sep);
+    }
     const div=document.createElement("div"); div.className="phase-card unlocked";
     div.innerHTML=`
       <div class="phase-left">
@@ -5213,15 +5288,18 @@ function openWriting(){
       </div>
       <div class="phase-right">→</div>
     `;
-    div.addEventListener("click",()=>startWritingTopic(i));
+    div.addEventListener("click",()=>startWritingTopic(i,topics));
     list.appendChild(div);
   });
   showView("view-writing");
 }
 
-function startWritingTopic(index){
+let _currentWritingTopics=null;
+function startWritingTopic(index,topicsArr){
+  if(topicsArr) _currentWritingTopics=topicsArr;
+  const topics=_currentWritingTopics||VICTOR_DATA.writingTopics;
   writingTopicIndex=index;
-  currentWritingTopic=VICTOR_DATA.writingTopics[index];
+  currentWritingTopic=topics[index];
   const t=currentWritingTopic;
 
   document.getElementById("writing-selector").style.display="none";
@@ -5252,10 +5330,11 @@ function startWritingTopic(index){
   if(inlineEl) inlineEl.style.display="none";
 
   // next button
+  const _wTopics=_currentWritingTopics||VICTOR_DATA.writingTopics;
   const nextBtn=document.getElementById("btn-next-writing");
-  if(writingTopicIndex<VICTOR_DATA.writingTopics.length-1){
+  if(writingTopicIndex<_wTopics.length-1){
     nextBtn.style.display="block";
-    nextBtn.textContent=`Próximo: ${VICTOR_DATA.writingTopics[writingTopicIndex+1].icon} ${VICTOR_DATA.writingTopics[writingTopicIndex+1].title} →`;
+    nextBtn.textContent=`Próximo: ${_wTopics[writingTopicIndex+1].icon} ${_wTopics[writingTopicIndex+1].title} →`;
   } else nextBtn.style.display="none";
 }
 
@@ -6653,6 +6732,8 @@ function init(){
   });
   // Writing
   document.getElementById("writing-core-banner")?.addEventListener("click",openWriting);
+  // Prepare & Present
+  document.getElementById("prepare-present-banner")?.addEventListener("click",openPreparePresent);
   document.getElementById("btn-back-writing")?.addEventListener("click",backToDashboard);
   document.getElementById("btn-back-writing-ex")?.addEventListener("click",openWriting);
   document.getElementById("btn-next-writing")?.addEventListener("click",()=>startWritingTopic(writingTopicIndex+1));
@@ -6730,7 +6811,15 @@ function init(){
   document.getElementById("btn-reload-onboarding")?.addEventListener("click",()=>{
     hardReloadWithCacheClear();
   });
-  document.getElementById("btn-start-now")?.addEventListener("click",()=>openSegmentPhases(currentSegmentId));
+  document.getElementById("btn-start-now")?.addEventListener("click",()=>{
+    const hasMissions=(userData.completedMissions||[]).length>0;
+    const hasCurrentMission=userData.currentMission?.missionId;
+    if(hasMissions && hasCurrentMission){
+      openSegmentPhases(currentSegmentId);
+    } else if(userData.diagnosisAnswers?.segment){
+      openSegmentPhases(userData.diagnosisAnswers.segment);
+    }
+  });
   document.getElementById("btn-goto-flashcards")?.addEventListener("click",openFlashcards);
   document.getElementById("btn-goto-memory")?.addEventListener("click",openMemoryFree);
   document.getElementById("btn-goto-truefalse")?.addEventListener("click",openTrueFalse);
@@ -6874,6 +6963,9 @@ if(typeof backToDashboard !== 'undefined') window.backToDashboard = backToDashbo
 if(typeof showView !== 'undefined') window.showView = showView;
 if(typeof openGlossary !== 'undefined') window.openGlossary = openGlossary;
 if(typeof closeGlossary !== 'undefined') window.closeGlossary = closeGlossary;
+if(typeof toggleSegments !== 'undefined') window.toggleSegments = toggleSegments;
+if(typeof toggleXpStats !== 'undefined') window.toggleXpStats = toggleXpStats;
+if(typeof toggleDashSection !== 'undefined') window.toggleDashSection = toggleDashSection;
 
 // ── Email verification screen handlers ────────────────────────────────────────
 window.checkEmailVerified = async function(){
