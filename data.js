@@ -6148,3 +6148,81 @@ VICTOR_DATA.flashcardDecks.push({
     ]
   });
 })();
+
+// ══════════════════════════════════════════════════════
+// PREPARE & PRESENT — Entrevistas e Apresentações
+// ══════════════════════════════════════════════════════
+VICTOR_DATA.prepareTopics = [
+
+  // ── 💼 ENTREVISTAS ────────────────────────────────────
+  { id:"pp1", category:"interview", level:"A2", icon:"👋", title:"Tell Me About Yourself",
+    ptTitle:"Fale sobre você",
+    prompt:"Write a 30-second self-introduction for a job interview. Include your name, job area, experience, and one strength.",
+    ptPrompt:"Escreva uma apresentação de 30 segundos para uma entrevista de emprego. Inclua nome, área, experiência e um ponto forte.",
+    example:"My name is Carlos Silva. I have been working in the port sector for six years, mainly in cargo inspection. I am organized, reliable, and I work well under pressure. I am now looking for an opportunity to grow in an international environment.",
+    tips:["Start with name and area: 'My name is... I work in...'","Mention years of experience","Highlight one strength relevant to the job","End with why you are here: 'I am looking for...'"] },
+
+  { id:"pp2", category:"interview", level:"B1", icon:"📋", title:"Describe Your Experience",
+    ptTitle:"Descreva sua experiência",
+    prompt:"Write 5-6 sentences describing your professional experience for an interview. Use examples.",
+    ptPrompt:"Escreva 5-6 frases descrevendo sua experiência profissional numa entrevista. Use exemplos concretos.",
+    example:"I have worked at the Port of Santos for eight years as a logistics coordinator. In my current role, I manage the documentation for import and export operations. Last year, I helped reduce customs clearance time by 20%. I regularly communicate with international freight agents in English. I am experienced with TMS systems and cargo tracking tools. I am confident I can bring this experience to your company.",
+    tips:["Use Present Perfect for current experience: 'I have worked...'","Use Past Simple for specific achievements: 'I helped reduce...'","Be specific: numbers, results, tools used","End by connecting your experience to the new job"] },
+
+  { id:"pp3", category:"interview", level:"B1", icon:"💪", title:"Your Strengths & Weaknesses",
+    ptTitle:"Pontos fortes e fracos",
+    prompt:"Write your answer to 'What is your greatest strength?' and 'What is your greatest weakness?' (3-4 sentences each).",
+    ptPrompt:"Escreva suas respostas para 'Qual seu maior ponto forte?' e 'Qual seu maior ponto fraco?' (3-4 frases cada).",
+    example:"My greatest strength is my ability to stay calm under pressure. When there is a crisis at the port — such as a delayed shipment — I focus on solutions rather than problems. I believe this makes me reliable and effective in fast-paced environments.\n\nMy greatest weakness is that I sometimes take on too many tasks at once. I have been working on this by using a task-management system to prioritize my workload. It has made me much more efficient.",
+    tips:["Strength: give a real example to prove it","Weakness: choose something you have improved — show growth","Avoid clichés like 'I work too hard'","Keep each answer focused: 3-4 sentences is enough"] },
+
+  { id:"pp4", category:"interview", level:"B1", icon:"❓", title:"Why Do You Want This Job?",
+    ptTitle:"Por que você quer este trabalho?",
+    prompt:"Write a 4-5 sentence answer to 'Why do you want to work here?' for a bilingual position at an international company.",
+    ptPrompt:"Escreva uma resposta de 4-5 frases para 'Por que você quer trabalhar aqui?' para uma vaga bilíngue numa empresa internacional.",
+    example:"I have been following your company's growth in the Santos logistics sector for the past two years. I believe my background in port operations and my English proficiency make me a strong fit for this role. I am particularly excited about the opportunity to work with international clients and expand my professional skills. Working here would allow me to contribute to a team I genuinely admire while continuing to develop my career.",
+    tips:["Show you know the company: 'I have been following your...'","Connect your background to their needs","Mention specific reasons — not just 'I need a job'","End with what you can contribute, not just what you want"] },
+
+  { id:"pp5", category:"interview", level:"B2", icon:"💰", title:"Discuss Salary & Conditions",
+    ptTitle:"Discuta salário e condições",
+    prompt:"Write a professional response to 'What are your salary expectations?' and a follow-up negotiation if the offer is lower (3-4 sentences each).",
+    ptPrompt:"Escreva uma resposta profissional para 'Quais são suas expectativas salariais?' e uma contra-proposta se a oferta for menor.",
+    example:"Based on my research and my experience in this sector, I am expecting a salary in the range of R$5,000 to R$6,000 per month. I am open to discussing the full compensation package, including benefits.\n\nThank you for the offer. I appreciate the opportunity. However, considering my eight years of experience and the responsibilities of this role, I was hoping we could discuss a figure closer to R$5,500. Is there any flexibility on that?",
+    tips:["Research market rates before the interview","Give a range, not a fixed number","Acknowledge the offer before negotiating","Be polite but direct: 'I was hoping we could discuss...'"] },
+
+  // ── 📊 APRESENTAÇÕES ──────────────────────────────────
+  { id:"pp6", category:"presentation", level:"A2", icon:"🎬", title:"Open a Presentation",
+    ptTitle:"Abra uma apresentação",
+    prompt:"Write the opening of a 2-minute professional presentation. Include greeting, topic, and structure overview (5-6 sentences).",
+    ptPrompt:"Escreva a abertura de uma apresentação profissional de 2 minutos. Inclua saudação, tema e visão geral da estrutura.",
+    example:"Good morning, everyone. My name is Ana Souza, and I am the logistics coordinator here at Santos Port Terminal. Today, I will be talking about the new cargo tracking system we implemented last quarter. My presentation has three parts: first, the problem we faced; second, the solution we chose; and third, the results so far. I will take questions at the end. Let's get started.",
+    tips:["Greet and introduce yourself: 'Good morning, my name is...'","State your topic clearly: 'Today I will be talking about...'","Outline your structure: 'My presentation has three parts...'","Tell the audience when to ask questions"] },
+
+  { id:"pp7", category:"presentation", level:"B1", icon:"📊", title:"Present Data & Charts",
+    ptTitle:"Apresente dados e gráficos",
+    prompt:"Write 5-6 sentences presenting data from a chart showing 20% growth in cargo volume over the last quarter.",
+    ptPrompt:"Escreva 5-6 frases apresentando dados de um gráfico com 20% de crescimento no volume de carga no último trimestre.",
+    example:"As you can see in this chart, our cargo volume has grown significantly over the past three months. In January, we handled 1,200 containers. By March, that number had risen to 1,440 — an increase of 20%. This growth was mainly driven by new contracts with two Asian partners. The trend is positive, and we expect to continue at this rate through the second quarter. These numbers confirm that our investment in automation was the right decision.",
+    tips:["Refer to the slide: 'As you can see...' / 'This chart shows...'","Use numbers precisely: percentages, quantities, dates","Explain the reason for the trend: 'This was driven by...'","Draw a conclusion: 'These numbers confirm...'"] },
+
+  { id:"pp8", category:"presentation", level:"B1", icon:"🎯", title:"Elevator Pitch",
+    ptTitle:"Pitch de elevador",
+    prompt:"Write a 30-second elevator pitch for your company or your professional services (5-6 sentences).",
+    ptPrompt:"Escreva um pitch de elevador de 30 segundos para sua empresa ou serviços profissionais.",
+    example:"Hi, I'm Victor from VIC Language. We help port and maritime professionals in Santos communicate confidently in English — in just a few weeks of focused training. Most of our students have never had formal English classes, but after our program they are handling real situations: emails, inspections, negotiations. We use real port and hotel scenarios, not generic textbooks. If your team needs to work with international clients, I would love to show you what we do. Can I send you a quick overview?",
+    tips:["Hook in the first sentence — what do you do?","Name the problem you solve","Describe your solution briefly","End with a call to action: a question or next step","Aim for 5-6 sentences maximum — keep it tight"] },
+
+  { id:"pp9", category:"presentation", level:"B2", icon:"🙋", title:"Handle Q&A Confidently",
+    ptTitle:"Responda perguntas com confiança",
+    prompt:"Write responses to 3 challenging Q&A questions after a presentation: (1) 'What is your source for this data?', (2) 'Why didn't you consider option B?', (3) 'What if your plan doesn't work?'",
+    ptPrompt:"Escreva respostas para 3 perguntas difíceis após uma apresentação: (1) fonte dos dados, (2) por que não considerou outra opção, (3) e se o plano falhar.",
+    example:"(1) Great question. The data comes from our internal tracking system, cross-referenced with the National Port Authority reports from Q1 2024. I can share the full report after this meeting.\n\n(2) We did consider option B in the early stages. However, after running a cost-benefit analysis, we found that option A would deliver results 40% faster. I am happy to walk you through the comparison if useful.\n\n(3) That is a fair concern. We have built a contingency plan for that scenario. If results fall below target after 60 days, we will activate Phase 2, which includes a revised timeline and a smaller pilot program.",
+    tips:["Buy time gracefully: 'Great question.' / 'That is a fair point.'","Always acknowledge the question before answering","For data questions: cite your source or offer to send it","For 'what if' questions: show you have a Plan B"] },
+
+  { id:"pp10", category:"presentation", level:"B2", icon:"🏁", title:"Close & Call to Action",
+    ptTitle:"Encerre com impacto",
+    prompt:"Write a strong closing for a presentation proposing a new service to a client. Include a summary, next steps, and a call to action (5-6 sentences).",
+    ptPrompt:"Escreva um encerramento impactante para uma apresentação propondo um novo serviço a um cliente. Inclua resumo, próximos passos e chamada para ação.",
+    example:"To summarize: our solution will reduce your customs clearance time by up to 30%, cut documentation errors, and free your team to focus on higher-value tasks. We have a proven track record with three clients at the Port of Santos, and we are ready to start implementation within two weeks. The next step is to schedule a technical visit to map your current process — that takes about one hour and there is no cost. I would love to set that up this week. Does Thursday work for your team?",
+    tips:["Summarize the key benefit — not everything, just the main point","Make next steps concrete and easy: '30 minutes, no cost'","Ask a specific closing question to get commitment","End confident and warm — not pushy"] },
+];
