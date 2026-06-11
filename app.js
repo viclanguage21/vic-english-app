@@ -1986,29 +1986,33 @@ function renderDashboard(){
   // User level in header
   const ulEl=document.getElementById("dash-user-level");
   if(ulEl) ulEl.textContent=lv.label.split(" ")[0]+" "+lv.label.split(" ")[1];
-  // Start Now — contextual: continuar se tem histórico, segmento do diagnóstico se novo
+  // Start Now — contextual com frases variadas
   const snBtn=document.getElementById("btn-start-now");
   if(snBtn){
     const hasMissions=(userData.completedMissions||[]).length>0;
     const hasCurrentMission=userData.currentMission?.missionId;
+    const pick=arr=>arr[Math.floor(Math.random()*arr.length)];
     if(hasMissions && hasCurrentMission){
-      // Usuário com histórico — mostra a missão atual
-      const seg=getSegment(currentSegmentId);
-      const phase=seg?.phases?.find(p=>p.id===currentPhaseId);
-      const mission=phase?.missions?.find(m=>m.id===currentMissionId);
-      const missionName=mission?.name||phase?.name||seg?.name||"";
-      snBtn.textContent=`▶ Continuar — ${missionName}`;
+      snBtn.textContent=pick([
+        "▶ Continue de onde parou",
+        "⚡ Continuar de onde parou",
+        "🔥 De volta ao treino!",
+        "💪 Continue treinando",
+        "🎯 Retomar o aprendizado",
+      ]);
       snBtn.style.display="block";
     } else if(userData.diagnosisAnswers?.segment){
-      // Usuário novo com diagnóstico — mostra segmento escolhido
-      const diagSegId=userData.diagnosisAnswers.segment;
-      const diagSeg=getSegment(diagSegId);
+      const diagSeg=getSegment(userData.diagnosisAnswers.segment);
       if(diagSeg){
-        snBtn.textContent=`${diagSeg.icon||"▶"} Começar ${diagSeg.name}`;
+        const icon=diagSeg.icon||"🚀";
+        snBtn.textContent=pick([
+          `${icon} Começar ${diagSeg.name}`,
+          `🚀 Iniciar ${diagSeg.name}`,
+          `⚡ Praticar ${diagSeg.name} agora`,
+        ]);
         snBtn.style.display="block";
       } else { snBtn.style.display="none"; }
     } else {
-      // Sem diagnóstico — oculta o botão
       snBtn.style.display="none";
     }
   }
