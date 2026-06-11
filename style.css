@@ -8352,3 +8352,265 @@ a.settings-big-btn:active {
   font-size: 11px !important;
   opacity: 0.8 !important;
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   BRAND COLORS — viclanguage.com.br palette applied to dashboard
+   Gold accent: #c9a227  |  Deep brand purple: #1e1740
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── Quick-access buttons — brand gold tinted (dark mode) ── */
+.quick-btn {
+  background: linear-gradient(145deg,
+    rgba(201,162,39,0.11) 0%,
+    rgba(201,162,39,0.06) 100%) !important;
+  border: 1px solid rgba(201,162,39,0.32) !important;
+  border-radius: 12px !important;
+  color: #f0c97a !important;
+  font-weight: 800 !important;
+  transition: background 0.18s, border-color 0.18s, box-shadow 0.18s !important;
+}
+.quick-btn:hover {
+  background: linear-gradient(145deg,
+    rgba(201,162,39,0.22) 0%,
+    rgba(201,162,39,0.12) 100%) !important;
+  border-color: rgba(201,162,39,0.60) !important;
+  box-shadow: 0 4px 18px rgba(201,162,39,0.20) !important;
+  color: #f8d970 !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   LIGHT MODE — full CSS-variables overhaul
+   Palette: cream #f7f2eb · brand purple #1e1740 · gold #c9a227
+   ══════════════════════════════════════════════════════════════════ */
+body.light-mode {
+  /* Backgrounds */
+  --bg:  #f7f2eb !important;
+  --bg2: #ede8de !important;
+
+  /* Card surfaces — brand dark purple */
+  --s:   #231854 !important;
+  --s2:  #2d2270 !important;
+  --s3:  #3b2d88 !important;
+
+  /* Rims on dark-purple cards */
+  --rim:  rgba(201,162,39,0.14) !important;
+  --rim2: rgba(201,162,39,0.30) !important;
+  --rim3: rgba(201,162,39,0.55) !important;
+
+  /* Gold accent — viclanguage.com.br yellow-gold */
+  --p:        #c9a227 !important;
+  --p-hi:     #e2b830 !important;
+  --p-bright: #e2b830 !important;
+  --p-light:  #f5d458 !important;
+  --p-glow:   rgba(201,162,39,0.36) !important;
+  --p-dim:    rgba(201,162,39,0.14) !important;
+  --p-deep:   rgba(201,162,39,0.07) !important;
+
+  /* Text on cream background */
+  --ink:       #1e1740 !important;
+  --ink-soft:  #4b3880 !important;
+  --ink-muted: #7b69a8 !important;
+
+  /* Shadows */
+  --sh: 0 8px 32px rgba(30,23,64,0.14) !important;
+}
+
+/* Page-level cream background */
+body.light-mode,
+body.light-mode #view-auth,
+body.light-mode .auth-wrapper,
+body.light-mode .dashboard-inner {
+  background: #f7f2eb !important;
+  color: #1e1740 !important;
+}
+
+/* Header stays brand dark purple in light mode */
+body.light-mode .dash-header {
+  background: linear-gradient(90deg, #130930 0%, #2b1268 30%, #3e1e88 50%, #2b1268 70%, #130930 100%) !important;
+  box-shadow: 0 1px 0 rgba(201,162,39,0.22), 0 4px 20px rgba(0,0,0,0.35) !important;
+}
+body.light-mode .dash-date     { color: var(--p-light) !important; }
+body.light-mode .dash-username { color: #ffffff !important; }
+body.light-mode .dash-user-level { color: var(--p-light) !important; }
+
+/* Cards — brand dark purple with gold accents, white text inside */
+body.light-mode .stat-card,
+body.light-mode .daily-block,
+body.light-mode .mission-card,
+body.light-mode .phrase-card,
+body.light-mode .xp-track,
+body.light-mode .phase-card.unlocked,
+body.light-mode .segment-card.available {
+  background: linear-gradient(145deg, #2d2270, #1e1740) !important;
+  border-color: rgba(201,162,39,0.28) !important;
+  color: #ffffff !important;
+}
+
+/* Text INSIDE cards — stay light */
+body.light-mode .stat-card *,
+body.light-mode .daily-block *,
+body.light-mode .mission-card *,
+body.light-mode .phrase-card *,
+body.light-mode .phase-card.unlocked *,
+body.light-mode .segment-card.available * {
+  color: inherit !important;
+}
+body.light-mode .stat-value    { color: var(--p-light) !important; }
+body.light-mode .stat-label    { color: rgba(255,255,255,0.65) !important; }
+body.light-mode .dmi-title     { color: #ffffff !important; }
+body.light-mode .dmi-sub       { color: rgba(255,255,255,0.65) !important; }
+body.light-mode .dmi-xp        { color: var(--p-light) !important; background: rgba(201,162,39,0.18) !important; }
+body.light-mode .seg-name      { color: #ffffff !important; }
+body.light-mode .phase-num     { color: var(--p-light) !important; }
+body.light-mode .phase-sub     { color: rgba(255,255,255,0.65) !important; }
+
+/* Greeting card — brand gold on cream */
+body.light-mode .greeting-card {
+  background: linear-gradient(135deg, #ede4c6, #dfd4a6) !important;
+  border-color: rgba(201,162,39,0.40) !important;
+}
+body.light-mode .greeting-hi      { color: #1e1740 !important; }
+body.light-mode .greeting-msg     { color: #4b3880 !important; }
+body.light-mode .greeting-time-en { color: #1e1740 !important; }
+body.light-mode .greeting-time-pt { color: #4b3880 !important; }
+body.light-mode .greeting-level   {
+  background: #1e1740 !important;
+  border-color: rgba(201,162,39,0.50) !important;
+  color: var(--p-light) !important;
+}
+
+/* Section titles on cream background */
+body.light-mode .dash-section-title { color: #1e1740 !important; }
+body.light-mode .dash-section-chevron { color: #4b3880 !important; }
+
+/* Block backgrounds in light mode — softer, cream-tinted */
+body.light-mode #daily-block       { background: linear-gradient(145deg, #2d2270, #1e1740) !important; }
+body.light-mode #block-segmentos   { background: linear-gradient(145deg, #f7f2eb, #ede8de) !important; border-color: rgba(20,184,166,0.30) !important; }
+body.light-mode #block-xp          { background: linear-gradient(145deg, #f7f2eb, #ede8de) !important; border-color: rgba(139,92,246,0.28) !important; }
+body.light-mode #block-quick       { background: linear-gradient(145deg, #f7f2eb, #ede8de) !important; border-color: rgba(201,162,39,0.28) !important; }
+body.light-mode #block-recursos    { background: linear-gradient(145deg, #f7f2eb, #ede8de) !important; border-color: rgba(217,119,6,0.28) !important; }
+
+/* Block section titles in light mode */
+body.light-mode #block-segmentos .dash-section-title  { color: #0f766e !important; }
+body.light-mode #block-segmentos .dash-section-chevron{ color: #0f766e !important; }
+body.light-mode #block-xp .dash-section-title         { color: #6d28d9 !important; }
+body.light-mode #block-xp .dash-section-chevron       { color: #6d28d9 !important; }
+body.light-mode #block-quick .dash-section-title      { color: #1e1740 !important; }
+body.light-mode #block-quick .dash-section-chevron    { color: #4b3880 !important; }
+body.light-mode #block-recursos .dash-section-title   { color: #92400e !important; }
+body.light-mode #block-recursos .dash-section-chevron { color: #b45309 !important; }
+
+/* Quick-access buttons in light mode — brand gold */
+body.light-mode .quick-btn {
+  background: linear-gradient(135deg, #c9a227 0%, #e2b830 100%) !important;
+  border-color: #a8821a !important;
+  color: #1e1740 !important;
+  box-shadow: 0 3px 14px rgba(201,162,39,0.35) !important;
+  font-weight: 900 !important;
+}
+body.light-mode .quick-btn:hover {
+  background: linear-gradient(135deg, #b8901e 0%, #c9a227 100%) !important;
+  border-color: #a8821a !important;
+  box-shadow: 0 6px 22px rgba(201,162,39,0.50) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Start Now button in light mode — brand gold */
+body.light-mode .btn-start-now {
+  background: linear-gradient(135deg, #c9a227 0%, #e2b830 50%, #c9a227 100%) !important;
+  color: #1e1740 !important;
+  text-shadow: none !important;
+  box-shadow: 0 4px 20px rgba(201,162,39,0.45) !important;
+  animation: start-now-gold-pulse 2.2s ease-in-out infinite !important;
+}
+@keyframes start-now-gold-pulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(201,162,39,0.42), 0 0 0 0 rgba(201,162,39,0.3); transform: scale(1); }
+  50%       { box-shadow: 0 8px 36px rgba(201,162,39,0.70), 0 0 22px 4px rgba(201,162,39,0.25); transform: scale(1.016); }
+}
+
+/* Auth card in light mode */
+body.light-mode .auth-card {
+  background: linear-gradient(145deg, #2d2270, #1e1740) !important;
+  border-color: rgba(201,162,39,0.30) !important;
+}
+body.light-mode .auth-tab        { color: var(--p-light) !important; }
+body.light-mode .auth-tab.active { color: #ffffff !important; border-color: var(--p) !important; }
+body.light-mode .input-group label { color: rgba(255,255,255,0.75) !important; }
+body.light-mode .input-group input {
+  background: rgba(255,255,255,0.10) !important;
+  color: #ffffff !important;
+  border-color: rgba(201,162,39,0.35) !important;
+}
+body.light-mode .input-group input::placeholder { color: rgba(255,255,255,0.45) !important; }
+
+/* Misc text that should be dark on cream areas */
+body.light-mode .section-label,
+body.light-mode .phases-title,
+body.light-mode .mission-header-name,
+body.light-mode .complete-title { color: #1e1740 !important; }
+
+/* Interactive states */
+body.light-mode .mc-option  { background: #fff !important; color: #1e1740 !important; border-color: rgba(30,23,64,0.20) !important; }
+body.light-mode .mc-option:hover { background: rgba(30,23,64,0.05) !important; border-color: rgba(201,162,39,0.55) !important; }
+body.light-mode .lt-option  { background: #fff !important; color: #1e1740 !important; border-color: rgba(30,23,64,0.18) !important; }
+body.light-mode .dlg-option { background: #fff !important; color: #1e1740 !important; border-color: rgba(30,23,64,0.18) !important; }
+body.light-mode .diag-option{ background: #fff !important; color: #1e1740 !important; border-color: rgba(30,23,64,0.18) !important; }
+body.light-mode .word-tile  { background: #fff !important; color: #1e1740 !important; border-color: rgba(30,23,64,0.22) !important; }
+body.light-mode textarea,
+body.light-mode .writing-textarea,
+body.light-mode .diag-textarea { background: #fff !important; color: #1e1740 !important; border-color: rgba(30,23,64,0.22) !important; }
+
+/* XP bar track in light mode */
+body.light-mode .xp-bar-bg { background: rgba(30,23,64,0.12) !important; }
+
+/* Pro banner in light mode */
+body.light-mode .upgrade-modal-inner,
+body.light-mode .pro-banner { background: linear-gradient(145deg, #2d2270, #1e1740) !important; color: #ffffff !important; }
+body.light-mode .pro-banner * { color: inherit !important; }
+body.light-mode .pro-banner-title,
+body.light-mode .upgrade-title { color: var(--p-light) !important; }
+
+/* Grammar core banners in light mode */
+body.light-mode .grammar-core-banner {
+  background: linear-gradient(145deg, #2d2270, #1e1740) !important;
+  border-color: rgba(201,162,39,0.28) !important;
+}
+body.light-mode .gc-title { color: var(--p-light) !important; }
+body.light-mode .gc-sub   { color: rgba(255,255,255,0.70) !important; }
+
+/* Settings in light mode */
+body.light-mode .settings-card   { background: #ffffff !important; border-color: rgba(30,23,64,0.12) !important; }
+body.light-mode .settings-item span:first-child { color: #1e1740 !important; }
+body.light-mode .settings-value  { color: #4b3880 !important; }
+
+/* Bottom nav in light mode */
+body.light-mode .bottom-nav {
+  background: rgba(247,242,235,0.95) !important;
+  border-color: rgba(30,23,64,0.12) !important;
+  backdrop-filter: blur(14px) !important;
+}
+body.light-mode .bnav-icon { color: #7b69a8 !important; }
+body.light-mode .bnav-label { color: #7b69a8 !important; }
+body.light-mode .bnav-item.active .bnav-icon,
+body.light-mode .bnav-item.active .bnav-label { color: #c9a227 !important; }
+
+/* Leaderboard + profile in light mode */
+body.light-mode .lb-card,
+body.light-mode .profile-card { background: linear-gradient(145deg, #2d2270, #1e1740) !important; color: #ffffff !important; }
+body.light-mode .lb-card *,
+body.light-mode .profile-card * { color: inherit !important; }
+
+/* Modals in light mode — keep dark purple for focus */
+body.light-mode .modal-content,
+body.light-mode .level-info-modal,
+body.light-mode .about-modal .modal-inner {
+  background: linear-gradient(145deg, #2d2270, #1e1740) !important;
+  color: #ffffff !important;
+}
+
+/* White text on dark purple elements */
+body.light-mode .lim-label,
+body.light-mode .lim-tier { color: #ffffff !important; }
+body.light-mode .lim-you  { color: var(--p-light) !important; }
+body.light-mode .lim-desc { color: rgba(255,255,255,0.72) !important; }
