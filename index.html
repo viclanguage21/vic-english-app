@@ -1558,7 +1558,24 @@
     <div class="phases-header">
       <button class="btn-back" id="btn-back-writing">←</button>
       <div class="phases-title">✍️ Writing & Translation</div>
-      <div style="width:40px"></div>
+      <button class="btn-cefr-info" id="btn-cefr-info" title="O que significam os níveis?">ℹ️</button>
+    </div>
+
+    <!-- CEFR levels modal -->
+    <div id="cefr-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.55);align-items:flex-end;justify-content:center" onclick="if(event.target===this)this.style.display='none'">
+      <div class="cefr-sheet">
+        <div class="cefr-sheet-handle"></div>
+        <div class="cefr-sheet-title">📊 Níveis de Inglês (CEFR)</div>
+        <div class="cefr-rows">
+          <div class="cefr-row"><span class="cefr-badge" style="background:#22c55e">A1</span><div><strong>Básico</strong> — Primeiras palavras, cumprimentos e frases simples do dia a dia.</div></div>
+          <div class="cefr-row"><span class="cefr-badge" style="background:#f59e0b">A2</span><div><strong>Elementar</strong> — Frases curtas, rotina e situações simples de trabalho.</div></div>
+          <div class="cefr-row"><span class="cefr-badge" style="background:#c9933a">B1</span><div><strong>Intermediário</strong> — Comunica-se em situações profissionais comuns com alguma confiança.</div></div>
+          <div class="cefr-row"><span class="cefr-badge" style="background:#7c3aed">B2</span><div><strong>Intermediário avançado</strong> — Lida com temas complexos, negocia e apresenta com fluência.</div></div>
+          <div class="cefr-row"><span class="cefr-badge" style="background:#db2777">C1</span><div><strong>Avançado</strong> — Expressa-se com precisão e naturalidade em qualquer contexto profissional.</div></div>
+          <div class="cefr-row"><span class="cefr-badge" style="background:#0ea5e9">C2</span><div><strong>Proficiente</strong> — Domínio completo, equivalente a um falante nativo culto.</div></div>
+        </div>
+        <button class="cefr-close-btn" onclick="document.getElementById('cefr-modal').style.display='none'">Fechar</button>
+      </div>
     </div>
 
     <!-- topic selector -->

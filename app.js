@@ -6599,6 +6599,7 @@ function init(){
   // Prepare & Present
   document.getElementById("prepare-present-banner")?.addEventListener("click",openPreparePresent);
   document.getElementById("btn-back-writing")?.addEventListener("click",backToDashboard);
+  document.getElementById("btn-cefr-info")?.addEventListener("click",()=>{ document.getElementById("cefr-modal").style.display="flex"; });
   document.getElementById("btn-back-writing-ex")?.addEventListener("click",openWriting);
   document.getElementById("btn-next-writing")?.addEventListener("click",()=>startWritingTopic(writingTopicIndex+1));
   document.getElementById("btn-check-writing")?.addEventListener("click",checkWriting);
