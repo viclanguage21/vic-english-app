@@ -70,13 +70,18 @@
           <div class="ob-slide-title" data-i18n="ob_title_0">Bem-vindo ao VIC English!</div>
           <div class="ob-slide-sub" data-i18n="ob_sub_0">O único app de inglês feito 100% para o mercado profissional brasileiro. Aprenda o inglês que você vai usar no trabalho.</div>
           <div class="ob-slide-tags">
-            <span class="ob-tag" data-i18n="ob_tag_maritime">⚓ Marítimo</span>
-            <span class="ob-tag" data-i18n="ob_tag_comex">🌍 COMEX</span>
-            <span class="ob-tag" data-i18n="ob_tag_hotel">🏨 Hotelaria</span>
-            <span class="ob-tag" data-i18n="ob_tag_offshore">🛢️ Offshore</span>
-            <span class="ob-tag" data-i18n="ob_tag_airport">✈️ Aeroporto</span>
-            <span class="ob-tag" data-i18n="ob_tag_corp">💼 Corporativo</span>
-            <span class="ob-tag" data-i18n="ob_tag_health">🏥 Saúde</span>
+            <span class="ob-tag ob-tag-seg">⚓ Marítimo</span>
+            <span class="ob-tag ob-tag-seg">🌍 COMEX</span>
+            <span class="ob-tag ob-tag-seg">🏨 Hotelaria</span>
+            <span class="ob-tag ob-tag-seg">🛢️ Offshore</span>
+            <span class="ob-tag ob-tag-seg">✈️ Aeroporto</span>
+            <span class="ob-tag ob-tag-seg">💼 Corporativo</span>
+            <span class="ob-tag ob-tag-seg">🏥 Saúde</span>
+            <span class="ob-tag ob-tag-res">📖 Glossário</span>
+            <span class="ob-tag ob-tag-res">📝 Vocabulário</span>
+            <span class="ob-tag ob-tag-game">🃏 Flashcards</span>
+            <span class="ob-tag ob-tag-game">🧠 Memória</span>
+            <span class="ob-tag ob-tag-game">✅ V ou F</span>
           </div>
         </div>
       </div>
@@ -232,24 +237,21 @@
       <div class="ob-dot" id="ob-dot-5"></div>
     </div>
 
-    <!-- Aviso sobre o botão de atualizar -->
-    <div class="ob-refresh-tip">
-      <span class="ob-refresh-icon">↻</span>
-      <span data-i18n-html="ob_refresh_tip">Travou? Toque no botão <strong>↻</strong> no canto da tela para atualizar o app.</span>
+    <!-- Botões -->
+    <div class="ob-actions">
+      <button class="ob-btn-next" id="ob-btn-next" onclick="obNext()" data-i18n="ob_next">Próximo →</button>
+      <button class="ob-btn-back" id="ob-btn-back" onclick="obBack()" style="display:none" data-i18n="back">← Voltar</button>
+      <button class="ob-btn-skip" id="ob-btn-skip" onclick="obSkip()" data-i18n="ob_skip_all">Pular tudo</button>
     </div>
 
     <!-- Seletor de língua no onboarding -->
-    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:12px;">
+    <div class="ob-lang-row">
       <button onclick="setLang('pt')" id="ob-lang-pt" class="auth-lang-btn">🇧🇷 PT</button>
       <button onclick="setLang('en')" id="ob-lang-en" class="auth-lang-btn">🇺🇸 EN</button>
     </div>
 
-    <!-- Botões -->
-    <div class="ob-actions">
-      <button class="ob-btn-back" id="ob-btn-back" onclick="obBack()" style="display:none" data-i18n="back">← Voltar</button>
-      <button class="ob-btn-next" id="ob-btn-next" onclick="obNext()" data-i18n="ob_next">Próximo →</button>
-      <button class="ob-btn-skip" id="ob-btn-skip" onclick="obSkip()" data-i18n="ob_skip_all">Pular tudo</button>
-    </div>
+    <!-- Reload discreto no canto -->
+    <button class="ob-reload-corner" onclick="location.reload()" title="Recarregar">↻</button>
 
   </div>
 </div>
