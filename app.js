@@ -4790,7 +4790,8 @@ window.showBadgeDetail=function(badgeId){
       <div style="font-size:20px;font-weight:900;color:#fff !important;margin-bottom:8px">${b.name}</div>
       <div style="font-size:14px;color:rgba(255,255,255,0.65) !important;line-height:1.6;margin-bottom:12px">${b.desc}</div>
       ${earned
-        ? `<div style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:10px;color:#4ade80 !important;font-weight:800">✅ Conquistado! +${b.xp} XP</div>`
+        ? `<div style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:10px;color:#4ade80 !important;font-weight:800;margin-bottom:14px">✅ Conquistado! +${b.xp} XP</div>
+           <button onclick="shareBadge(${JSON.stringify(b).replace(/"/g,'&quot;')})" style="width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:12px;color:#fff;font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">📲 Compartilhar conquista</button>`
         : `<div style="background:rgba(255,255,255,0.06);border:1px solid var(--rim2);border-radius:10px;padding:10px">
             <div style="color:rgba(255,255,255,0.5) !important;font-size:12px;margin-bottom:4px">🔒 Como conquistar:</div>
             <div style="color:#e4b45c !important;font-weight:700;font-size:13px">${b.desc}</div>
