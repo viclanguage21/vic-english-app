@@ -24,8 +24,8 @@ export const I18N = {
     // Dashboard
     "good_morning": "Bom dia", "good_afternoon": "Boa tarde", "good_evening": "Boa noite",
     "daily_missions": "🎯 Missões do Dia", "segments": "🗺️ Segmentos",
-    "quick_access": "🎯 Acesso Rápido", "start_now": "🚀 Praticar agora!",
-    "subscribe": "Assinar", "xp_progress": "Progresso XP",
+    "quick_access": "🎮 Acesso Rápido", "start_now": "🚀 Praticar agora!",
+    "subscribe": "Assinar", "xp_progress": "⚡ Progresso XP",
     "ranking": "Ranking",
 
     // Navegação
@@ -229,8 +229,8 @@ export const I18N = {
     "ph_name": "Your name", "ph_password": "Min. 6 characters", "ph_email": "your@email.com",
     "good_morning": "Good morning", "good_afternoon": "Good afternoon", "good_evening": "Good evening",
     "daily_missions": "🎯 Daily Missions", "segments": "🗺️ Segments",
-    "quick_access": "🎯 Quick Access", "start_now": "🚀 Practice now!",
-    "subscribe": "Subscribe", "xp_progress": "XP Progress", "ranking": "Ranking",
+    "quick_access": "🎮 Quick Access", "start_now": "🚀 Practice now!",
+    "subscribe": "Subscribe", "xp_progress": "⚡ XP Progress", "ranking": "Ranking",
     "back": "← Back", "next": "Next →", "previous": "← Previous",
     "continue": "Continue", "skip": "Skip", "done": "Done",
     "back_dashboard": "Back to Dashboard", "back_segments": "← Segments",
