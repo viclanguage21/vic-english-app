@@ -641,7 +641,6 @@
     <div class="dash-header dash-header-3col">
       <div class="dash-left-col">
         <div class="dash-left-inner">
-          <div class="dash-date" id="dash-date"></div>
           <div class="dash-header-streak" id="dash-header-streak" style="display:none">
             <span class="dhs-fire">🔥</span><span class="dhs-val" id="dash-header-streak-val">0</span>
             <span class="dhs-shield" id="dash-header-shields" style="display:none">🛡️<span id="dash-header-shield-count">0</span></span>
@@ -659,8 +658,13 @@
       </div>
     </div>
 
+    <!-- Data abaixo do header -->
+    <div class="dash-date-bar">
+      <span class="dash-date" id="dash-date"></span>
+    </div>
+
     <div class="greeting-card">
-      <div class="greeting-hi" id="greeting-hi"></div>
+      <div class="greeting-hi" id="greeting-hi" style="display:none"></div>
       <div class="greeting-time-wrap">
         <div class="greeting-time-en" id="greeting-time-en"></div>
         <div class="greeting-time-pt" id="greeting-time-pt"></div>
