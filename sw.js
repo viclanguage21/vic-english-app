@@ -122,7 +122,7 @@ self.addEventListener("fetch", e => {
 messaging.onBackgroundMessage(payload => {
   // FCM push also wakes the SW — check pending local notif too
   checkPendingNotif();
-  const { title = "VIC English 📚", body = "Hora de praticar!", icon } = payload.notification || {};
+  const { title = "VIC English 📚", body = "Você tem novas atividades esperando. Abra o app!", icon } = payload.notification || {};
   return self.registration.showNotification(title, {
     body,
     icon: icon || "/logo_full_2.png",
