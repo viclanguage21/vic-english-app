@@ -8222,3 +8222,59 @@ a.settings-big-btn:active {
   border-radius: 10px; padding: 10px 14px;
   margin-bottom: 12px; line-height: 1.5;
 }
+
+/* ══ DASHBOARD BLOCK COLORS ════════════════════════════ */
+
+/* Daily Missions — navy/indigo */
+#daily-block {
+  background: linear-gradient(145deg, #080e23, #0d1840) !important;
+  border-color: rgba(99,102,241,0.38) !important;
+}
+#daily-block::before {
+  background: linear-gradient(90deg, transparent, rgba(99,102,241,0.45), transparent) !important;
+}
+#daily-block .daily-block-title { color: #818cf8 !important; }
+#daily-block .daily-chevron,
+#daily-block .daily-overall-pct { color: #6366f1 !important; }
+
+/* Segmentos — teal night */
+#block-segmentos {
+  background: linear-gradient(145deg, #061818, #0b2424) !important;
+  border-color: rgba(20,184,166,0.32) !important;
+}
+#block-segmentos::before {
+  background: linear-gradient(90deg, transparent, rgba(20,184,166,0.4), transparent) !important;
+}
+#block-segmentos .dash-section-title { color: #2dd4bf !important; }
+#block-segmentos .dash-section-chevron { color: #14b8a6 !important; }
+
+/* XP Progress — purple (keep brand color, just reinforce) */
+#block-xp {
+  background: linear-gradient(145deg, #0f0622, #1a0838) !important;
+  border-color: rgba(139,92,246,0.38) !important;
+}
+#block-xp::before {
+  background: linear-gradient(90deg, transparent, rgba(139,92,246,0.5), transparent) !important;
+}
+
+/* Acesso Rápido — slate/cool dark blue */
+#block-quick {
+  background: linear-gradient(145deg, #090d18, #0e1628) !important;
+  border-color: rgba(71,85,105,0.45) !important;
+}
+#block-quick::before {
+  background: linear-gradient(90deg, transparent, rgba(100,116,139,0.4), transparent) !important;
+}
+#block-quick .dash-section-title { color: #94a3b8 !important; }
+#block-quick .dash-section-chevron { color: #64748b !important; }
+
+/* Recursos — warm amber dark */
+#block-recursos {
+  background: linear-gradient(145deg, #130c00, #1e1200) !important;
+  border-color: rgba(217,119,6,0.32) !important;
+}
+#block-recursos::before {
+  background: linear-gradient(90deg, transparent, rgba(245,158,11,0.38), transparent) !important;
+}
+#block-recursos .dash-section-title { color: #f59e0b !important; }
+#block-recursos .dash-section-chevron { color: #d97706 !important; }
