@@ -1,7 +1,7 @@
 // app.js — VIC English v12 — Full fix
 
 import { auth, registerUser, loginUser, loginWithGoogle, logoutUser, onAuthChange, getUserData, saveProgress, getAllUsers, getUserById, OWNER_UID, registerFCMToken, onForegroundMessage, resetPassword, resendVerificationEmail, reloadCurrentUser, callSendPushToAll } from "./firebase.js";
-import { I18N, SEG_NAMES, LEVEL_TIPS, LOADING_QUOTES, GLOSSARY, PRO_MESSAGES, BADGES, NOTIF_MESSAGES, MP_LINK } from "./constants.js";
+import { I18N, SEG_NAMES, LEVEL_TIPS, LOADING_QUOTES, GLOSSARY, PRO_MESSAGES, BADGES, BADGE_TRANSLATIONS, NOTIF_MESSAGES, MP_LINK } from "./constants.js";
 import { calcLevel, stripEmoji, cleanEnunciado, shuffle, vibrate } from "./utils.js";
 
 // Global haptic: every button tap gets a short buzz (capture fires before onclick)
@@ -102,6 +102,18 @@ let _lang = (()=>{ const l=localStorage.getItem("vic_lang"); return(l==="pt"||l=
 // Função principal de tradução
 function t(key) {
   return I18N[_lang]?.[key] || I18N["pt"]?.[key] || key;
+}
+
+// Badge text in the current language (falls back to PT stored in the badge object)
+function _bt(badge, field) {
+  if (_lang === "pt") return badge[field];
+  return BADGE_TRANSLATIONS?.[_lang]?.[badge.id]?.[field] ?? badge[field];
+}
+function _bcat(cat) {
+  const map = BADGE_TRANSLATIONS?.[_lang]?._cat;
+  const pt  = {momento:"⚡ Momento",performance:"🔥 Performance",resiliencia:"⚔️ Resiliência",
+               dominio:"🧠 Domínio",raro:"👑 Raro",jogos:"🎮 Jogos",segmento:"🗺️ Segmento"};
+  return (map?.[cat] ?? pt[cat]) || "";
 }
 
 // Trocar idioma e re-renderizar tudo
@@ -4717,7 +4729,7 @@ function renderBadges(){
   const container=document.getElementById("profile-badges-grid"); if(!container) return;
   const earned=userData?.badges||[];
   const stats=getBadgeStats();
-  const cats={segmento:"🎯 Segmentos",momento:"⚡ Momento",performance:"🔥 Performance",resiliencia:"⚔️ Resiliência",dominio:"🧠 Domínio",raro:"👑 Raros"};
+  const cats={segmento:_bcat("segmento"),momento:_bcat("momento"),performance:_bcat("performance"),resiliencia:_bcat("resiliencia"),dominio:_bcat("dominio"),raro:_bcat("raro"),jogos:_bcat("jogos")};
   let html="";
   Object.entries(cats).forEach(([cat,catLabel])=>{
     const catBadges=BADGES.filter(b=>b.cat===cat);
@@ -4737,12 +4749,12 @@ function renderBadges(){
           progress=`${Math.min(done,need)}/${need} missões`;
         }
       }
-      html+=`<div class="badge-item ${isEarned?"earned":"locked"}" onclick="showBadgeDetail('${b.id}')" style="cursor:pointer" title="${b.desc}">
+      html+=`<div class="badge-item ${isEarned?"earned":"locked"}" onclick="showBadgeDetail('${b.id}')" style="cursor:pointer" title="${_bt(b,'desc')}">
         <div class="badge-item-icon-wrap">
           <span class="badge-item-icon ${isEarned?"":"badge-locked-icon"}">${b.icon}</span>
           ${!isEarned?'<span class="badge-lock-overlay">🔒</span>':""}
         </div>
-        <div class="badge-item-name">${b.name}</div>
+        <div class="badge-item-name">${_bt(b,'name')}</div>
         ${progress&&!isEarned?`<div class="badge-item-progress">${progress}</div>`:""}
       </div>`;
     });
@@ -4786,15 +4798,15 @@ window.showBadgeDetail=function(badgeId){
     <div class="about-card" style="text-align:center;padding:32px 24px">
       <button class="about-close" onclick="document.getElementById('badge-detail-modal').remove()">✕</button>
       <div style="font-size:64px;margin-bottom:12px;filter:${earned?"none":"grayscale(1) opacity(0.4)"}">${b.icon}</div>
-      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#c9933a !important;font-weight:800;margin-bottom:6px">${{momento:"⚡ Momento",performance:"🔥 Performance",resiliencia:"⚔️ Resiliência",dominio:"🧠 Domínio",raro:"👑 Raro"}[b.cat]||""}</div>
-      <div style="font-size:20px;font-weight:900;color:#fff !important;margin-bottom:8px">${b.name}</div>
-      <div style="font-size:14px;color:rgba(255,255,255,0.65) !important;line-height:1.6;margin-bottom:12px">${b.desc}</div>
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#c9933a !important;font-weight:800;margin-bottom:6px">${_bcat(b.cat)}</div>
+      <div style="font-size:20px;font-weight:900;color:#fff !important;margin-bottom:8px">${_bt(b,"name")}</div>
+      <div style="font-size:14px;color:rgba(255,255,255,0.65) !important;line-height:1.6;margin-bottom:12px">${_bt(b,"desc")}</div>
       ${earned
         ? `<div style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:10px;color:#4ade80 !important;font-weight:800;margin-bottom:14px">✅ Conquistado! +${b.xp} XP</div>
            <button onclick="shareBadge(${JSON.stringify(b).replace(/"/g,'&quot;')})" style="width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:12px;color:#fff;font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">📲 Compartilhar conquista</button>`
         : `<div style="background:rgba(255,255,255,0.06);border:1px solid var(--rim2);border-radius:10px;padding:10px">
             <div style="color:rgba(255,255,255,0.5) !important;font-size:12px;margin-bottom:4px">🔒 Como conquistar:</div>
-            <div style="color:#e4b45c !important;font-weight:700;font-size:13px">${b.desc}</div>
+            <div style="color:#e4b45c !important;font-weight:700;font-size:13px">${_bt(b,"desc")}</div>
             ${progressText?`<div style="color:var(--p-light) !important;font-size:12px;margin-top:6px;font-family:var(--mono)">${progressText}</div>`:""}
             <div style="color:#c9933a !important;font-weight:800;margin-top:8px">+${b.xp} XP ao conquistar</div>
           </div>`
@@ -5394,10 +5406,10 @@ function showBadgeUnlock(badge){
   overlay.innerHTML = `
     <div class="badge-unlock-card">
       <div class="badge-unlock-shimmer"></div>
-      <div class="badge-cat-label">${{momento:"⚡ Momento",performance:"🔥 Performance",resiliencia:"⚔️ Resiliência",dominio:"🧠 Domínio",raro:"👑 Raro"}[badge.cat]||""}</div>
+      <div class="badge-cat-label">${_bcat(badge.cat)}</div>
       <div class="badge-unlock-icon">${badge.icon}</div>
-      <div class="badge-unlock-name">${badge.name}</div>
-      <div class="badge-unlock-desc">${badge.desc}</div>
+      <div class="badge-unlock-name">${_bt(badge,"name")}</div>
+      <div class="badge-unlock-desc">${_bt(badge,"desc")}</div>
       <div class="badge-unlock-xp">+${badge.xp} XP</div>
       <div class="badge-unlock-actions">
         <button class="badge-unlock-btn" onclick="document.getElementById('badge-overlay').remove()">Incrível! 🚀</button>
