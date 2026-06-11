@@ -7690,12 +7690,12 @@ a.settings-big-btn:active {
 .dash-header-3col #dash-logo-img,
 .dash-header-3col .dash-logo-img {
   width: auto !important;
-  height: 56px !important;
-  max-width: 200px !important;
+  height: 76px !important;
+  max-width: 260px !important;
   border-radius: 14px !important;
   object-fit: contain !important;
   background: #0f0520 !important;
-  padding: 4px 10px !important;
+  padding: 6px 12px !important;
 }
 /* coluna direita: avatar arredondado (squircle, não círculo) */
 .dash-header-3col .dash-user {
@@ -8089,8 +8089,8 @@ a.settings-big-btn:active {
 
 /* ══ HEADER — VIC Language speech bubble logo (left) ══ */
 #header-speech-logo {
-  width: 86px !important;
-  height: 86px !important;
+  width: 62px !important;
+  height: 62px !important;
   object-fit: contain !important;
   filter: drop-shadow(0 2px 10px rgba(180,100,255,0.45)) !important;
   display: block !important;
