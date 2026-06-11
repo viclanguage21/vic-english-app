@@ -222,14 +222,6 @@ function renderDashboardTexts() {
     else if(txt.includes("Ranking")||txt.includes("Rangliste")||txt.includes("Classifica")) { el.dataset.i18nStat="ranking"; el.textContent = t("ranking"); }
   });
 
-  // Diag invite banner
-  const diagInvTitle = document.querySelector(".diag-invite-title");
-  const diagInvSub   = document.querySelector(".diag-invite-sub");
-  const diagInvBtn   = document.getElementById("btn-start-diag");
-  if(diagInvTitle) diagInvTitle.textContent = t("discover_level");
-  if(diagInvSub)   diagInvSub.textContent   = t("quick_test");
-  if(diagInvBtn)   diagInvBtn.textContent   = t("do_test");
-
   // Grammar Core banner title/sub
   const gcTitle = document.querySelector(".grammar-core-banner .gc-title");
   if(gcTitle) gcTitle.textContent = t("grammar_core_title");
@@ -292,8 +284,6 @@ function renderDashboardTexts() {
   if(diagSkipNote) diagSkipNote.textContent = t("diag_skip");
   const diagTestBtn = document.getElementById("btn-finish-diag");
   if(diagTestBtn) diagTestBtn.textContent = t("diag_test_btn");
-  const diagSkipTest = document.getElementById("btn-skip-level-test-diag");
-  if(diagSkipTest) diagSkipTest.textContent = t("diag_skip_test");
   const confirmSegsBtn = document.getElementById("btn-confirm-segments");
   if(confirmSegsBtn && _selectedSegments?.length > 0){
     const confirmLabels = {pt:"Confirmar →",en:"Confirm →",es:"Confirmar →",de:"Bestätigen →",it:"Conferma →"};
@@ -495,7 +485,6 @@ let freeMemSelected=[], freeMemMatched=0, freeMemXP=0;
 let tfItems=[], tfIndex=0, tfScore=0, tfCategory=null;
 let dlgScenario=null, dlgIndex=0, dlgScore=0;
 let adminUsers=[], adminSearchTerm="", _currentModalUser=null;
-let ltIndex=0, ltScore=0;
 
 // ── HELPERS ────────────────────────────────────────────────────────────────────
 const getSegment  = id     => VICTOR_DATA.segments.find(s=>s.id===id);
@@ -533,7 +522,7 @@ function showView(id){
   if(current===next) return;
 
   // Determine direction
-  const views=["view-onboarding","view-auth","view-dashboard","view-phases","view-missions-list","view-mission","view-complete","view-flashcards","view-memory-free","view-truefalse","view-dialogue","view-writing","view-profile","view-upgrade","view-admin","view-diagnosis","view-level-test"];
+  const views=["view-onboarding","view-auth","view-dashboard","view-phases","view-missions-list","view-mission","view-complete","view-flashcards","view-memory-free","view-truefalse","view-dialogue","view-writing","view-profile","view-upgrade","view-admin","view-diagnosis"];
 // view-leaderboard foi substituída por bottom sheet — não usa showView()
   const ci=views.indexOf(current?.id||"");
   const ni=views.indexOf(id);
@@ -1351,7 +1340,7 @@ async function finishDiagnosis(){
     await saveProgress(currentUser.uid,{diagnosisAnswers:diagAnswers,currentMission:{segmentId:currentSegmentId,phaseId:"f1",missionId:getSegment(currentSegmentId)?.phases[0]?.missions[0]?.id||"",phraseIndex:0}});
     userData.diagnosisAnswers=diagAnswers;
   }
-  startLevelTest();
+  renderDashboard(); showView("view-dashboard");
 }
 
 
@@ -1473,323 +1462,6 @@ window.addEventListener("offline", () => {
   showXpToast("📶 Sem internet — progresso salvo localmente");
 });
 
-// ── LEVEL TEST ADAPTATIVO ────────────────────────────────────────────────────
-// 15 questões | 5 por nível (A1-A2, B1-B2, C1) | lógica adaptativa
-// Acertou 3 seguidas → sobe nível | Errou 2 seguidas → desce nível
-// Penalidade: erro em A1/A2 trava máximo em B1
-
-const LT_QUESTIONS = {
-  all: [
-    // ── A1 ──────────────────────────────────────────────────────────────────
-    {id:"q1", type:"mcq", level:"A1",
-     title:"Vocabulário — A1",
-     question:"What does 'deadline' mean?",
-     options:["Prazo","Reunião","Contrato","Relatório"], correct:0,
-     pts:{correct:1,wrong:0}},
-
-    {id:"q2", type:"mcq", level:"A1",
-     title:"Gramática — A1",
-     question:"Choose the correct sentence:",
-     options:["He works on an offshore platform.","I works in a ship.","She work every day.","They works together."], correct:0,
-     pts:{correct:1,wrong:0}},
-
-    // ── A2 ──────────────────────────────────────────────────────────────────
-    {id:"q3", type:"mcq", level:"A2",
-     title:"Passado Simples — A2",
-     question:"She _____ the report before the meeting started.",
-     options:["sent","send","sends","was send"], correct:0,
-     pts:{correct:1,wrong:0}},
-
-    {id:"q4", type:"mcq", level:"A2",
-     title:"Vocabulário — Trabalho",
-     question:"Your supervisor asks: 'Please send me the _____ with all the numbers from last month.' What does he want?",
-     options:["Report","Schedule","Receipt","Invoice"], correct:0,
-     pts:{correct:1,wrong:0}},
-
-    // ── B1 ──────────────────────────────────────────────────────────────────
-    {id:"q5", type:"mcq", level:"B1",
-     title:"Present Perfect vs Simple Past",
-     question:"'We _____ this supplier for 10 years, but last year we changed to another one.'",
-     options:["used","have used","are using","use"], correct:0,
-     pts:{correct:1,wrong:0}},
-
-    {id:"q6", type:"reading", level:"B1",
-     title:"Compreensão — B1",
-     question:"Read: 'The shipment was delayed due to port congestion, but we expect it to arrive by Thursday.' — What is the main problem?",
-     options:["The shipment is late","The goods are damaged","The port is permanently closed","The supplier cancelled the order"], correct:0,
-     pts:{correct:1,wrong:0}},
-
-    {id:"q7", type:"mcq", level:"B1",
-     title:"Condicional Tipo 1",
-     question:"'If the client _____ by tomorrow, we will cancel the order.'",
-     options:["doesn't confirm","won't confirm","didn't confirm","wouldn't confirm"], correct:0,
-     pts:{correct:1,wrong:0}},
-
-    // ── B2 ──────────────────────────────────────────────────────────────────
-    {id:"q8", type:"mcq", level:"B2",
-     title:"Voz Passiva — B2",
-     question:"The safety report _____ before the inspection tomorrow.",
-     options:["must be submitted","must submit","must submitted","must have submit"], correct:0,
-     pts:{correct:1,wrong:0}},
-
-    {id:"q9", type:"mcq", level:"B2",
-     title:"Registro Formal — B2",
-     question:"Which sentence is correct for a professional email?",
-     options:[
-       "I am writing with regard to your recent inquiry.",
-       "I am writing about your asking.",
-       "I write for your inquiry.",
-       "I am writing in regard of your question."
-     ], correct:0,
-     pts:{correct:1,wrong:0}},
-
-    {id:"q10", type:"reading", level:"B2",
-     title:"Inferência — B2",
-     question:"Read: 'Although the quarterly figures exceeded projections, the board expressed concern about the sustainability of current growth rates.' — What is the board worried about?",
-     options:[
-       "The growth may not continue at this pace",
-       "The company lost money this quarter",
-       "The projections were wrong",
-       "The quarterly report had errors"
-     ], correct:0,
-     pts:{correct:1,wrong:0}},
-
-    // ── C1 ──────────────────────────────────────────────────────────────────
-    {id:"q11", type:"mcq", level:"C1",
-     title:"Condicional Misto — C1",
-     question:"'If they _____ the safety protocol last year, the accident _____ prevented.'",
-     options:[
-       "had followed / could have been",
-       "followed / could be",
-       "have followed / would be",
-       "would follow / might be"
-     ], correct:0,
-     pts:{correct:1,wrong:0}},
-
-    {id:"q12", type:"mcq", level:"C1",
-     title:"Expressão Idiomática — C1",
-     question:"The manager said: 'We need to take ownership of this project.' What does this mean?",
-     options:[
-       "Be fully responsible for the project's success or failure",
-       "Buy shares in the project",
-       "Submit a formal ownership document",
-       "Assign the project to another team"
-     ], correct:0,
-     pts:{correct:1,wrong:0}},
-
-    {id:"q13", type:"mcq", level:"C1",
-     title:"Registro Avançado — C1",
-     question:"Which sentence is most appropriate for a formal business proposal?",
-     options:[
-       "This initiative has the potential to significantly enhance operational efficiency.",
-       "We think this idea is really good and you should totally try it.",
-       "Doing this will make things way better for everyone.",
-       "The company would be a lot more efficient if they did this."
-     ], correct:0,
-     pts:{correct:1,wrong:0}},
-
-    // ── C2 ──────────────────────────────────────────────────────────────────
-    {id:"q14", type:"mcq", level:"C2",
-     title:"Nuance de Vocabulário — C2",
-     question:"What is the key difference between 'He refused to sign' and 'He declined to sign'?",
-     options:[
-       "'Refused' implies stronger resistance; 'declined' is more formal and polite",
-       "No difference — they mean exactly the same",
-       "'Declined' means he was unable to sign; 'refused' means unwilling",
-       "'Refused' is only used in legal documents"
-     ], correct:0,
-     pts:{correct:1,wrong:0}},
-
-    {id:"q15", type:"reading", level:"C2",
-     title:"Texto Técnico — C2",
-     question:"Read: 'The arbitration clause stipulates that any disputes arising from this agreement shall be resolved through binding arbitration rather than litigation.' — What does this mean for the parties?",
-     options:[
-       "Disputes must be resolved privately through arbitration, not courts",
-       "Disputes must go to court",
-       "Either party can choose to litigate",
-       "No disputes are allowed under the agreement"
-     ], correct:0,
-     pts:{correct:1,wrong:0}},
-  ]
-};
-
-// ── LÓGICA SEQUENCIAL — 15 questões A1→C2 ────────────────────────────────────
-let ltTotalQuestions = 15;
-let ltCurrentQ = 0;
-
-function buildAdaptiveQueue() {
-  ltIndex = 0;
-}
-
-function getNextAdaptiveQuestion() {
-  return LT_QUESTIONS.all[ltIndex++];
-}
-
-function adaptLevel() {} // sequencial — classificação por pontuação final
-
-function calcFinalLevel() {
-  if (ltScore >= 14) return { level:"c2", label:"C2 — Fluente 🎓", msg:"Inglês excepcional! Vocabulário, gramática e nuance sob controle total.", color:"#f97316" };
-  if (ltScore >= 12) return { level:"c1", label:"C1 — Avançado 🏆", msg:"Impressionante! Você domina inglês profissional com precisão e naturalidade.", color:"#ffd700" };
-  if (ltScore >= 10) return { level:"b2", label:"B2 — Intermediário Alto 🌟", msg:"Ótimo nível! Comunicação fluida — pequenos refinamentos para chegar ao topo.", color:"#e4b45c" };
-  if (ltScore >= 7)  return { level:"b1", label:"B1 — Intermediário ⭐", msg:"Bom nível! Você se vira bem. Foco em fluência e vocabulário profissional.", color:"#a78bfa" };
-  if (ltScore >= 4)  return { level:"a2", label:"A2 — Básico Funcional 📘", msg:"Você tem uma base sólida! Vamos fortalecer o vocabulário e a gramática.", color:"#60a5fa" };
-  return               { level:"a1", label:"A1 — Iniciante 🌱", msg:"Todo expert já foi iniciante! Vamos construir seu inglês do zero.", color:"#22c55e" };
-}
-
-function startLevelTest(){
-  ltIndex=0; ltScore=0; ltCurrentQ=0;
-  buildAdaptiveQueue();
-  document.getElementById("lt-result").style.display="none";
-  document.getElementById("lt-questions-area").style.display="block";
-  showView("view-level-test");
-  renderLTQuestion();
-}
-
-function renderLTQuestion(){
-  const q = getNextAdaptiveQuestion();
-  if (!q || ltCurrentQ >= ltTotalQuestions) { showLTResult(); return; }
-
-  const total = ltTotalQuestions;
-  ltCurrentQ++;
-  document.getElementById("lt-counter").textContent=`${ltCurrentQ} / ${total}`;
-  document.getElementById("lt-progress-bar").style.width=`${Math.round((ltCurrentQ/total)*100)}%`;
-
-  // Badge do nível da pergunta atual
-  const levelColors = {A1:"#22c55e",A2:"#4ade80",B1:"#a78bfa",B2:"#e4b45c",C1:"#ffd700",C2:"#f97316"};
-  document.getElementById("lt-title").textContent = q.title;
-  document.getElementById("lt-title").style.color = levelColors[q.level]||"#e4b45c";
-
-  let levelBadge = document.getElementById("lt-level-badge");
-  if(!levelBadge){
-    levelBadge = document.createElement("div");
-    levelBadge.id = "lt-level-badge";
-    levelBadge.style.cssText="font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;display:inline-block;margin-bottom:8px;";
-    document.getElementById("lt-title").parentNode.insertBefore(levelBadge, document.getElementById("lt-title"));
-  }
-  levelBadge.textContent = q.level;
-  levelBadge.style.background = (levelColors[q.level]||"#e4b45c")+"22";
-  levelBadge.style.color = levelColors[q.level]||"#e4b45c";
-  levelBadge.style.border = `1px solid ${levelColors[q.level]||"#e4b45c"}44`;
-
-  document.getElementById("lt-question").textContent = q.question;
-  document.getElementById("lt-feedback").style.display="none";
-  ["lt-mc","lt-fill","lt-order"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display="none";});
-
-  // ── MCQ ──
-  if(q.type==="mcq"||q.type==="reading"){
-    const indices=[0,1,2,3];
-    const shuffled=shuffle(indices);
-    const newCorrect=shuffled.indexOf(q.correct);
-    const newOptions=shuffled.map(i=>q.options[i]);
-    const wrap=document.getElementById("lt-mc"); wrap.innerHTML=""; wrap.style.display="flex";
-    newOptions.forEach((opt,i)=>{
-      const btn=document.createElement("button"); btn.className="lt-option"; btn.textContent=opt;
-      btn.addEventListener("click",()=>{
-        wrap.querySelectorAll(".lt-option").forEach((b,j)=>{b.disabled=true;if(j===newCorrect)b.classList.add("correct");else if(j===i&&i!==newCorrect)b.classList.add("wrong");});
-        const correct=(i===newCorrect);
-        const pts=correct?q.pts.correct:q.pts.wrong||0;
-        ltScore+=pts;
-        adaptLevel(correct);
-        showLTFeedback(correct?"correct":"tryagain",newOptions[newCorrect],pts);
-      });
-      wrap.appendChild(btn);
-    });
-  }
-
-  // ── FILL / ERROR_CORRECTION / TRANSLATION ──
-  if(q.type==="fill"||q.type==="error_correction"||q.type==="translation"){
-    const inp=document.getElementById("lt-fill-input");
-    inp.value=""; inp.disabled=false;
-    inp.placeholder=q.placeholder||"";
-    document.getElementById("lt-fill").style.display="block";
-    // Label especial para tradução
-    const fillLabel = document.getElementById("lt-fill-label")||null;
-    if(fillLabel){
-      fillLabel.textContent = q.type==="translation"?"🇧🇷 → 🇺🇸 Escreva em inglês:":q.type==="error_correction"?"✏️ Reescreva corretamente:":"✏️ Complete:";
-      fillLabel.style.display="block";
-    }
-    document.getElementById("lt-fill-check").onclick=()=>{
-      if(inp.disabled) return;
-      const res=avaliarResposta(inp.value.trim(),q.answer);
-      const pts=res.feedback==="correct"?q.pts.correct:res.feedback==="almost"?(q.pts.almost||0):q.pts.wrong||0;
-      ltScore+=pts; inp.disabled=true;
-      adaptLevel(res.feedback==="correct");
-      showLTFeedback(res.feedback,q.answer,pts);
-    };
-    inp.onkeydown=e=>{if(e.key==="Enter")document.getElementById("lt-fill-check").click();};
-    setTimeout(()=>inp.focus(),100);
-  }
-
-  // ── WORD ORDER ──
-  if(q.type==="word_order"){
-    const wrap=document.getElementById("lt-order"); wrap.style.display="block";
-    const zone=document.getElementById("lt-order-zone"); zone.innerHTML="";
-    const bank=document.getElementById("lt-order-bank"); bank.innerHTML="";
-    let placed=[];
-    shuffle([...q.scrambled]).forEach(w=>{
-      const btn=document.createElement("button"); btn.className="word-tile"; btn.textContent=w;
-      btn.addEventListener("click",()=>{
-        if(btn.classList.contains("placed")) return;
-        placed.push(w); btn.classList.add("placed");
-        const tile=document.createElement("span"); tile.className="word-tile placed-tile"; tile.textContent=w;
-        tile.addEventListener("click",()=>{placed.splice(placed.lastIndexOf(w),1);btn.classList.remove("placed");tile.remove();});
-        zone.appendChild(tile);
-      });
-      bank.appendChild(btn);
-    });
-    document.getElementById("lt-order-check").onclick=()=>{
-      const res=avaliarResposta(placed.join(" "),q.answer);
-      const pts=res.feedback==="correct"?q.pts.correct:res.feedback==="almost"?(q.pts.almost||0):0;
-      ltScore+=pts;
-      adaptLevel(res.feedback==="correct");
-      showLTFeedback(res.feedback,q.answer,pts);
-    };
-  }
-}
-
-function showLTFeedback(feedback,correct,pts){
-  const fb=document.getElementById("lt-feedback");
-  if(feedback==="correct"){fb.className="lt-feedback correct";fb.innerHTML=`${t("correct")} <strong>+${pts} pts</strong>`;SoundFX.correct();}
-  else if(feedback==="almost"){fb.className="lt-feedback almost";fb.innerHTML=`👍 Quase! Correto: <strong>${correct}</strong> +${pts} pts`;SoundFX.almost();}
-  else{fb.className="lt-feedback wrong";fb.innerHTML=`❌ Correto seria: <strong>${correct}</strong>`;SoundFX.wrong();}
-  fb.style.display="block";
-  setTimeout(()=>{if(ltCurrentQ>=ltTotalQuestions)showLTResult();else renderLTQuestion();},1600);
-}
-
-function showLTResult(){
-  const result = calcFinalLevel();
-  diagAnswers.level = result.level;
-  diagAnswers.levelTestCompleted = true;
-
-  document.getElementById("lt-questions-area").style.display="none";
-  document.getElementById("lt-result").style.display="block";
-  document.getElementById("lt-result-score").textContent=`${ltScore} / ${ltTotalQuestions}`;
-  document.getElementById("lt-result-pct").textContent=result.label;
-  document.getElementById("lt-result-pct").style.color=result.color||"#e4b45c";
-  document.getElementById("lt-result-level").textContent=result.label;
-  document.getElementById("lt-result-msg").textContent=result.msg;
-  const barPct = {c2:"100%",c1:"90%",b2:"75%",b1:"58%",a2:"38%",a1:"18%"};
-  document.getElementById("lt-result-bar").style.width = barPct[result.level]||"18%";
-  document.getElementById("lt-result-bar").style.background=result.color||"#e4b45c";
-  SoundFX.complete();
-}
-
-async function finishLevelTest(){
-  const completed = diagAnswers.levelTestCompleted || false;
-  if(currentUser){
-    await saveProgress(currentUser.uid,{
-      diagnosisAnswers:diagAnswers,
-      detectedLevel: completed ? diagAnswers.level : (userData.detectedLevel||null),
-      levelTestCompleted: completed,
-      currentMission:{segmentId:currentSegmentId,phaseId:"f1",missionId:getSegment(currentSegmentId)?.phases[0]?.missions[0]?.id||"",phraseIndex:0}
-    });
-    userData.diagnosisAnswers=diagAnswers;
-    userData.detectedLevel= completed ? diagAnswers.level : (userData.detectedLevel||null);
-    userData.levelTestCompleted=completed;
-  }
-  renderDashboard(); showView("view-dashboard");
-}
-
 // ── DASHBOARD ─────────────────────────────────────────────────────────────────
 async function loadDashboard(user){
   console.log("loadDashboard start:", user.uid);
@@ -1862,10 +1534,6 @@ async function loadDashboard(user){
   hideAuthLoading();
   initOneSignal();
 
-  // Level test for new users (diagnosis screen removed)
-  if(!userData.diagnosisAnswers){
-    setTimeout(()=>{ try{ startLevelTest(); }catch(e){ vicLog("level-test","startLevelTest failed",e); } }, 800);
-  }
   console.log("✅ Dashboard shown for:", userData.name);
 }
 
@@ -2277,19 +1945,6 @@ function renderDashboard(){
   const banner=document.getElementById("pro-banner");
   if(banner) banner.style.display=isPro()?"none":"flex";
 
-  // Show banner: diagnosis not done OR level test not done yet
-  const diagBanner=document.getElementById("diag-invite-banner");
-  if(diagBanner){
-    const needsDiag = !userData.diagnosisAnswers;
-    const needsLevelTest = userData.diagnosisAnswers && !userData.levelTestCompleted;
-    diagBanner.style.display = (needsDiag || needsLevelTest) ? "flex" : "none";
-    if(needsLevelTest && !needsDiag){
-      const titleEl = diagBanner.querySelector(".diag-invite-title");
-      const subEl   = diagBanner.querySelector(".diag-invite-sub");
-      if(titleEl) titleEl.textContent = "Descubra seu nível de inglês";
-      if(subEl)   subEl.textContent   = "Teste rápido • 15 questões • ~5 min";
-    }
-  }
 
   renderSegments();
   try{ renderDashboardTexts(); }catch(e){}
@@ -6794,11 +6449,6 @@ function init(){
   document.getElementById("btn-diag-voice")?.addEventListener("click",startDiagVoice);
   document.getElementById("btn-finish-diag-note")?.addEventListener("click",finishDiagnosisNote);
   document.getElementById("btn-skip-diag-note")?.addEventListener("click",finishDiagnosisNote);
-  document.getElementById("btn-skip-level-test-diag")?.addEventListener("click",async()=>{diagAnswers.levelTestCompleted=false;await finishLevelTest();});
-
-  // level test
-  document.getElementById("btn-finish-level-test")?.addEventListener("click",finishLevelTest);
-  document.getElementById("btn-skip-level-test")?.addEventListener("click",async()=>{diagAnswers.levelTestCompleted=false;await finishLevelTest();});
 
   // profile
   document.getElementById("btn-open-profile")?.addEventListener("click",openProfile);
@@ -6827,16 +6477,6 @@ function init(){
 
   // dashboard
   document.getElementById("btn-upgrade-dash")?.addEventListener("click",showUpgradeScreen);
-  document.getElementById("btn-start-diag")?.addEventListener("click",()=>{
-    document.getElementById("diag-invite-banner").style.display="none";
-    startLevelTest();
-  });
-  document.getElementById("btn-skip-diag")?.addEventListener("click",async()=>{
-    // mark as skipped so banner doesn't show again
-    document.getElementById("diag-invite-banner").style.display="none";
-    if(currentUser) await saveProgress(currentUser.uid,{diagnosisAnswers:{skipped:true}});
-    userData.diagnosisAnswers={skipped:true};
-  });
   // Writing
   document.getElementById("writing-core-banner")?.addEventListener("click",openWriting);
   // Prepare & Present

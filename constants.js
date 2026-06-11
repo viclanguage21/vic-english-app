@@ -1452,12 +1452,13 @@ export const GLOSSARY = {
 Object.values(GLOSSARY).forEach(seg => seg.terms.sort((a,b) => a.en.localeCompare(b.en)));
 
 export const PRO_MESSAGES=[
-  {title:"🚀 Acelere seu inglês",        sub:"Só R$ 5/mês — menos que um café por dia!"},
-  {title:"💼 Para sua carreira",         sub:"Todo conteúdo profissional por apenas R$ 5/mês"},
-  {title:"⭐ Plano PRO — R$ 5/mês",     sub:"Acesso total. Cancela quando quiser."},
-  {title:"🔓 Desbloqueie tudo agora",    sub:"Menos que 1 aula particular. Vale muito mais!"},
-  {title:"🌍 Inglês sem limites",        sub:"R$ 5/mês — menos de R$ 0,50 por dia 🤯"},
-  {title:"📈 Invista na sua carreira",   sub:"Por só R$ 15 você acessa tudo. Faz sentido!"},
+  {title:"🚀 Desbloqueie tudo por R$ 5",      sub:"Acesso completo a todos os segmentos e recursos."},
+  {title:"💼 R$ 5/mês — para sua carreira",   sub:"Menos que um café. Mais que uma aula particular."},
+  {title:"⭐ Plano PRO — só R$ 5/mês",        sub:"Cancela quando quiser. Sem compromisso."},
+  {title:"🔓 Tudo isso por R$ 5/mês?",        sub:"Sim. Conteúdo profissional completo, sem limites."},
+  {title:"🌍 Inglês sem limites",              sub:"R$ 5/mês — menos de R$ 0,17 por dia."},
+  {title:"📈 O melhor investimento do mês",    sub:"R$ 5 que mudam a sua carreira. Sério."},
+  {title:"🎯 Seu inglês profissional te espera", sub:"Assine o PRO por R$ 5 e comece agora."},
 ];
 
 export const BADGES = [
