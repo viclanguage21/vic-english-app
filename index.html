@@ -783,8 +783,13 @@
       <button class="quick-btn" id="btn-goto-dialogue">💬 Diálogo</button>
     </div>
 
-    <div class="section-label" style="margin-top:20px" id="dash-segments-label" data-i18n="segments">Segmentos</div>
-    <div class="segments-grid" id="segments-grid"></div>
+    <div class="section-label section-label-toggle" style="margin-top:20px" onclick="toggleSegments()" id="dash-segments-label">
+      <span data-i18n="segments">Segmentos</span>
+      <span class="section-toggle-arrow" id="segments-toggle-arrow" style="font-size:12px;color:rgba(255,255,255,0.4);transition:transform .25s ease;margin-left:auto;">▼</span>
+    </div>
+    <div id="segments-collapsible">
+      <div class="segments-grid" id="segments-grid"></div>
+    </div>
 
     <!-- Grammar Core Banner -->
     <div class="grammar-core-banner" id="grammar-core-banner" style="display:none">

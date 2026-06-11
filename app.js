@@ -2166,6 +2166,15 @@ function renderDashboard(){
   }catch(e){ console.error("renderDashboard error:", e.message); }
 }
 
+function toggleSegments(){
+  const col=document.getElementById("segments-collapsible");
+  const arrow=document.getElementById("segments-toggle-arrow");
+  if(!col) return;
+  const open=col.style.display==="none";
+  col.style.display=open?"block":"none";
+  if(arrow) arrow.style.transform=open?"rotate(0deg)":"rotate(180deg)";
+}
+
 function toggleXpStats(){
   const row=document.getElementById("stats-row-collapsible");
   const arrow=document.getElementById("xp-toggle-arrow");
