@@ -2215,9 +2215,9 @@ function toggleXpStats(){
   const row=document.getElementById("stats-row-collapsible");
   const arrow=document.getElementById("xp-toggle-arrow");
   if(!row) return;
-  const open=row.style.display==="none"||row.style.display==="";
-  row.style.display=open?"flex":"none";
-  if(arrow) arrow.style.transform=open?"rotate(180deg)":"rotate(0deg)";
+  const isHidden=row.style.display==="none";
+  row.style.display=isHidden?"grid":"none";
+  if(arrow) arrow.style.transform=isHidden?"rotate(180deg)":"rotate(0deg)";
 }
 
 function renderSegments(){

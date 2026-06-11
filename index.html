@@ -681,42 +681,41 @@
       <div class="curiosity-text" id="curiosity-ticker-text"></div>
     </div>
 
-    <div class="xp-track section-label-toggle" onclick="toggleXpStats()" style="cursor:pointer">
-      <div class="xp-track-header">
-        <span class="xp-track-label" id="xp-track-label" data-i18n="xp_progress">Progresso XP</span>
-        <span style="display:flex;align-items:center;gap:6px">
-          <span class="xp-track-next" id="dash-xp-next">100 XP</span>
-          <span id="xp-toggle-arrow" style="font-size:11px;color:#a78bfa;transition:transform 0.25s;display:inline-block;transform:rotate(180deg)">▼</span>
-        </span>
+    <!-- XP Progress block -->
+    <div class="dash-section-block">
+      <div class="dash-section-header" onclick="toggleXpStats()">
+        <span class="dash-section-title" id="xp-track-label" data-i18n="xp_progress">⚡ Progresso XP</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="dash-section-sub" id="dash-xp-next">100 XP</span>
+          <span class="dash-section-chevron" id="xp-toggle-arrow">▼</span>
+        </div>
       </div>
       <div class="xp-bar-wrapper">
         <div class="progress-bar-bg"><div class="progress-bar-fill" id="dash-xp-bar" style="width:0%"></div></div>
         <span class="xp-milestone-marker" id="dash-milestone-marker" style="right:4px;top:-4px;position:absolute"></span>
       </div>
-      <!-- Next badge inline below bar -->
       <div class="next-badge-inline" id="next-badge-inline" style="display:none">
         <span class="nbi-icon" id="nbi-icon"></span>
         <span class="nbi-text">Próxima conquista: <strong id="nbi-name"></strong></span>
         <span class="nbi-prog" id="nbi-prog"></span>
       </div>
-    </div>
-
-    <div class="stats-row" id="stats-row-collapsible">
-      <div class="stat-card stat-card-click" id="stat-xp-card" title="Ver histórico de XP">
-        <span class="stat-tap-hint">›</span>
-        <span class="stat-value" id="dash-xp">0</span>
-        <span class="stat-label">XP Hoje ☀️</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-value" id="dash-level">1</span>
-        <span class="stat-label">Nível ⭐</span>
-      </div>
-      <div class="stat-card stat-card-click" id="stat-streak-card" title="Ver calendário">
-        <span class="stat-tap-hint">›</span>
-        <span class="stat-value" id="dash-streak">0</span>
-        <span class="stat-label">Streak 🔥</span>
-        <div class="streak-shields" id="dash-streak-shields" style="display:none">
-          🛡️ <span id="dash-shield-count">0</span>
+      <div class="stats-row" id="stats-row-collapsible" style="display:none;margin-top:14px">
+        <div class="stat-card stat-card-click" id="stat-xp-card" title="Ver histórico de XP">
+          <span class="stat-tap-hint">›</span>
+          <span class="stat-value" id="dash-xp">0</span>
+          <span class="stat-label">XP Hoje ☀️</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value" id="dash-level">1</span>
+          <span class="stat-label">Nível ⭐</span>
+        </div>
+        <div class="stat-card stat-card-click" id="stat-streak-card" title="Ver calendário">
+          <span class="stat-tap-hint">›</span>
+          <span class="stat-value" id="dash-streak">0</span>
+          <span class="stat-label">Streak 🔥</span>
+          <div class="streak-shields" id="dash-streak-shields" style="display:none">
+            🛡️ <span id="dash-shield-count">0</span>
+          </div>
         </div>
       </div>
     </div>
@@ -778,27 +777,38 @@
       </div>
     </div>
 
-    <!-- quick access -->
-    <div class="section-label" id="dash-quick-label" data-i18n="quick_access">⚡ Acesso Rápido</div>
-    <div class="quick-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%">
-      <button class="quick-btn" id="btn-goto-flashcards">🃏 Flashcards</button>
-      <button class="quick-btn" id="btn-goto-memory">🧠 Memória</button>
-      <button class="quick-btn" id="btn-goto-truefalse">✅ V ou F</button>
-      <button class="quick-btn" id="btn-goto-dialogue">💬 Diálogo</button>
+    <!-- Acesso Rápido block -->
+    <div class="dash-section-block">
+      <div class="dash-section-header" onclick="toggleDashSection('quick-collapsible','quick-toggle-arrow','grid')">
+        <span class="dash-section-title" id="dash-quick-label" data-i18n="quick_access">⚡ Acesso Rápido</span>
+        <span class="dash-section-chevron" id="quick-toggle-arrow">▼</span>
+      </div>
+      <div id="quick-collapsible" class="quick-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button class="quick-btn" id="btn-goto-flashcards">🃏 Flashcards</button>
+        <button class="quick-btn" id="btn-goto-memory">🧠 Memória</button>
+        <button class="quick-btn" id="btn-goto-truefalse">✅ V ou F</button>
+        <button class="quick-btn" id="btn-goto-dialogue">💬 Diálogo</button>
+      </div>
     </div>
 
-    <div class="section-label section-label-toggle" style="margin-top:20px" id="dash-segments-label" onclick="toggleSegments()" data-i18n="segments">
-      Segmentos <span id="segments-toggle-arrow" style="font-size:11px;color:#a78bfa;transition:transform 0.25s;display:inline-block">▼</span>
-    </div>
-    <div id="segments-collapsible">
-      <div class="segments-grid" id="segments-grid"></div>
+    <!-- Segmentos block -->
+    <div class="dash-section-block">
+      <div class="dash-section-header" onclick="toggleSegments()">
+        <span class="dash-section-title" id="dash-segments-label" data-i18n="segments">🗺️ Segmentos</span>
+        <span class="dash-section-chevron" id="segments-toggle-arrow">▼</span>
+      </div>
+      <div id="segments-collapsible">
+        <div class="segments-grid" id="segments-grid"></div>
+      </div>
     </div>
 
-    <!-- Recursos collapsible -->
-    <div class="section-label section-label-toggle" style="margin-top:20px" onclick="toggleDashSection('recursos-collapsible','recursos-toggle-arrow','block')">
-      📚 Recursos <span id="recursos-toggle-arrow" style="font-size:11px;color:#a78bfa;transition:transform 0.25s;display:inline-block;transform:rotate(180deg)">▼</span>
-    </div>
-    <div id="recursos-collapsible">
+    <!-- Recursos block -->
+    <div class="dash-section-block">
+      <div class="dash-section-header" onclick="toggleDashSection('recursos-collapsible','recursos-toggle-arrow','block')">
+        <span class="dash-section-title">📚 Recursos</span>
+        <span class="dash-section-chevron" id="recursos-toggle-arrow">▼</span>
+      </div>
+      <div id="recursos-collapsible">
 
     <!-- Grammar Core Banner -->
     <div class="grammar-core-banner" id="grammar-core-banner" style="display:none">
@@ -856,6 +866,7 @@
     </div>
 
     </div><!-- /recursos-collapsible -->
+    </div><!-- /dash-section-block recursos -->
 
     <!-- Feedback widget — discreto, só estrelas -->
     <div class="feedback-strip feedback-strip-minimal" id="feedback-strip">
