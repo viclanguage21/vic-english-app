@@ -8331,3 +8331,14 @@ a.settings-big-btn:active {
   min-width: 14px;
   text-align: center;
 }
+
+/* ══ SECTION ARROWS — clearer triangles ═══════════════ */
+.dash-section-chevron {
+  font-size: 11px !important;
+  opacity: 0.85 !important;
+  letter-spacing: 0 !important;
+}
+.daily-chevron {
+  font-size: 11px !important;
+  opacity: 0.8 !important;
+}

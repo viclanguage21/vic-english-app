@@ -1018,7 +1018,7 @@ function toggleDailyBlock(){
   const isCollapsed=block.classList.contains('collapsed');
   localStorage.setItem('vic_daily_collapsed',isCollapsed?'1':'0');
   const chevron=document.getElementById('daily-chevron');
-  if(chevron) chevron.textContent=isCollapsed?'›':'▼';
+  if(chevron) chevron.textContent=isCollapsed?'▶':'▼';
 }
 function renderDailyMissions(){
   const dp=getDailyProgress();
@@ -2015,7 +2015,7 @@ function _setSection(colId, arrowId, openDisplay, isOpen){
   const arrow=document.getElementById(arrowId);
   if(!col) return;
   col.style.display=isOpen?(openDisplay||"block"):"none";
-  if(arrow){ arrow.textContent=isOpen?"▼":"›"; arrow.style.transform="none"; }
+  if(arrow){ arrow.textContent=isOpen?"▼":"▶"; arrow.style.transform="none"; }
 }
 function _saveSection(key,isOpen){
   try{ localStorage.setItem("vic_sec_"+key,isOpen?"1":"0"); }catch(e){}
@@ -2031,7 +2031,7 @@ function initSectionStates(){
   _setSection("recursos-collapsible","recursos-toggle-arrow","block",_loadSection("recursos-collapsible"));
   const block=document.getElementById("daily-block");
   const chevron=document.getElementById("daily-chevron");
-  if(block&&chevron) chevron.textContent=block.classList.contains("collapsed")?"›":"▼";
+  if(block&&chevron) chevron.textContent=block.classList.contains("collapsed")?"▶":"▼";
 }
 
 function toggleDashSection(colId, arrowId, openDisplay){
