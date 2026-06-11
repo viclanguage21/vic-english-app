@@ -732,7 +732,7 @@ function buildDate(){
   const weekday=d.toLocaleDateString("en-US",{weekday:"long"});
   const month=d.toLocaleDateString("en-US",{month:"long"});
   const el=document.getElementById("dash-date");
-  if(el) el.innerHTML=`<div class="dash-date-weekday">${weekday}</div><div class="dash-date-day">${month} ${day}${suffix}</div>`;
+  if(el) el.textContent=`${weekday}, ${month} ${day}${suffix}`;
 }
 
 // ── DAILY MISSIONS ─────────────────────────────────────────────────────────────
