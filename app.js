@@ -711,15 +711,16 @@ function buildGreeting(name){
   const greet=GREETINGS[Math.floor(Math.random()*GREETINGS.length)];
   // Saudação sempre em inglês
   if(el("greeting-hi"))  el("greeting-hi").textContent=`${greet}, ${name}! 👋`;
-  if(el("greeting-time-en")) el("greeting-time-en").textContent=`${timeEN} — ${motEN}`;
+  const timeEmoji = h<12?"☀️":h<18?"⚡":"🌙";
+  if(el("greeting-time-en")) el("greeting-time-en").textContent=`${timeEN} — ${motEN}, ${name}! ${timeEmoji}`;
   // Linha de baixo = tradução no idioma selecionado (se não for EN)
   const ptLine = el("greeting-time-pt");
   if(ptLine){
     if(_lang === "en"){
-      ptLine.style.display = "none"; // em inglês não precisa de 2ª linha
+      ptLine.style.display = "none";
     } else {
       ptLine.style.display = "";
-      ptLine.textContent = `${timeGreet} — ${motTranslated}`;
+      ptLine.textContent = `${timeGreet} — ${motTranslated}, ${name}! ${timeEmoji}`;
     }
   }
   if(el("greeting-motivational")) el("greeting-motivational").style.display="none";
