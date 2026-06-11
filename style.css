@@ -4940,7 +4940,7 @@ body.light-mode .settings-big-btn {
 .sl-handle { font-size: 11px; color: rgba(255,255,255,0.6) !important; font-family: var(--font); }
 .social-instagram { background: linear-gradient(135deg, #833ab4, #fd1d1d, #f77737); }
 .social-linkedin  { background: linear-gradient(135deg, #0077b5, #004182); }
-.social-website   { background: linear-gradient(135deg, #2a1060, #5b21b6); }
+.social-website   { background: linear-gradient(135deg, #3b0764, #7c3aed, #a855f7); }
 .social-whatsapp  { background: linear-gradient(135deg, #25d366, #128c7e); }
 
 /* ══ DAILY MISSIONS — big dark button style ════════════ */
