@@ -8121,3 +8121,9 @@ a.settings-big-btn:active {
 .dash-header {
   background: linear-gradient(90deg, #0a0418 0%, #14082a 35%, #1a0826 50%, #14082a 65%, #0a0418 100%) !important;
 }
+
+/* ══ HEADER — gradiente roxo escuro → azul marinho ══════ */
+.dash-header {
+  background: linear-gradient(135deg, #1a0826 0%, #12103a 40%, #0d1a4a 70%, #071530 100%) !important;
+  box-shadow: 0 1px 0 rgba(212,175,55,0.2), 0 4px 24px rgba(0,0,0,0.6) !important;
+}
