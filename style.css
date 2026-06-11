@@ -8424,6 +8424,11 @@ body.light-mode .dashboard-inner {
   background: #f7f2eb !important;
   color: #1e1740 !important;
 }
+/* Remove glow/grain overlays — fundo creme uniforme sem branco */
+body.light-mode::before,
+body.light-mode::after { background: none !important; }
+body.light-mode .view  { background: #f7f2eb !important; }
+body.light-mode .bg-glow { display: none !important; }
 
 /* Header stays brand dark purple in light mode */
 body.light-mode .dash-header {
