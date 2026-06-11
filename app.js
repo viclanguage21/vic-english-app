@@ -544,7 +544,6 @@ function showLevelInfoModal(){
           Cada missão concluída dá XP. Quanto mais XP, mais sobe o nível — e a curva fica mais difícil com o tempo.
         </div>
       </div>
-      <div class="lim-tip">${lv.label} — ${lv.msg}</div>
       <div class="lim-table">${rows}</div>
       <div style="font-size:11px;color:#6b7280;text-align:center;margin-top:14px;line-height:1.6">
         Seu nível atual: <strong style="color:#c084fc">Nível ${currentLevel} • ${currentXp} XP</strong>
