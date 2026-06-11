@@ -8237,26 +8237,26 @@ a.settings-big-btn:active {
 
 /* Daily Missions — navy/indigo */
 #daily-block {
-  background: linear-gradient(145deg, #080e23, #0d1840) !important;
-  border-color: rgba(99,102,241,0.38) !important;
-}
-#daily-block::before {
-  background: linear-gradient(90deg, transparent, rgba(99,102,241,0.45), transparent) !important;
-}
-#daily-block .daily-block-title { color: #818cf8 !important; }
-#daily-block .daily-chevron,
-#daily-block .daily-overall-pct { color: #6366f1 !important; }
-
-/* Segmentos — teal night */
-#block-segmentos {
   background: linear-gradient(145deg, #061818, #0b2424) !important;
   border-color: rgba(20,184,166,0.32) !important;
 }
-#block-segmentos::before {
+#daily-block::before {
   background: linear-gradient(90deg, transparent, rgba(20,184,166,0.4), transparent) !important;
 }
-#block-segmentos .dash-section-title { color: #2dd4bf !important; }
-#block-segmentos .dash-section-chevron { color: #14b8a6 !important; }
+#daily-block .daily-block-title { color: #2dd4bf !important; }
+#daily-block .daily-chevron,
+#daily-block .daily-overall-pct { color: #14b8a6 !important; }
+
+/* Segmentos — navy/indigo */
+#block-segmentos {
+  background: linear-gradient(145deg, #080e23, #0d1840) !important;
+  border-color: rgba(99,102,241,0.38) !important;
+}
+#block-segmentos::before {
+  background: linear-gradient(90deg, transparent, rgba(99,102,241,0.45), transparent) !important;
+}
+#block-segmentos .dash-section-title { color: #818cf8 !important; }
+#block-segmentos .dash-section-chevron { color: #6366f1 !important; }
 
 /* XP Progress — purple (keep brand color, just reinforce) */
 #block-xp {
@@ -8485,15 +8485,18 @@ body.light-mode .dash-section-title { color: #1e1740 !important; }
 body.light-mode .dash-section-chevron { color: #4b3880 !important; }
 
 /* Block backgrounds in light mode — âmbar (brand gold) com variações por bloco */
-body.light-mode #daily-block    { background: linear-gradient(145deg, #2d2270, #1e1740) !important; }
-body.light-mode #block-segmentos{ background: linear-gradient(135deg, #fef3c7 0%, #ede0ff 100%) !important; border-color: rgba(124,58,237,0.28) !important; }
+body.light-mode #daily-block    { background: linear-gradient(135deg, #fef3c7 0%, #ede0ff 100%) !important; border-color: rgba(124,58,237,0.28) !important; }
+body.light-mode #block-segmentos{ background: linear-gradient(145deg, #2d2270, #1e1740) !important; }
 body.light-mode #block-xp       { background: linear-gradient(145deg, #fef9e7 0%, #ddd6fe 100%) !important; border-color: rgba(109,40,217,0.30) !important; }
 body.light-mode #block-quick    { background: linear-gradient(135deg, #fff8e1 0%, #e8deff 100%) !important; border-color: rgba(91,33,182,0.25) !important; }
 body.light-mode #block-recursos { background: linear-gradient(145deg, #fef3c7 0%, #fde68a 100%) !important; border-color: rgba(180,83,9,0.35) !important; }
 
 /* Block section titles in light mode */
-body.light-mode #block-segmentos .dash-section-title  { color: #4c1d95 !important; }
-body.light-mode #block-segmentos .dash-section-chevron{ color: #6d28d9 !important; }
+body.light-mode #daily-block .daily-block-title { color: #4c1d95 !important; }
+body.light-mode #daily-block .daily-chevron,
+body.light-mode #daily-block .daily-overall-pct { color: #6d28d9 !important; }
+body.light-mode #block-segmentos .dash-section-title  { color: #fff !important; }
+body.light-mode #block-segmentos .dash-section-chevron{ color: rgba(255,255,255,0.7) !important; }
 body.light-mode #block-xp .dash-section-title         { color: #3b1f8c !important; }
 body.light-mode #block-xp .dash-section-chevron       { color: #5b21b6 !important; }
 body.light-mode #block-quick .dash-section-title      { color: #2e1a7a !important; }
