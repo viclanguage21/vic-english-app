@@ -8320,3 +8320,14 @@ a.settings-big-btn:active {
   border-color: rgba(34,197,94,0.75) !important;
   box-shadow: 0 0 28px rgba(34,197,94,0.20) !important;
 }
+
+/* ══ SECTION ARROWS — text-based (›/▼), no CSS transform ══ */
+.daily-block.collapsed .daily-chevron { transform: none !important; }
+.daily-chevron { transition: none !important; }
+.dash-section-chevron {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  transition: none !important;
+  min-width: 14px;
+  text-align: center;
+}

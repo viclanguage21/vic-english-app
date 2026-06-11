@@ -1015,7 +1015,10 @@ function toggleDailyBlock(){
   if(!block) return;
   vibrate(10);
   block.classList.toggle('collapsed');
-  localStorage.setItem('vic_daily_collapsed',block.classList.contains('collapsed')?'1':'0');
+  const isCollapsed=block.classList.contains('collapsed');
+  localStorage.setItem('vic_daily_collapsed',isCollapsed?'1':'0');
+  const chevron=document.getElementById('daily-chevron');
+  if(chevron) chevron.textContent=isCollapsed?'›':'▼';
 }
 function renderDailyMissions(){
   const dp=getDailyProgress();
@@ -2003,34 +2006,59 @@ function renderDashboard(){
 
   renderSegments();
   try{ renderDashboardTexts(); }catch(e){}
+  initSectionStates();
   }catch(e){ console.error("renderDashboard error:", e.message); }
+}
+
+function _setSection(colId, arrowId, openDisplay, isOpen){
+  const col=document.getElementById(colId);
+  const arrow=document.getElementById(arrowId);
+  if(!col) return;
+  col.style.display=isOpen?(openDisplay||"block"):"none";
+  if(arrow){ arrow.textContent=isOpen?"▼":"›"; arrow.style.transform="none"; }
+}
+function _saveSection(key,isOpen){
+  try{ localStorage.setItem("vic_sec_"+key,isOpen?"1":"0"); }catch(e){}
+}
+function _loadSection(key){
+  const v=localStorage.getItem("vic_sec_"+key);
+  return v===null?false:v==="1";
+}
+function initSectionStates(){
+  _setSection("stats-row-collapsible","xp-toggle-arrow","grid",_loadSection("stats-row-collapsible"));
+  _setSection("segments-collapsible","segments-toggle-arrow","block",_loadSection("segments-collapsible"));
+  _setSection("quick-collapsible","quick-toggle-arrow","grid",_loadSection("quick-collapsible"));
+  _setSection("recursos-collapsible","recursos-toggle-arrow","block",_loadSection("recursos-collapsible"));
+  const block=document.getElementById("daily-block");
+  const chevron=document.getElementById("daily-chevron");
+  if(block&&chevron) chevron.textContent=block.classList.contains("collapsed")?"›":"▼";
 }
 
 function toggleDashSection(colId, arrowId, openDisplay){
   const col=document.getElementById(colId);
-  const arrow=document.getElementById(arrowId);
   if(!col) return;
-  const isHidden=col.style.display==="none";
-  col.style.display=isHidden?(openDisplay||"block"):"none";
-  if(arrow) arrow.style.transform=isHidden?"rotate(0deg)":"rotate(180deg)";
+  vibrate(10);
+  const willOpen=col.style.display==="none";
+  _setSection(colId,arrowId,openDisplay,willOpen);
+  _saveSection(colId,willOpen);
 }
 
 function toggleSegments(){
   const col=document.getElementById("segments-collapsible");
-  const arrow=document.getElementById("segments-toggle-arrow");
   if(!col) return;
-  const open=col.style.display==="none";
-  col.style.display=open?"block":"none";
-  if(arrow) arrow.style.transform=open?"rotate(0deg)":"rotate(180deg)";
+  vibrate(10);
+  const willOpen=col.style.display==="none";
+  _setSection("segments-collapsible","segments-toggle-arrow","block",willOpen);
+  _saveSection("segments-collapsible",willOpen);
 }
 
 function toggleXpStats(){
   const row=document.getElementById("stats-row-collapsible");
-  const arrow=document.getElementById("xp-toggle-arrow");
   if(!row) return;
-  const isHidden=row.style.display==="none";
-  row.style.display=isHidden?"grid":"none";
-  if(arrow) arrow.style.transform=isHidden?"rotate(180deg)":"rotate(0deg)";
+  vibrate(10);
+  const willOpen=row.style.display==="none";
+  _setSection("stats-row-collapsible","xp-toggle-arrow","grid",willOpen);
+  _saveSection("stats-row-collapsible",willOpen);
 }
 
 function renderSegments(){
