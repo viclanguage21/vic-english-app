@@ -8073,3 +8073,18 @@ a.settings-big-btn:active {
   align-self: flex-end;
   margin-bottom: 8px;
 }
+
+/* ══ GREETING — final override (logo + font sizes) ══════ */
+#dash-logo-img {
+  border-radius: 0 !important;
+  object-fit: contain !important;
+}
+.greeting-time-en {
+  font-size: 26px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+}
+.greeting-time-pt {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+}
