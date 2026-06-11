@@ -168,7 +168,7 @@ function renderDashboardTexts() {
   if (el("dash-daily-title"))    el("dash-daily-title").textContent    = t("daily_missions");
   if (el("dash-segments-label")) el("dash-segments-label").textContent = t("segments");
   if (el("dash-quick-label"))    el("dash-quick-label").textContent    = t("quick_access");
-  if (el("btn-start-now"))       el("btn-start-now").textContent       = t("start_now");
+  // btn-start-now text is set contextually after this call — skip i18n override
   if (el("btn-upgrade-dash"))    el("btn-upgrade-dash").textContent    = t("subscribe");
   if (el("xp-track-label"))      el("xp-track-label").textContent      = t("xp_progress");
   if (el("stat-ranking-label"))  el("stat-ranking-label").textContent  = t("ranking");
@@ -1986,42 +1986,44 @@ function renderDashboard(){
   // User level in header
   const ulEl=document.getElementById("dash-user-level");
   if(ulEl) ulEl.textContent=lv.label.split(" ")[0]+" "+lv.label.split(" ")[1];
-  // Start Now — contextual com frases variadas
-  const snBtn=document.getElementById("btn-start-now");
-  if(snBtn){
+  const banner=document.getElementById("pro-banner");
+  if(banner) banner.style.display=isPro()?"none":"flex";
+
+  renderSegments();
+  try{ renderDashboardTexts(); }catch(e){}
+
+  // Texto contextual do botão — deve rodar DEPOIS de renderDashboardTexts()
+  // para não ser sobrescrito pelo i18n
+  const snBtn2=document.getElementById("btn-start-now");
+  if(snBtn2){
     const hasMissions=(userData.completedMissions||[]).length>0;
     const hasCurrentMission=userData.currentMission?.missionId;
     const pick=arr=>arr[Math.floor(Math.random()*arr.length)];
     if(hasMissions && hasCurrentMission){
-      snBtn.textContent=pick([
+      snBtn2.textContent=pick([
         "▶ Continue de onde parou",
         "⚡ Continuar de onde parou",
         "🔥 De volta ao treino!",
         "💪 Continue treinando",
         "🎯 Retomar o aprendizado",
       ]);
-      snBtn.style.display="block";
+      snBtn2.style.display="block";
     } else if(userData.diagnosisAnswers?.segment){
       const diagSeg=getSegment(userData.diagnosisAnswers.segment);
       if(diagSeg){
         const icon=diagSeg.icon||"🚀";
-        snBtn.textContent=pick([
+        snBtn2.textContent=pick([
           `${icon} Começar ${diagSeg.name}`,
           `🚀 Iniciar ${diagSeg.name}`,
           `⚡ Praticar ${diagSeg.name} agora`,
         ]);
-        snBtn.style.display="block";
-      } else { snBtn.style.display="none"; }
+        snBtn2.style.display="block";
+      } else { snBtn2.style.display="none"; }
     } else {
-      snBtn.style.display="none";
+      snBtn2.style.display="none";
     }
   }
-  const banner=document.getElementById("pro-banner");
-  if(banner) banner.style.display=isPro()?"none":"flex";
 
-
-  renderSegments();
-  try{ renderDashboardTexts(); }catch(e){}
   initSectionStates();
   }catch(e){ console.error("renderDashboard error:", e.message); }
 }
