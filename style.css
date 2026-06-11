@@ -8100,3 +8100,19 @@ a.settings-big-btn:active {
   border-radius: 0 !important;
   display: block !important;
 }
+
+/* ══ LOGO — remove dark frame, add golden glow ══════════ */
+.dash-logo-mid {
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.dash-header-3col #dash-logo-img,
+.dash-header-3col .dash-logo-img,
+#dash-logo-img {
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 14px rgba(212,175,55,0.45), 0 2px 10px rgba(0,0,0,0.5) !important;
+}
