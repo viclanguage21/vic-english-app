@@ -8199,3 +8199,19 @@ a.settings-big-btn:active {
   font-weight: 700 !important;
   letter-spacing: 0.3px !important;
 }
+
+/* ══ LEVEL INFO MODAL — tier table ═══════════════════ */
+.lim-table { display: flex; flex-direction: column; gap: 8px; }
+.lim-row {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(124,58,237,0.18);
+  border-radius: 10px; padding: 10px 14px;
+}
+.lim-row-active {
+  background: rgba(192,132,252,0.12) !important;
+  border-color: rgba(192,132,252,0.45) !important;
+}
+.lim-label { font-size: 14px; font-weight: 700; color: #e2d9f3; flex: 1; }
+.lim-xp { font-size: 11px; color: #9ca3af; white-space: nowrap; }
+.lim-you { font-size: 11px; font-weight: 700; color: #c084fc; white-space: nowrap; }

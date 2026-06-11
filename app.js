@@ -505,6 +505,50 @@ function levelInfo(xp){
   return         {label:t("level_advanced"),  msg:getRandomTip(4)};
 }
 
+function showLevelInfoModal(){
+  vibrate(20);
+  const currentXp = userData?.xp || 0;
+  const currentLevel = calcLevel(currentXp);
+  const tiers = [
+    { label:"Trainee 🌱",      minL:1,  maxL:2,  xpStart:0,    xpEnd:399   },
+    { label:"Praticante 📘",   minL:3,  maxL:5,  xpStart:400,  xpEnd:2499  },
+    { label:"Especialista ⭐", minL:6,  maxL:9,  xpStart:2500, xpEnd:8099  },
+    { label:"Mestre 🏆",       minL:10, maxL:null,xpStart:8100, xpEnd:null  },
+  ];
+  const tierOf = l => l<=2?0 : l<=5?1 : l<=9?2 : 3;
+  const currentTier = tierOf(currentLevel);
+  const rows = tiers.map((tier,i)=>{
+    const active = i === currentTier;
+    const xpLabel = tier.xpEnd ? `${tier.xpStart.toLocaleString()} – ${tier.xpEnd.toLocaleString()} XP` : `${tier.xpStart.toLocaleString()}+ XP`;
+    return `<div class="lim-row${active?' lim-row-active':''}">
+      <span class="lim-label">${tier.label}</span>
+      <span class="lim-xp">${xpLabel}</span>
+      ${active?'<span class="lim-you">← você</span>':''}
+    </div>`;
+  }).join('');
+  const el = document.createElement('div');
+  el.className = 'about-modal';
+  el.id = 'level-info-modal';
+  el.innerHTML = `
+    <div class="about-card" style="max-width:360px">
+      <button class="about-close" onclick="document.getElementById('level-info-modal').remove()">✕</button>
+      <div style="text-align:center;margin-bottom:18px">
+        <div style="font-size:32px;margin-bottom:6px">⭐</div>
+        <div style="font-size:18px;font-weight:800;color:#c084fc">Como funcionam os níveis?</div>
+        <div style="font-size:13px;color:#a78bfa;margin-top:6px;line-height:1.5">
+          Cada missão concluída dá XP. Quanto mais XP, mais sobe o nível — e a curva fica mais difícil com o tempo.
+        </div>
+      </div>
+      <div class="lim-table">${rows}</div>
+      <div style="font-size:11px;color:#6b7280;text-align:center;margin-top:14px;line-height:1.6">
+        Seu nível atual: <strong style="color:#c084fc">Nível ${currentLevel} • ${currentXp} XP</strong>
+      </div>
+    </div>`;
+  el.addEventListener('click', e => { if(e.target===el) el.remove(); });
+  document.body.appendChild(el);
+}
+if(typeof showLevelInfoModal!=='undefined') window.showLevelInfoModal=showLevelInfoModal;
+
 let _lastView = null;
 function showView(id){
   // view-leaderboard é bottom sheet — usar openLeaderboard()
@@ -6341,6 +6385,8 @@ function init(){
 
   // XP card → show history popup
   document.getElementById("stat-xp-card")?.addEventListener("click",()=>showXPHistoryPopup());
+  // Level card → show levels info modal
+  document.getElementById("stat-level-card")?.addEventListener("click",()=>showLevelInfoModal());
   // Streak card → show calendar popup
   document.getElementById("stat-streak-card")?.addEventListener("click",()=>showStreakCalendarPopup());
   document.getElementById("btn-share-header")?.addEventListener("click",()=>{ vibrate(30); shareApp(); });
