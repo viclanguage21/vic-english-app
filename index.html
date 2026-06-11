@@ -614,6 +614,34 @@
       <div class="curiosity-text" id="curiosity-ticker-text"></div>
     </div>
 
+    <!-- daily missions -->
+    <div class="daily-block" id="daily-block">
+      <div class="daily-block-header" onclick="toggleDailyBlock()">
+        <div class="daily-block-title" id="dash-daily-title" data-i18n="daily_missions">🎯 Daily Missions</div>
+        <div class="daily-header-right">
+          <span class="daily-overall-pct" id="daily-overall-pct">0% feito hoje</span>
+          <span class="daily-chevron" id="daily-chevron">▼</span>
+        </div>
+      </div>
+      <div class="daily-block-body" id="daily-block-body">
+        <div class="daily-overall-bar-wrap">
+          <div class="daily-overall-bar" id="daily-overall-bar" style="width:0%"></div>
+        </div>
+        <div id="daily-missions-list"></div>
+      </div>
+    </div>
+
+    <!-- Segmentos block -->
+    <div class="dash-section-block">
+      <div class="dash-section-header" onclick="toggleSegments()">
+        <span class="dash-section-title" id="dash-segments-label" data-i18n="segments">🗺️ Segmentos ✏️</span>
+        <span class="dash-section-chevron" id="segments-toggle-arrow">▼</span>
+      </div>
+      <div id="segments-collapsible">
+        <div class="segments-grid" id="segments-grid"></div>
+      </div>
+    </div>
+
     <!-- XP Progress block -->
     <div class="dash-section-block">
       <div class="dash-section-header" onclick="toggleXpStats()">
@@ -653,49 +681,6 @@
       </div>
     </div>
 
-    <!-- Golden ranking CTA — temporariamente oculto até ter massa crítica de usuários -->
-    <button class="ranking-cta-btn" id="btn-ranking-cta" onclick="openLeaderboard()" style="display:none">
-      <div class="ranking-cta-shine"></div>
-      <div class="ranking-cta-inner">
-        <span class="ranking-cta-crown">👑</span>
-        <div class="ranking-cta-copy">
-          <div class="ranking-cta-title">Competir pelo #1</div>
-          <div class="ranking-cta-sub">Você tem o que é preciso para o topo?</div>
-        </div>
-        <span class="ranking-cta-trophy">🏆</span>
-      </div>
-    </button>
-
-
-    <!-- Pro upgrade banner -->
-    <div class="pro-banner" id="pro-banner" style="display:none">
-      <div class="pro-banner-left">
-        <span class="pro-banner-icon">⭐</span>
-        <div>
-          <div class="pro-banner-title" id="pro-banner-title">Desbloqueie tudo</div>
-          <div class="pro-banner-sub" id="pro-banner-sub">R$ 5/mês — todos os segmentos</div>
-        </div>
-      </div>
-      <button class="pro-banner-btn" id="btn-upgrade-dash" data-i18n="subscribe">Assinar</button>
-    </div>
-
-    <!-- daily missions -->
-    <div class="daily-block" id="daily-block">
-      <div class="daily-block-header" onclick="toggleDailyBlock()">
-        <div class="daily-block-title" id="dash-daily-title" data-i18n="daily_missions">🎯 Daily Missions</div>
-        <div class="daily-header-right">
-          <span class="daily-overall-pct" id="daily-overall-pct">0% feito hoje</span>
-          <span class="daily-chevron" id="daily-chevron">▼</span>
-        </div>
-      </div>
-      <div class="daily-block-body" id="daily-block-body">
-        <div class="daily-overall-bar-wrap">
-          <div class="daily-overall-bar" id="daily-overall-bar" style="width:0%"></div>
-        </div>
-        <div id="daily-missions-list"></div>
-      </div>
-    </div>
-
     <!-- Acesso Rápido block -->
     <div class="dash-section-block">
       <div class="dash-section-header" onclick="toggleDashSection('quick-collapsible','quick-toggle-arrow','grid')">
@@ -710,15 +695,29 @@
       </div>
     </div>
 
-    <!-- Segmentos block -->
-    <div class="dash-section-block">
-      <div class="dash-section-header" onclick="toggleSegments()">
-        <span class="dash-section-title" id="dash-segments-label" data-i18n="segments">🗺️ Segmentos ✏️</span>
-        <span class="dash-section-chevron" id="segments-toggle-arrow">▼</span>
+    <!-- Golden ranking CTA — temporariamente oculto até ter massa crítica de usuários -->
+    <button class="ranking-cta-btn" id="btn-ranking-cta" onclick="openLeaderboard()" style="display:none">
+      <div class="ranking-cta-shine"></div>
+      <div class="ranking-cta-inner">
+        <span class="ranking-cta-crown">👑</span>
+        <div class="ranking-cta-copy">
+          <div class="ranking-cta-title">Competir pelo #1</div>
+          <div class="ranking-cta-sub">Você tem o que é preciso para o topo?</div>
+        </div>
+        <span class="ranking-cta-trophy">🏆</span>
       </div>
-      <div id="segments-collapsible">
-        <div class="segments-grid" id="segments-grid"></div>
+    </button>
+
+    <!-- Pro upgrade banner -->
+    <div class="pro-banner" id="pro-banner" style="display:none">
+      <div class="pro-banner-left">
+        <span class="pro-banner-icon">⭐</span>
+        <div>
+          <div class="pro-banner-title" id="pro-banner-title">Desbloqueie tudo</div>
+          <div class="pro-banner-sub" id="pro-banner-sub">R$ 5/mês — todos os segmentos</div>
+        </div>
       </div>
+      <button class="pro-banner-btn" id="btn-upgrade-dash" data-i18n="subscribe">Assinar</button>
     </div>
 
     <!-- Recursos block -->
