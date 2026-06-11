@@ -8088,3 +8088,15 @@ a.settings-big-btn:active {
   font-size: 18px !important;
   font-weight: 600 !important;
 }
+
+/* ══ LOGO — fundo roxo escuro para combinar com o JPEG ══ */
+.dash-logo-mid {
+  background: #1a0826 !important;
+  padding: 4px 10px !important;
+  border-radius: 10px !important;
+}
+#dash-logo-img {
+  background: #1a0826 !important;
+  border-radius: 0 !important;
+  display: block !important;
+}
