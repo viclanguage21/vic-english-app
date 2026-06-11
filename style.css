@@ -7690,12 +7690,12 @@ a.settings-big-btn:active {
 .dash-header-3col #dash-logo-img,
 .dash-header-3col .dash-logo-img {
   width: auto !important;
-  height: 76px !important;
-  max-width: 260px !important;
+  height: 56px !important;
+  max-width: 200px !important;
   border-radius: 14px !important;
   object-fit: contain !important;
   background: #0f0520 !important;
-  padding: 6px 12px !important;
+  padding: 4px 10px !important;
 }
 /* coluna direita: avatar arredondado (squircle, não círculo) */
 .dash-header-3col .dash-user {
