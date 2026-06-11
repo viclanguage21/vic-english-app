@@ -677,10 +677,13 @@
       <div class="curiosity-text" id="curiosity-ticker-text"></div>
     </div>
 
-    <div class="xp-track">
-      <div class="xp-track-header">
+    <div class="xp-track xp-track-toggle" id="xp-track-toggle">
+      <div class="xp-track-header" onclick="toggleXpStats()" style="cursor:pointer;user-select:none;">
         <span class="xp-track-label" id="xp-track-label" data-i18n="xp_progress">Progresso XP</span>
-        <span class="xp-track-next" id="dash-xp-next">100 XP</span>
+        <span style="display:flex;align-items:center;gap:6px;">
+          <span class="xp-track-next" id="dash-xp-next">100 XP</span>
+          <span class="xp-toggle-arrow" id="xp-toggle-arrow" style="font-size:12px;color:rgba(255,255,255,0.4);transition:transform .25s ease;">▼</span>
+        </span>
       </div>
       <div class="xp-bar-wrapper">
         <div class="progress-bar-bg"><div class="progress-bar-fill" id="dash-xp-bar" style="width:0%"></div></div>
@@ -694,7 +697,7 @@
       </div>
     </div>
 
-    <div class="stats-row">
+    <div class="stats-row stats-row-collapsible" id="stats-row-collapsible" style="display:none;overflow:hidden;">
       <div class="stat-card stat-card-click" id="stat-xp-card" title="Ver histórico de XP">
         <span class="stat-tap-hint">›</span>
         <span class="stat-value" id="dash-xp">0</span>

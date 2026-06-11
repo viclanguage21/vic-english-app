@@ -2166,6 +2166,15 @@ function renderDashboard(){
   }catch(e){ console.error("renderDashboard error:", e.message); }
 }
 
+function toggleXpStats(){
+  const row=document.getElementById("stats-row-collapsible");
+  const arrow=document.getElementById("xp-toggle-arrow");
+  if(!row) return;
+  const open=row.style.display==="none"||row.style.display==="";
+  row.style.display=open?"flex":"none";
+  if(arrow) arrow.style.transform=open?"rotate(180deg)":"rotate(0deg)";
+}
+
 function renderSegments(){
   const c=document.getElementById("segments-grid"); if(!c) return; c.innerHTML="";
   const grammarSeg=VICTOR_DATA.segments.find(s=>s.isGrammarCore);
