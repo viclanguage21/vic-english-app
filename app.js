@@ -499,10 +499,12 @@ function getRandomTip(level){
 }
 function levelInfo(xp){
   const l=calcLevel(xp);
-  if(l<=2) return {label:t("level_beginner"), msg:getRandomTip(1)};
-  if(l<=5) return {label:t("level_basic"),    msg:getRandomTip(2)};
-  if(l<=9) return {label:t("level_inter"),    msg:getRandomTip(3)};
-  return         {label:t("level_advanced"),  msg:getRandomTip(4)};
+  if(l<=2)  return {label:t("level_beginner"),  msg:getRandomTip(1)};
+  if(l<=5)  return {label:t("level_basic"),      msg:getRandomTip(2)};
+  if(l<=9)  return {label:t("level_inter"),      msg:getRandomTip(3)};
+  if(l<=12) return {label:t("level_advanced"),   msg:getRandomTip(4)};
+  if(l<=16) return {label:t("level_authority"),  msg:getRandomTip(4)};
+  return           {label:t("level_legend"),     msg:getRandomTip(4)};
 }
 
 function showLevelInfoModal(){
@@ -510,18 +512,20 @@ function showLevelInfoModal(){
   const currentXp = userData?.xp || 0;
   const currentLevel = calcLevel(currentXp);
   const tiers = [
-    { label:"Trainee 🌱",      minL:1,  maxL:2,  xpStart:0,    xpEnd:399   },
-    { label:"Praticante 📘",   minL:3,  maxL:5,  xpStart:400,  xpEnd:2499  },
-    { label:"Especialista ⭐", minL:6,  maxL:9,  xpStart:2500, xpEnd:8099  },
-    { label:"Mestre 🏆",       minL:10, maxL:null,xpStart:8100, xpEnd:null  },
+    { key:"level_beginner",  minL:1,  maxL:2,  xpStart:0,     xpEnd:399    },
+    { key:"level_basic",     minL:3,  maxL:5,  xpStart:400,   xpEnd:2499   },
+    { key:"level_inter",     minL:6,  maxL:9,  xpStart:2500,  xpEnd:8099   },
+    { key:"level_advanced",  minL:10, maxL:12, xpStart:8100,  xpEnd:14399  },
+    { key:"level_authority", minL:13, maxL:16, xpStart:14400, xpEnd:25599  },
+    { key:"level_legend",    minL:17, maxL:null,xpStart:25600, xpEnd:null  },
   ];
-  const tierOf = l => l<=2?0 : l<=5?1 : l<=9?2 : 3;
+  const tierOf = l => l<=2?0 : l<=5?1 : l<=9?2 : l<=12?3 : l<=16?4 : 5;
   const currentTier = tierOf(currentLevel);
   const rows = tiers.map((tier,i)=>{
     const active = i === currentTier;
     const xpLabel = tier.xpEnd ? `${tier.xpStart.toLocaleString()} – ${tier.xpEnd.toLocaleString()} XP` : `${tier.xpStart.toLocaleString()}+ XP`;
     return `<div class="lim-row${active?' lim-row-active':''}">
-      <span class="lim-label">${tier.label}</span>
+      <span class="lim-label">${t(tier.key)}</span>
       <span class="lim-xp">${xpLabel}</span>
       ${active?'<span class="lim-you">← você</span>':''}
     </div>`;
