@@ -255,10 +255,12 @@ function renderDashboardTexts() {
   // Benefits
   const benefits = document.querySelectorAll(".upgrade-benefit");
   const benefitKeys = [
-    {pt:"Todos os segmentos", en:"All segments unlocked", es:"Todos los segmentos", de:"Alle Bereiche", it:"Tutti i segmenti"},
-    {pt:"Todas as fases",     en:"All phases (1→5)",      es:"Todas las fases",    de:"Alle Phasen",  it:"Tutte le fasi"},
-    {pt:"Jogos ilimitados",   en:"Unlimited games",       es:"Juegos ilimitados",  de:"Unbegrenzte Spiele", it:"Giochi illimitati"},
-    {pt:"Progresso na nuvem", en:"Cloud progress",        es:"Progreso en la nube",de:"Cloud-Fortschritt", it:"Progressi nel cloud"},
+    {pt:"Todos os segmentos desbloqueados", en:"All segments unlocked",      es:"Todos los segmentos",      de:"Alle Bereiche",          it:"Tutti i segmenti"},
+    {pt:"Todas as fases (1 → 5)",          en:"All phases (1→5)",            es:"Todas las fases",          de:"Alle Phasen",            it:"Tutte le fasi"},
+    {pt:"Marítimo completo + COMEX",       en:"Maritime + COMEX included",   es:"Marítimo + COMEX",         de:"Maritim + COMEX",        it:"Marittimo + COMEX"},
+    {pt:"Grammar Core completo",           en:"Full Grammar Core",           es:"Grammar Core completo",    de:"Vollständiger Grammar Core", it:"Grammar Core completo"},
+    {pt:"Jogos ilimitados",                en:"Unlimited games",             es:"Juegos ilimitados",        de:"Unbegrenzte Spiele",     it:"Giochi illimitati"},
+    {pt:"Progresso salvo na nuvem",        en:"Cloud progress",              es:"Progreso en la nube",      de:"Cloud-Fortschritt",      it:"Progressi nel cloud"},
   ];
   benefits.forEach((el,i) => {
     if(benefitKeys[i]) el.textContent = "✅ " + (benefitKeys[i][_lang] || benefitKeys[i].pt);
