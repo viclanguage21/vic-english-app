@@ -1,6 +1,6 @@
 // constants.js — VIC English — pure data, no dependencies
 
-export const MP_LINK = "https://mpago.la/279pigb";
+export const MP_LINK = "https://mpago.la/1e8xPpN";
 
 export const I18N = {
   pt: {
