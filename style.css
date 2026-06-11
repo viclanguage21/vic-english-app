@@ -4931,13 +4931,23 @@ body.light-mode .settings-big-btn {
 .social-link-btn {
   display: flex; align-items: center; gap: 10px;
   padding: 14px; border-radius: var(--r);
-  text-decoration: none; font-family: var(--font);
+  text-decoration: none; font-family: 'Inter', system-ui, sans-serif;
   transition: var(--t); border: 1px solid transparent;
+  min-width: 0;
 }
 .social-link-btn:hover { transform: translateY(-2px); }
+.social-link-btn > div { min-width: 0; overflow: hidden; }
 .sl-icon { font-size: 22px; flex-shrink: 0; }
-.sl-name { font-size: 13px; font-weight: 800; color: #fff !important; font-family: var(--font); }
-.sl-handle { font-size: 11px; color: rgba(255,255,255,0.6) !important; font-family: var(--font); }
+.sl-name {
+  font-size: 13px; font-weight: 800; color: #fff !important;
+  font-family: 'Inter', system-ui, sans-serif;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.sl-handle {
+  font-size: 11px; color: rgba(255,255,255,0.65) !important;
+  font-family: 'Inter', system-ui, sans-serif; font-weight: 500;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 .social-instagram { background: linear-gradient(135deg, #833ab4, #fd1d1d, #f77737); }
 .social-linkedin  { background: linear-gradient(135deg, #0077b5, #004182); }
 .social-website   { background: linear-gradient(135deg, #3b0764, #7c3aed, #a855f7); }
