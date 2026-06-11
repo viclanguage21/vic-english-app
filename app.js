@@ -690,37 +690,137 @@ function updateShieldDisplay(){
 }
 
 // ── GREETING ──────────────────────────────────────────────────────────────────
-const GREETINGS = ["Hello","Hi","Hey","Hi there","What's up","How's it going","How are you","Good to see you","Welcome back","Great to have you here"];
+const GREET_LINES = {
+  morning: {
+    en: [
+      "You've got this!",
+      "Make today count!",
+      "Fresh start, fresh words!",
+      "Ready to crush it?",
+      "Your streak won't keep itself!",
+      "Consistency is your superpower!",
+      "Another day, another level up!",
+      "The early bird catches the XP!",
+      "Progress over perfection!",
+      "One lesson closer to fluency!",
+      "Let's build something great today!",
+      "Great minds practice daily!",
+      "Rise and shine — it's English time!",
+      "Small effort, big results over time!",
+      "Show up today and own it!",
+    ],
+    pt: [
+      "Você consegue!",
+      "Faça hoje valer a pena!",
+      "Novo dia, novas palavras!",
+      "Pronto pra arrasar?",
+      "Seu streak não se mantém sozinho!",
+      "Consistência é o seu superpoder!",
+      "Mais um dia, mais um nível!",
+      "Quem madruga ganha o XP!",
+      "Progresso acima da perfeição!",
+      "Um passo a mais rumo à fluência!",
+      "Vamos construir algo incrível hoje!",
+      "Grandes mentes praticam todo dia!",
+      "Acorde e brilhe — é hora do inglês!",
+      "Pequeno esforço, grandes resultados!",
+      "Aparece hoje e domina!",
+    ],
+  },
+  afternoon: {
+    en: [
+      "Keep the momentum going!",
+      "Halfway through — finish strong!",
+      "A few minutes goes a long way!",
+      "You're doing great, keep pushing!",
+      "This is your time!",
+      "Every session counts!",
+      "Small steps, big results!",
+      "Your future self will thank you!",
+      "Make the most of today!",
+      "Stay focused, you're getting there!",
+      "One mission at a time!",
+      "Don't slow down now!",
+      "You're closer than you think!",
+      "Afternoon grind — let's go!",
+      "Keep stacking those wins!",
+    ],
+    pt: [
+      "Mantém o ritmo!",
+      "Metade do dia — termina forte!",
+      "Alguns minutos fazem toda a diferença!",
+      "Você está indo bem, não para!",
+      "Esse momento é seu!",
+      "Cada sessão conta!",
+      "Passos pequenos, resultados grandes!",
+      "Seu futuro eu vai agradecer!",
+      "Aproveita o dia ao máximo!",
+      "Foco — você está chegando lá!",
+      "Uma missão de cada vez!",
+      "Não desacelera agora!",
+      "Você está mais perto do que imagina!",
+      "Tarde produtiva — bora!",
+      "Continua acumulando vitórias!",
+    ],
+  },
+  evening: {
+    en: [
+      "End the day with a win!",
+      "Don't break the streak!",
+      "A little practice before bed!",
+      "Wind down with some English!",
+      "Sleep better knowing you practiced!",
+      "The best time to review is now!",
+      "Quiet hours, sharp mind!",
+      "Finish strong today!",
+      "One last push — you earned it!",
+      "You showed up — that's what matters!",
+      "Cap the day with something valuable!",
+      "Night mode: learning activated!",
+      "The night is yours — make it count!",
+      "Rest is earned, not given!",
+      "Close the day like a champion!",
+    ],
+    pt: [
+      "Termina o dia com uma vitória!",
+      "Não quebra o streak!",
+      "Um pouquinho antes de dormir!",
+      "Relaxa com um inglês gostoso!",
+      "Dorme melhor sabendo que praticou!",
+      "Melhor hora pra revisar é agora!",
+      "Silêncio da noite, mente afiada!",
+      "Termina forte hoje!",
+      "Último esforço — você merece!",
+      "Você apareceu — isso é o que importa!",
+      "Fecha o dia com algo de valor!",
+      "Modo noturno: aprendizado ativado!",
+      "A noite é sua — aproveita!",
+      "Descanso se conquista!",
+      "Fecha o dia como campeão!",
+    ],
+  },
+};
 
 function buildGreeting(name){
   const h=new Date().getHours();
-  // Saudação de hora — usa i18n
-  const timeGreet = h<12 ? t("good_morning") : h<18 ? t("good_afternoon") : t("good_evening");
-  // Sempre em inglês (não muda)
+  const period = h<12?"morning":h<18?"afternoon":"evening";
+  const timeEmoji = h<12?"☀️":h<18?"⚡":"🌙";
   const timeEN = h<12?"Good morning":h<18?"Good afternoon":"Good evening";
+  const timeGreet = h<12?t("good_morning"):h<18?t("good_afternoon"):t("good_evening");
 
-  // Frases motivacionais — traduzidas
-  const motKeys=["lets_go","you_got_this","every_word","hope_well","one_step","keep_going_strong"];
-  const motKey = motKeys[Math.floor(Math.random()*motKeys.length)];
-  const motTranslated = t(motKey);
-  // Versão EN sempre fixa
-  const motEN_map = {"lets_go":"Let's get this!","you_got_this":"You got this!","every_word":"Every word counts!","hope_well":"Hope things are well!","one_step":"One step at a time!","keep_going_strong":"Keep going strong!"};
-  const motEN = motEN_map[motKey];
+  const lines = GREET_LINES[period];
+  const idx = Math.floor(Math.random()*lines.en.length);
 
   const el=id=>document.getElementById(id);
-  const greet=GREETINGS[Math.floor(Math.random()*GREETINGS.length)];
-  // Saudação sempre em inglês
-  if(el("greeting-hi"))  el("greeting-hi").textContent=`${greet}, ${name}! 👋`;
-  const timeEmoji = h<12?"☀️":h<18?"⚡":"🌙";
-  if(el("greeting-time-en")) el("greeting-time-en").textContent=`${timeEN} — ${motEN}, ${name}! ${timeEmoji}`;
-  // Linha de baixo = tradução no idioma selecionado (se não for EN)
+  if(el("greeting-hi")) el("greeting-hi").textContent="";
+  if(el("greeting-time-en")) el("greeting-time-en").textContent=`${timeEN} — ${lines.en[idx]}, ${name}! ${timeEmoji}`;
   const ptLine = el("greeting-time-pt");
   if(ptLine){
-    if(_lang === "en"){
-      ptLine.style.display = "none";
+    if(_lang==="en"){
+      ptLine.style.display="none";
     } else {
-      ptLine.style.display = "";
-      ptLine.textContent = `${timeGreet} — ${motTranslated}, ${name}! ${timeEmoji}`;
+      ptLine.style.display="";
+      ptLine.textContent=`${timeGreet} — ${lines.pt[idx]}, ${name}! ${timeEmoji}`;
     }
   }
   if(el("greeting-motivational")) el("greeting-motivational").style.display="none";
