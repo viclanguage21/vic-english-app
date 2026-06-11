@@ -126,12 +126,12 @@ function setLang(lang) {
 // Aplicar idioma em todos os elementos com data-i18n
 function applyLang() {
   // Flags e labels por idioma — mostra o idioma ATUAL
-  const LANG_LABELS = { pt:"🇧🇷 PT", en:"🇺🇸 EN", es:"🇪🇸 ES", de:"🇩🇪 DE", it:"🇮🇹 IT" };
+  const LANG_LABELS = { pt:"🇧🇷 PT", en:"🇺🇸 EN" };
 
   // Botão no header removido — seletor só no perfil agora
 
   // Destacar botão ativo — configurações E tela de login
-  ["pt","en","es","de","it"].forEach(lang => {
+  ["pt","en"].forEach(lang => {
     const active = _lang === lang;
     // Botões no perfil/configurações
     const btn = document.getElementById(`lang-btn-${lang}`);
@@ -267,22 +267,22 @@ function renderDashboardTexts() {
   // Benefits
   const benefits = document.querySelectorAll(".upgrade-benefit");
   const benefitKeys = [
-    {pt:"Todos os segmentos desbloqueados", en:"All segments unlocked",      es:"Todos los segmentos",      de:"Alle Bereiche",          it:"Tutti i segmenti"},
-    {pt:"Todas as fases (1 → 5)",          en:"All phases (1→5)",            es:"Todas las fases",          de:"Alle Phasen",            it:"Tutte le fasi"},
-    {pt:"Marítimo completo + COMEX",       en:"Maritime + COMEX included",   es:"Marítimo + COMEX",         de:"Maritim + COMEX",        it:"Marittimo + COMEX"},
-    {pt:"Grammar Core completo",           en:"Full Grammar Core",           es:"Grammar Core completo",    de:"Vollständiger Grammar Core", it:"Grammar Core completo"},
-    {pt:"Jogos ilimitados",                en:"Unlimited games",             es:"Juegos ilimitados",        de:"Unbegrenzte Spiele",     it:"Giochi illimitati"},
-    {pt:"Progresso salvo na nuvem",        en:"Cloud progress",              es:"Progreso en la nube",      de:"Cloud-Fortschritt",      it:"Progressi nel cloud"},
+    {pt:"Todos os segmentos desbloqueados", en:"All segments unlocked"},
+    {pt:"Todas as fases (1 → 5)",          en:"All phases (1→5)"},
+    {pt:"Marítimo completo + COMEX",       en:"Maritime + COMEX included"},
+    {pt:"Grammar Core completo",           en:"Full Grammar Core"},
+    {pt:"Jogos ilimitados",                en:"Unlimited games"},
+    {pt:"Progresso salvo na nuvem",        en:"Cloud progress"},
   ];
   benefits.forEach((el,i) => {
     if(benefitKeys[i]) el.textContent = "✅ " + (benefitKeys[i][_lang] || benefitKeys[i].pt);
   });
   // Diagnóstico — títulos dos steps
   const diagTitles = {
-    0: {pt:"Por que você quer aprender inglês?", en:"Why do you want to learn English?", es:"¿Por qué quieres aprender inglés?", de:"Warum möchtest du Englisch lernen?", it:"Perché vuoi imparare l'inglese?"},
-    1: {pt:"Qual é a sua área de atuação?", en:"What is your area of work?", es:"¿Cuál es tu área de trabajo?", de:"Was ist dein Arbeitsbereich?", it:"Qual è la tua area di lavoro?"},
-    2: {pt:"Qual é sua maior dificuldade?", en:"What is your biggest challenge?", es:"¿Cuál es tu mayor dificultad?", de:"Was ist deine größte Schwierigkeit?", it:"Qual è la tua difficoltà principale?"},
-    3: {pt:"O que você quer conseguir fazer em inglês?", en:"What do you want to be able to do in English?", es:"¿Qué quieres poder hacer en inglés?", de:"Was möchtest du auf Englisch tun können?", it:"Cosa vuoi riuscire a fare in inglese?"},
+    0: {pt:"Por que você quer aprender inglês?", en:"Why do you want to learn English?"},
+    1: {pt:"Qual é a sua área de atuação?", en:"What is your area of work?"},
+    2: {pt:"Qual é sua maior dificuldade?", en:"What is your biggest challenge?"},
+    3: {pt:"O que você quer conseguir fazer em inglês?", en:"What do you want to be able to do in English?"},
   };
   Object.entries(diagTitles).forEach(([i, titles]) => {
     const stepEl = document.getElementById(`diag-step-${i}`);
@@ -300,7 +300,7 @@ function renderDashboardTexts() {
   if(diagTestBtn) diagTestBtn.textContent = t("diag_test_btn");
   const confirmSegsBtn = document.getElementById("btn-confirm-segments");
   if(confirmSegsBtn && _selectedSegments?.length > 0){
-    const confirmLabels = {pt:"Confirmar →",en:"Confirm →",es:"Confirmar →",de:"Bestätigen →",it:"Conferma →"};
+    const confirmLabels = {pt:"Confirmar →",en:"Confirm →"};
     confirmSegsBtn.textContent = (confirmLabels[_lang]||"Confirmar →").replace("→", `${_selectedSegments.length > 1 ? " ("+_selectedSegments.length+")" : ""} →`);
   }
   // Onboarding language buttons active state
@@ -311,9 +311,9 @@ function renderDashboardTexts() {
 
   // Auth labels (login e cadastro)
   const authLabels = {
-    "auth-label-email":    {pt:"EMAIL",         en:"EMAIL",     es:"CORREO",    de:"E-MAIL",    it:"EMAIL"},
-    "auth-label-password": {pt:"SENHA",         en:"PASSWORD",  es:"CONTRASEÑA",de:"PASSWORT",  it:"PASSWORD"},
-    "auth-label-username": {pt:"@ Nome de usuário", en:"@ Username", es:"@ Nombre de usuario", de:"@ Benutzername", it:"@ Nome utente"},
+    "auth-label-email":    {pt:"EMAIL",     en:"EMAIL"},
+    "auth-label-password": {pt:"SENHA",     en:"PASSWORD"},
+    "auth-label-username": {pt:"@ Nome de usuário", en:"@ Username"},
   };
   Object.entries(authLabels).forEach(([id, vals]) => {
     const el = document.getElementById(id);
@@ -341,8 +341,8 @@ function renderDashboardTexts() {
   if(qa("btn-goto-dialogue"))   qa("btn-goto-dialogue").textContent   = t("qa_dialogue");
 
   // V/F buttons (dentro do jogo)
-  if(qa("tf-true"))  qa("tf-true").innerHTML  = "✅ " + (_lang==="pt"?"Verdadeiro":_lang==="es"?"Verdadero":_lang==="de"?"Wahr":_lang==="it"?"Vero":"True");
-  if(qa("tf-false")) qa("tf-false").innerHTML = "❌ " + (_lang==="pt"?"Falso":_lang==="es"?"Falso":_lang==="de"?"Falsch":_lang==="it"?"Falso":"False");
+  if(qa("tf-true"))  qa("tf-true").innerHTML  = "✅ " + (_lang==="pt"?"Verdadeiro":"True");
+  if(qa("tf-false")) qa("tf-false").innerHTML = "❌ " + (_lang==="pt"?"Falso":"False");
 
   // Grammar Core banner
   const gcSub = document.querySelector(".grammar-core-banner .gc-sub");
@@ -438,7 +438,7 @@ function renderDashboardTexts() {
 
   // Site oficial
   document.querySelectorAll(".settings-big-btn, a").forEach(el => {
-    if(el.textContent.includes("Site Oficial")||el.textContent.includes("Official Site")||el.textContent.includes("Offizielle"))
+    if(el.textContent.includes("Site Oficial")||el.textContent.includes("Official Site"))
       el.textContent = t("official_site");
   });
 
@@ -5975,7 +5975,7 @@ async function _handleAuth(user){
 
 // ── ONBOARDING ────────────────────────────────────────────────────────────────
 let obStep = 0;
-const OB_TOTAL = 5;
+const OB_TOTAL = 6;
 let _obLocked = false; // debounce: prevents double-fire on touch devices
 
 function startOnboarding(){

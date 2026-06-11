@@ -1123,120 +1123,7 @@ input { color: #ffffff !important; }
 .diag-next-info p { font-size:14px; color:#fff !important; line-height:1.5; }
 .diag-next-sub { font-size:12px !important; color:var(--ink-muted) !important; margin-top:4px; }
 
-/* ══ LEVEL TEST ════════════════════════════════════════ */
-#view-level-test { flex-direction:column; align-items:center; padding:0; }
-
-.lt-wrapper {
-  width:100%; max-width:480px;
-  display:flex; flex-direction:column;
-  min-height:100vh;
-}
-
-.lt-header {
-  background: linear-gradient(135deg, var(--s2), var(--s));
-  border-bottom: 1px solid var(--rim2);
-  padding: 16px 20px 12px;
-  position: sticky; top:0; z-index:10;
-}
-.lt-header-top {
-  display:flex; align-items:center; gap:12px; margin-bottom:10px;
-}
-.lt-logo img { width:32px; height:32px; border-radius:8px; }
-.lt-header-text { flex:1; }
-.lt-header-title {
-  font-size:14px; font-weight:800; color:#fff !important; letter-spacing:-0.2px;
-}
-.lt-counter {
-  font-family:var(--mono); font-size:11px; color:var(--ink-muted) !important; margin-top:1px;
-}
-.btn-skip-lt {
-  padding:6px 12px; background:transparent;
-  border:1px solid var(--rim2); border-radius:var(--rsm);
-  color:var(--ink-muted) !important; font-size:12px; font-weight:600;
-  cursor:pointer; transition:var(--t);
-}
-.btn-skip-lt:hover { border-color:var(--rim3); color:var(--ink-soft) !important; }
-
-.lt-progress-bg {
-  height:4px; background:rgba(0,0,0,0.4); border-radius:999px; overflow:hidden;
-}
-.lt-progress-fill {
-  height:100%;
-  background: linear-gradient(90deg, var(--p), var(--p-bright));
-  border-radius:999px; transition:width 0.4s var(--ease);
-}
-
-/* Questions area */
-#lt-questions-area { padding:20px; flex:1; }
-
-.lt-card {
-  background: linear-gradient(160deg, var(--s2), var(--s));
-  border: 1px solid var(--rim2);
-  border-radius: var(--rxl);
-  padding: 24px 20px;
-  box-shadow: var(--sh);
-  position:relative; overflow:hidden;
-}
-.lt-card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:1px;
-  background: linear-gradient(90deg, transparent, rgba(201,147,58,0.5), transparent);
-}
-
-.lt-type-badge {
-  display:inline-block;
-  font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
-  padding:4px 12px; border-radius:999px;
-  background:var(--p-dim); color:var(--p-light) !important;
-  border:1px solid var(--rim2); margin-bottom:14px;
-}
-
-.lt-question {
-  font-size:18px; font-weight:800; color:#fff !important;
-  line-height:1.4; margin-bottom:18px; white-space:pre-line;
-  letter-spacing:-0.3px;
-}
-
-/* MC options */
-.lt-mc { display:flex; flex-direction:column; gap:10px; }
-.lt-option {
-  padding:13px 16px;
-  background:var(--bg2); border:1px solid var(--rim2);
-  border-radius:var(--r); color:#fff !important;
-  font-family:var(--font); font-size:14px; font-weight:600;
-  cursor:pointer; transition:var(--t); text-align:left;
-}
-.lt-option:hover { border-color:var(--rim3); background:var(--s); }
-.lt-option.correct { border-color:var(--green) !important; background:var(--green-dim) !important; color:var(--green) !important; }
-.lt-option.wrong   { border-color:var(--red) !important;   background:var(--red-dim) !important;   color:#fca5a5 !important; }
-.lt-option:disabled { cursor:not-allowed; }
-
-/* Fill input */
-.lt-fill-input {
-  width:100%; padding:12px 14px; margin-bottom:10px;
-  background:var(--bg2); border:1px solid var(--rim2); border-radius:var(--rsm);
-  color:#fff !important; font-family:var(--font); font-size:15px; font-weight:600;
-  outline:none; transition:var(--t);
-}
-.lt-fill-input:focus { border-color:var(--p); box-shadow:0 0 0 3px var(--p-dim); }
-.lt-check-btn {
-  width:100%; padding:12px; background:var(--p);
-  border:none; border-radius:var(--rsm); color:#fff !important;
-  font-family:var(--font); font-size:14px; font-weight:800;
-  cursor:pointer; transition:var(--t);
-}
-.lt-check-btn:hover { background:var(--p-hi); transform:translateY(-1px); }
-
-/* Feedback */
-.lt-feedback {
-  margin-top:12px; padding:12px 14px; border-radius:var(--r);
-  font-size:14px; font-weight:700; text-align:center; animation:slide-up 0.3s var(--ease);
-}
-.lt-feedback.correct  { background:var(--green-dim); color:var(--green) !important; border:1px solid rgba(34,197,94,0.2); }
-.lt-feedback.almost   { background:var(--amber-dim); color:var(--amber) !important; border:1px solid rgba(228,180,92,0.2); }
-.lt-feedback.wrong    { background:var(--red-dim);   color:#fca5a5 !important;      border:1px solid rgba(239,68,68,0.2); }
-
-/* Result */
-#lt-result { padding:20px; }
+/* Result cards (shared by TF and Dialogue games) */
 .lt-result-card {
   background:linear-gradient(160deg,var(--s2),var(--s));
   border:1px solid var(--rim2); border-radius:var(--rxl);
@@ -2171,7 +2058,7 @@ input { color: #ffffff !important; }
 }
 
 /* Card enter animation */
-.phrase-card, .phase-card, .tf-card, .dlg-card, .lt-card {
+.phrase-card, .phase-card, .tf-card, .dlg-card {
   animation: cardEnter 0.3s cubic-bezier(0.22,1,0.36,1);
 }
 @keyframes cardEnter {
@@ -3241,7 +3128,6 @@ body.light-mode .phase-card.unlocked *,
 body.light-mode .daily-block *,
 body.light-mode .segment-card.available *,
 body.light-mode .grammar-core-banner *,
-body.light-mode .lt-card *,
 body.light-mode .tf-card *,
 body.light-mode .dlg-card * { color: inherit; }
 
