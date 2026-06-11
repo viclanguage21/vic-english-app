@@ -618,6 +618,18 @@ function showView(id){
 
   _lastView=current?.id||null;
   window.scrollTo(0,0);
+
+  // Show global floats on dashboard and profile only
+  const floatViews=new Set(["view-dashboard","view-profile"]);
+  const showFloats=floatViews.has(id);
+  const reloadBtn=document.getElementById("btn-reload-dashboard");
+  const contactBtn=document.getElementById("btn-contact-float");
+  if(reloadBtn) reloadBtn.style.display=showFloats?"":"none";
+  if(contactBtn) contactBtn.style.display=showFloats?"":"none";
+  // Admin float: only show if already visible (controlled elsewhere) AND on these views
+  const adminBtn=document.getElementById("btn-admin-float");
+  if(adminBtn && adminBtn.dataset.adminEnabled==="1")
+    adminBtn.style.display=showFloats?"":"none";
 }
 
 // ── MERCADO PAGO ─────────────────────────────────────────────────────────────
@@ -6418,6 +6430,7 @@ function init(){
   // Admin float button for owner
   const adminFloatBtn=document.getElementById("btn-admin-float");
   if(adminFloatBtn&&currentUser?.uid===OWNER_UID){
+    adminFloatBtn.dataset.adminEnabled="1";
     adminFloatBtn.style.display="flex";
     adminFloatBtn.onclick=()=>{ vibrate(30); showView("view-admin"); loadAdminPanel(); };
   }

@@ -8484,21 +8484,21 @@ body.light-mode .greeting-level   {
 body.light-mode .dash-section-title { color: #1e1740 !important; }
 body.light-mode .dash-section-chevron { color: #4b3880 !important; }
 
-/* Block backgrounds in light mode — softer, cream-tinted */
+/* Block backgrounds in light mode — solid tinted colors per block */
 body.light-mode #daily-block       { background: linear-gradient(145deg, #2d2270, #1e1740) !important; }
-body.light-mode #block-segmentos   { background: linear-gradient(145deg, #f7f2eb, #ede8de) !important; border-color: rgba(20,184,166,0.30) !important; }
-body.light-mode #block-xp          { background: linear-gradient(145deg, #f7f2eb, #ede8de) !important; border-color: rgba(139,92,246,0.28) !important; }
-body.light-mode #block-quick       { background: linear-gradient(145deg, #f7f2eb, #ede8de) !important; border-color: rgba(201,162,39,0.28) !important; }
-body.light-mode #block-recursos    { background: linear-gradient(145deg, #f7f2eb, #ede8de) !important; border-color: rgba(217,119,6,0.28) !important; }
+body.light-mode #block-segmentos   { background: #bbf7d0 !important; border-color: rgba(5,150,105,0.45) !important; }
+body.light-mode #block-xp          { background: #e8deff !important; border-color: rgba(109,40,217,0.32) !important; }
+body.light-mode #block-quick       { background: #bae6fd !important; border-color: rgba(14,116,144,0.40) !important; }
+body.light-mode #block-recursos    { background: #fef2c0 !important; border-color: rgba(180,83,9,0.32) !important; }
 
 /* Block section titles in light mode */
-body.light-mode #block-segmentos .dash-section-title  { color: #0f766e !important; }
-body.light-mode #block-segmentos .dash-section-chevron{ color: #0f766e !important; }
-body.light-mode #block-xp .dash-section-title         { color: #6d28d9 !important; }
-body.light-mode #block-xp .dash-section-chevron       { color: #6d28d9 !important; }
-body.light-mode #block-quick .dash-section-title      { color: #1e1740 !important; }
-body.light-mode #block-quick .dash-section-chevron    { color: #4b3880 !important; }
-body.light-mode #block-recursos .dash-section-title   { color: #92400e !important; }
+body.light-mode #block-segmentos .dash-section-title  { color: #065f46 !important; }
+body.light-mode #block-segmentos .dash-section-chevron{ color: #059669 !important; }
+body.light-mode #block-xp .dash-section-title         { color: #5b21b6 !important; }
+body.light-mode #block-xp .dash-section-chevron       { color: #7c3aed !important; }
+body.light-mode #block-quick .dash-section-title      { color: #0c4a6e !important; }
+body.light-mode #block-quick .dash-section-chevron    { color: #0369a1 !important; }
+body.light-mode #block-recursos .dash-section-title   { color: #78350f !important; }
 body.light-mode #block-recursos .dash-section-chevron { color: #b45309 !important; }
 
 /* Quick-access buttons in light mode — brand gold */
