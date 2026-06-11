@@ -8116,3 +8116,8 @@ a.settings-big-btn:active {
   border-radius: 8px !important;
   box-shadow: 0 0 14px rgba(212,175,55,0.45), 0 2px 10px rgba(0,0,0,0.5) !important;
 }
+
+/* ══ HEADER — fundo mais escuro para combinar com o logo ═ */
+.dash-header {
+  background: linear-gradient(90deg, #0a0418 0%, #14082a 35%, #1a0826 50%, #14082a 65%, #0a0418 100%) !important;
+}
