@@ -8146,3 +8146,15 @@ a.settings-big-btn:active {
 .dash-date-bar .dash-date {
   font-family: 'Georgia', serif !important;
 }
+
+/* ══ DATE — menor, sem maiúsculas ══════════════════════ */
+.dash-date-bar .dash-date {
+  font-size: 7px !important;
+  text-transform: none !important;
+  letter-spacing: 1px !important;
+}
+
+/* ══ LOGO — escurece só a imagem ════════════════════════ */
+#dash-logo-img {
+  filter: brightness(0.72) !important;
+}
