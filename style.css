@@ -8141,3 +8141,8 @@ a.settings-big-btn:active {
 .greeting-time-pt {
   font-size: 14px !important;
 }
+
+/* ══ DATE — Georgia font ════════════════════════════════ */
+.dash-date-bar .dash-date {
+  font-family: 'Georgia', serif !important;
+}
