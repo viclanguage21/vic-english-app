@@ -8158,3 +8158,8 @@ a.settings-big-btn:active {
 #dash-logo-img {
   filter: brightness(0.72) !important;
 }
+
+/* ══ LOGO — revert brightness ══════════════════════════ */
+#dash-logo-img {
+  filter: none !important;
+}
