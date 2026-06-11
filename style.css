@@ -8331,26 +8331,22 @@ a.settings-big-btn:active {
   box-shadow: 0 0 28px rgba(34,197,94,0.20) !important;
 }
 
-/* ══ SECTION ARROWS — text-based (›/▼), no CSS transform ══ */
-.daily-block.collapsed .daily-chevron { transform: none !important; }
-.daily-chevron { transition: none !important; }
-.dash-section-chevron {
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  transition: none !important;
-  min-width: 14px;
+/* ══ SECTION ARROWS — › rotates 90° when open ══════════ */
+.dash-section-chevron,
+.daily-chevron {
+  font-size: 22px !important;
+  font-weight: 300 !important;
+  line-height: 1 !important;
+  display: inline-block !important;
+  transition: transform 0.22s ease !important;
+  transform: rotate(0deg) !important;
+  opacity: 0.9 !important;
+  min-width: 16px;
   text-align: center;
 }
-
-/* ══ SECTION ARROWS — clearer triangles ═══════════════ */
-.dash-section-chevron {
-  font-size: 11px !important;
-  opacity: 0.85 !important;
-  letter-spacing: 0 !important;
-}
-.daily-chevron {
-  font-size: 11px !important;
-  opacity: 0.8 !important;
+.dash-section-chevron.open,
+.daily-chevron.open {
+  transform: rotate(90deg) !important;
 }
 
 /* ══════════════════════════════════════════════════════════════════
