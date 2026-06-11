@@ -8179,8 +8179,8 @@ a.settings-big-btn:active {
 
 /* ══ HEADER — VIC Language speech bubble logo (left) ══ */
 #header-speech-logo {
-  width: 72px !important;
-  height: 72px !important;
+  width: 86px !important;
+  height: 86px !important;
   object-fit: contain !important;
   filter: drop-shadow(0 2px 10px rgba(180,100,255,0.45)) !important;
   display: block !important;
