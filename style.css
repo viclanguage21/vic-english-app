@@ -7638,6 +7638,43 @@ a.settings-big-btn:active {
 #view-dialogue .phases-title { color: #7dd3fc !important; text-shadow: 0 0 14px rgba(56,189,248,0.35); }
 #view-dialogue .phases-header::after { background: linear-gradient(90deg, transparent, #38bdf8, transparent); }
 
+/* ── DATA BAR — linha dourada compacta abaixo do header ── */
+.dash-date-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 5px 16px 2px;
+  background: rgba(0,0,0,0.15);
+  border-bottom: 1px solid rgba(201,147,58,0.12);
+}
+.dash-date-bar .dash-date {
+  flex-direction: row !important;
+  gap: 6px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  border: none !important;
+}
+.dash-date-bar .dash-date-weekday {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.8px !important;
+  color: rgba(240,208,112,0.55) !important;
+  text-transform: uppercase !important;
+}
+.dash-date-bar .dash-date-day {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #f0d070 !important;
+  text-shadow: 0 0 10px rgba(240,208,112,0.4) !important;
+}
+.dash-date-bar .dash-header-streak {
+  margin-top: 0 !important;
+  padding: 1px 8px !important;
+  font-size: 12px !important;
+}
+
 /* ✍️ Writing — dourado */
 #view-writing .phases-title { color: #f0c97a !important; text-shadow: 0 0 14px rgba(228,180,92,0.35); }
 #view-writing .phases-header::after { background: linear-gradient(90deg, transparent, #e4b45c, transparent); }

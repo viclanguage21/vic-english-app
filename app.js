@@ -2166,6 +2166,15 @@ function renderDashboard(){
   }catch(e){ console.error("renderDashboard error:", e.message); }
 }
 
+function toggleDashSection(colId, arrowId, openDisplay){
+  const col=document.getElementById(colId);
+  const arrow=document.getElementById(arrowId);
+  if(!col) return;
+  const isHidden=col.style.display==="none";
+  col.style.display=isHidden?(openDisplay||"block"):"none";
+  if(arrow) arrow.style.transform=isHidden?"rotate(0deg)":"rotate(180deg)";
+}
+
 function toggleSegments(){
   const col=document.getElementById("segments-collapsible");
   const arrow=document.getElementById("segments-toggle-arrow");
@@ -6923,6 +6932,9 @@ if(typeof backToDashboard !== 'undefined') window.backToDashboard = backToDashbo
 if(typeof showView !== 'undefined') window.showView = showView;
 if(typeof openGlossary !== 'undefined') window.openGlossary = openGlossary;
 if(typeof closeGlossary !== 'undefined') window.closeGlossary = closeGlossary;
+if(typeof toggleSegments !== 'undefined') window.toggleSegments = toggleSegments;
+if(typeof toggleXpStats !== 'undefined') window.toggleXpStats = toggleXpStats;
+if(typeof toggleDashSection !== 'undefined') window.toggleDashSection = toggleDashSection;
 
 // ── Email verification screen handlers ────────────────────────────────────────
 window.checkEmailVerified = async function(){
