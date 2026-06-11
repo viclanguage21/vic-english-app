@@ -1872,7 +1872,6 @@ function renderDashboard(){
   const nextBadge2=BADGES.find(b=>!earned2.includes(b.id));
   const nbiEl=document.getElementById("next-badge-inline");
   nbiEl?.addEventListener("click",()=>{ vibrate(30); openProfile(); setTimeout(()=>document.getElementById("profile-badges-grid")?.scrollIntoView({behavior:"smooth"}),400); },{ signal: _dSig });
-  const conquistasBlock=document.getElementById("conquistas-block");
   if(nbiEl&&nextBadge2){
     nbiEl.style.display="flex";
     document.getElementById("nbi-icon").textContent=nextBadge2.icon;
@@ -1882,11 +1881,7 @@ function renderDashboard(){
     if(nextBadge2.id==="streak5") p2=`${Math.min(s2.answerStreak,5)}/5`;
     else if(nextBadge2.id==="xp250") p2=`${Math.min(s2.xp,250)}/250 XP`;
     document.getElementById("nbi-prog").textContent=p2;
-    if(conquistasBlock) conquistasBlock.style.display="block";
-  } else if(nbiEl){
-    nbiEl.style.display="none";
-    if(conquistasBlock) conquistasBlock.style.display="none";
-  }
+  } else if(nbiEl) nbiEl.style.display="none";
 
   // Quadratic thresholds: xp to reach level L = (L-1)² × 100
   const xpFloor=(level-1)*(level-1)*100;
