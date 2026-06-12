@@ -6114,12 +6114,13 @@ body.light-mode .notif-freq-select { background: #1e0a50 !important; color: #fff
 .ob-slide-content{text-align:center;}
 .ob-slide-title{font-size:24px;font-weight:900;color:#fff;margin-bottom:10px;font-family:var(--font);}
 .ob-slide-sub{font-size:15px;color:rgba(255,255,255,0.7);line-height:1.6;max-width:320px;margin:0 auto;}
-.ob-slide-tags{display:flex;flex-direction:column;gap:7px;align-items:center;margin-top:14px;}
-.ob-tag-group{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;}
-.ob-tag{padding:4px 10px;border-radius:999px;font-size:11px;font-weight:600;border:none;}
-.ob-tag-seg{background:rgba(99,102,241,0.18);color:#a5b4fc;}
-.ob-tag-res{background:rgba(201,147,58,0.18);color:#e4b45c;}
-.ob-tag-game{background:rgba(139,92,246,0.18);color:#c4b5fd;}
+.ob-slide-tags{display:flex;flex-direction:column;gap:5px;align-items:center;margin-top:14px;}
+.ob-tag-group{display:flex;flex-wrap:wrap;gap:0;justify-content:center;line-height:1.8;}
+.ob-tag{font-size:11.5px;font-weight:500;background:none;border:none;padding:0;}
+.ob-tag+.ob-tag::before{content:" · ";color:rgba(255,255,255,0.2);margin:0 2px;}
+.ob-tag-seg{color:rgba(165,180,252,0.85);}
+.ob-tag-res{color:rgba(228,180,92,0.85);}
+.ob-tag-game{color:rgba(196,181,253,0.85);}
 
 /* Mock UI no onboarding */
 .ob-mock-dashboard{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:16px;width:100%;max-width:280px;margin:0 auto;}
