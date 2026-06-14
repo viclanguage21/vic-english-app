@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "gaspar-english",
     "public": ".",
     "ignore": [
       "firebase.json",
@@ -15,12 +16,5 @@
         "destination": "/index.html"
       }
     ]
-  },
-  "firestore": {
-    "rules": "firestore.rules"
-  },
-  "functions": {
-    "source": "functions",
-    "runtime": "nodejs20"
   }
 }
