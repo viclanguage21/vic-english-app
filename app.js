@@ -1,3 +1,4 @@
+import { COMPANY } from "./company.js";
 // app.js — VIC English v12 — Full fix
 
 import { auth, registerUser, loginUser, loginWithGoogle, logoutUser, onAuthChange, getUserData, saveProgress, getAllUsers, getUserById, OWNER_UID, registerFCMToken, onForegroundMessage, resetPassword, resendVerificationEmail, reloadCurrentUser, callSendPushToAll } from "./firebase.js";
@@ -1609,6 +1610,13 @@ async function loadDashboard(user){
     currentPhraseIndex=userData.currentMission.phraseIndex||0;
   }
 
+  // Filter to company segments only
+  if(COMPANY?.segments?.length){
+    VICTOR_DATA.segments = VICTOR_DATA.segments.filter(s =>
+      s.isGrammarCore || COMPANY.segments.includes(s.id)
+    );
+  }
+
   try{ renderDashboard(); }catch(e){ console.error("renderDashboard error:", e.message, e); }
   // Guarantee daily missions render even if renderDashboard's try-catch swallowed an error
   try{ renderDailyMissions(); }catch(e){ console.error("renderDailyMissions error:", e.message, e); }
@@ -1933,6 +1941,12 @@ function renderDashboard(){
   _dashAC = new AbortController();
   const { signal: _dSig } = _dashAC;
   try{
+  if(COMPANY?.features?.xp === false){
+    ["dash-xp-block","dash-streak-block","ranking-block","dash-daily-block","dash-missions-section"].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.style.display = "none";
+    });
+  }
   const xp=userData.xp||0, lv=levelInfo(xp), level=calcLevel(xp);
   buildDate(); buildGreeting(userData.name||"Aluno");
   fitUserName(userData.name||"Aluno");

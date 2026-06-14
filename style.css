@@ -8523,3 +8523,90 @@ body.light-mode .lim-label,
 body.light-mode .lim-tier { color: #ffffff !important; }
 body.light-mode .lim-you  { color: var(--p-light) !important; }
 body.light-mode .lim-desc { color: rgba(255,255,255,0.72) !important; }
+
+/* ══════════════════════════════════════════════════════
+   GASPAR THEME — Verde & Branco
+   ══════════════════════════════════════════════════════ */
+body {
+  --p:        #16a34a !important;
+  --p-hi:     #22c55e !important;
+  --p-glow:   rgba(22,163,74,0.35) !important;
+  --p-light:  #4ade80 !important;
+  --p-dark:   #15803d !important;
+  --s:        #071a0e !important;
+  --s2:       #0d2416 !important;
+  --s3:       #122b1c !important;
+  --rim:      rgba(34,197,94,0.08) !important;
+  --rim2:     rgba(34,197,94,0.18) !important;
+  --rim3:     rgba(34,197,94,0.35) !important;
+  --ink:      #f0fdf4 !important;
+  --ink-soft: rgba(240,253,244,0.75) !important;
+  --ink-muted:rgba(240,253,244,0.45) !important;
+  background: #071a0e !important;
+}
+
+/* Header green */
+.dash-header {
+  background: linear-gradient(135deg, #071a0e 0%, #0d2416 40%, #0a2010 70%, #071a0e 100%) !important;
+  border-bottom: 1px solid rgba(34,197,94,0.2) !important;
+}
+
+/* Primary buttons — green */
+.btn-primary, .ob-btn-next, .phase-card.unlocked:hover {
+  background: linear-gradient(135deg, #15803d, #22c55e) !important;
+  color: #fff !important;
+}
+
+/* Accent glow — green */
+.dash-logo-mid, #dash-logo-img {
+  box-shadow: 0 0 18px rgba(34,197,94,0.3) !important;
+}
+
+/* Nav bar bottom */
+.nav-bar {
+  background: rgba(7,26,14,0.97) !important;
+  border-top: 1px solid rgba(34,197,94,0.15) !important;
+}
+.nav-item.active .nav-icon,
+.nav-item.active .nav-label { color: #22c55e !important; }
+
+/* XP bar → green */
+.xp-bar-fill { background: linear-gradient(90deg, #15803d, #22c55e) !important; }
+
+/* Writing section */
+#view-writing .phases-title { color: #4ade80 !important; text-shadow: 0 0 14px rgba(34,197,94,0.35) !important; }
+#view-writing .phases-header::after { background: linear-gradient(90deg, transparent, #22c55e, transparent) !important; }
+
+/* Segment cards */
+.seg-card { border-color: rgba(34,197,94,0.15) !important; }
+.seg-card:hover { border-color: rgba(34,197,94,0.4) !important; }
+
+/* Phase cards */
+.phase-card.unlocked { border-color: rgba(34,197,94,0.2) !important; }
+
+/* Onboarding next button */
+.ob-btn-next { background: linear-gradient(135deg, #15803d, #22c55e) !important; color: #fff !important; }
+
+/* Hide XP/streak/ranking/missions blocks */
+#dash-xp-block,
+#xp-track-block,
+.dash-section-block.streak,
+#dash-streak-block,
+#ranking-block,
+#dash-daily-block,
+.dash-section-block[data-block="daily"],
+#dash-header-streak,
+.dhs-fire, .dhs-val, .dhs-shield,
+.xp-bar-wrap,
+#view-ranking,
+.ranking-cta-btn,
+#dash-ranking-preview { display: none !important; }
+
+/* App name in onboarding */
+[data-i18n="ob_title_0"]::before { content: "Grupo Gaspar — "; }
+
+/* Font override — clean and bold */
+body, .btn-primary, .ob-btn-next, .phases-title, .seg-name {
+  font-weight: 700 !important;
+  letter-spacing: -0.2px !important;
+}
