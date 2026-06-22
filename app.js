@@ -6874,3 +6874,29 @@ window.backToAuthFromVerify = function(){
 };
 
 document.addEventListener("DOMContentLoaded",init);
+
+// ── Swipe navigation: dashboard ↔ profile ────────────────────────────────────
+(function(){
+  const SWIPE_VIEWS = ["view-dashboard","view-profile"];
+  let tx=0, ty=0, swiping=false;
+
+  const currentView = () => document.querySelector(".view.active")?.id;
+
+  document.addEventListener("touchstart", e=>{
+    if(!SWIPE_VIEWS.includes(currentView())) return;
+    tx = e.touches[0].clientX;
+    ty = e.touches[0].clientY;
+    swiping = true;
+  }, {passive:true});
+
+  document.addEventListener("touchend", e=>{
+    if(!swiping) return;
+    swiping = false;
+    const dx = e.changedTouches[0].clientX - tx;
+    const dy = e.changedTouches[0].clientY - ty;
+    if(Math.abs(dy) > 80 || Math.abs(dx) < 55) return;
+    const cv = currentView();
+    if(dx < 0 && cv === "view-dashboard"){ openProfile(); }
+    else if(dx > 0 && cv === "view-profile"){ renderDashboard(); showView("view-dashboard"); }
+  }, {passive:true});
+})();
