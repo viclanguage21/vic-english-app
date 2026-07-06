@@ -6952,3 +6952,83 @@ VICTOR_DATA.prepareTopics.push(
     example:"Thank you for that question — it is an important one. I want to make sure I give you an accurate answer, so let me confirm the exact figures and get back to you directly after the meeting. What I can tell you now is that the trend has been consistently positive over the last three quarters. To put it another way, the direction is clear even if I don't have the exact number in front of me. Does that answer part of your question, or would you like me to follow up with more detail?",
     tips:["Always acknowledge: 'Thank you for that question...'","If unsure: 'I'd like to confirm that and get back to you'","Never guess or invent data","Redirect professionally: 'That falls slightly outside today scope, but...'","End with a check: 'Does that answer your question?'"] }
 );
+
+// ══════════════════════════════════════════════════════════════════════════════
+// MANUAIS & PROCEDIMENTOS — módulo white-label (POPs, segurança, processos)
+// Estrutura reutilizável: cada empresa preenche seus próprios manuais.
+// category: "safety" | "process" | "manual"
+// steps: passo a passo bilíngue (pt + en)
+// quiz: questões de fixação (opcional)
+// ══════════════════════════════════════════════════════════════════════════════
+VICTOR_DATA.manuals = [
+  {
+    id:"safety_epi",
+    category:"safety",
+    icon:"🦺",
+    title:"Uso de EPI no Porto",
+    ptTitle:"Equipamento de Proteção Individual — obrigatório",
+    steps:[
+      { pt:"Use sempre capacete dentro da área operacional.", en:"Always wear a hard hat inside the operational area." },
+      { pt:"Calce botas com biqueira de aço.", en:"Wear steel-toe boots at all times." },
+      { pt:"Use colete refletivo para ser visto pelos operadores de equipamentos.", en:"Wear a reflective vest so equipment operators can see you." },
+      { pt:"Proteja a audição perto de guindastes e máquinas.", en:"Protect your hearing near cranes and machinery." },
+    ],
+    quiz:[
+      { q:"O que protege sua cabeça na área operacional?", options:["Capacete","Boné","Nada"], correct:0 },
+      { q:"Por que usar colete refletivo?", options:["Moda","Para ser visto pelos operadores","Para esquentar"], correct:1 },
+    ]
+  },
+  {
+    id:"safety_emergency",
+    category:"safety",
+    icon:"🚨",
+    title:"Procedimento de Emergência",
+    ptTitle:"O que fazer em caso de incêndio ou acidente",
+    steps:[
+      { pt:"Mantenha a calma e alerte os colegas próximos.", en:"Stay calm and alert nearby colleagues." },
+      { pt:"Acione o alarme mais próximo.", en:"Activate the nearest alarm." },
+      { pt:"Dirija-se ao ponto de encontro pela rota de fuga sinalizada.", en:"Proceed to the muster point using the marked escape route." },
+      { pt:"Não use elevadores durante a evacuação.", en:"Do not use elevators during evacuation." },
+      { pt:"Aguarde a contagem e libere apenas com autorização.", en:"Wait for the headcount and only leave when authorized." },
+    ],
+    quiz:[
+      { q:"Onde você deve ir em uma evacuação?", options:["Ponto de encontro","Banheiro","Estacionamento qualquer"], correct:0 },
+      { q:"Pode usar o elevador na evacuação?", options:["Sim","Não","Só no térreo"], correct:1 },
+    ]
+  },
+  {
+    id:"process_checkin",
+    category:"process",
+    icon:"📋",
+    title:"Recebimento de Carga",
+    ptTitle:"Sequência padrão para receber e conferir carga",
+    steps:[
+      { pt:"Confira a documentação de transporte (conhecimento de embarque).", en:"Check the transport documents (bill of lading)." },
+      { pt:"Verifique se o lacre está intacto.", en:"Verify that the seal is intact." },
+      { pt:"Confira a quantidade contra a nota fiscal.", en:"Check the quantity against the invoice." },
+      { pt:"Registre avarias com foto, se houver.", en:"Record any damage with a photo." },
+      { pt:"Libere a carga no sistema e assine o recebimento.", en:"Release the cargo in the system and sign for receipt." },
+    ],
+    quiz:[
+      { q:"O que conferir primeiro?", options:["A documentação","O almoço","O clima"], correct:0 },
+      { q:"O que fazer se encontrar avaria?", options:["Ignorar","Registrar com foto","Esconder"], correct:1 },
+    ]
+  },
+  {
+    id:"manual_radio",
+    category:"manual",
+    icon:"📻",
+    title:"Comunicação por Rádio",
+    ptTitle:"Frases padrão e protocolo de rádio",
+    steps:[
+      { pt:"Diga 'Copy' para confirmar que entendeu.", en:"Say 'Copy' to confirm you understood." },
+      { pt:"Diga 'Say again' para pedir que repitam.", en:"Say 'Say again' to ask for a repeat." },
+      { pt:"Diga 'Standby' para pedir que aguardem.", en:"Say 'Standby' to ask them to wait." },
+      { pt:"Finalize com 'Over' ao passar a palavra e 'Out' ao encerrar.", en:"Finish with 'Over' to hand over and 'Out' to end." },
+    ],
+    quiz:[
+      { q:"Como pedir para repetirem?", options:["Say again","Copy","Out"], correct:0 },
+      { q:"O que significa 'Standby'?", options:["Encerrar","Aguardar","Repetir"], correct:1 },
+    ]
+  },
+];

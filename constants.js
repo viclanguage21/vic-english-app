@@ -927,11 +927,11 @@ export const I18N = {
 
 export const SEG_NAMES = {
   pt: {
-    maritimo:"Marítimo", comex:"COMEX", offshore:"Offshore",
+    maritimo:"Agenciamento Marítimo", comex:"COMEX", offshore:"Offshore",
     hotelaria:"Hotelaria", restaurantes:"Restaurantes", aeroporto:"Aeroporto",
-    cruzeiros:"Cruzeiros", corporativo:"Corporativo", saude:"Saúde",
+    cruzeiros:"Terminal de Cruzeiros", corporativo:"Corporativo", saude:"Saúde",
     transporte:"Transporte", varejo:"Varejo", turismo_santos:"Turismo Santos", turismo:"Turismo Santos",
-    gramatica:"Gramática", naval:"Naval", eventos:"Eventos",
+    gramatica:"Gramática", naval:"Engenharia Naval", eventos:"Eventos",
   },
   en: {
     maritimo:"Maritime", comex:"COMEX", offshore:"Offshore",

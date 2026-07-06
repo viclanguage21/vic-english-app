@@ -533,7 +533,7 @@ function showView(id){
   if(current===next) return;
 
   // Determine direction
-  const views=["view-onboarding","view-auth","view-dashboard","view-phases","view-missions-list","view-mission","view-complete","view-flashcards","view-memory-free","view-truefalse","view-dialogue","view-writing","view-profile","view-upgrade","view-admin","view-diagnosis","view-level-test"];
+  const views=["view-onboarding","view-auth","view-dashboard","view-phases","view-missions-list","view-mission","view-complete","view-flashcards","view-memory-free","view-truefalse","view-dialogue","view-writing","view-manuals","view-profile","view-upgrade","view-admin","view-diagnosis","view-level-test"];
 // view-leaderboard foi substituída por bottom sheet — não usa showView()
   const ci=views.indexOf(current?.id||"");
   const ni=views.indexOf(id);
@@ -2211,6 +2211,9 @@ function renderSegments(){
   // Prepare & Present banner
   const ppBanner=document.getElementById("prepare-present-banner");
   if(ppBanner&&VICTOR_DATA.prepareTopics?.length) ppBanner.style.display="flex";
+  // Manuais & Procedimentos banner
+  const mBanner=document.getElementById("manuals-banner");
+  if(mBanner&&VICTOR_DATA.manuals?.length) mBanner.style.display="flex";
 }
 
 // ── PHASES ────────────────────────────────────────────────────────────────────
@@ -5239,6 +5242,132 @@ function openPreparePresent(){
   _openWritingList(VICTOR_DATA.prepareTopics||[],"🎙️ Prepare & Present");
 }
 
+// ── MANUAIS & PROCEDIMENTOS ───────────────────────────────────────────────────
+const MANUAL_CATS={
+  safety:{label:"🦺 Segurança"},
+  process:{label:"⚙️ Processos"},
+  manual:{label:"📘 Manuais"},
+};
+let _manualCatFilter="all", _currentManual=null, _manualStep=0;
+
+function _manualsDone(){ return (userData&&userData.manualsDone)||[]; }
+
+function openManuals(){
+  document.getElementById("manuals-selector").style.display="block";
+  document.getElementById("manuals-walk").style.display="none";
+  renderManualsList();
+  showView("view-manuals");
+}
+
+function renderManualsList(){
+  const all=VICTOR_DATA.manuals||[];
+  // category filter chips
+  const filterBox=document.getElementById("manuals-cat-filter");
+  if(filterBox){
+    const cats=["all",...new Set(all.map(m=>m.category))];
+    filterBox.innerHTML="";
+    cats.forEach(cat=>{
+      const chip=document.createElement("button");
+      chip.className="manual-chip"+(_manualCatFilter===cat?" active":"");
+      chip.textContent=cat==="all"?"Todos":(MANUAL_CATS[cat]?.label||cat);
+      chip.addEventListener("click",()=>{_manualCatFilter=cat;renderManualsList();});
+      filterBox.appendChild(chip);
+    });
+  }
+  const list=document.getElementById("manuals-list"); list.innerHTML="";
+  const done=_manualsDone();
+  const shown=all.filter(m=>_manualCatFilter==="all"||m.category===_manualCatFilter);
+  if(!shown.length){ list.innerHTML=`<div class="manuals-empty">Nenhum manual nesta categoria.</div>`; return; }
+  shown.forEach(m=>{
+    const isDone=done.includes(m.id);
+    const div=document.createElement("div"); div.className="phase-card unlocked";
+    div.innerHTML=`
+      <div class="phase-left">
+        <div class="phase-num">${m.icon} ${m.title} ${isDone?'<span class="manual-done-tag">✅</span>':''}</div>
+        <div class="phase-sub">${m.ptTitle}</div>
+        <div class="phase-progress-text">${m.steps.length} passos${m.quiz?.length?` · ${m.quiz.length} perguntas`:""}</div>
+      </div>
+      <div class="phase-right">→</div>`;
+    div.addEventListener("click",()=>openManual(m.id));
+    list.appendChild(div);
+  });
+}
+
+function openManual(id){
+  _currentManual=(VICTOR_DATA.manuals||[]).find(m=>m.id===id);
+  if(!_currentManual) return;
+  _manualStep=0;
+  document.getElementById("manuals-selector").style.display="none";
+  document.getElementById("manuals-walk").style.display="block";
+  document.getElementById("mw-icon").textContent=_currentManual.icon;
+  document.getElementById("mw-title").textContent=_currentManual.title;
+  document.getElementById("mw-sub").textContent=_currentManual.ptTitle;
+  renderManualStep();
+}
+
+function _manualTotalSteps(){
+  const m=_currentManual; if(!m) return 0;
+  return (m.steps?.length||0)+(m.quiz?.length||0);
+}
+
+function renderManualStep(){
+  const m=_currentManual; if(!m) return;
+  const total=_manualTotalSteps();
+  const stepEl=document.getElementById("mw-step");
+  const quizEl=document.getElementById("mw-quiz");
+  document.getElementById("mw-progress-bar").style.width=`${Math.round((_manualStep/total)*100)}%`;
+
+  if(_manualStep<m.steps.length){
+    // step
+    stepEl.style.display="block"; quizEl.style.display="none";
+    const s=m.steps[_manualStep];
+    document.getElementById("mw-step-num").textContent=`Passo ${_manualStep+1} de ${m.steps.length}`;
+    document.getElementById("mw-step-pt").textContent=s.pt;
+    document.getElementById("mw-step-en").textContent=s.en;
+    try{ SoundFX.speakEN(stripEmoji(s.en)); }catch(e){}
+  } else {
+    // quiz
+    const qi=_manualStep-m.steps.length;
+    const q=(m.quiz||[])[qi];
+    if(!q){ finishManual(); return; }
+    stepEl.style.display="none"; quizEl.style.display="block";
+    document.getElementById("mw-quiz-q").textContent=`❓ ${q.q}`;
+    const opts=document.getElementById("mw-quiz-opts"); opts.innerHTML="";
+    q.options.forEach((opt,i)=>{
+      const b=document.createElement("button"); b.className="mw-quiz-opt"; b.textContent=opt;
+      b.addEventListener("click",()=>{
+        if(i===q.correct){ b.classList.add("correct"); try{SoundFX.correct();}catch(e){} setTimeout(manualNext,650); }
+        else { b.classList.add("wrong"); try{SoundFX.wrong();}catch(e){} }
+      });
+      opts.appendChild(b);
+    });
+  }
+  // nav buttons
+  document.getElementById("mw-prev").style.display=_manualStep>0?"block":"none";
+  const nextBtn=document.getElementById("mw-next");
+  const inQuiz=_manualStep>=m.steps.length;
+  nextBtn.style.display=inQuiz?"none":"block"; // no quiz, avança ao acertar
+  nextBtn.textContent=(_manualStep===m.steps.length-1&&(m.quiz?.length))?"Quiz de fixação →":(_manualStep>=total-1?"Concluir ✅":"Próximo →");
+}
+
+function manualNext(){
+  if(_manualStep>=_manualTotalSteps()-1){ finishManual(); return; }
+  _manualStep++; renderManualStep();
+}
+function manualPrev(){ if(_manualStep>0){_manualStep--; renderManualStep();} }
+
+function finishManual(){
+  const m=_currentManual; if(!m) return;
+  const done=_manualsDone();
+  if(!done.includes(m.id)){
+    done.push(m.id);
+    if(userData) userData.manualsDone=done;
+    try{ if(currentUser?.uid) saveProgressSafe(currentUser.uid,{manualsDone:done},true); }catch(e){}
+  }
+  showXpToast(`✅ ${m.title} concluído!`);
+  openManuals();
+}
+
 function _openWritingList(topics, titleText){
   document.getElementById("writing-selector").style.display="block";
   document.getElementById("writing-exercise").style.display="none";
@@ -6711,6 +6840,16 @@ function init(){
   document.getElementById("writing-core-banner")?.addEventListener("click",openWriting);
   // Prepare & Present
   document.getElementById("prepare-present-banner")?.addEventListener("click",openPreparePresent);
+  // Manuais & Procedimentos
+  document.getElementById("manuals-banner")?.addEventListener("click",openManuals);
+  document.getElementById("btn-back-manuals")?.addEventListener("click",backToDashboard);
+  document.getElementById("btn-back-manuals-list")?.addEventListener("click",openManuals);
+  document.getElementById("mw-prev")?.addEventListener("click",manualPrev);
+  document.getElementById("mw-next")?.addEventListener("click",manualNext);
+  document.getElementById("mw-speak")?.addEventListener("click",()=>{
+    const m=_currentManual; if(!m||_manualStep>=m.steps.length) return;
+    try{ SoundFX.speakEN(stripEmoji(m.steps[_manualStep].en)); }catch(e){}
+  });
   document.getElementById("btn-back-writing")?.addEventListener("click",backToDashboard);
   document.getElementById("btn-back-writing-ex")?.addEventListener("click",openWriting);
   document.getElementById("btn-next-writing")?.addEventListener("click",()=>startWritingTopic(writingTopicIndex+1));
@@ -6886,6 +7025,7 @@ Object.assign(window, {
   backToDashboard, backToDashboard,
   showUpgradeScreen,
   openFlashcards, openMemoryFree, openTrueFalse, openDialogue,
+  openManuals,
   showReviewPanel, showReferralPanel,
   handleGoogle, handleLogin, handleRegister,
   // Preview

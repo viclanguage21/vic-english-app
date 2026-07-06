@@ -8073,3 +8073,30 @@ a.settings-big-btn:active {
   align-self: flex-end;
   margin-bottom: 8px;
 }
+
+/* ── MANUAIS & PROCEDIMENTOS ─────────────────────────────────────────────────── */
+.manuals-cat-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.manual-chip{padding:7px 14px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s}
+.manual-chip.active{background:rgba(201,147,58,0.22);border-color:rgba(201,147,58,0.5);color:#e8c98a}
+.manual-done-tag{font-size:12px;margin-left:4px}
+.manuals-empty{text-align:center;color:rgba(255,255,255,0.4);padding:30px 0;font-size:14px}
+.mw-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.mw-icon{font-size:40px;line-height:1}
+.mw-titles{flex:1;min-width:0}
+.mw-title{font-size:18px;font-weight:800;color:#fff}
+.mw-sub{font-size:13px;color:rgba(255,255,255,0.55);margin-top:2px}
+.mw-step{position:relative;background:linear-gradient(145deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:22px 18px 18px;margin-bottom:16px}
+.mw-step-num{font-size:12px;font-weight:700;color:#c9933a;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
+.mw-step-pt{font-size:18px;font-weight:700;color:#fff;line-height:1.4;margin-bottom:10px}
+.mw-step-en{font-size:15px;color:#e8c98a;font-style:italic;line-height:1.4}
+.mw-speak{position:absolute;top:16px;right:16px;background:rgba(201,147,58,0.18);border:1px solid rgba(255,255,255,0.12);border-radius:50%;width:38px;height:38px;font-size:18px;cursor:pointer;color:#e8c98a}
+.mw-quiz{background:linear-gradient(145deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px 18px;margin-bottom:16px}
+.mw-quiz-q{font-size:17px;font-weight:700;color:#fff;margin-bottom:16px;line-height:1.4}
+.mw-quiz-opts{display:flex;flex-direction:column;gap:10px}
+.mw-quiz-opt{padding:14px 16px;border-radius:12px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);color:#fff;font-size:15px;font-weight:600;cursor:pointer;text-align:left;transition:all 0.15s}
+.mw-quiz-opt:active{transform:scale(0.98)}
+.mw-quiz-opt.correct{background:rgba(34,197,94,0.18);border-color:rgba(34,197,94,0.5);color:#86efac}
+.mw-quiz-opt.wrong{background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.45);color:#fca5a5}
+.mw-nav{display:flex;gap:10px}
+.mw-nav .btn-back-sm{flex:1}
+.mw-nav .btn-next-mission{flex:2}
