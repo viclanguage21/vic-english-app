@@ -852,6 +852,23 @@
       </div>
     </div>
 
+    <!-- Manuais & Procedimentos Banner -->
+    <div class="prepare-present-banner" id="manuals-banner" style="display:none">
+      <div class="gcb-top">
+        <span class="gcb-icon">📋</span>
+        <div class="gcb-title-wrap">
+          <div class="gc-title">Manuais &amp; Procedimentos</div>
+          <div class="gc-sub">Processos, segurança e POPs — passo a passo, bilíngue</div>
+        </div>
+        <span class="gcb-arrow">›</span>
+      </div>
+      <div class="gcb-chips">
+        <span class="gcb-chip">🦺 Segurança</span>
+        <span class="gcb-chip">⚙️ Processos</span>
+        <span class="gcb-chip">📘 Manuais</span>
+      </div>
+    </div>
+
     </div><!-- end recursos-collapsible -->
 
     <!-- Feedback widget — discreto, só estrelas -->
@@ -1597,6 +1614,51 @@
     </a>
 
     <button class="upgrade-back-bottom" id="btn-back-upgrade-bottom">← Voltar</button>
+  </div>
+</div>
+
+<!-- ══ MANUAIS & PROCEDIMENTOS ════════════════════════════ -->
+<div class="view" id="view-manuals">
+  <div class="phases-inner">
+    <div class="phases-header">
+      <button class="btn-back" id="btn-back-manuals">←</button>
+      <div class="phases-title" id="manuals-title">📋 Manuais & Procedimentos</div>
+      <div style="width:40px"></div>
+    </div>
+    <!-- list -->
+    <div id="manuals-selector">
+      <div class="manuals-cat-filter" id="manuals-cat-filter"></div>
+      <div class="phases-list" id="manuals-list"></div>
+    </div>
+    <!-- walkthrough -->
+    <div id="manuals-walk" style="display:none">
+      <div class="mw-head">
+        <span class="mw-icon" id="mw-icon"></span>
+        <div class="mw-titles">
+          <div class="mw-title" id="mw-title"></div>
+          <div class="mw-sub" id="mw-sub"></div>
+        </div>
+      </div>
+      <div class="progress-bar-bg" style="margin-bottom:16px">
+        <div class="progress-bar-fill" id="mw-progress-bar" style="width:0%"></div>
+      </div>
+      <div class="mw-step" id="mw-step">
+        <div class="mw-step-num" id="mw-step-num"></div>
+        <div class="mw-step-pt" id="mw-step-pt"></div>
+        <div class="mw-step-en" id="mw-step-en"></div>
+        <button class="mw-speak" id="mw-speak" title="Ouvir em inglês">🔊</button>
+      </div>
+      <!-- quiz -->
+      <div class="mw-quiz" id="mw-quiz" style="display:none">
+        <div class="mw-quiz-q" id="mw-quiz-q"></div>
+        <div class="mw-quiz-opts" id="mw-quiz-opts"></div>
+      </div>
+      <div class="mw-nav">
+        <button class="btn-back-sm" id="mw-prev">← Anterior</button>
+        <button class="btn-next-mission" id="mw-next">Próximo →</button>
+      </div>
+      <button class="btn-back-sm" id="btn-back-manuals-list" style="width:100%;margin-top:10px">← Todos os manuais</button>
+    </div>
   </div>
 </div>
 
