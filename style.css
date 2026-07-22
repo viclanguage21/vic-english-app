@@ -8119,3 +8119,30 @@ a.settings-big-btn:active {
   align-self: flex-end;
   margin-bottom: 8px;
 }
+
+/* ══ ACESSO RÁPIDO — cards coloridos, mais atraentes ═══════════════ */
+.quick-grid { gap: 12px !important; }
+.quick-btn {
+  padding: 20px 10px !important;
+  border-radius: 18px !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.2px !important;
+  border-width: 1.5px !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.25) !important;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease !important;
+}
+.quick-btn:hover  { transform: translateY(-3px) !important; }
+.quick-btn:active { transform: translateY(0) scale(0.96) !important; }
+
+.quick-grid .quick-btn:nth-child(1) { background: linear-gradient(145deg, rgba(99,102,241,0.22), rgba(99,102,241,0.06)) !important; border-color: rgba(99,102,241,0.45) !important; }
+.quick-grid .quick-btn:nth-child(1):hover { box-shadow: 0 8px 24px rgba(99,102,241,0.35) !important; border-color: rgba(129,140,248,0.75) !important; }
+
+.quick-grid .quick-btn:nth-child(2) { background: linear-gradient(145deg, rgba(236,72,153,0.22), rgba(236,72,153,0.06)) !important; border-color: rgba(236,72,153,0.45) !important; }
+.quick-grid .quick-btn:nth-child(2):hover { box-shadow: 0 8px 24px rgba(236,72,153,0.35) !important; border-color: rgba(244,114,182,0.75) !important; }
+
+.quick-grid .quick-btn:nth-child(3) { background: linear-gradient(145deg, rgba(34,197,94,0.22), rgba(34,197,94,0.06)) !important; border-color: rgba(34,197,94,0.45) !important; }
+.quick-grid .quick-btn:nth-child(3):hover { box-shadow: 0 8px 24px rgba(34,197,94,0.35) !important; border-color: rgba(74,222,128,0.75) !important; }
+
+.quick-grid .quick-btn:nth-child(4) { background: linear-gradient(145deg, rgba(249,115,22,0.22), rgba(249,115,22,0.06)) !important; border-color: rgba(249,115,22,0.45) !important; }
+.quick-grid .quick-btn:nth-child(4):hover { box-shadow: 0 8px 24px rgba(249,115,22,0.35) !important; border-color: rgba(251,146,60,0.75) !important; }
