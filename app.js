@@ -2118,7 +2118,8 @@ function renderDashboard(){
 function renderSegments(){
   const c=document.getElementById("segments-grid"); if(!c) return; c.innerHTML="";
   const grammarSeg=VICTOR_DATA.segments.find(s=>s.isGrammarCore);
-  const regularSegs=VICTOR_DATA.segments.filter(s=>!s.isGrammarCore && !s.hidden);
+  const brandSegs = window.BRAND?.segments;
+  const regularSegs=VICTOR_DATA.segments.filter(s=>!s.isGrammarCore && !s.hidden && (!brandSegs || brandSegs.includes(s.id)));
   regularSegs.forEach(seg=>{
     const div=document.createElement("div");
     div.className=`segment-card ${seg.available?"available":"locked"}`;
@@ -6148,6 +6149,36 @@ function showProActivatedCelebration(){
 }
 
 
+// ── WHITE-LABEL BRAND ────────────────────────────────────────────────────────
+function applyBrand(){
+  const B = window.BRAND;
+  if(!B) return;
+
+  // Substitui logos mapeando pelo nome do arquivo original
+  const logoMap = {
+    "vic_english_logo.png": B.logos?.main,
+    "vic_english_header.png": B.logos?.header,
+    "vic_logo.png": B.logos?.icon,
+    "vic_lamp.png": B.logos?.lamp,
+    "vic_speech.png": B.logos?.speech,
+    "logo_full_2.png": B.logos?.ob,
+  };
+  document.querySelectorAll("img[src]").forEach(img => {
+    const key = img.getAttribute("src");
+    if(key && logoMap[key] && logoMap[key] !== key) img.src = logoMap[key];
+  });
+
+  // Fonte (fallback caso o brand.js seja carregado sem CSS vars de fonte)
+  if(B.font?.family) document.body.style.fontFamily = B.font.family;
+
+  // Esconde o rodapé "Powered by VIC Language" se não for o app VIC
+  if(B.companyName && B.companyName !== "VIC Language"){
+    document.querySelectorAll(".powered-footer, .auth-page-footer, .auth-powered-colored").forEach(el => {
+      el.style.display = "none";
+    });
+  }
+}
+
 function init(){
   _domReady = true;
 
@@ -6158,6 +6189,9 @@ function init(){
       if(ctx.state === "suspended") ctx.resume();
     }
   }, {once: true});
+
+  // ── Aplicar brand (white-label) ─────────────────────────────────────────────
+  applyBrand();
 
   // ── Aplicar idioma salvo ────────────────────────────────────────────────────
   applyLang();
