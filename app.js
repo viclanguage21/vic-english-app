@@ -516,6 +516,9 @@ function levelInfo(xp){
   return         {label:t("level_advanced"),  msg:getRandomTip(4)};
 }
 
+// Views sem login concluído / fora do app principal — barra de abas fica oculta
+const NO_TABBAR_VIEWS = new Set(["view-onboarding","view-auth","view-diagnosis","view-level-test","view-verify-email","view-admin"]);
+
 let _lastView = null;
 function showView(id){
   // view-leaderboard é bottom sheet — usar openLeaderboard()
@@ -526,6 +529,7 @@ function showView(id){
   if(id === "view-auth" || id === "view-onboarding") {
     setTimeout(applyLang, 50);
   }
+  document.body.classList.toggle("hide-tabbar", NO_TABBAR_VIEWS.has(id));
   const next=document.getElementById(id);
   if(!next) return;
 
@@ -2097,6 +2101,13 @@ function renderDashboard(){
   clearInterval(window._proBannerTimer);
   window._proBannerTimer=setInterval(rotatProBanner,5000);
   renderDailyMissions();
+  // Progresso tab extras (movidas do perfil)
+  renderSkillsAnalysis();
+  renderCommitment();
+  renderBadges();
+  renderNextBadge();
+  renderActivityCalendar();
+  renderXPChart("week");
   // Show admin float button if owner
   const adminBtn=document.getElementById("btn-admin-float");
   if(adminBtn) adminBtn.style.display=currentUser?.uid===OWNER_UID?"flex":"none";
@@ -2109,7 +2120,7 @@ function renderDashboard(){
   const earned2=userData.badges||[];
   const nextBadge2=BADGES.find(b=>!earned2.includes(b.id));
   const nbiEl=document.getElementById("next-badge-inline");
-  nbiEl?.addEventListener("click",()=>{ vibrate(30); openProfile(); setTimeout(()=>document.getElementById("profile-badges-grid")?.scrollIntoView({behavior:"smooth"}),400); },{ signal: _dSig });
+  nbiEl?.addEventListener("click",()=>{ vibrate(30); switchDashTab("progresso"); setTimeout(()=>document.getElementById("profile-badges-grid")?.scrollIntoView({behavior:"smooth"}),150); },{ signal: _dSig });
   if(nbiEl&&nextBadge2){
     nbiEl.style.display="flex";
     document.getElementById("nbi-icon").textContent=nextBadge2.icon;
@@ -6479,8 +6490,11 @@ function applyBrand(){
   }
 }
 
-// ── DASHBOARD TAB BAR ────────────────────────────────────────────────────────
+// ── DASHBOARD TAB BAR — barra global, disponível em qualquer página ──────────
 function switchDashTab(tab){
+  if(tab === "perfil"){ openProfile(); return; }
+  const dash = document.getElementById("view-dashboard");
+  if(dash && !dash.classList.contains("active")) showView("view-dashboard");
   document.querySelectorAll(".dash-panel[data-panel]").forEach(p=>{
     p.classList.toggle("active", p.dataset.panel===tab);
   });
@@ -6728,13 +6742,11 @@ function init(){
   // profile
   document.getElementById("btn-open-profile")?.addEventListener("click",openProfile);
 
-  // dashboard bottom tab bar
+  // dashboard bottom tab bar — global, funciona em qualquer página
   document.querySelectorAll(".dtb-btn").forEach(btn=>{
     btn.addEventListener("click",()=>{
       vibrate(15);
-      const tab=btn.dataset.tab;
-      if(tab==="perfil"){ openProfile(); return; }
-      switchDashTab(tab);
+      switchDashTab(btn.dataset.tab);
     });
   });
   document.getElementById("btn-back-profile")?.addEventListener("click",backToDashboard);

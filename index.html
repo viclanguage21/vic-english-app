@@ -645,12 +645,7 @@
       <div class="dash-logo-mid">
         <img src="vic_english_header_new.jpg" alt="VIC English" id="dash-logo-img"/>
       </div>
-      <div class="dash-user">
-        <div class="dash-avatar-wrap" id="btn-open-profile" title="Editar perfil">
-          <span id="dash-avatar-icon">👤</span>
-          <span class="dash-avatar-edit">✏️</span>
-        </div>
-      </div>
+      <div class="dash-user" style="visibility:hidden;pointer-events:none;flex:1 1 0"></div>
     </div>
     <!-- Data abaixo do header -->
     <div class="dash-date-bar">
@@ -664,12 +659,12 @@
     <div class="dash-panel active" data-panel="home">
 
     <div class="greeting-card">
+      <div class="greeting-hi" id="greeting-hi"></div>
       <div class="greeting-time-wrap">
         <div class="greeting-time-en" id="greeting-time-en"></div>
         <div class="greeting-time-pt" id="greeting-time-pt"></div>
       </div>
       <div class="greeting-level" id="greeting-level"></div>
-      <div class="greeting-hi" id="greeting-hi" style="display:none"></div>
       <div                          id="greeting-motivational" style="display:none"></div>
     </div>
 
@@ -737,6 +732,50 @@
         <span class="ranking-cta-trophy">🏆</span>
       </div>
     </button>
+
+    <!-- Commitment -->
+    <div class="profile-section">
+      <div class="profile-section-title" id="prof-title-commitment" data-i18n="prof_commitment">🎯 Comprometimento</div>
+      <div class="commitment-card" id="commitment-card" style="cursor:pointer" onclick="showCommitmentTips()"></div>
+    </div>
+
+    <!-- Activity Calendar -->
+    <div class="profile-section">
+      <div class="profile-section-title" id="prof-title-calendar" data-i18n="prof_calendar">📅 Calendário de Atividade</div>
+      <div class="activity-calendar" id="activity-calendar"></div>
+      <div class="activity-legend">
+        <span class="al-box al-0"></span><span data-i18n="activity_none">Sem atividade</span>
+        <span class="al-box al-1"></span><span data-i18n="activity_low">Baixo</span>
+        <span class="al-box al-2"></span><span data-i18n="activity_mid">Médio</span>
+        <span class="al-box al-3"></span><span data-i18n="activity_high">Alto</span>
+      </div>
+    </div>
+
+    <!-- Weekly + Monthly progress chart -->
+    <div class="profile-section">
+      <div class="profile-section-title" data-i18n="xp_history">📊 Progresso de XP</div>
+      <div class="chart-tabs">
+        <button class="chart-tab active" data-period="week" data-i18n="week_this">Esta semana</button>
+        <button class="chart-tab" data-period="week1" data-i18n="week_last">Semana passada</button>
+        <button class="chart-tab" data-period="week2" data-i18n="week_2ago">2 semanas atrás</button>
+      </div>
+      <div class="xp-chart" id="xp-chart"></div>
+    </div>
+
+    <!-- Badges — retrátil -->
+    <div class="profile-section">
+      <div class="profile-section-title section-label-toggle" style="cursor:pointer" onclick="toggleDashSection('profile-badges-grid','badges-toggle-arrow','block')">
+        <span data-i18n="achievements">🏆 Conquistas</span>
+        <span class="section-toggle-arrow" id="badges-toggle-arrow" style="font-size:12px;color:rgba(255,255,255,0.4);transition:transform .25s ease;margin-left:auto;">▼</span>
+      </div>
+      <div id="profile-badges-grid"></div>
+    </div>
+
+    <!-- Skills analysis -->
+    <div class="profile-section">
+      <div class="profile-section-title" id="prof-title-skills" data-i18n="prof_skills">🧠 Habilidades</div>
+      <div id="profile-skills"></div>
+    </div>
 
     </div><!-- /panel:progresso -->
 
@@ -943,25 +982,6 @@
       <button class="cfm-btn cfm-share" id="cfm-share-btn">📤 Compartilhar App</button>
     </div>
     <a href="https://www.viclanguage.com.br" target="_blank" class="vic-site-link">viclanguage.com.br →</a>
-
-    <!-- Bottom Tab Bar -->
-    <nav class="dash-tabbar" id="dash-tabbar">
-      <button class="dtb-btn active" data-tab="home" id="dtb-home">
-        <span class="dtb-icon">🏠</span><span class="dtb-label">Home</span>
-      </button>
-      <button class="dtb-btn" data-tab="recursos" id="dtb-recursos">
-        <span class="dtb-icon">📚</span><span class="dtb-label">Recursos</span>
-      </button>
-      <button class="dtb-btn" data-tab="progresso" id="dtb-progresso">
-        <span class="dtb-icon">📈</span><span class="dtb-label">Progresso</span>
-      </button>
-      <button class="dtb-btn" data-tab="acesso" id="dtb-acesso">
-        <span class="dtb-icon">⚡</span><span class="dtb-label">Rápido</span>
-      </button>
-      <button class="dtb-btn" data-tab="perfil" id="dtb-perfil">
-        <span class="dtb-icon">👤</span><span class="dtb-label">Perfil</span>
-      </button>
-    </nav>
   </div>
 </div>
 
@@ -1807,47 +1827,6 @@
       </button>
     </div>
 
-    <!-- Commitment — right after XP -->
-    <div class="profile-section">
-      <div class="profile-section-title" id="prof-title-commitment" data-i18n="prof_commitment">🎯 Comprometimento</div>
-      <div class="commitment-card" id="commitment-card" style="cursor:pointer" onclick="showCommitmentTips()"></div>
-    </div>
-
-    <!-- Activity Calendar -->
-    <div class="profile-section">
-      <div class="profile-section-title" id="prof-title-calendar" data-i18n="prof_calendar">📅 Calendário de Atividade</div>
-      <div class="activity-calendar" id="activity-calendar"></div>
-      <div class="activity-legend">
-        <span class="al-box al-0"></span><span data-i18n="activity_none">Sem atividade</span>
-        <span class="al-box al-1"></span><span data-i18n="activity_low">Baixo</span>
-        <span class="al-box al-2"></span><span data-i18n="activity_mid">Médio</span>
-        <span class="al-box al-3"></span><span data-i18n="activity_high">Alto</span>
-      </div>
-    </div>
-
-    <!-- Weekly + Monthly progress chart -->
-    <div class="profile-section">
-      <div class="profile-section-title" data-i18n="xp_history">📊 Progresso de XP</div>
-      <div class="chart-tabs">
-        <button class="chart-tab active" data-period="week" data-i18n="week_this">Esta semana</button>
-        <button class="chart-tab" data-period="week1" data-i18n="week_last">Semana passada</button>
-        <button class="chart-tab" data-period="week2" data-i18n="week_2ago">2 semanas atrás</button>
-      </div>
-      <div class="xp-chart" id="xp-chart"></div>
-    </div>
-
-    <!-- Badges -->
-    <div class="profile-section">
-      <div class="profile-section-title" data-i18n="achievements">🏆 Conquistas</div>
-      <div id="profile-badges-grid"></div>
-    </div>
-
-    <!-- Skills analysis -->
-    <div class="profile-section">
-      <div class="profile-section-title" id="prof-title-skills" data-i18n="prof_skills">🧠 Habilidades</div>
-      <div id="profile-skills"></div>
-    </div>
-
     <!-- Personal goal -->
     <div class="profile-section" id="profile-goal-section" style="display:none">
       <div class="profile-section-title" id="prof-title-goal" data-i18n="prof_goal">💬 Seu objetivo pessoal</div>
@@ -2000,6 +1979,25 @@
 
   </div>
 </div>
+
+<!-- ══ GLOBAL BOTTOM TAB BAR — sempre visível, fora das views ══ -->
+<nav class="dash-tabbar" id="dash-tabbar">
+  <button class="dtb-btn active" data-tab="home" id="dtb-home">
+    <span class="dtb-icon">🏠</span><span class="dtb-label">Home</span>
+  </button>
+  <button class="dtb-btn" data-tab="recursos" id="dtb-recursos">
+    <span class="dtb-icon">📚</span><span class="dtb-label">Recursos</span>
+  </button>
+  <button class="dtb-btn" data-tab="progresso" id="dtb-progresso">
+    <span class="dtb-icon">📈</span><span class="dtb-label">Progresso</span>
+  </button>
+  <button class="dtb-btn" data-tab="acesso" id="dtb-acesso">
+    <span class="dtb-icon">⚡</span><span class="dtb-label">Rápido</span>
+  </button>
+  <button class="dtb-btn" data-tab="perfil" id="dtb-perfil">
+    <span class="dtb-icon">👤</span><span class="dtb-label">Perfil</span>
+  </button>
+</nav>
 
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script src="sounds.js"></script>

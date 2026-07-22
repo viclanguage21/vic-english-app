@@ -218,6 +218,14 @@ input[type="checkbox"], input[type="radio"], select, label,
 .dtb-btn .dtb-label{font-size:10px; font-weight:700; letter-spacing:0.2px}
 .dtb-btn.active{background:var(--p-dim); color:var(--p-light)}
 .dtb-btn:active{transform:scale(0.94)}
+
+/* Barra de abas global — some nas telas de login/onboarding/admin */
+body.hide-tabbar .dash-tabbar{display:none !important}
+
+/* Espaço para o conteúdo não ficar atrás da barra de abas fixa */
+.view:not(#view-onboarding):not(#view-auth):not(#view-diagnosis):not(#view-level-test):not(#view-verify-email):not(#view-admin){
+  padding-bottom:96px !important;
+}
 .dashboard-inner{width:100%;max-width:480px}
 .dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
 .dash-logo{display:flex;align-items:center;gap:10px}
@@ -7829,6 +7837,11 @@ a.settings-big-btn:active {
 }
 .dash-header-3col .dash-avatar-edit {
   border-radius: 50% !important;
+}
+
+/* ══ HEADER — gradiente escuro azul → roxo → rosa (sutil) ═══════ */
+.dash-header-3col {
+  background: linear-gradient(135deg, #0a0a26 0%, #170f3e 22%, #241150 45%, #341250 68%, #2a0f38 88%, #200c2c 100%) !important;
 }
 
 /* ══ ONBOARDING — aviso do botão de atualizar ════════════════ */
