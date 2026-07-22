@@ -1,0 +1,27 @@
+name: VIC English — Push Notifications
+
+on:
+  schedule:
+    - cron: "0 11 * * *"    # 08h BRT — Bom dia motivacional
+    - cron: "30 13 * * *"   # 10h30 BRT — False friend / curiosidade
+    - cron: "0 15 * * *"    # 12h BRT — Pausa do almoço
+    - cron: "0 18 * * *"    # 15h BRT — Phrasal verb / dica
+    - cron: "0 22 * * *"    # 19h BRT — Streak principal
+    - cron: "30 0 * * *"    # 21h30 BRT — Última chance
+  workflow_dispatch:          # Permite disparar manualmente para testar
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Enviar notificação
+        env:
+          ONESIGNAL_APP_ID:       ${{ secrets.ONESIGNAL_APP_ID }}
+          ONESIGNAL_REST_API_KEY: ${{ secrets.ONESIGNAL_REST_API_KEY }}
+        run: node .github/scripts/send-push.js

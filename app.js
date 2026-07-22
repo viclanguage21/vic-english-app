@@ -151,10 +151,15 @@ function applyLang() {
     el.title = t(el.getAttribute("data-i18n-title"));
   });
 
+  // Hide PT tagline on auth screen when English is selected
+  const taglinePt = document.querySelector(".auth-tagline-pt");
+  if(taglinePt) taglinePt.style.display = _lang === "pt" ? "" : "none";
+
   // Re-renderizar partes dinâmicas se estiverem visíveis
   const activeView = document.querySelector(".view.active")?.id;
   if (activeView === "view-dashboard") renderDashboardTexts();
   if (activeView === "view-mission") renderMissionTexts();
+  if (activeView === "view-profile") renderProfileTexts();
 }
 
 function renderDashboardTexts() {
@@ -441,8 +446,16 @@ function renderDashboardTexts() {
   if(userData) renderDailyMissions();
 }
 
+function renderProfileTexts() {
+  // Re-render JS-built sections that have language-specific text
+  if (userData) {
+    renderSkillsAnalysis();
+    renderCommitment();
+  }
+}
+
 function renderMissionTexts() {
-  ["btn-prev-exercise","btn-prev-exercise"].forEach(id => {
+  ["btn-prev-exercise"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.textContent = t("previous");
   });
@@ -466,6 +479,7 @@ onAuthChange(user => {
 
 // ── STATE ──────────────────────────────────────────────────────────────────────
 let currentUser=null, userData=null;
+let _logoImgCache=null;
 let currentSegmentId="maritimo", currentPhaseId="f1", currentMissionId="vocab_basico", currentPhraseIndex=0;
 let exerciseAnswered=false;
 let diagAnswers={}, diagStep=0;
@@ -589,11 +603,18 @@ async function updateStreak(){
     // If lastExerciseDate is set and older than yesterday, the streak is broken
     const lastEx=userData.lastExerciseDate||"";
     if(lastEx && lastEx<yesterday && (userData.streak||0)>0){
-      userData.streak=0;
+      const freezes = userData.streakFreezes||0;
+      if(freezes>0){
+        userData.streakFreezes = freezes-1;
+        setTimeout(()=>showXpToast("🛡️ Streak protegido pelo escudo!"),800);
+      } else {
+        userData.streak=0;
+      }
     }
 
     const save={lastLoginDate:today,xpYesterday:userData.xpYesterday,xpToday:0};
     if(userData.streak===0) save.streak=0;
+    if(userData.streakFreezes!==undefined) save.streakFreezes=userData.streakFreezes;
     await saveProgressSafe(currentUser.uid,save,true);
   }
 
@@ -619,6 +640,17 @@ async function updateStreakOnExercise(){
   updateStreakFireDisplay();
 
   await saveProgressSafe(currentUser.uid,{streak,lastExerciseDate:today},true);
+
+  // Earn a shield every 7-day streak milestone
+  if(streak%7===0 && streak>0){
+    const cur=userData.streakFreezes||0;
+    if(cur<3){
+      userData.streakFreezes=cur+1;
+      await saveProgressSafe(currentUser.uid,{streakFreezes:cur+1},false);
+      setTimeout(()=>showXpToast("🛡️ Escudo de streak ganho! ("+userData.streakFreezes+"/3)"),600);
+    }
+  }
+  updateShieldDisplay();
 }
 
 // Updates the header fire icon: bright if exercised today, dimmed if not
@@ -636,6 +668,24 @@ function updateStreakFireDisplay(){
     elStHV.textContent=streak;
     elStH.style.display=streak>=1?"flex":"none";
     if(streak>=1) elStH.setAttribute("data-fire",active?"on":"off");
+  }
+  updateShieldDisplay();
+}
+
+function updateShieldDisplay(){
+  const freezes=userData?.streakFreezes||0;
+  const el=document.getElementById("dash-streak-shields");
+  if(el){
+    el.style.display=freezes>0?"flex":"none";
+    const cnt=document.getElementById("dash-shield-count");
+    if(cnt) cnt.textContent=freezes;
+  }
+  // Header pill shield
+  const hel=document.getElementById("dash-header-shields");
+  if(hel){
+    hel.style.display=freezes>0?"flex":"none";
+    const hcnt=document.getElementById("dash-header-shield-count");
+    if(hcnt) hcnt.textContent=freezes;
   }
 }
 
@@ -1197,9 +1247,9 @@ async function finishDiagnosisNote(){
   document.getElementById("diag-step-3")?.classList.remove("active");
   // Mostrar resultado personalizado
   const diagResult = getDiagResultText();
-  document.getElementById("diag-result-icon").textContent = diagResult.icon;
-  document.getElementById("diag-result-level").textContent = diagResult.title;
-  document.getElementById("diag-result-sub").textContent = diagResult.sub;
+  const _ri = document.getElementById("diag-result-icon");   if(_ri) _ri.textContent = diagResult.icon;
+  const _rl = document.getElementById("diag-result-level");  if(_rl) _rl.textContent = diagResult.title;
+  const _rs = document.getElementById("diag-result-sub");    if(_rs) _rs.textContent = diagResult.sub;
   document.getElementById("diag-step-result")?.classList.add("active");
 }
 async function finishDiagnosis(){
@@ -1716,10 +1766,11 @@ async function loadDashboard(user){
   try{ renderDailyMissions(); }catch(e){ console.error("renderDailyMissions error:", e.message, e); }
   showView("view-dashboard");
   hideAuthLoading();
+  initOneSignal();
 
-  // Diagnosis for new users
+  // Level test for new users (diagnosis screen removed)
   if(!userData.diagnosisAnswers){
-    setTimeout(()=>{ try{ startDiagnosis(); }catch(e){ vicLog("diagnosis","startDiagnosis failed",e); } }, 800);
+    setTimeout(()=>{ try{ startLevelTest(); }catch(e){ vicLog("level-test","startLevelTest failed",e); } }, 800);
   }
   console.log("✅ Dashboard shown for:", userData.name);
 }
@@ -2125,6 +2176,33 @@ function renderDashboard(){
   }catch(e){ console.error("renderDashboard error:", e.message); }
 }
 
+function toggleDashSection(colId, arrowId, openDisplay){
+  const col=document.getElementById(colId);
+  const arrow=document.getElementById(arrowId);
+  if(!col) return;
+  const isHidden=col.style.display==="none";
+  col.style.display=isHidden?(openDisplay||"block"):"none";
+  if(arrow) arrow.style.transform=isHidden?"rotate(0deg)":"rotate(180deg)";
+}
+
+function toggleSegments(){
+  const col=document.getElementById("segments-collapsible");
+  const arrow=document.getElementById("segments-toggle-arrow");
+  if(!col) return;
+  const open=col.style.display==="none";
+  col.style.display=open?"block":"none";
+  if(arrow) arrow.style.transform=open?"rotate(0deg)":"rotate(180deg)";
+}
+
+function toggleXpStats(){
+  const row=document.getElementById("stats-row-collapsible");
+  const arrow=document.getElementById("xp-toggle-arrow");
+  if(!row) return;
+  const open=row.style.display==="none"||row.style.display==="";
+  row.style.display=open?"flex":"none";
+  if(arrow) arrow.style.transform=open?"rotate(180deg)":"rotate(0deg)";
+}
+
 function renderSegments(){
   const c=document.getElementById("segments-grid"); if(!c) return; c.innerHTML="";
   const grammarSeg=VICTOR_DATA.segments.find(s=>s.isGrammarCore);
@@ -2141,6 +2219,9 @@ function renderSegments(){
     const gc=document.getElementById("grammar-core-banner");
     if(gc){gc.style.display="flex";gc.onclick=()=>openSegmentPhases(grammarSeg.id);}
   }
+  // Prepare & Present banner
+  const ppBanner=document.getElementById("prepare-present-banner");
+  if(ppBanner&&VICTOR_DATA.prepareTopics?.length) ppBanner.style.display="flex";
 }
 
 // ── PHASES ────────────────────────────────────────────────────────────────────
@@ -2160,7 +2241,11 @@ function openSegmentPhases(segId){
   }
 
   const completed=userData.completedMissions||[];
-  (seg.phases||[]).forEach((phase,pi)=>{
+  let _phases=seg.phases||[];
+  if(seg.isGrammarCore){
+    _phases=[..._phases].sort((a,b)=>{const af=isSegmentFree("gramatica",a.id),bf=isSegmentFree("gramatica",b.id);return (bf?1:0)-(af?1:0);});
+  }
+  _phases.forEach((phase,pi)=>{
     // Grammar Core: all phases independent
     if(seg.isGrammarCore){ phase.unlocked=true; }
     else if(pi===0){ phase.unlocked=true; }
@@ -2306,10 +2391,7 @@ function renderMission(){
   document.getElementById("mission-progress-bar").style.width=`${Math.round(((currentPhraseIndex+1)/total)*100)}%`;
   const ptEl=document.getElementById("phrase-pt");
   if(ptEl){
-    if(phrase.pt&&phrase.type!=="translate_en_pt"&&phrase.type!=="translate_pt_en"){
-      ptEl.innerHTML=`<span class="phrase-pt-label">🇧🇷</span> ${phrase.pt}`;
-      ptEl.style.display="";
-    } else if(phrase.pt&&phrase.type==="translate_pt_en"){
+    if(phrase.pt&&!["translate_en_pt","translate_pt_en","memory_match","match_columns"].includes(phrase.type)){
       ptEl.innerHTML=`<span class="phrase-pt-label">🇧🇷</span> ${phrase.pt}`;
       ptEl.style.display="";
     } else {
@@ -2328,6 +2410,8 @@ function renderMission(){
   const [label,cls]=typeMap[phrase.type]||["",""];
   const badge=document.getElementById("ex-type-badge");
   badge.textContent=label; badge.className=`ex-type-badge ${cls}`;
+  const phraseLabel=document.querySelector(".phrase-label");
+  if(phraseLabel) phraseLabel.textContent=["memory_match","match_columns"].includes(phrase.type)?"Tema":"Frase";
 
   document.getElementById("speak-controls")?.style && (document.getElementById("speak-controls").style.display="flex");
   renderPhraseEN(phrase,[]);
@@ -2340,6 +2424,7 @@ function renderMission(){
 function renderPhraseEN(phrase,spoken){
   const container=document.getElementById("phrase-en"); if(!container) return;
   if(["memory_match","match_columns"].includes(phrase.type)){container.textContent=cleanEnunciado(phrase.en);return;}
+  if(phrase.type==="translate_pt_en"){container.textContent=cleanEnunciado(phrase.pt||"");return;}
   const spokenClean=spoken.map(w=>w.toLowerCase().replace(/[^a-z]/g,""));
   const wordMap={}; (phrase.words||[]).forEach(w=>{wordMap[w.w.toLowerCase().replace(/[^a-z]/g,"")]=w.cls;});
   const cleanText=cleanEnunciado(phrase.en);
@@ -2362,7 +2447,7 @@ function renderVocab(phrase){
     return;
   }
   el.style.display="flex";
-  el.classList.add("dica-mode");
+  el.classList.remove("dica-open"); // start collapsed
   el.innerHTML=phrase.words.map(w=>`<div class="vocab-item" data-word="${w.w}" data-tr="${w.tr}"><span class="vocab-word">${w.w}</span><span class="vocab-class ${w.cls}">${w.cls}</span><span class="vocab-translation">= ${w.tr}</span><span class="vocab-speaker">🔊</span></div>`).join("");
   el.querySelectorAll(".vocab-item").forEach(item=>{
     item.querySelector(".vocab-word")?.addEventListener("click",()=>SoundFX.speakEN(item.dataset.word),{ signal: _phraseAC?.signal });
@@ -2371,8 +2456,14 @@ function renderVocab(phrase){
   });
   if(dicaBtn){
     dicaBtn.style.display="inline-flex";
-    dicaBtn.classList.remove("used");
-    dicaBtn.onclick=()=>{ el.classList.remove("dica-mode"); dicaBtn.classList.add("used"); };
+    dicaBtn.classList.remove("open");
+    dicaBtn.innerHTML="💡 Ver Dica";
+    dicaBtn.onclick=()=>{
+      el.classList.toggle("dica-open");
+      const nowOpen=el.classList.contains("dica-open");
+      dicaBtn.classList.toggle("open",nowOpen);
+      dicaBtn.innerHTML=nowOpen?"🔼 Esconder Dica":"💡 Ver Dica";
+    };
   }
 }
 
@@ -2395,20 +2486,18 @@ function renderExerciseUI(phrase){
     indices.forEach((origIdx,newIdx)=>{
       const opt=phrase.options[origIdx];
       const btn=document.createElement("button"); btn.className="mc-option";
-      btn.innerHTML=`<span class="mc-text">${opt}</span><button class="mc-speak-btn" tabindex="-1">🔊</button>`;
+      btn.innerHTML=`<span class="mc-text">${opt}</span><span class="mc-speak-btn" tabindex="-1">🔊</span>`;
       btn.querySelector(".mc-speak-btn").addEventListener("click",e=>{
         e.stopPropagation();
         const clean=stripEmoji(opt);
-        // if phrase is translate_pt_en, options are PT; otherwise EN
-        const phrase=getPhrase();
-        if(phrase?.type==="translate_en_pt"||SoundFX._isPT(clean)) SoundFX.speakPT(clean);
-        else SoundFX.speakEN(clean);
+        const ph=getPhrase();
+        _optionIsPT(clean,ph)?SoundFX.speakPT(clean):SoundFX.speakEN(clean);
       });
       btn.addEventListener("click",()=>{
         if(exerciseAnswered) return; exerciseAnswered=true;
         wrap.querySelectorAll(".mc-option").forEach((b,i)=>{b.disabled=true;if(i===newCorrect)b.classList.add("correct");else if(i===newIdx&&newIdx!==newCorrect)b.classList.add("wrong");});
         const correctText=stripEmoji(phrase.options[phrase.correct]);
-        SoundFX._isPT(correctText)?SoundFX.speakPT(correctText):SoundFX.speakEN(correctText);
+        _optionIsPT(correctText,phrase)?SoundFX.speakPT(correctText):SoundFX.speakEN(correctText);
         showNextBtn('btn-next-exercise', newIdx===newCorrect?10:0);
       });
       wrap.appendChild(btn);
@@ -2560,6 +2649,28 @@ function checkWordOrder(){
   fb.style.display="block";
   SoundFX._isPT(correct)?SoundFX.speakPT(correct):SoundFX.speakEN(correct);
   showNextBtn('btn-next-order', result.score);
+}
+
+// ── TTS LANGUAGE DETECTION FOR MC OPTIONS ─────────────────────────────────────
+// Returns true if the option text should be spoken in Portuguese.
+// Uses explicit type, then structural clues, then character/word heuristics.
+function _optionIsPT(optText, phrase){
+  if(phrase?.type==="translate_pt_en") return false;
+  if(phrase?.type==="translate_en_pt") return true;
+  const clean=stripEmoji(optText).trim();
+  // Accented characters → definitely PT
+  if(/[àáâãçèéêëìíîïòóôõöùúûü]/i.test(clean)) return true;
+  // Slash translations like "Carga / mercadoria" → PT
+  if(clean.includes("/")) return true;
+  // Question asks "What does X mean?" or "X means:" → options are PT translations
+  if(/(what does|what is the '|' means:|'[^']* means:)/i.test(phrase?.en||"")) return true;
+  // Long sentence with common EN pronouns → likely an EN response option
+  if(clean.length>20 && /\b(I am|I will|You can|Please|Of course|Not my|Best regards)\b/i.test(clean)) return false;
+  // Words array: if option matches a translation field → PT
+  for(const w of (phrase?.words||[])){
+    if((w.tr||"").length>2 && clean.toLowerCase().includes(w.tr.toLowerCase())) return true;
+  }
+  return SoundFX._isPT(clean);
 }
 
 // ── TTS ────────────────────────────────────────────────────────────────────────
@@ -4258,12 +4369,9 @@ async function openUserModal(uid){
   const uidEl=document.getElementById("modal-uid");
   if(uidEl) uidEl.textContent=`UID: ${u.uid.slice(0,12)}...`;
   const lv=calcLevel(u.xp||0), lvInfo_=levelInfo(u.xp||0), completed=(u.completedMissions||[]);
-  // Avatar real no modal
-  const avatarEl = document.getElementById("modal-avatar");
-  if(avatarEl) avatarEl.outerHTML = renderUserAvatar(u, 52).replace('flex-shrink:0;', 'flex-shrink:0;') + `<div id="modal-avatar" style="display:none"></div>`;
-  // Fallback simples caso renderUserAvatar falhe
-  const avEl = document.getElementById("modal-avatar");
-  if(avEl) avEl.innerHTML = (u.avatar && u.avatar.length<=4) ? u.avatar : (u.name||"?")[0]?.toUpperCase()||"?";
+  // Avatar no modal — usa wrapper para não acumular elementos no DOM
+  const avatarWrap = document.getElementById("modal-avatar-wrap");
+  if(avatarWrap) avatarWrap.innerHTML = renderUserAvatar(u, 52);
 
   document.getElementById("modal-name").textContent = u.provider==="anonymous"?"Visitante":u.name||"—";
   document.getElementById("modal-email").textContent = u.username ? `@${u.username} · ${u.email||u.provider||"—"}` : (u.email||u.provider||"—");
@@ -4563,11 +4671,11 @@ function renderSkillsAnalysis(){
   const translating=Math.min(100,Math.round((completed.filter(m=>m.includes("traducao")||m.includes("translate")).length*15)+10));
 
   const skills=[
-    {name:"🗣️ Speaking",    value:speaking,  tip:"Pratique pronúncia e diálogos"},
-    {name:"✍️ Writing",     value:writing,   tip:"Use a seção Writing & Translation"},
-    {name:"👂 Listening",   value:listening, tip:"Pratique diálogos e situações reais"},
-    {name:"📖 Reading",     value:reading,   tip:"Complete mais missões de vocabulário"},
-    {name:"🔄 Translating", value:translating,tip:"Faça exercícios de tradução"},
+    {name:"🗣️ Speaking",    value:speaking,  tip:t("skill_tip_speaking")},
+    {name:"✍️ Writing",     value:writing,   tip:t("skill_tip_writing")},
+    {name:"👂 Listening",   value:listening, tip:t("skill_tip_listening")},
+    {name:"📖 Reading",     value:reading,   tip:t("skill_tip_reading")},
+    {name:"🔄 Translating", value:translating,tip:t("skill_tip_translating")},
   ];
 
 
@@ -4734,7 +4842,7 @@ function renderBadges(){
   const container=document.getElementById("profile-badges-grid"); if(!container) return;
   const earned=userData?.badges||[];
   const stats=getBadgeStats();
-  const cats={momento:"⚡ Momento",performance:"🔥 Performance",resiliencia:"⚔️ Resiliência",dominio:"🧠 Domínio",raro:"👑 Raros"};
+  const cats={segmento:"🎯 Segmentos",momento:"⚡ Momento",performance:"🔥 Performance",resiliencia:"⚔️ Resiliência",dominio:"🧠 Domínio",raro:"👑 Raros"};
   let html="";
   Object.entries(cats).forEach(([cat,catLabel])=>{
     const catBadges=BADGES.filter(b=>b.cat===cat);
@@ -4748,6 +4856,11 @@ function renderBadges(){
         else if(b.id==="xp250"||b.id==="xp1000"){const need=b.id==="xp250"?250:1000;progress=`${Math.min(s.xp,need)}/${need} XP`;}
         else if(b.id==="daily7"){progress=`${Math.min(s.loginStreak,7)}/7 dias`;}
         else if(b.id==="missions10"){progress=`${Math.min(s.missionsCompleted,10)}/10`;}
+        else if(b.id.startsWith("seg_")){
+          const {segId,need}=_parseSegBadgeId(b.id);
+          const done=s.segMissions?.[segId]||0;
+          progress=`${Math.min(done,need)}/${need} missões`;
+        }
       }
       html+=`<div class="badge-item ${isEarned?"earned":"locked"}" onclick="showBadgeDetail('${b.id}')" style="cursor:pointer" title="${b.desc}">
         <div class="badge-item-icon-wrap">
@@ -4783,6 +4896,10 @@ window.showBadgeDetail=function(badgeId){
     } else if(b.id==="missions3"||b.id==="missions5"||b.id==="missions10"){
       const need=b.id==="missions3"?3:b.id==="missions5"?5:10;
       progressText=`Progresso: ${Math.min(stats.missionsCompleted,need)}/${need} missões`;
+    } else if(b.id.startsWith("seg_")){
+      const {segId,need}=_parseSegBadgeId(b.id);
+      const done=stats.segMissions?.[segId]||0;
+      progressText=`Progresso: ${Math.min(done,need)}/${need} missões em ${segId}`;
     }
   }
 
@@ -4891,9 +5008,9 @@ function renderCommitment(){
   const completed=(userData.completedMissions||[]).length;
 
   let level,color,msg;
-  if(streak>=7&&todayDone>=3){level="🔥 Alto";color="#22c55e";msg="Você está praticando com consistência! Continue assim.";}
-  else if(streak>=3||todayDone>=2){level="⚡ Médio";color="#f59e0b";msg="Bom ritmo! Tente praticar todos os dias para subir o nível.";}
-  else{level="💤 Baixo";color="#ef4444";msg="Tente fazer pelo menos 3 exercícios por dia para evoluir mais rápido.";}
+  if(streak>=7&&todayDone>=3){level=t("commitment_high");color="#22c55e";msg=t("commitment_msg_high");}
+  else if(streak>=3||todayDone>=2){level=t("commitment_mid");color="#f59e0b";msg=t("commitment_msg_mid");}
+  else{level=t("commitment_low");color="#ef4444";msg=t("commitment_msg_low");}
 
   const xp=userData.xp||0;
   const daysPracticed=(userData.practicedDays||[]).length||0;
@@ -4901,9 +5018,9 @@ function renderCommitment(){
     <div class="commitment-level" style="color:${color}">${level}</div>
     <div class="commitment-msg">${msg}</div>
     <div class="commitment-stats">
-      <div class="commitment-stat"><span>${xp.toLocaleString()}</span><small>XP Total</small></div>
-      <div class="commitment-stat"><span>${daysPracticed}</span><small>Dias Praticados</small></div>
-      <div class="commitment-stat"><span>${completed}</span><small>Missões</small></div>
+      <div class="commitment-stat"><span>${xp.toLocaleString()}</span><small>${t("stat_xp")}</small></div>
+      <div class="commitment-stat"><span>${daysPracticed}</span><small>${t("stat_days")}</small></div>
+      <div class="commitment-stat"><span>${completed}</span><small>${t("stat_missions")}</small></div>
     </div>
   `;
 }
@@ -5126,12 +5243,30 @@ function loadAvatar(){
 let currentWritingTopic=null, writingTopicIndex=0;
 
 function openWriting(){
+  _openWritingList(VICTOR_DATA.writingTopics,"✍️ Writing & Translation");
+}
+
+function openPreparePresent(){
+  _openWritingList(VICTOR_DATA.prepareTopics||[],"🎙️ Prepare & Present");
+}
+
+function _openWritingList(topics, titleText){
   document.getElementById("writing-selector").style.display="block";
   document.getElementById("writing-exercise").style.display="none";
+  const titleEl=document.querySelector("#view-writing .phases-title");
+  if(titleEl) titleEl.textContent=titleText;
   const list=document.getElementById("writing-topic-list"); list.innerHTML="";
 
   const levelColors={A1:"#22c55e",A2:"#f59e0b",B1:"#c9933a",B2:"#7c3aed"};
-  VICTOR_DATA.writingTopics.forEach((topic,i)=>{
+  const catLabels={interview:"🎙️ Entrevista",presentation:"📊 Apresentação"};
+  let lastCat=null;
+  topics.forEach((topic,i)=>{
+    if(topic.category&&topic.category!==lastCat){
+      lastCat=topic.category;
+      const sep=document.createElement("div"); sep.className="writing-section-sep";
+      sep.textContent=catLabels[topic.category]||topic.category;
+      list.appendChild(sep);
+    }
     const div=document.createElement("div"); div.className="phase-card unlocked";
     div.innerHTML=`
       <div class="phase-left">
@@ -5141,15 +5276,18 @@ function openWriting(){
       </div>
       <div class="phase-right">→</div>
     `;
-    div.addEventListener("click",()=>startWritingTopic(i));
+    div.addEventListener("click",()=>startWritingTopic(i,topics));
     list.appendChild(div);
   });
   showView("view-writing");
 }
 
-function startWritingTopic(index){
+let _currentWritingTopics=null;
+function startWritingTopic(index,topicsArr){
+  if(topicsArr) _currentWritingTopics=topicsArr;
+  const topics=_currentWritingTopics||VICTOR_DATA.writingTopics;
   writingTopicIndex=index;
-  currentWritingTopic=VICTOR_DATA.writingTopics[index];
+  currentWritingTopic=topics[index];
   const t=currentWritingTopic;
 
   document.getElementById("writing-selector").style.display="none";
@@ -5180,10 +5318,11 @@ function startWritingTopic(index){
   if(inlineEl) inlineEl.style.display="none";
 
   // next button
+  const _wTopics=_currentWritingTopics||VICTOR_DATA.writingTopics;
   const nextBtn=document.getElementById("btn-next-writing");
-  if(writingTopicIndex<VICTOR_DATA.writingTopics.length-1){
+  if(writingTopicIndex<_wTopics.length-1){
     nextBtn.style.display="block";
-    nextBtn.textContent=`Próximo: ${VICTOR_DATA.writingTopics[writingTopicIndex+1].icon} ${VICTOR_DATA.writingTopics[writingTopicIndex+1].title} →`;
+    nextBtn.textContent=`Próximo: ${_wTopics[writingTopicIndex+1].icon} ${_wTopics[writingTopicIndex+1].title} →`;
   } else nextBtn.style.display="none";
 }
 
@@ -5311,13 +5450,26 @@ let _sessionStats = {
   retries: 0,
 };
 
+function _parseSegBadgeId(id){
+  const p=id.replace(/^seg_/,"").split("_");
+  const need=parseInt(p.pop());
+  return {segId:p.join("_"),need};
+}
+
 function getBadgeStats(){
   const completed = userData?.completedMissions||[];
+
+  // Single pass: count completed missions per segment
+  const segMissions = {};
+  completed.forEach(m=>{
+    const idx=m.indexOf("_");
+    if(idx>0){ const seg=m.slice(0,idx); segMissions[seg]=(segMissions[seg]||0)+1; }
+  });
+
   const segDone = VICTOR_DATA.segments.filter(seg=>{
     const phases = seg.phases||[];
     const total = phases.reduce((a,p)=>(p.missions||[]).length+a,0);
-    const done = completed.filter(m=>m.startsWith(seg.id+"_")).length;
-    return total>0 && done/total>=0.6;
+    return total>0 && (segMissions[seg.id]||0)/total>=0.6;
   }).map(s=>s.id);
 
   return {
@@ -5330,6 +5482,7 @@ function getBadgeStats(){
     retries: (userData?.retries||0)+_sessionStats.retries,
     answerStreak: userData?.answerStreak||0,
     segmentsDone: segDone,
+    segMissions,
     writingCompleted: userData?.writingCompleted||0,
     grammarCompleted: completed.filter(m=>m.startsWith("gramatica_")).length,
   };
@@ -5341,13 +5494,19 @@ function checkBadges(){
   const newBadges = BADGES.filter(b => !earned.includes(b.id) && b.condition(stats));
   if(!newBadges.length) return;
 
-  // Save to userData
+  // Save ALL newly earned badges silently (including catch-up from other segments)
   const updated = [...earned, ...newBadges.map(b=>b.id)];
   userData.badges = updated;
   if(currentUser) saveProgressSafe(currentUser.uid, {badges:updated});
 
-  // Show only 1 badge per session — avoid badge flooding
-  showBadgeUnlock(newBadges[0]);
+  // Only SHOW seg_ badges from the active segment — never interrupt with an unrelated segment badge
+  const toShow = newBadges.filter(b => {
+    if(!b.id.startsWith("seg_")) return true;
+    const {segId} = _parseSegBadgeId(b.id);
+    return segId === currentSegmentId;
+  });
+  if(!toShow.length) return;
+  showBadgeUnlock(toShow[0]);
 }
 
 function showBadgeUnlock(badge){
@@ -5382,80 +5541,182 @@ function showBadgeUnlock(badge){
 
 async function shareBadge(badge){
   try{
+    // Load logo for branding footer (cached after first load)
+    if(!_logoImgCache) _logoImgCache = await new Promise(res => {
+      const img = new Image();
+      img.onload  = () => res(img);
+      img.onerror = () => res(null);
+      img.src = "/logo_full_2.png";
+    });
+    const logoImg = _logoImgCache;
+
     const canvas = document.createElement("canvas");
     canvas.width = 1080; canvas.height = 1080;
     const ctx = canvas.getContext("2d");
 
-    // Background gradient
-    const grad = ctx.createLinearGradient(0,0,1080,1080);
-    grad.addColorStop(0,"#0a0f1e");
-    grad.addColorStop(0.5,"#0d1b2e");
-    grad.addColorStop(1,"#0a0f1e");
-    ctx.fillStyle = grad; ctx.fillRect(0,0,1080,1080);
+    // ── BACKGROUND ───────────────────────────────────────────────
+    const bg = ctx.createLinearGradient(0,0,1080,1080);
+    bg.addColorStop(0,"#08052a");
+    bg.addColorStop(0.5,"#130845");
+    bg.addColorStop(1,"#08052a");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0,0,1080,1080);
 
-    // Gold border glow
-    ctx.shadowColor = "rgba(201,147,58,0.6)";
-    ctx.shadowBlur = 40;
-    ctx.strokeStyle = "rgba(201,147,58,0.7)";
-    ctx.lineWidth = 8;
-    const r = 48;
-    ctx.beginPath();
-    ctx.moveTo(r,4); ctx.lineTo(1080-r,4);
-    ctx.quadraticCurveTo(1076,4,1076,r);
-    ctx.lineTo(1076,1080-r);
-    ctx.quadraticCurveTo(1076,1076,1080-r,1076);
-    ctx.lineTo(r,1076); ctx.quadraticCurveTo(4,1076,4,1080-r);
-    ctx.lineTo(4,r); ctx.quadraticCurveTo(4,4,r,4);
-    ctx.closePath(); ctx.stroke();
-    ctx.shadowBlur = 0;
+    // Purple spotlight top-center
+    const spl = ctx.createRadialGradient(540,180,0,540,180,700);
+    spl.addColorStop(0,"rgba(124,58,237,0.40)");
+    spl.addColorStop(0.55,"rgba(124,58,237,0.10)");
+    spl.addColorStop(1,"rgba(0,0,0,0)");
+    ctx.fillStyle = spl; ctx.fillRect(0,0,1080,1080);
 
-    // "CONQUISTA DESBLOQUEADA" label
-    ctx.fillStyle = "rgba(201,147,58,0.75)";
-    ctx.font = "bold 38px system-ui, sans-serif";
-    ctx.textAlign = "center";
-    ctx.letterSpacing = "6px";
-    ctx.fillText("CONQUISTA DESBLOQUEADA", 540, 160);
+    // Pink glow center
+    const pg = ctx.createRadialGradient(540,430,0,540,430,460);
+    pg.addColorStop(0,"rgba(236,72,153,0.22)");
+    pg.addColorStop(0.6,"rgba(236,72,153,0.06)");
+    pg.addColorStop(1,"rgba(0,0,0,0)");
+    ctx.fillStyle = pg; ctx.fillRect(0,0,1080,1080);
 
-    // Badge icon (emoji rendered large)
-    ctx.font = "220px serif";
-    ctx.textAlign = "center";
-    ctx.fillText(badge.icon, 540, 460);
+    // ── LIGHT RAYS from center ────────────────────────────────────
+    ctx.save(); ctx.translate(540,430);
+    for(let i=0;i<12;i++){
+      const a = (i/12)*Math.PI*2;
+      const rg = ctx.createLinearGradient(0,0,Math.cos(a)*500,Math.sin(a)*500);
+      rg.addColorStop(0,"rgba(255,255,255,0.055)");
+      rg.addColorStop(1,"rgba(255,255,255,0)");
+      ctx.beginPath();
+      ctx.moveTo(0,0);
+      const w = Math.PI/18;
+      ctx.lineTo(Math.cos(a-w)*500, Math.sin(a-w)*500);
+      ctx.lineTo(Math.cos(a+w)*500, Math.sin(a+w)*500);
+      ctx.closePath();
+      ctx.fillStyle = rg; ctx.fill();
+    }
+    ctx.restore();
 
-    // Badge name
-    ctx.shadowColor = "rgba(201,147,58,0.5)";
-    ctx.shadowBlur = 20;
-    ctx.fillStyle = "#f2c87a";
-    ctx.font = "bold 72px system-ui, sans-serif";
-    ctx.fillText(badge.name, 540, 580);
-    ctx.shadowBlur = 0;
+    // ── BORDER — purple→pink gradient glow ────────────────────────
+    const brd = ctx.createLinearGradient(0,0,1080,1080);
+    brd.addColorStop(0,"rgba(124,58,237,0.95)");
+    brd.addColorStop(0.5,"rgba(236,72,153,0.95)");
+    brd.addColorStop(1,"rgba(124,58,237,0.95)");
+    ctx.shadowColor="rgba(124,58,237,0.8)"; ctx.shadowBlur=36;
+    ctx.strokeStyle=brd; ctx.lineWidth=7;
+    ctx.beginPath(); ctx.roundRect(6,6,1068,1068,50); ctx.stroke();
+    ctx.shadowBlur=0;
+    // inner soft ring
+    ctx.strokeStyle="rgba(255,255,255,0.07)"; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.roundRect(20,20,1040,1040,42); ctx.stroke();
 
-    // Badge desc
-    ctx.fillStyle = "rgba(255,255,255,0.65)";
-    ctx.font = "38px system-ui, sans-serif";
-    // Word-wrap desc
-    const words = badge.desc.split(" ");
-    let line = "", lines = [], maxW = 860;
-    words.forEach(w => {
-      const test = line ? line+" "+w : w;
-      if(ctx.measureText(test).width > maxW){ lines.push(line); line=w; }
-      else line=test;
+    // ── HEADER PILL ───────────────────────────────────────────────
+    const pw=660,ph=60,px=(1080-pw)/2,py=88;
+    const pg2 = ctx.createLinearGradient(px,0,px+pw,0);
+    pg2.addColorStop(0,"rgba(124,58,237,0.55)");
+    pg2.addColorStop(1,"rgba(236,72,153,0.55)");
+    ctx.fillStyle=pg2;
+    ctx.beginPath(); ctx.roundRect(px,py,pw,ph,30); ctx.fill();
+    ctx.strokeStyle="rgba(255,255,255,0.18)"; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.roundRect(px,py,pw,ph,30); ctx.stroke();
+    ctx.fillStyle="#fff";
+    ctx.font="700 27px system-ui,sans-serif";
+    ctx.textAlign="center"; ctx.letterSpacing="7px";
+    ctx.fillText("CONQUISTA DESBLOQUEADA",540,py+40);
+    ctx.letterSpacing="0px";
+
+    // ── GLOW RING behind emoji ────────────────────────────────────
+    const cx=540,cy=420;
+    // soft halo layers
+    [[260,0.10],[210,0.18],[160,0.28]].forEach(([r,a])=>{
+      const h = ctx.createRadialGradient(cx,cy,r*0.4,cx,cy,r);
+      h.addColorStop(0,`rgba(150,60,240,${a})`);
+      h.addColorStop(1,"rgba(0,0,0,0)");
+      ctx.fillStyle=h;
+      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
     });
-    if(line) lines.push(line);
-    lines.forEach((l,i) => ctx.fillText(l, 540, 660 + i*52));
+    // circle stroke
+    ctx.shadowColor="rgba(124,58,237,0.6)"; ctx.shadowBlur=24;
+    ctx.strokeStyle="rgba(180,100,255,0.35)"; ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.arc(cx,cy,195,0,Math.PI*2); ctx.stroke();
+    ctx.shadowBlur=0;
 
-    // XP badge
-    ctx.fillStyle = "rgba(201,147,58,0.15)";
-    ctx.beginPath(); ctx.roundRect(390,780,300,80,40); ctx.fill();
-    ctx.strokeStyle = "rgba(201,147,58,0.6)"; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.roundRect(390,780,300,80,40); ctx.stroke();
-    ctx.fillStyle = "#f2c87a";
-    ctx.font = "bold 44px system-ui, sans-serif";
-    ctx.fillText(`+${badge.xp} XP`, 540, 833);
+    // ── SPARKLE PARTICLES ─────────────────────────────────────────
+    const sparks=[
+      {a:0.20,r:218,s:7},{a:0.55,r:212,s:5},{a:0.85,r:222,s:8},
+      {a:1.20,r:208,s:5},{a:1.55,r:220,s:6},{a:1.90,r:214,s:7},
+      {a:2.30,r:210,s:5},{a:2.70,r:218,s:8},{a:3.10,r:212,s:5},
+      {a:3.50,r:208,s:7},{a:3.90,r:220,s:5},{a:4.30,r:214,s:6},
+      {a:4.75,r:210,s:7},{a:5.20,r:218,s:5},{a:5.65,r:212,s:6},
+    ];
+    const sparkColors=["rgba(180,100,255,1)","rgba(236,72,153,1)","rgba(255,215,100,1)"];
+    ctx.shadowBlur=12;
+    sparks.forEach((sp,i)=>{
+      const sx=cx+Math.cos(sp.a)*sp.r, sy=cy+Math.sin(sp.a)*sp.r;
+      ctx.shadowColor=sparkColors[i%3];
+      ctx.fillStyle="#fff";
+      ctx.beginPath(); ctx.arc(sx,sy,sp.s/2,0,Math.PI*2); ctx.fill();
+    });
+    ctx.shadowBlur=0;
 
-    // VIC Language branding
-    ctx.fillStyle = "rgba(255,255,255,0.3)";
-    ctx.font = "32px system-ui, sans-serif";
-    ctx.fillText("VIC English · app.viclanguage.com.br", 540, 960);
+    // ── EMOJI ─────────────────────────────────────────────────────
+    ctx.font="200px serif"; ctx.textAlign="center";
+    ctx.fillText(badge.icon, cx, cy+68);
+
+    // ── BADGE NAME — gold gradient ────────────────────────────────
+    const ng = ctx.createLinearGradient(160,0,920,0);
+    ng.addColorStop(0,"#e8a84a"); ng.addColorStop(0.5,"#fff3d0"); ng.addColorStop(1,"#e8a84a");
+    ctx.shadowColor="rgba(230,170,60,0.65)"; ctx.shadowBlur=28;
+    ctx.fillStyle=ng; ctx.font="800 70px system-ui,sans-serif";
+    ctx.fillText(badge.name,540,622);
+    ctx.shadowBlur=0;
+
+    // ── DESCRIPTION ───────────────────────────────────────────────
+    ctx.fillStyle="rgba(255,255,255,0.58)";
+    ctx.font="36px system-ui,sans-serif";
+    const dwords=badge.desc.split(" ");
+    let dline="",dlines=[],dmaxW=860;
+    dwords.forEach(w=>{
+      const t=dline?dline+" "+w:w;
+      if(ctx.measureText(t).width>dmaxW){dlines.push(dline);dline=w;}
+      else dline=t;
+    });
+    if(dline)dlines.push(dline);
+    dlines.forEach((l,i)=>ctx.fillText(l,540,686+i*50));
+
+    // ── XP PILL ───────────────────────────────────────────────────
+    const xpTop=686+Math.max(dlines.length,1)*50+28;
+    const xpW=272,xpH=74,xpX=(1080-xpW)/2;
+    const xpG=ctx.createLinearGradient(xpX,0,xpX+xpW,0);
+    xpG.addColorStop(0,"rgba(124,58,237,0.55)"); xpG.addColorStop(1,"rgba(236,72,153,0.55)");
+    ctx.fillStyle=xpG; ctx.beginPath(); ctx.roundRect(xpX,xpTop,xpW,xpH,37); ctx.fill();
+    ctx.shadowColor="rgba(201,147,58,0.5)"; ctx.shadowBlur=12;
+    ctx.strokeStyle="rgba(230,170,60,0.8)"; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.roundRect(xpX,xpTop,xpW,xpH,37); ctx.stroke();
+    ctx.shadowBlur=0;
+    ctx.fillStyle="#f2c87a"; ctx.font="800 44px system-ui,sans-serif";
+    ctx.fillText(`+${badge.xp} XP`,540,xpTop+50);
+
+    // ── DIVIDER ───────────────────────────────────────────────────
+    const dvY=930;
+    const dvG=ctx.createLinearGradient(60,0,1020,0);
+    dvG.addColorStop(0,"rgba(255,255,255,0)");
+    dvG.addColorStop(0.3,"rgba(124,58,237,0.5)");
+    dvG.addColorStop(0.7,"rgba(236,72,153,0.5)");
+    dvG.addColorStop(1,"rgba(255,255,255,0)");
+    ctx.strokeStyle=dvG; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(60,dvY); ctx.lineTo(1020,dvY); ctx.stroke();
+
+    // ── LOGO + URL ────────────────────────────────────────────────
+    if(logoImg){
+      const lh=52, lw=Math.round(logoImg.width*(lh/logoImg.height));
+      ctx.globalAlpha=0.82;
+      ctx.drawImage(logoImg,540-lw/2,dvY+16,lw,lh);
+      ctx.globalAlpha=1;
+      ctx.fillStyle="rgba(255,255,255,0.28)"; ctx.font="23px system-ui,sans-serif";
+      ctx.fillText("app.viclanguage.com.br",540,dvY+82);
+    } else {
+      ctx.fillStyle="rgba(255,255,255,0.35)"; ctx.font="700 30px system-ui,sans-serif";
+      ctx.fillText("VIC English",540,dvY+46);
+      ctx.fillStyle="rgba(255,255,255,0.28)"; ctx.font="23px system-ui,sans-serif";
+      ctx.fillText("app.viclanguage.com.br",540,dvY+76);
+    }
 
     // Convert to blob and share
     canvas.toBlob(async blob => {
@@ -5521,60 +5782,67 @@ function trackAnswer(isCorrect, isVoice=false){
 // ── PUSH NOTIFICATIONS ─────────────────────────────────
 
 
+// ── ONESIGNAL ────────────────────────────────────────────────────────────────
+const OS_APP_ID = "0d10ba5b-6831-4a78-aa5f-1b001370a487";
+
+function initOneSignal(){
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  window.OneSignalDeferred.push(async function(OneSignal){
+    await OneSignal.init({
+      appId: OS_APP_ID,
+      safari_web_id: "web.onesignal.auto.54eebb47-16d1-4f2f-8c9e-9bb7522bb051",
+      notifyButton: { enable: false },
+      allowLocalhostAsSecureOrigin: true,
+    });
+    // Tag com data da última visita — usado para segmentar lembretes no dashboard
+    const today = new Date().toISOString().slice(0,10);
+    OneSignal.User.addTag("last_visit", today).catch(()=>{});
+    if(currentUser?.uid) OneSignal.User.addTag("uid", currentUser.uid).catch(()=>{});
+  });
+}
+
 async function requestNotificationPermission(){
-  if(!("Notification" in window)) return;
-  if(Notification.permission==="granted"){
-    scheduleNotifications();
-    if(currentUser?.uid) registerFCMToken(currentUser.uid).catch(()=>{});
-    return;
-  }
-  if(Notification.permission!=="denied"){
-    const perm=await Notification.requestPermission();
-    if(perm==="granted"){
-      scheduleNotifications();
-      if(currentUser?.uid) registerFCMToken(currentUser.uid).catch(()=>{});
-    }
-  }
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  window.OneSignalDeferred.push(async function(OneSignal){
+    await OneSignal.Notifications.requestPermission();
+  });
 }
 
-function scheduleNotifications(){
-  if(!("Notification" in window)||Notification.permission!=="granted") return;
-  if(_cfg.notifEnabled==="0") return;
-
-  localStorage.setItem("vic_last_visit", String(Date.now()));
-
-  // Schedule a 7pm reminder via service worker if user hasn't completed today's missions
-  const dp = getDailyProgress();
-  if(!dp.allComplete){
-    const now = new Date();
-    const target = new Date(); target.setHours(19,0,0,0);
-    const delay = target.getTime() - now.getTime();
-    if(delay > 0){
-      navigator.serviceWorker?.ready.then(reg => {
-        reg.active?.postMessage({
-          type: "SCHEDULE_NOTIF",
-          delay,
-          title: "VIC English 📚",
-          body: "Você não praticou hoje! 🔥 Seu streak está em risco.",
-        });
-      }).catch(()=>{});
-    }
-  }
-}
-
-// Ask for notifications with friendly banner after first mission
+// Ask for notifications with a full-screen modal after first mission
 function showNotifBanner(){
-  if(!("Notification" in window)||Notification.permission!=="default") return;
   if(_cfg.notifAsked) return;
-  _setCfg("notifAsked","1");
-  const banner=document.createElement("div");
-  banner.className="notif-banner";
-  banner.innerHTML=`<span style="font-size:22px">🔔</span><div style="flex:1"><div style="font-weight:800;color:#fff">Ativar lembretes?</div><div style="font-size:12px;opacity:0.6">Receba frases motivacionais de filmes + lembretes diários</div></div><button style="padding:8px 16px;background:var(--p);border:none;border-radius:999px;color:#fff;font-weight:800;cursor:pointer;font-family:var(--font)" onclick="requestNotificationPermission();this.closest('.notif-banner').remove()">Ativar</button><button style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:18px;padding:4px 8px" onclick="this.closest('.notif-banner').remove()">✕</button>`;
-  const daily=document.querySelector(".daily-block");
-  daily?.parentNode?.insertBefore(banner, daily);
+  // Delay so the mission-complete celebration plays first
+  setTimeout(()=>{
+    _setCfg("notifAsked","1");
+    const overlay=document.createElement("div");
+    overlay.className="notif-modal-overlay";
+    overlay.innerHTML=`
+      <div class="notif-modal">
+        <div class="notif-modal-icon">🔔</div>
+        <h2>Receba dicas todo dia</h2>
+        <p class="notif-sub">Ative as notificações e não perca seu streak — mesmo com o app fechado.</p>
+        <ul class="notif-modal-perks">
+          <li><span class="perk-icon">💡</span>Dica diária de inglês: false friends, phrasal verbs e mais</li>
+          <li><span class="perk-icon">🔥</span>Lembrete de streak para você nunca quebrar a sequência</li>
+          <li><span class="perk-icon">🧠</span>Curiosidades científicas sobre aprender uma nova língua</li>
+        </ul>
+        <button class="btn-notif-yes" id="btn-notif-yes">Sim, quero receber! 🚀</button>
+        <button class="btn-notif-skip">Talvez depois</button>
+      </div>`;
+    document.body.appendChild(overlay);
+    overlay.querySelector(".btn-notif-skip").onclick=()=>overlay.remove();
+    overlay.querySelector("#btn-notif-yes").onclick=async()=>{
+      overlay.remove();
+      await requestNotificationPermission();
+    };
+  }, 1800);
 }
+
+function scheduleNotifications(){ /* OneSignal gerencia — noop */ }
 
 // ── PUSH DO PAINEL ADMIN ─────────────────────────────────────────────────────
+// O envio manual agora é feito pelo dashboard OneSignal (onesignal.com)
+// ou via API REST abaixo:
 async function sendPushFromAdmin(){
   const title = document.getElementById("push-title")?.value?.trim();
   const body  = document.getElementById("push-body")?.value?.trim();
@@ -5584,12 +5852,30 @@ async function sendPushFromAdmin(){
   if(btn){ btn.disabled=true; btn.textContent="Enviando..."; }
 
   try{
-    const data = await callSendPushToAll({ title, body });
-    showXpToast(`✅ Push enviado para ${data.sent} dispositivos!`);
-    if(document.getElementById("push-title")) document.getElementById("push-title").value="";
-    if(document.getElementById("push-body"))  document.getElementById("push-body").value="";
+    const res = await fetch("https://api.onesignal.com/notifications", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Basic OS_REST_API_KEY", // substitua no dashboard
+      },
+      body: JSON.stringify({
+        app_id: OS_APP_ID,
+        included_segments: ["All"],
+        headings: { en: title, pt: title },
+        contents:  { en: body,  pt: body  },
+        url: "https://app.viclanguage.com.br",
+      }),
+    });
+    const data = await res.json();
+    if(data.id){
+      showXpToast(`✅ Push enviado para ${data.recipients||"todos"} usuários!`);
+      if(document.getElementById("push-title")) document.getElementById("push-title").value="";
+      if(document.getElementById("push-body"))  document.getElementById("push-body").value="";
+    } else {
+      showXpToast("❌ Erro: " + (data.errors?.[0]||"desconhecido"));
+    }
   }catch(e){
-    showXpToast("❌ Erro ao enviar: " + (e.message||"desconhecido"));
+    showXpToast("❌ Erro ao enviar: " + e.message);
   }finally{
     if(btn){ btn.disabled=false; btn.textContent="📣 Enviar para todos"; }
   }
@@ -5757,6 +6043,7 @@ async function _handleAuth(user){
 
   // Block unverified email users (Google logins are pre-verified, guests are local)
   if(!user.emailVerified && !user.isLocalGuest &&
+     user.uid !== OWNER_UID &&
      user.providerData?.[0]?.providerId === "password"){
     hideLoadingSplash();
     const addrEl = document.getElementById("verify-email-addr");
@@ -5807,6 +6094,9 @@ function startOnboarding(){
   obStep = 0;
   _obLocked = false;
   _onboardingActive = true; // block all automatic navigation
+  // Auto-show Android install instructions if on Android
+  const isAndroid = /android/i.test(navigator.userAgent);
+  if(isAndroid) showInstallOS("android");
   renderObStep();
   showView("view-onboarding");
 }
@@ -6398,6 +6688,9 @@ function init(){
     showView("view-dashboard");
     showAdminReturnBtn();
   });
+  document.getElementById("btn-admin-signout")?.addEventListener("click", () => {
+    logoutUser();
+  });
   // Também registrar o botão flutuante do admin
   document.getElementById("btn-admin-float")?.addEventListener("click", () => {
     loadAdminDashboard();
@@ -6456,9 +6749,9 @@ function init(){
   document.getElementById("btn-daily-complete-ok")?.addEventListener("click",()=>{
     document.getElementById("daily-complete-overlay")?.classList.remove("visible");
   });
-  document.getElementById("btn-edit-name")?.addEventListener("click",()=>openEditModal("name","Novo nome",userData?.name||"","text"));
-  document.getElementById("btn-edit-email")?.addEventListener("click",()=>openEditModal("email","Novo email",userData?.email||"","email"));
-  document.getElementById("btn-edit-password")?.addEventListener("click",()=>openEditModal("password","Nova senha","","password"));
+  document.getElementById("btn-edit-name")?.addEventListener("click",()=>openEditModal("name",t("edit_name_title"),userData?.name||"","text"));
+  document.getElementById("btn-edit-email")?.addEventListener("click",()=>openEditModal("email",t("edit_email_title"),userData?.email||"","email"));
+  document.getElementById("btn-edit-password")?.addEventListener("click",()=>openEditModal("password",t("edit_pass_title"),"","password"));
   document.getElementById("btn-save-edit")?.addEventListener("click",saveEdit);
   document.getElementById("btn-cancel-edit")?.addEventListener("click",()=>document.getElementById("profile-edit-modal").style.display="none");
   document.getElementById("btn-share-app")?.addEventListener("click",shareAppPanel);
@@ -6471,8 +6764,7 @@ function init(){
   document.getElementById("btn-upgrade-dash")?.addEventListener("click",showUpgradeScreen);
   document.getElementById("btn-start-diag")?.addEventListener("click",()=>{
     document.getElementById("diag-invite-banner").style.display="none";
-    if(userData.diagnosisAnswers && !userData.levelTestCompleted){ startLevelTest(); }
-    else { startDiagnosis(); }
+    startLevelTest();
   });
   document.getElementById("btn-skip-diag")?.addEventListener("click",async()=>{
     // mark as skipped so banner doesn't show again
@@ -6482,6 +6774,8 @@ function init(){
   });
   // Writing
   document.getElementById("writing-core-banner")?.addEventListener("click",openWriting);
+  // Prepare & Present
+  document.getElementById("prepare-present-banner")?.addEventListener("click",openPreparePresent);
   document.getElementById("btn-back-writing")?.addEventListener("click",backToDashboard);
   document.getElementById("btn-back-writing-ex")?.addEventListener("click",openWriting);
   document.getElementById("btn-next-writing")?.addEventListener("click",()=>startWritingTopic(writingTopicIndex+1));
@@ -6556,6 +6850,9 @@ function init(){
   document.getElementById("btn-reload-auth")?.addEventListener("click",()=>{
     hardReloadWithCacheClear();
   });
+  document.getElementById("btn-reload-onboarding")?.addEventListener("click",()=>{
+    hardReloadWithCacheClear();
+  });
   document.getElementById("btn-start-now")?.addEventListener("click",()=>openSegmentPhases(currentSegmentId));
   document.getElementById("btn-goto-flashcards")?.addEventListener("click",openFlashcards);
   document.getElementById("btn-goto-memory")?.addEventListener("click",openMemoryFree);
@@ -6579,6 +6876,7 @@ function init(){
 
   // upgrade
   document.getElementById("btn-back-upgrade")?.addEventListener("click",backToDashboard);
+  document.getElementById("btn-back-upgrade-bottom")?.addEventListener("click",backToDashboard);
   // lb-sheet usa closeLeaderboard() diretamente
   document.getElementById("btn-leaderboard")?.addEventListener("click",openLeaderboard);
   const mpBtn=document.getElementById("btn-pay-mp"); if(mpBtn) mpBtn.href=MP_LINK;
@@ -6699,6 +6997,9 @@ if(typeof backToDashboard !== 'undefined') window.backToDashboard = backToDashbo
 if(typeof showView !== 'undefined') window.showView = showView;
 if(typeof openGlossary !== 'undefined') window.openGlossary = openGlossary;
 if(typeof closeGlossary !== 'undefined') window.closeGlossary = closeGlossary;
+if(typeof toggleSegments !== 'undefined') window.toggleSegments = toggleSegments;
+if(typeof toggleXpStats !== 'undefined') window.toggleXpStats = toggleXpStats;
+if(typeof toggleDashSection !== 'undefined') window.toggleDashSection = toggleDashSection;
 
 // ── Email verification screen handlers ────────────────────────────────────────
 window.checkEmailVerified = async function(){

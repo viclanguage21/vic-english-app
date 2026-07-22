@@ -761,9 +761,74 @@ const VICTOR_DATA = {
             {id:"tr1",type:"translate_pt_en",en:"Turn left at the traffic light.",pt:"Vire à esquerda no semáforo.",answer:"turn left at the traffic light",words:[{w:"turn left",cls:"verb",tr:"vire à esquerda"},{w:"traffic light",cls:"noun",tr:"semáforo"}]},
           ]},
         ]},
-        {id:"f3",name:"Fase 3 ⭐",subtitle:"Intermediário",unlocked:false,missions:[]},
-        {id:"f4",name:"Fase 4 🔥",subtitle:"Intermediário Avançado",unlocked:false,missions:[]},
-        {id:"f5",name:"Fase 5 🏆",subtitle:"Avançado",unlocked:false,missions:[]},
+        {id:"f3",name:"Fase 3 ⭐",subtitle:"Pontos Turísticos",unlocked:false,missions:[
+          {id:"atrações_f3",name:"🌺 Atrações de Santos",icon:"🌺",description:"Principais pontos turísticos de Santos",xpTotal:80,phrases:[
+            {id:"a1",type:"pronunciation",en:"The Orquidário Municipal has over 3,000 orchid species and is free to visit. 🌺",pt:"O Orquidário Municipal tem mais de 3.000 espécies de orquídeas e é gratuito.",words:[{w:"orchid",cls:"noun",tr:"orquídea"},{w:"species",cls:"noun",tr:"espécies"},{w:"free",cls:"adj",tr:"gratuito"}]},
+            {id:"a2",type:"fill_blank",en:"The ___ do Monte Serrat takes you to the hilltop sanctuary with panoramic views. 🚡",pt:"O bondinho do Monte Serrat leva você ao santuário no topo com vistas panorâmicas.",answer:"cable car",words:[{w:"cable car",cls:"noun",tr:"bondinho/teleférico"},{w:"panoramic",cls:"adj",tr:"panorâmico"}]},
+            {id:"a3",type:"multiple_choice",en:"Tourist: 'Where can I learn about Santos FC and Pelé?' You say: ⚽",pt:"Turista pergunta sobre Pelé. Você diz:",options:["I recommend the Museu Pelé — it is dedicated to the King of Football! 👑","There is no museum here. ❌","Go to the beach instead. 🏖️","I don't know. 🤷"],correct:0,words:[{w:"dedicated",cls:"adj",tr:"dedicado"}]},
+            {id:"a4",type:"translate_pt_en",en:"The Museu do Café is inside the famous 1922 Coffee Exchange building.",pt:"O Museu do Café fica dentro do famoso edifício da Bolsa de Café de 1922.",answer:"the museu do café is inside the famous 1922 coffee exchange building",words:[{w:"exchange",cls:"noun",tr:"bolsa/câmbio"},{w:"inside",cls:"prep",tr:"dentro de"}]},
+            {id:"a5",type:"word_order",en:"The Jardim da Orla is the longest urban garden in the world. 🌿",pt:"O Jardim da Orla é o jardim urbano mais longo do mundo.",scrambled:["The","Jardim","da","Orla","is","the","longest","urban","garden","in","the","world."],answer:"The Jardim da Orla is the longest urban garden in the world.",words:[{w:"longest",cls:"adj",tr:"o mais longo"},{w:"urban",cls:"adj",tr:"urbano"}]},
+          ]},
+          {id:"mem_tur_f3",name:"🃏 Memória Atrações",icon:"🃏",description:"Pontos turísticos de Santos",xpTotal:50,phrases:[{id:"mem1",type:"memory_match",en:"Santos attractions 🌺",pt:"Atrações de Santos",pairs:[{a:"🌺 Orquidário",b:"orchid garden"},{a:"🚡 bondinho",b:"cable car"},{a:"☕ Museu do Café",b:"Coffee Museum"},{a:"👑 Museu Pelé",b:"Pelé Museum"}],words:[]}]},
+          {id:"match_tur_f3",name:"🔗 Match Atrações",icon:"🔗",description:"Conecte atrações aos nomes em inglês",xpTotal:50,phrases:[{id:"mc1",type:"match_columns",en:"Santos attractions 🗺️",pt:"Atrações",pairs:[{a:"🌺 orchid garden",b:"Orquidário Municipal"},{a:"🚡 cable car",b:"Bondinho Monte Serrat"},{a:"☕ coffee exchange",b:"Bolsa Oficial de Café"},{a:"🌿 urban garden",b:"Jardim da Orla"}],words:[]}]},
+          {id:"mc_tur_f3",name:"☑️ Quiz Atrações",icon:"☑️",description:"Fatos sobre os pontos turísticos",xpTotal:60,phrases:[
+            {id:"q1",type:"multiple_choice",en:"The Orquidário Municipal was founded in which year? 🌺",pt:"Em que ano foi fundado o Orquidário Municipal?",options:["1939 🌺","1922 ☕","1912 ⚽","1910 🎭"],correct:0,tip:"O Orquidário foi fundado em 1939! 🌺",words:[{w:"founded",cls:"verb",tr:"fundado"}]},
+            {id:"q2",type:"multiple_choice",en:"The Jardim da Orla stretches along the beachfront for: 🌿",pt:"O Jardim da Orla se estende pela orla por:",options:["5.4 km 🌿","2 km","10 km","1 km"],correct:0,words:[{w:"stretches",cls:"verb",tr:"se estende"}]},
+          ]},
+          {id:"order_tur_f3",name:"🔀 Ordene Atrações",icon:"🔀",description:"Frases sobre atrações",xpTotal:50,phrases:[
+            {id:"o1",type:"word_order",en:"Monte Serrat has a stunning view of the whole city. 🏔️",pt:"Monte Serrat tem uma vista deslumbrante de toda a cidade.",scrambled:["Monte","Serrat","has","a","stunning","view","of","the","whole","city."],answer:"Monte Serrat has a stunning view of the whole city.",words:[{w:"stunning",cls:"adj",tr:"deslumbrante"},{w:"whole",cls:"adj",tr:"inteira"}]},
+          ]},
+          {id:"traducao_tur_f3",name:"🔄 Traduções Atrações",icon:"🔄",description:"Traduza frases sobre atrações",xpTotal:60,phrases:[
+            {id:"tr1",type:"translate_pt_en",en:"The cable car goes up to the Monte Serrat sanctuary.",pt:"O bondinho sobe até o santuário do Monte Serrat.",answer:"the cable car goes up to the monte serrat sanctuary",words:[{w:"sanctuary",cls:"noun",tr:"santuário"}]},
+            {id:"tr2",type:"translate_en_pt",en:"The Museu do Café is one of the most beautiful buildings in Santos. ☕",pt:"O Museu do Café é um dos edifícios mais bonitos de Santos.",answer:"o museu do café é um dos edifícios mais bonitos de santos",words:[{w:"beautiful",cls:"adj",tr:"bonito"}]},
+          ]},
+        ]},
+        {id:"f4",name:"Fase 4 🔥",subtitle:"Santos FC & Esporte",unlocked:false,missions:[
+          {id:"futebol_f4",name:"⚽ Santos FC",icon:"⚽",description:"O Peixe — história e glórias",xpTotal:80,phrases:[
+            {id:"s1",type:"pronunciation",en:"Santos FC was founded on April 14th, 1912, and is known as 'O Peixe' — The Fish. ⚽",pt:"O Santos FC foi fundado em 14 de abril de 1912 e é conhecido como 'O Peixe'.",words:[{w:"founded",cls:"verb",tr:"fundado"},{w:"known as",cls:"phrase",tr:"conhecido como"}]},
+            {id:"s2",type:"fill_blank",en:"Santos FC won the Copa Libertadores in 1962 and ___. 🏆",pt:"O Santos FC venceu a Copa Libertadores em 1962 e 1963.",answer:"1963",words:[{w:"won",cls:"verb",tr:"venceu"}]},
+            {id:"s3",type:"multiple_choice",en:"What is the nickname of Santos FC? ⚽",pt:"Qual é o apelido do Santos FC?",options:["O Peixe — The Fish 🐟","O Leão — The Lion","O Tricolor","O Galo"],correct:0,tip:"Santos FC é 'O Peixe' por causa do mar! 🐟",words:[{w:"nickname",cls:"noun",tr:"apelido"}]},
+            {id:"s4",type:"translate_pt_en",en:"Pelé played for Santos FC from 1956 to 1974.",pt:"Pelé jogou no Santos FC de 1956 a 1974.",answer:"pelé played for santos fc from 1956 to 1974",words:[{w:"played for",cls:"verb",tr:"jogou pelo"}]},
+            {id:"s5",type:"word_order",en:"The Vila Belmiro stadium holds around sixteen thousand fans. ⚽",pt:"O estádio Vila Belmiro comporta cerca de 16.000 torcedores.",scrambled:["The","Vila","Belmiro","stadium","holds","around","sixteen","thousand","fans."],answer:"The Vila Belmiro stadium holds around sixteen thousand fans.",words:[{w:"holds",cls:"verb",tr:"comporta"},{w:"fans",cls:"noun",tr:"torcedores"}]},
+          ]},
+          {id:"pelé_f4",name:"👑 Pelé — O Rei",icon:"👑",description:"A lenda do futebol mundial",xpTotal:80,phrases:[
+            {id:"p1",type:"pronunciation",en:"Pelé scored over one thousand goals in his career, most of them wearing the Santos shirt. 👑",pt:"Pelé marcou mais de mil gols em sua carreira, a maioria deles com a camisa do Santos.",words:[{w:"scored",cls:"verb",tr:"marcou"},{w:"career",cls:"noun",tr:"carreira"}]},
+            {id:"p2",type:"multiple_choice",en:"Pelé is considered: 👑",pt:"Pelé é considerado:",options:["The greatest footballer of all time 👑","A good player from São Paulo","A Brazilian president","A local poet"],correct:0,words:[{w:"greatest",cls:"adj",tr:"o maior/melhor"}]},
+            {id:"p3",type:"fill_blank",en:"Pelé won the ___ Cup three times with Brazil: 1958, 1962 and 1970. 🌍",pt:"Pelé venceu a Copa do Mundo três vezes com o Brasil: 1958, 1962 e 1970.",answer:"World",words:[{w:"World Cup",cls:"noun",tr:"Copa do Mundo"}]},
+            {id:"p4",type:"translate_pt_en",en:"Neymar also started his career at Santos FC.",pt:"Neymar também iniciou sua carreira no Santos FC.",answer:"neymar also started his career at santos fc",words:[{w:"started",cls:"verb",tr:"iniciou"}]},
+          ]},
+          {id:"mem_tur_f4",name:"🃏 Memória Futebol",icon:"🃏",description:"Santos FC e Pelé",xpTotal:50,phrases:[{id:"mem1",type:"memory_match",en:"Santos FC facts ⚽",pt:"Santos FC",pairs:[{a:"⚽ O Peixe",b:"The Fish"},{a:"🏟️ Vila Belmiro",b:"Santos FC stadium"},{a:"👑 Pelé",b:"King of Football"},{a:"📅 1912",b:"Santos FC founded"}],words:[]}]},
+          {id:"match_tur_f4",name:"🔗 Match Futebol",icon:"🔗",description:"Conecte fatos do Santos FC",xpTotal:50,phrases:[{id:"mc1",type:"match_columns",en:"Santos FC match ⚽",pt:"Santos FC",pairs:[{a:"⚽ colors",b:"black and white"},{a:"🏆 Libertadores",b:"1962 and 1963"},{a:"👑 greatest player",b:"Pelé"},{a:"📍 neighborhood",b:"Vila Belmiro"}],words:[]}]},
+          {id:"mc_tur_f4",name:"☑️ Quiz Futebol",icon:"☑️",description:"Fatos sobre Santos FC",xpTotal:60,phrases:[
+            {id:"q1",type:"multiple_choice",en:"How many times has Santos FC won the Campeonato Brasileiro? 🏆",pt:"Quantas vezes o Santos FC venceu o Campeonato Brasileiro?",options:["8 times 🏆","3 times","5 times","12 times"],correct:0,words:[{w:"times",cls:"noun",tr:"vezes"}]},
+            {id:"q2",type:"multiple_choice",en:"Neymar Jr. left Santos FC to join which club? ⚽",pt:"Para qual clube Neymar Jr. foi ao deixar o Santos FC?",options:["FC Barcelona 🔵","Real Madrid ⚪","Manchester United 🔴","Juventus"],correct:0,words:[{w:"join",cls:"verb",tr:"entrar/se juntar"}]},
+          ]},
+          {id:"traducao_tur_f4",name:"🔄 Traduções Futebol",icon:"🔄",description:"Traduza frases sobre Santos FC",xpTotal:60,phrases:[
+            {id:"tr1",type:"translate_pt_en",en:"Santos FC won the Intercontinental Cup in 1962 and 1963.",pt:"O Santos FC venceu a Copa Intercontinental em 1962 e 1963.",answer:"santos fc won the intercontinental cup in 1962 and 1963",words:[{w:"won",cls:"verb",tr:"venceu"}]},
+            {id:"tr2",type:"translate_en_pt",en:"Pelé is the greatest player in the history of Santos FC. 👑",pt:"Pelé é o maior jogador da história do Santos FC.",answer:"pelé é o maior jogador da história do santos fc",words:[{w:"greatest",cls:"adj",tr:"o maior"}]},
+          ]},
+        ]},
+        {id:"f5",name:"Fase 5 🏆",subtitle:"Bairros e Praias",unlocked:false,missions:[
+          {id:"praias_f5",name:"🏖️ Praias de Santos",icon:"🏖️",description:"As sete praias da cidade",xpTotal:80,phrases:[
+            {id:"pr1",type:"pronunciation",en:"Santos has seven beaches connected in an eight-kilometer stretch. 🏖️",pt:"Santos tem sete praias conectadas em um trecho de oito quilômetros.",words:[{w:"stretch",cls:"noun",tr:"trecho"},{w:"connected",cls:"adj",tr:"conectadas"}]},
+            {id:"pr2",type:"fill_blank",en:"The most famous beach in Santos is Praia do ___. 🏖️",pt:"A praia mais famosa de Santos é a Praia do Gonzaga.",answer:"Gonzaga",words:[{w:"famous",cls:"adj",tr:"famosa"}]},
+            {id:"pr3",type:"multiple_choice",en:"Which Santos beach is closest to the port channel? ⚓",pt:"Qual praia de Santos fica mais próxima do canal do porto?",options:["Praia da Ponta da Praia ⚓","Praia do Gonzaga 🏖️","Praia do Itararé","Praia da Aparecida"],correct:0,words:[{w:"closest",cls:"adj",tr:"mais próxima"},{w:"channel",cls:"noun",tr:"canal"}]},
+            {id:"pr4",type:"translate_pt_en",en:"The boardwalk restaurants are the best on the beachfront.",pt:"Os restaurantes da orla são os melhores à beira-mar.",answer:"the boardwalk restaurants are the best on the beachfront",words:[{w:"boardwalk",cls:"noun",tr:"calçadão"},{w:"beachfront",cls:"noun",tr:"à beira-mar/orla"}]},
+            {id:"pr5",type:"word_order",en:"The beach at Boqueirão is great for families with children. 👨‍👩‍👧",pt:"A praia do Boqueirão é ótima para famílias com crianças.",scrambled:["The","beach","at","Boqueirão","is","great","for","families","with","children."],answer:"The beach at Boqueirão is great for families with children.",words:[{w:"families",cls:"noun",tr:"famílias"}]},
+          ]},
+          {id:"bairros_f5",name:"🏘️ Bairros de Santos",icon:"🏘️",description:"Principais bairros da cidade",xpTotal:80,phrases:[
+            {id:"b1",type:"pronunciation",en:"Gonzaga is the tourist heart of Santos, with restaurants and hotels along Avenida Ana Costa. 🛎️",pt:"Gonzaga é o coração turístico de Santos, com restaurantes e hotéis na Avenida Ana Costa.",words:[{w:"tourist heart",cls:"phrase",tr:"coração turístico"},{w:"along",cls:"prep",tr:"ao longo de"}]},
+            {id:"b2",type:"multiple_choice",en:"Which neighborhood is home to the Santos FC stadium? ⚽",pt:"Qual bairro abriga o estádio do Santos FC?",options:["Vila Belmiro ⚽","Gonzaga 🛎️","Ponta da Praia ⚓","Macuco 🏭"],correct:0,words:[{w:"home to",cls:"phrase",tr:"onde fica"}]},
+            {id:"b3",type:"fill_blank",en:"Avenida ___ Costa is the main commercial avenue in Gonzaga. 🛍️",pt:"A Avenida Ana Costa é a principal avenida comercial de Gonzaga.",answer:"Ana",words:[{w:"commercial",cls:"adj",tr:"comercial"}]},
+            {id:"b4",type:"translate_pt_en",en:"Ponta da Praia has traditional fish restaurants near the port.",pt:"Ponta da Praia tem restaurantes de peixe tradicionais perto do porto.",answer:"ponta da praia has traditional fish restaurants near the port",words:[{w:"traditional",cls:"adj",tr:"tradicionais"}]},
+          ]},
+          {id:"mem_tur_f5",name:"🃏 Memória Bairros",icon:"🃏",description:"Bairros e praias de Santos",xpTotal:50,phrases:[{id:"mem1",type:"memory_match",en:"Santos neighborhoods 🏘️",pt:"Bairros de Santos",pairs:[{a:"🏖️ Gonzaga",b:"tourist heart"},{a:"⚽ Vila Belmiro",b:"Santos FC stadium"},{a:"⚓ Ponta da Praia",b:"near the port"},{a:"🌊 Boqueirão",b:"family beach"}],words:[]}]},
+          {id:"match_tur_f5",name:"🔗 Match Bairros",icon:"🔗",description:"Conecte bairros e características",xpTotal:50,phrases:[{id:"mc1",type:"match_columns",en:"Santos neighborhoods 🗺️",pt:"Bairros",pairs:[{a:"🛍️ Av. Ana Costa",b:"main street in Gonzaga"},{a:"🏖️ Embaré",b:"upscale beachfront"},{a:"🏭 Macuco",b:"near port, industrial"},{a:"🎓 Encruzilhada",b:"central neighborhood"}],words:[]}]},
+          {id:"traducao_tur_f5",name:"🔄 Traduções Bairros",icon:"🔄",description:"Traduza frases sobre bairros",xpTotal:60,phrases:[
+            {id:"tr1",type:"translate_pt_en",en:"The Embaré neighborhood has an upscale beachfront.",pt:"O bairro Embaré tem uma orla sofisticada.",answer:"the embaré neighborhood has an upscale beachfront",words:[{w:"upscale",cls:"adj",tr:"sofisticado/nobre"}]},
+            {id:"tr2",type:"translate_en_pt",en:"Turn right on Avenida Presidente Wilson to reach the boardwalk. 🏖️",pt:"Vire à direita na Avenida Presidente Wilson para chegar à orla.",answer:"vire à direita na avenida presidente wilson para chegar à orla",words:[{w:"reach",cls:"verb",tr:"chegar a"}]},
+          ]},
+        ]},
       ]
     },
 
@@ -1902,6 +1967,46 @@ VICTOR_DATA.writingTopics = [
     ptPrompt:"O preço do fornecedor está alto. Escreva uma mensagem negociando preço ou condições melhores.",
     example:"Dear Mr. Lee,\n\nThank you for your quotation. We are very interested in working with you; however, the proposed price is slightly above our budget. Given the large volume of our order, we would appreciate a 12% discount. In return, we are willing to commit to a long-term partnership and faster payment terms. We believe this would be beneficial for both parties. Please let us know if this arrangement works for you.\n\nBest regards.",
     tips:["Acknowledge first, then raise the concern","Use 'however' and 'given that...' to soften","Offer something in return (win-win)"] },
+];
+
+// ── PREPARE & PRESENT ────────────────────────────────────────────────────────
+VICTOR_DATA.prepareTopics = [
+  // ── ENTREVISTAS ──
+  { id:"pp1", level:"B1", icon:"🎙️", title:"Interview: Tell Me About Yourself",
+    ptTitle:"Entrevista: Fale sobre você", category:"interview",
+    prompt:"Write 5-6 sentences answering: 'Tell me about yourself.' Include your profession, years of experience, key skills, and what you're looking for.",
+    ptPrompt:"Escreva 5-6 frases respondendo: 'Fale sobre você.' Inclua sua profissão, anos de experiência, habilidades principais e o que você busca.",
+    example:"I am a logistics professional with four years of experience at the Port of Santos. I specialize in cargo documentation and communication with international clients. I am fluent in Portuguese and have a strong working knowledge of English. I am detail-oriented, proactive, and I work well under pressure. Currently, I am looking for an opportunity to grow in a bilingual environment where I can contribute to international operations.",
+    tips:["Structure: Profession → Experience → Skills → Goals","Use Present Simple: 'I am...', 'I work...', 'I have...'","Keep it under 90 seconds when spoken","End with what you're looking for, not just your past"] },
+
+  { id:"pp2", level:"B1", icon:"🎯", title:"Interview: Your Strengths",
+    ptTitle:"Entrevista: Seus pontos fortes", category:"interview",
+    prompt:"Write 4-5 sentences describing your greatest professional strength. Give one specific example of how it helped you at work.",
+    ptPrompt:"Escreva 4-5 frases sobre seu maior ponto forte. Dê um exemplo concreto de como ele te ajudou no trabalho.",
+    example:"My greatest strength is meeting deadlines without compromising quality. I am highly organized and always plan my tasks in advance. For example, last quarter I coordinated three simultaneous shipment processes and delivered all documentation on time. I believe this ability to work under pressure is a valuable asset in logistics. My colleagues often rely on me when urgent tasks need to be handled efficiently.",
+    tips:["Name one strength clearly first","Back it up with a specific, real example","Use 'For example...' or 'Last year/quarter...'","Connect the strength to the job you want"] },
+
+  { id:"pp3", level:"B2", icon:"🚀", title:"Interview: Where Do You See Yourself in 5 Years?",
+    ptTitle:"Entrevista: Seus planos para 5 anos", category:"interview",
+    prompt:"Write 5-6 sentences answering: 'Where do you see yourself in 5 years?' Show ambition but also alignment with the company's goals.",
+    ptPrompt:"Escreva 5-6 frases respondendo: 'Onde você se vê em 5 anos?' Mostre ambição e alinhamento com a empresa.",
+    example:"In five years, I see myself in a senior role managing international client relationships and leading a small team. I want to deepen my English proficiency to communicate with global partners without any barriers. I am also interested in developing my skills in project management and KPI tracking. I believe this company offers the environment and challenges I need to grow professionally. Ultimately, I want to contribute to the company's international expansion and help achieve its strategic goals.",
+    tips:["Show ambition, but connect it to the company","Use: 'I see myself...', 'I want to...', 'I plan to...'","Mention skills you want to develop","Avoid: 'I want your job' or unrealistic goals"] },
+
+  // ── APRESENTAÇÕES ──
+  { id:"pp4", level:"B1", icon:"📊", title:"Presentation: Opening & Structure",
+    ptTitle:"Apresentação: Abertura e estrutura", category:"presentation",
+    prompt:"Write the opening of a 5-minute work presentation (6-8 sentences). Include: a greeting, your name/role, the topic, the structure, and how long it will take.",
+    ptPrompt:"Escreva a abertura de uma apresentação de 5 minutos (6-8 frases). Inclua: saudação, nome/cargo, tema, estrutura e duração.",
+    example:"Good morning, everyone. My name is Juliana Costa and I am the sales coordinator at VIC Logistics. Today I will present our Q3 results and our proposal for the next quarter. I will structure my talk into four parts: context, key results, challenges, and our action plan. The presentation will take approximately five minutes, and I will leave time for questions at the end. Please feel free to take notes and ask anything that is not clear.",
+    tips:["Always announce the structure upfront","Use: 'I will structure my talk into...'","State the time: 'This will take approximately...'","Invite questions: 'I will leave time for questions at the end'"] },
+
+  { id:"pp5", level:"B2", icon:"📈", title:"Presentation: Data, Solution & Closing",
+    ptTitle:"Apresentação: Dados, solução e encerramento", category:"presentation",
+    prompt:"Write the middle and closing of a work presentation (7-9 sentences). Present one problem with data, propose a solution, and close with a clear next step.",
+    ptPrompt:"Escreva o desenvolvimento e encerramento de uma apresentação (7-9 frases). Apresente um problema com dados, proponha uma solução e feche com próximo passo.",
+    example:"As you can see from this chart, our response time to client requests increased by 30% last quarter. This was mainly due to a lack of standardized follow-up procedures. To address this, we propose implementing a weekly KPI review meeting with the account team. This will allow us to identify bottlenecks early and realign our priorities before deadlines are missed. We have already discussed this with the stakeholders and received their support. In summary, the solution is low-cost, fast to implement, and directly addresses the root cause. The next step is to approve the action plan by the end of this week. Thank you for your attention — I am happy to take any questions.",
+    tips:["Reference data: 'As you can see from this chart...'","Name the problem, then your solution clearly","Use: 'To address this, we propose...'","Close with ONE clear next step + thank you","Practice speaking this aloud — fluency matters as much as content"] },
 ];
 
 // ══════════════════════════════════════════════════════
@@ -5529,7 +5634,7 @@ VICTOR_DATA.flashcardDecks.push({
 // ── Segmento NAVAL (hidden — em desenvolvimento) ──────────────────────────────
 (function(){
   VICTOR_DATA.segments.push({
-    id:"naval", name:"Naval", icon:"⚙️", available:true, hidden:true,
+    id:"naval", name:"Naval", icon:"⚙️", available:true, hidden:false,
     phases:[
       // ── f1 · A1 · Ferramentas ──────────────────────────────────────────────
       {
@@ -5867,3 +5972,983 @@ VICTOR_DATA.flashcardDecks.push({
     ]
   });
 })();
+
+// ── TURISMO f6 / f7 / f8 ─────────────────────────────
+(function(){
+  const seg = VICTOR_DATA.segments.find(s => s.id === "turismo");
+  if (!seg) return;
+  seg.phases.push(
+    {
+      id:"f6", name:"Fase 6 🌊", subtitle:"História e Monumentos",
+      unlocked:false,
+      missions:[
+        { id:"porto_f6", name:"⚓ Porto de Santos", icon:"⚓",
+          description:"O maior porto da América Latina",xpTotal:90,
+          phrases:[
+            {id:"p1",type:"pronunciation",en:"The Port of Santos is the largest port in Latin America, handling about 30% of Brazil's GDP. ⚓",pt:"O Porto de Santos é o maior da América Latina, movimentando cerca de 30% do PIB do Brasil.",words:[{w:"handling",cls:"verb",tr:"movimentando"},{w:"GDP",cls:"noun",tr:"PIB"}]},
+            {id:"p2",type:"fill_blank",en:"The Port of Santos handles around ___ percent of Brazil's total trade. ⚓",pt:"O Porto de Santos movimenta cerca de 30% do comércio total do Brasil.",answer:"30",words:[{w:"trade",cls:"noun",tr:"comércio"}]},
+            {id:"p3",type:"multiple_choice",en:"The Port of Santos is located: ⚓",pt:"O Porto de Santos está localizado:",options:["In Santos Bay, along the Ponta da Praia waterfront ⚓","In the center of São Paulo","In the Gonzaga neighborhood","On Monte Serrat hill"],correct:0,words:[{w:"located",cls:"verb",tr:"localizado"}]},
+            {id:"p4",type:"translate_pt_en",en:"The port channel is visible from the Ponta da Praia beach.",pt:"O canal do porto é visível da praia da Ponta da Praia.",answer:"the port channel is visible from the ponta da praia beach",words:[{w:"channel",cls:"noun",tr:"canal"},{w:"visible",cls:"adj",tr:"visível"}]},
+            {id:"p5",type:"word_order",en:"Santos was Brazil's main coffee export port from the 1870s to the 1930s. ☕",pt:"Santos foi o principal porto de exportação de café do Brasil de 1870 a 1930.",scrambled:["Santos","was","Brazil's","main","coffee","export","port","from","the","1870s","to","the","1930s."],answer:"Santos was Brazil's main coffee export port from the 1870s to the 1930s.",words:[{w:"export",cls:"noun",tr:"exportação"}]},
+          ]
+        },
+        { id:"monumentos_f6", name:"🏛️ Monumentos Históricos", icon:"🏛️",
+          description:"Edifícios e monumentos coloniais",xpTotal:90,
+          phrases:[
+            {id:"m1",type:"pronunciation",en:"The Santa Casa de Santos was founded in 1543 and is the oldest hospital still operating in Brazil. 🏥",pt:"A Santa Casa de Santos foi fundada em 1543 e é o hospital mais antigo em funcionamento no Brasil.",words:[{w:"founded",cls:"verb",tr:"fundada"},{w:"operating",cls:"adj",tr:"em funcionamento"}]},
+            {id:"m2",type:"multiple_choice",en:"The Bolsa Oficial de Café (Coffee Exchange) was built in: ☕",pt:"A Bolsa Oficial de Café foi construída em:",options:["1922 ☕","1912","1939","1543"],correct:0,tip:"O edifício da Bolsa do Café data de 1922!",words:[{w:"built",cls:"verb",tr:"construída"}]},
+            {id:"m3",type:"fill_blank",en:"The Teatro Guarany was built in 1910 and features ___ architecture. 🎭",pt:"O Teatro Guarany foi construído em 1910 e tem arquitetura Art Nouveau.",answer:"Art Nouveau",words:[{w:"features",cls:"verb",tr:"apresenta"},{w:"architecture",cls:"noun",tr:"arquitetura"}]},
+            {id:"m4",type:"translate_pt_en",en:"The Casarão do Valongo is a colonial building that was once a slave market.",pt:"O Casarão do Valongo é um edifício colonial que já foi um mercado de escravos.",answer:"the casarão do valongo is a colonial building that was once a slave market",words:[{w:"colonial",cls:"adj",tr:"colonial"},{w:"slave market",cls:"noun",tr:"mercado de escravos"}]},
+            {id:"m5",type:"word_order",en:"The Catedral Metropolitana was built in the nineteenth century in a neo-Gothic style. ⛪",pt:"A Catedral Metropolitana foi construída no século XIX em estilo neogótico.",scrambled:["The","Catedral","Metropolitana","was","built","in","the","nineteenth","century","in","a","neo-Gothic","style."],answer:"The Catedral Metropolitana was built in the nineteenth century in a neo-Gothic style.",words:[{w:"neo-Gothic",cls:"adj",tr:"neogótico"},{w:"century",cls:"noun",tr:"século"}]},
+          ]
+        },
+        { id:"mem_tur_f6", name:"🃏 Memória História", icon:"🃏",
+          description:"Datas e monumentos históricos",xpTotal:50,
+          phrases:[{id:"mem1",type:"memory_match",en:"Santos history 🏛️",pt:"História de Santos",pairs:[{a:"⚓ Port of Santos",b:"largest in Latin America"},{a:"☕ Coffee Exchange",b:"built in 1922"},{a:"🏥 Santa Casa",b:"founded 1543"},{a:"🎭 Teatro Guarany",b:"built in 1910"}],words:[]}]
+        },
+        { id:"match_tur_f6", name:"🔗 Match Monumentos", icon:"🔗",
+          description:"Conecte monumentos e datas",xpTotal:50,
+          phrases:[{id:"mc1",type:"match_columns",en:"Santos monuments 🏛️",pt:"Monumentos",pairs:[{a:"🏛️ neo-Gothic cathedral",b:"Catedral Metropolitana"},{a:"🏥 oldest hospital",b:"Santa Casa de Santos"},{a:"🏰 colonial building",b:"Casarão do Valongo"},{a:"☕ Art Deco",b:"Bolsa Oficial de Café"}],words:[]}]
+        },
+        { id:"mc_tur_f6", name:"☑️ Quiz História", icon:"☑️",
+          description:"Fatos históricos de Santos",xpTotal:60,
+          phrases:[
+            {id:"q1",type:"multiple_choice",en:"Santos was one of the first cities in Brazil to have: 💡",pt:"Santos foi uma das primeiras cidades do Brasil a ter:",options:["Electricity and trams, in 1909 💡","A football stadium","A shopping mall","An airport"],correct:0,words:[{w:"electricity",cls:"noun",tr:"eletricidade"},{w:"trams",cls:"noun",tr:"bondes"}]},
+            {id:"q2",type:"multiple_choice",en:"The Convento do Valongo was built in: 🏛️",pt:"O Convento do Valongo foi construído em:",options:["1640 🏛️","1543","1922","1910"],correct:0,words:[{w:"convent",cls:"noun",tr:"convento"}]},
+          ]
+        },
+        { id:"traducao_tur_f6", name:"🔄 Traduções História", icon:"🔄",
+          description:"Traduza frases históricas",xpTotal:60,
+          phrases:[
+            {id:"tr1",type:"translate_pt_en",en:"The Coffee Exchange is the most iconic building in Santos.",pt:"A Bolsa do Café é o edifício mais icônico de Santos.",answer:"the coffee exchange is the most iconic building in santos",words:[{w:"iconic",cls:"adj",tr:"icônico"}]},
+            {id:"tr2",type:"translate_en_pt",en:"The Santa Casa de Santos is the oldest hospital still operating in Brazil. 🏥",pt:"A Santa Casa de Santos é o hospital mais antigo em funcionamento no Brasil.",answer:"a santa casa de santos é o hospital mais antigo em funcionamento no brasil",words:[{w:"oldest",cls:"adj",tr:"mais antigo"}]},
+          ]
+        },
+      ]
+    },
+    {
+      id:"f7", name:"Fase 7 🏆", subtitle:"Gastronomia & Cultura",
+      unlocked:false,
+      missions:[
+        { id:"gastronomia_f7", name:"🍤 Gastronomia Santista", icon:"🍤",
+          description:"Comida típica e cultura local",xpTotal:90,
+          phrases:[
+            {id:"g1",type:"pronunciation",en:"Santos is famous for its seafood — especially shrimp, fish and crab from the Santos Bay. 🦐",pt:"Santos é famosa pelos frutos do mar — especialmente camarão, peixe e caranguejo da Baía de Santos.",words:[{w:"seafood",cls:"noun",tr:"frutos do mar"},{w:"especially",cls:"adv",tr:"especialmente"}]},
+            {id:"g2",type:"fill_blank",en:"The ___ de camarão is a popular local street food — a fried pastry filled with shrimp. 🍤",pt:"O pastel de camarão é um popular alimento de rua — uma massa frita recheada com camarão.",answer:"pastel",words:[{w:"fried",cls:"adj",tr:"frito"},{w:"filled with",cls:"phrase",tr:"recheado com"}]},
+            {id:"g3",type:"multiple_choice",en:"'Pão de ló de Margarida' is: 🍰",pt:"O 'Pão de ló de Margarida' é:",options:["A traditional sponge cake — a Santos specialty 🍰","A type of bread from Gonzaga","A local beer","A seafood soup"],correct:0,words:[{w:"sponge cake",cls:"noun",tr:"pão de ló"},{w:"specialty",cls:"noun",tr:"especialidade"}]},
+            {id:"g4",type:"translate_pt_en",en:"The fish restaurants in Ponta da Praia are excellent.",pt:"Os restaurantes de peixe em Ponta da Praia são excelentes.",answer:"the fish restaurants in ponta da praia are excellent",words:[{w:"excellent",cls:"adj",tr:"excelentes"}]},
+            {id:"g5",type:"word_order",en:"Santos was the coffee capital of Brazil from the 1870s to the 1930s. ☕",pt:"Santos foi a capital do café do Brasil de 1870 a 1930.",scrambled:["Santos","was","the","coffee","capital","of","Brazil","from","the","1870s","to","the","1930s."],answer:"Santos was the coffee capital of Brazil from the 1870s to the 1930s.",words:[{w:"capital",cls:"noun",tr:"capital"}]},
+          ]
+        },
+        { id:"cultura_f7", name:"🎉 Cultura Santista", icon:"🎉",
+          description:"Carnaval, canais e tradições",xpTotal:80,
+          phrases:[
+            {id:"c1",type:"pronunciation",en:"The Carnaval de Santos is a traditional carnival, considered the second most important in Brazil after Rio. 🎉",pt:"O Carnaval de Santos é um carnaval tradicional, considerado o segundo mais importante do Brasil depois do Rio.",words:[{w:"traditional",cls:"adj",tr:"tradicional"},{w:"considered",cls:"verb",tr:"considerado"}]},
+            {id:"c2",type:"multiple_choice",en:"Santos has how many waterway canals through its city center? 🌊",pt:"Santos tem quantos canais fluviais pelo centro da cidade?",options:["Six canals — Canal 1 to Canal 6 🌊","Three canals","Two canals","Ten canals"],correct:0,tip:"Santos tem 6 canais, do Canal 1 ao Canal 6!",words:[{w:"canals",cls:"noun",tr:"canais"}]},
+            {id:"c3",type:"fill_blank",en:"The Avenida Bartolomeu de Gusmão runs alongside ___ 6 in the city center. 🌊",pt:"A Avenida Bartolomeu de Gusmão corre ao lado do Canal 6 no centro da cidade.",answer:"Canal",words:[{w:"alongside",cls:"prep",tr:"ao lado de"}]},
+            {id:"c4",type:"translate_pt_en",en:"Santos was the second city in Brazil to have electricity and trams.",pt:"Santos foi a segunda cidade do Brasil a ter eletricidade e bondes.",answer:"santos was the second city in brazil to have electricity and trams",words:[{w:"trams",cls:"noun",tr:"bondes"}]},
+          ]
+        },
+        { id:"mem_tur_f7", name:"🃏 Memória Cultura", icon:"🃏",
+          description:"Gastronomia e cultura santista",xpTotal:50,
+          phrases:[{id:"mem1",type:"memory_match",en:"Santos culture 🎉",pt:"Cultura de Santos",pairs:[{a:"🦐 frutos do mar",b:"seafood"},{a:"🍤 pastel de camarão",b:"shrimp pastry"},{a:"🍰 pão de ló",b:"sponge cake"},{a:"🎉 carnaval",b:"traditional carnival"}],words:[]}]
+        },
+        { id:"match_tur_f7", name:"🔗 Match Gastronomia", icon:"🔗",
+          description:"Conecte pratos e descrições",xpTotal:50,
+          phrases:[{id:"mc1",type:"match_columns",en:"Santos food 🍤",pt:"Gastronomia",pairs:[{a:"🦐 seafood",b:"frutos do mar"},{a:"🍤 fried pastry + shrimp",b:"pastel de camarão"},{a:"🍰 local sponge cake",b:"pão de ló de Margarida"},{a:"☕ coffee city era",b:"1870s–1930s Santos"}],words:[]}]
+        },
+        { id:"mc_tur_f7", name:"☑️ Quiz Cultura", icon:"☑️",
+          description:"Cultura e gastronomia de Santos",xpTotal:60,
+          phrases:[
+            {id:"q1",type:"multiple_choice",en:"The best place in Santos for traditional seafood restaurants is: 🦐",pt:"O melhor lugar em Santos para restaurantes de frutos do mar tradicionais é:",options:["Ponta da Praia neighborhood 🦐","Gonzaga shopping district","Vila Belmiro","Monte Serrat"],correct:0,words:[{w:"traditional",cls:"adj",tr:"tradicional"}]},
+            {id:"q2",type:"multiple_choice",en:"The Santos Carnaval is considered: 🎉",pt:"O Carnaval de Santos é considerado:",options:["The second most important carnival in Brazil 🎉","The most important in Brazil","A small local event","A recent tradition from the 2000s"],correct:0,words:[{w:"carnival",cls:"noun",tr:"carnaval"}]},
+          ]
+        },
+        { id:"traducao_tur_f7", name:"🔄 Traduções Cultura", icon:"🔄",
+          description:"Traduza frases sobre cultura",xpTotal:60,
+          phrases:[
+            {id:"tr1",type:"translate_pt_en",en:"The shrimp pastry is the most popular street food in Santos.",pt:"O pastel de camarão é o alimento de rua mais popular de Santos.",answer:"the shrimp pastry is the most popular street food in santos",words:[{w:"popular",cls:"adj",tr:"popular"}]},
+            {id:"tr2",type:"translate_en_pt",en:"Santos has six waterway canals through the city center. 🌊",pt:"Santos tem seis canais fluviais pelo centro da cidade.",answer:"santos tem seis canais fluviais pelo centro da cidade",words:[{w:"waterway",cls:"adj",tr:"fluvial/aquático"}]},
+          ]
+        },
+      ]
+    },
+    {
+      id:"f8", name:"Fase 8 🌟", subtitle:"Guia Expert — Santos Completo",
+      unlocked:false,
+      missions:[
+        { id:"expert_f8", name:"🌍 Guia Expert", icon:"🌍",
+          description:"Situações avançadas com turistas internacionais",xpTotal:130,
+          phrases:[
+            {id:"e1",type:"pronunciation",en:"Welcome to Santos! I highly recommend starting at the Orquidário Municipal — it's free, world-class, and only ten minutes from here on Avenida Bartolomeu de Gusmão. 🌺",pt:"Bem-vindo a Santos! Recomendo muito começar pelo Orquidário Municipal — é gratuito, de nível mundial, e fica a apenas 10 minutos daqui na Avenida Bartolomeu de Gusmão.",words:[{w:"highly recommend",cls:"phrase",tr:"recomendo muito"},{w:"world-class",cls:"adj",tr:"de nível mundial"}]},
+            {id:"e2",type:"translate_pt_en",en:"For panoramic views of the city, take the cable car up to Monte Serrat — the view is breathtaking.",pt:"Para vistas panorâmicas da cidade, pegue o bondinho até o Monte Serrat — a vista é de tirar o fôlego.",answer:"for panoramic views of the city, take the cable car up to monte serrat — the view is breathtaking",words:[{w:"breathtaking",cls:"adj",tr:"de tirar o fôlego"},{w:"panoramic",cls:"adj",tr:"panorâmico"}]},
+            {id:"e3",type:"multiple_choice",en:"A tourist wants a full Santos experience in one day. The best route is: 🗺️",pt:"Um turista quer conhecer Santos em um dia. A melhor rota é:",options:["Orquidário → Museu do Café → Museu Pelé → Monte Serrat → Gonzaga beachfront 🗺️","Stay at the hotel all day 🛌","Just go to the beach 🏖️","Take a bus to São Paulo 🚌"],correct:0,words:[{w:"route",cls:"noun",tr:"rota"}]},
+            {id:"e4",type:"fill_blank",en:"If a tourist asks about Pelé, tell them: 'Pelé played for Santos FC for ___ years!' 👑",pt:"Se um turista perguntar sobre Pelé, diga: 'Pelé jogou no Santos FC por 18 anos!'",answer:"18",words:[{w:"played for",cls:"phrase",tr:"jogou pelo"}]},
+            {id:"e5",type:"word_order",en:"Santos Bay offers some of the best views of the port and the ocean. ⚓",pt:"A Baía de Santos oferece algumas das melhores vistas do porto e do oceano.",scrambled:["Santos","Bay","offers","some","of","the","best","views","of","the","port","and","the","ocean."],answer:"Santos Bay offers some of the best views of the port and the ocean.",words:[{w:"bay",cls:"noun",tr:"baía"},{w:"offers",cls:"verb",tr:"oferece"}]},
+          ]
+        },
+        { id:"directions_f8", name:"📍 Direções Avançadas", icon:"📍",
+          description:"Orientando turistas pela cidade",xpTotal:110,
+          phrases:[
+            {id:"d1",type:"pronunciation",en:"To get to the Museu do Café, take Avenida Conselheiro Nébias toward Praça Rui Barbosa — the building is unmissable, it's right on the square. ☕",pt:"Para chegar ao Museu do Café, pegue a Avenida Conselheiro Nébias em direção à Praça Rui Barbosa — o edifício é inconfundível, fica bem na praça.",words:[{w:"unmissable",cls:"adj",tr:"inconfundível"},{w:"square",cls:"noun",tr:"praça"}]},
+            {id:"d2",type:"translate_pt_en",en:"Walk along Avenida Presidente Wilson to enjoy the full beachfront.",pt:"Caminhe pela Avenida Presidente Wilson para aproveitar toda a orla.",answer:"walk along avenida presidente wilson to enjoy the full beachfront",words:[{w:"along",cls:"prep",tr:"ao longo de"},{w:"enjoy",cls:"verb",tr:"aproveitar"}]},
+            {id:"d3",type:"multiple_choice",en:"A tourist at Gonzaga beach asks how to get to Vila Belmiro stadium. You say: ⚽",pt:"Turista na praia do Gonzaga quer ir ao estádio Vila Belmiro. Você diz:",options:["Take a taxi or ride-share — it's about 15 minutes from here in the Vila Belmiro neighborhood ⚽","Walk to the port and turn left","Take the cable car up Monte Serrat","It's right here on the beach"],correct:0,words:[{w:"ride-share",cls:"noun",tr:"carona por app"},{w:"neighborhood",cls:"noun",tr:"bairro"}]},
+            {id:"d4",type:"fill_blank",en:"The Museu Pelé is located near the historic ___ area of Santos. 👑",pt:"O Museu Pelé está localizado perto da área histórica do centro de Santos.",answer:"center",words:[{w:"located",cls:"verb",tr:"localizado"}]},
+          ]
+        },
+        { id:"mem_tur_f8", name:"🃏 Memória Expert", icon:"🃏",
+          description:"Revisão completa de Santos",xpTotal:50,
+          phrases:[{id:"mem1",type:"memory_match",en:"Santos expert review 🌟",pt:"Revisão expert Santos",pairs:[{a:"🌺 Orquidário",b:"free, 3,000+ orchids"},{a:"⚓ Porto de Santos",b:"30% of Brazil's GDP"},{a:"☕ Bolsa do Café",b:"built 1922"},{a:"👑 Pelé",b:"1,000+ goals at Santos"}],words:[]}]
+        },
+        { id:"match_tur_f8", name:"🔗 Match Final Santos", icon:"🔗",
+          description:"Revisão total de Santos",xpTotal:60,
+          phrases:[{id:"mc1",type:"match_columns",en:"Santos final review 🏖️",pt:"Revisão final Santos",pairs:[{a:"🌺 3,000+ orchid species",b:"Orquidário Municipal"},{a:"🚡 cable car + hilltop",b:"Bondinho Monte Serrat"},{a:"☕ 1922 exchange building",b:"Museu do Café"},{a:"⚓ largest port LatAm",b:"Porto de Santos"}],words:[]}]
+        },
+        { id:"mc_tur_f8", name:"☑️ Quiz Expert", icon:"☑️",
+          description:"Teste seu conhecimento total de Santos",xpTotal:80,
+          phrases:[
+            {id:"q1",type:"multiple_choice",en:"Which of these Santos facts is correct? 🌟",pt:"Qual desses fatos sobre Santos é correto?",options:["Santos has 7 beaches in an 8 km stretch, plus the largest port in Latin America 🏖️","Santos has 3 beaches and a small regional port","Santos FC was founded in 1950","The Orquidário opened in 1980"],correct:0,words:[{w:"stretch",cls:"noun",tr:"trecho"}]},
+            {id:"q2",type:"multiple_choice",en:"A tourist says: 'I want to see the best of Santos in one afternoon.' Your best suggestion: 🗺️",pt:"Turista quer ver o melhor de Santos em uma tarde. Sua melhor sugestão:",options:["Museu do Café + Orquidário + Gonzaga beachfront walk + seafood dinner at Ponta da Praia 🌟","Stay inside the hotel","Only go to Vila Belmiro","Take a boat to Rio de Janeiro"],correct:0,words:[{w:"suggestion",cls:"noun",tr:"sugestão"}]},
+            {id:"q3",type:"multiple_choice",en:"Which avenue runs along the Santos beachfront? 🏖️",pt:"Qual avenida corre ao longo da orla de Santos?",options:["Avenida Presidente Wilson 🏖️","Avenida Ana Costa","Avenida Conselheiro Nébias","Avenida Bartolomeu de Gusmão"],correct:0,words:[{w:"avenue",cls:"noun",tr:"avenida"}]},
+          ]
+        },
+        { id:"traducao_tur_f8", name:"🔄 Traduções Expert", icon:"🔄",
+          description:"Traduções avançadas sobre Santos",xpTotal:70,
+          phrases:[
+            {id:"tr1",type:"translate_pt_en",en:"Santos is both a historic port city and a modern beach resort.",pt:"Santos é ao mesmo tempo uma cidade portuária histórica e uma moderna estância de praia.",answer:"santos is both a historic port city and a modern beach resort",words:[{w:"historic",cls:"adj",tr:"histórico"},{w:"resort",cls:"noun",tr:"estância"}]},
+            {id:"tr2",type:"translate_en_pt",en:"The Jardim da Orla stretches 5.4 kilometers along the entire beachfront. 🌿",pt:"O Jardim da Orla se estende por 5,4 quilômetros ao longo de toda a orla.",answer:"o jardim da orla se estende por 5,4 quilômetros ao longo de toda a orla",words:[{w:"stretches",cls:"verb",tr:"se estende"}]},
+            {id:"tr3",type:"translate_pt_en",en:"Pelé is considered the greatest footballer who ever lived.",pt:"Pelé é considerado o maior futebolista que já existiu.",answer:"pelé is considered the greatest footballer who ever lived",words:[{w:"considered",cls:"verb",tr:"considerado"},{w:"ever lived",cls:"phrase",tr:"que já existiu"}]},
+          ]
+        },
+      ]
+    }
+  );
+})();
+
+// ── Segmento EVENTOS (hidden — em desenvolvimento) ─────────────────────────────
+(function(){
+  VICTOR_DATA.segments.push({
+    id:"eventos", name:"Eventos", icon:"🎪", available:true, hidden:false,
+    phases:[
+      {
+        id:"f1", name:"Fase 1 🎤", subtitle:"A1 — Vocabulário Essencial de Eventos", unlocked:true,
+        missions:[
+          {
+            id:"vocab_ev_f1", name:"📝 Termos Básicos", icon:"📝",
+            description:"Vocabulário fundamental para trabalhar em eventos", xpTotal:60,
+            phrases:[
+              {id:"mc1",type:"multiple_choice",en:"What does 'venue' mean? 🏛️",pt:"O que significa 'venue'?",options:["Local do evento 🏛️","Ingresso","Palestrante","Cronograma"],correct:0,words:[{w:"venue",cls:"noun",tr:"local do evento"}]},
+              {id:"mc2",type:"multiple_choice",en:"What is an 'attendee'? 👤",pt:"O que é um 'attendee'?",options:["Participante 👤","Organizador","Patrocinador","Fornecedor"],correct:0,words:[{w:"attendee",cls:"noun",tr:"participante"}]},
+              {id:"mc3",type:"multiple_choice",en:"'Schedule' in an events context means: 📅",pt:"'Schedule' no contexto de eventos significa:",options:["Programação / cronograma 📅","Entrada","Palco","Equipamento"],correct:0,words:[{w:"schedule",cls:"noun",tr:"programação"}]},
+              {id:"mc4",type:"multiple_choice",en:"What is a 'keynote speaker'? 🎤",pt:"O que é um 'keynote speaker'?",options:["Palestrante principal 🎤","Mestre de cerimônias","Moderador","Convidado especial"],correct:0,words:[{w:"keynote",cls:"adj",tr:"principal"}]},
+              {id:"tr1",type:"translate_pt_en",en:"The event will be held at the convention center.",pt:"O evento será realizado no centro de convenções.",answer:"the event will be held at the convention center",words:[{w:"held",cls:"verb",tr:"realizado"},{w:"convention center",cls:"noun",tr:"centro de convenções"}]},
+            ]
+          },
+          {
+            id:"check_ev_f1", name:"✅ Check-in & Recepção", icon:"✅",
+            description:"Frases de boas-vindas e check-in em eventos", xpTotal:60,
+            phrases:[
+              {id:"p1",type:"pronunciation",en:"Welcome to the event! Please show your badge at the entrance. 🎪",pt:"Bem-vindo ao evento! Por favor, mostre seu crachá na entrada.",words:[{w:"badge",cls:"noun",tr:"crachá"},{w:"entrance",cls:"noun",tr:"entrada"}]},
+              {id:"p2",type:"pronunciation",en:"May I see your registration confirmation? 📋",pt:"Posso ver sua confirmação de inscrição?",words:[{w:"registration",cls:"noun",tr:"inscrição"},{w:"confirmation",cls:"noun",tr:"confirmação"}]},
+              {id:"mc1",type:"multiple_choice",en:"'RSVP' stands for: 📩",pt:"'RSVP' significa:",options:["Please confirm your attendance 📩","Reserved seating for VIP","Registration starts very promptly","Random seat venue plan"],correct:0,words:[{w:"RSVP",cls:"abbrev",tr:"confirmação de presença"}]},
+              {id:"tr1",type:"translate_pt_en",en:"Your seat is in row B, number 12.",pt:"Seu assento está na fileira B, número 12.",answer:"your seat is in row b number 12",words:[{w:"row",cls:"noun",tr:"fileira"},{w:"seat",cls:"noun",tr:"assento"}]},
+            ]
+          },
+        ]
+      },
+      {
+        id:"f2", name:"Fase 2 🎭", subtitle:"A2 — Gestão e Logística de Eventos", unlocked:false,
+        missions:[
+          {
+            id:"setup_ev_f2", name:"🔧 Setup & Logística", icon:"🔧",
+            description:"Vocabulário de montagem e logística de eventos", xpTotal:70,
+            phrases:[
+              {id:"mc1",type:"multiple_choice",en:"'Breakout session' means: 📌",pt:"'Breakout session' significa:",options:["Sessão paralela / grupo menor 📌","Intervalo para café","Encerramento do evento","Sessão plenária"],correct:0,words:[{w:"breakout",cls:"adj",tr:"paralela/separada"}]},
+              {id:"mc2",type:"multiple_choice",en:"What is 'catering'? 🍽️",pt:"O que é 'catering'?",options:["Serviço de alimentação 🍽️","Decoração do evento","Som e iluminação","Segurança"],correct:0,words:[{w:"catering",cls:"noun",tr:"serviço de alimentação"}]},
+              {id:"p1",type:"pronunciation",en:"The audiovisual setup needs to be tested before the opening ceremony. 🎬",pt:"O equipamento audiovisual precisa ser testado antes da cerimônia de abertura.",words:[{w:"audiovisual",cls:"adj",tr:"audiovisual"},{w:"setup",cls:"noun",tr:"configuração/montagem"},{w:"ceremony",cls:"noun",tr:"cerimônia"}]},
+              {id:"tr1",type:"translate_pt_en",en:"Please set up the stage and check all the microphones.",pt:"Por favor, monte o palco e verifique todos os microfones.",answer:"please set up the stage and check all the microphones",words:[{w:"set up",cls:"verb",tr:"montar"},{w:"stage",cls:"noun",tr:"palco"}]},
+            ]
+          },
+        ]
+      },
+      {
+        id:"f3", name:"Fase 3 🌟", subtitle:"B1 — Comunicação Profissional em Eventos", unlocked:false,
+        missions:[
+          {
+            id:"comm_ev_f3", name:"💬 Comunicação Avançada", icon:"💬",
+            description:"Inglês para situações complexas em eventos", xpTotal:80,
+            phrases:[
+              {id:"mc1",type:"multiple_choice",en:"A 'panel discussion' is: 🎙️",pt:"Um 'panel discussion' é:",options:["Debate com vários especialistas 🎙️","Apresentação solo","Workshop prático","Sessão de networking"],correct:0,words:[{w:"panel",cls:"noun",tr:"painel"},{w:"discussion",cls:"noun",tr:"discussão"}]},
+              {id:"p1",type:"pronunciation",en:"On behalf of the organizing committee, I'd like to welcome all our distinguished guests. 🤝",pt:"Em nome da comissão organizadora, gostaria de dar boas-vindas a todos os nossos ilustres convidados.",words:[{w:"on behalf of",cls:"phrase",tr:"em nome de"},{w:"distinguished",cls:"adj",tr:"ilustre/distinto"}]},
+              {id:"tr1",type:"translate_pt_en",en:"The networking session will take place after the closing ceremony.",pt:"A sessão de networking acontecerá após a cerimônia de encerramento.",answer:"the networking session will take place after the closing ceremony",words:[{w:"networking",cls:"noun",tr:"networking"},{w:"closing ceremony",cls:"phrase",tr:"cerimônia de encerramento"}]},
+            ]
+          },
+        ]
+      },
+    ]
+  });
+})();
+
+// ── EVENTOS: CASAMENTOS (Weddings) ─────────────────────────────────────────
+(function(){
+  const seg = VICTOR_DATA.segments.find(s=>s.id==="eventos");
+  if(!seg) return;
+
+  // ── Fase 1: Vocabulário de Casamentos ──
+  seg.phases[0].missions.push({
+    id:"wedding_vocab_f1", name:"💍 Casamentos — Vocabulário", icon:"💍",
+    description:"Termos essenciais para trabalhar em casamentos", xpTotal:70,
+    phrases:[
+      {id:"wv1",type:"memory_match",en:"Wedding terms",pt:"Termos de casamento",
+        pairs:[
+          {a:"bride",      b:"noiva"},
+          {a:"groom",      b:"noivo"},
+          {a:"ceremony",   b:"cerimônia"},
+          {a:"reception",  b:"recepção"},
+          {a:"vows",       b:"votos"},
+          {a:"bouquet",    b:"buquê"}
+        ],words:[]},
+      {id:"wv2",type:"multiple_choice",en:"'Bridesmaid' means: 👰",pt:"'Bridesmaid' significa:",
+        options:["Dama de honra 💐","Noiva","Madrinha","Florista"],correct:0,
+        words:[{w:"bridesmaid",cls:"noun",tr:"dama de honra"}]},
+      {id:"wv3",type:"multiple_choice",en:"The correct English term for 'cerimonialista' is: 🎪",pt:"O termo correto em inglês para 'cerimonialista' é:",
+        options:["Wedding planner / coordinator 📋","Ceremonialist","Wedding manager","Event director"],correct:0,
+        words:[{w:"wedding planner",cls:"noun",tr:"cerimonialista"}]},
+      {id:"wv4",type:"multiple_choice",en:"A guest says: 'I have a dietary restriction.' What does this mean? 🍽️",pt:"Um convidado diz: 'I have a dietary restriction.' O que isso significa?",
+        options:["Restrição alimentar — não pode comer algo 🍽️","Preferência por assento","Restrição de horário","Pedido especial de música"],correct:0,
+        words:[{w:"dietary restriction",cls:"noun",tr:"restrição alimentar"}]},
+      {id:"wv5",type:"translate_pt_en",en:"The wedding ceremony will begin at 4 p.m.",pt:"A cerimônia de casamento começará às 16h.",
+        answer:"the wedding ceremony will begin at 4 p.m.",
+        words:[{w:"ceremony",cls:"noun",tr:"cerimônia"}]},
+    ]
+  });
+
+  // ── Fase 2: Coordenação & Logística ──
+  seg.phases[1].missions.push({
+    id:"wedding_coord_f2", name:"📋 Casamentos — Coordenação", icon:"📋",
+    description:"Frases de logística e coordenação de casamentos", xpTotal:80,
+    phrases:[
+      {id:"wc1",type:"pronunciation",
+        en:"Where would you like the ceremony to be set up? What time should the vendors arrive?",
+        pt:"Onde você gostaria que a cerimônia fosse montada? A que horas os fornecedores devem chegar?",
+        words:[{w:"vendors",cls:"noun",tr:"fornecedores"},{w:"ceremony",cls:"noun",tr:"cerimônia"}]},
+      {id:"wc2",type:"match_columns",en:"Wedding coordination",pt:"Coordenação de casamento",
+        pairs:[
+          {a:"rehearsal",     b:"ensaio"},
+          {a:"seating plan",  b:"mapa de mesas"},
+          {a:"first dance",   b:"primeiro baile"},
+          {a:"cocktail hour", b:"coquetel"}
+        ],words:[]},
+      {id:"wc3",type:"fill_blank",
+        en:"Do any guests have ___ restrictions? We need to inform the kitchen. 🍽️",
+        pt:"Algum convidado tem restrições alimentares? Precisamos informar a cozinha.",
+        answer:"dietary",
+        words:[{w:"dietary",cls:"adj",tr:"alimentar"}]},
+      {id:"wc4",type:"translate_pt_en",
+        en:"Could you confirm the number of guests one week before the wedding?",
+        pt:"Você poderia confirmar o número de convidados uma semana antes do casamento?",
+        answer:"could you confirm the number of guests one week before the wedding",
+        words:[{w:"confirm",cls:"verb",tr:"confirmar"},{w:"guests",cls:"noun",tr:"convidados"}]},
+      {id:"wc5",type:"pronunciation",
+        en:"I'll coordinate with the DJ about the timeline and make sure the first dance starts right on cue.",
+        pt:"Vou coordenar com o DJ sobre o cronograma e garantir que o primeiro baile comece na hora certa.",
+        words:[{w:"coordinate",cls:"verb",tr:"coordenar"},{w:"timeline",cls:"noun",tr:"cronograma"},{w:"on cue",cls:"expr",tr:"na hora certa"}]},
+    ]
+  });
+
+  // ── Fase 3: Comunicação Profissional ──
+  seg.phases[2].missions.push({
+    id:"wedding_pro_f3", name:"💍 Casamentos — Comunicação Profissional", icon:"💍",
+    description:"Inglês avançado para cerimonialistas e equipes de casamento", xpTotal:90,
+    phrases:[
+      {id:"wp1",type:"pronunciation",
+        en:"Thank you for trusting us with your wedding. We will coordinate every detail to make it a perfect and unforgettable day.",
+        pt:"Obrigado por confiar a nós o seu casamento. Coordenaremos cada detalhe para torná-lo um dia perfeito e inesquecível.",
+        words:[{w:"coordinate",cls:"verb",tr:"coordenar"},{w:"unforgettable",cls:"adj",tr:"inesquecível"}]},
+      {id:"wp2",type:"translate_pt_en",
+        en:"The photographer will take family photos right after the ceremony.",
+        pt:"O fotógrafo tirará fotos de família logo após a cerimônia.",
+        answer:"the photographer will take family photos right after the ceremony",
+        words:[{w:"photographer",cls:"noun",tr:"fotógrafo"},{w:"ceremony",cls:"noun",tr:"cerimônia"}]},
+      {id:"wp3",type:"word_order",
+        en:"Please keep noise to a minimum during the vows.",
+        pt:"Por favor, mantenha o barulho ao mínimo durante os votos.",
+        scrambled:["Please","keep","noise","to","a","minimum","during","the","vows."],
+        answer:"Please keep noise to a minimum during the vows.",
+        words:[{w:"vows",cls:"noun",tr:"votos"},{w:"minimum",cls:"noun",tr:"mínimo"}]},
+      {id:"wp4",type:"translate_pt_en",
+        en:"Would you like a rehearsal before the ceremony to make sure everything runs smoothly?",
+        pt:"Você gostaria de um ensaio antes da cerimônia para garantir que tudo corra bem?",
+        answer:"would you like a rehearsal before the ceremony to make sure everything runs smoothly",
+        words:[{w:"rehearsal",cls:"noun",tr:"ensaio"},{w:"smoothly",cls:"adv",tr:"sem problemas"}]},
+      {id:"wp5",type:"multiple_choice",
+        en:"A guest says they cannot eat beef. The best waiter response is: 🍽️",
+        pt:"Um convidado diz que não pode comer carne bovina. A melhor resposta do garçom é:",
+        options:[
+          "I apologize — may I offer you chicken or our vegetarian option instead? 🥗",
+          "Sorry, there's nothing we can do.",
+          "Please wait — we will prepare beef for you.",
+          "You should have told us earlier."
+        ],correct:0,
+        words:[{w:"apologize",cls:"verb",tr:"pedir desculpas"},{w:"vegetarian option",cls:"noun",tr:"opção vegetariana"}]},
+    ]
+  });
+})();
+
+// ── EVENTOS: FESTAS CORPORATIVAS & GALAS ──────────────────────────────────
+(function(){
+  const seg=VICTOR_DATA.segments.find(s=>s.id==="eventos"); if(!seg) return;
+
+  seg.phases[0].missions.push({
+    id:"gala_vocab_f1", name:"🥂 Festas & Galas — Vocabulário", icon:"🥂",
+    description:"Termos essenciais para festas corporativas e galas", xpTotal:70,
+    phrases:[
+      {id:"gv1",type:"memory_match",en:"Gala terms",pt:"Termos de gala",
+        pairs:[{a:"badge",b:"crachá"},{a:"attendee",b:"participante"},{a:"dress code",b:"código de vestimenta"},{a:"cocktail hour",b:"horário do coquetel"},{a:"VIP lounge",b:"sala VIP"},{a:"catering",b:"serviço de alimentação"}],words:[]},
+      {id:"gv2",type:"multiple_choice",en:"For a formal black-tie event, which word is most appropriate? 🎩",pt:"Para um evento formal com traje a rigor, qual palavra é mais adequada?",
+        options:["Gala 🎩","Party","Get-together","Hang-out"],correct:0,
+        words:[{w:"gala",cls:"noun",tr:"gala/baile formal"}]},
+      {id:"gv3",type:"multiple_choice",en:"'Give a speech' or 'make a speech'? Which is correct English? 🎤",pt:"'Give a speech' ou 'make a speech'? Qual é o inglês correto?",
+        options:["Both are correct — 'give a speech' is more natural 🎤","Only 'make a speech'","Only 'do a speech'","Only 'say a speech'"],correct:0,
+        words:[{w:"give a speech",cls:"expr",tr:"fazer um discurso"}]},
+      {id:"gv4",type:"multiple_choice",en:"RSVP on an invitation means: 📩",pt:"RSVP em um convite significa:",
+        options:["Please confirm your attendance 📩","Reserved seat for VIP","Registration starts very promptly","Respond slowly via phone"],correct:0,
+        words:[{w:"RSVP",cls:"abbrev",tr:"confirmação de presença"}]},
+      {id:"gv5",type:"translate_pt_en",en:"The event will start at 7 p.m.; doors open at 6:30.",pt:"O evento começará às 19h; as portas abrem às 18h30.",
+        answer:"the event will start at 7 p.m. doors open at 6:30",
+        words:[{w:"doors open",cls:"expr",tr:"portões abrem"}]},
+    ]
+  });
+
+  seg.phases[1].missions.push({
+    id:"gala_coord_f2", name:"📋 Festas & Galas — Logística", icon:"📋",
+    description:"Coordenação e logística de festas e galas", xpTotal:80,
+    phrases:[
+      {id:"gc1",type:"pronunciation",
+        en:"Where would you like the VIP table to be placed? Would you prefer a standing cocktail or a seated dinner?",
+        pt:"Onde você gostaria que a mesa VIP fosse colocada? Você prefere um coquetel em pé ou um jantar sentado?",
+        words:[{w:"placed",cls:"verb",tr:"colocada"},{w:"standing cocktail",cls:"noun",tr:"coquetel em pé"},{w:"seated dinner",cls:"noun",tr:"jantar sentado"}]},
+      {id:"gc2",type:"match_columns",en:"Gala logistics",pt:"Logística de gala",
+        pairs:[{a:"soundcheck",b:"teste de som"},{a:"coat check",b:"guarda-volumes"},{a:"networking area",b:"espaço de networking"},{a:"security check",b:"checagem de segurança"}],words:[]},
+      {id:"gc3",type:"fill_blank",
+        en:"The speaker will be ___ in ten minutes — please inform the guests to take their seats. 🎤",
+        pt:"O palestrante estará no palco em dez minutos — por favor avise os convidados para sentarem.",
+        answer:"onstage",words:[{w:"onstage",cls:"adv",tr:"no palco"}]},
+      {id:"gc4",type:"translate_pt_en",
+        en:"Could you confirm the number of attendees for dinner by Thursday?",
+        pt:"Você poderia confirmar o número de participantes para o jantar até quinta-feira?",
+        answer:"could you confirm the number of attendees for dinner by thursday",
+        words:[{w:"attendees",cls:"noun",tr:"participantes"},{w:"confirm",cls:"verb",tr:"confirmar"}]},
+      {id:"gc5",type:"pronunciation",
+        en:"Please keep your badge visible at all times. If you need assistance, find any staff member wearing a badge.",
+        pt:"Por favor, mantenha seu crachá visível o tempo todo. Se precisar de ajuda, encontre qualquer membro da equipe com crachá.",
+        words:[{w:"badge",cls:"noun",tr:"crachá"},{w:"visible",cls:"adj",tr:"visível"},{w:"assistance",cls:"noun",tr:"assistência"}]},
+    ]
+  });
+
+  seg.phases[2].missions.push({
+    id:"gala_pro_f3", name:"🥂 Festas & Galas — Comunicação Profissional", icon:"🥂",
+    description:"Inglês avançado para coordenadores de festas corporativas", xpTotal:90,
+    phrases:[
+      {id:"gp1",type:"pronunciation",
+        en:"Thank you for attending our event. Please keep the aisles clear as you exit and follow the emergency exit signs.",
+        pt:"Obrigado por participar do nosso evento. Por favor, mantenha os corredores livres ao sair e siga as placas de saída de emergência.",
+        words:[{w:"aisles",cls:"noun",tr:"corredores"},{w:"emergency exit",cls:"noun",tr:"saída de emergência"}]},
+      {id:"gp2",type:"translate_pt_en",
+        en:"The sound check is scheduled for 5 p.m. — please ensure all vendors are ready by then.",
+        pt:"O teste de som está agendado para às 17h — por favor, garanta que todos os fornecedores estejam prontos até lá.",
+        answer:"the sound check is scheduled for 5 p.m. please ensure all vendors are ready by then",
+        words:[{w:"scheduled",cls:"verb",tr:"agendado"},{w:"vendors",cls:"noun",tr:"fornecedores"}]},
+      {id:"gp3",type:"word_order",
+        en:"Please keep photography to the designated zone only.",
+        pt:"Por favor, restrinja a fotografia à zona designada.",
+        scrambled:["Please","keep","photography","to","the","designated","zone","only."],
+        answer:"Please keep photography to the designated zone only.",
+        words:[{w:"designated",cls:"adj",tr:"designada"},{w:"photography",cls:"noun",tr:"fotografia"}]},
+      {id:"gp4",type:"multiple_choice",
+        en:"A guest at a gala says: 'I'm allergic to shellfish.' The correct waiter response is: 🦐",
+        pt:"Um convidado numa gala diz: 'I'm allergic to shellfish.' A resposta correta do garçom é:",
+        options:[
+          "Of course — I'll mark your meal as shellfish-free and inform the kitchen. 🍽️",
+          "Sorry, all dishes contain shellfish.",
+          "Please speak to the chef yourself.",
+          "You should have told us when you booked."
+        ],correct:0,
+        words:[{w:"allergic",cls:"adj",tr:"alérgico"},{w:"shellfish",cls:"noun",tr:"frutos do mar/mariscos"}]},
+      {id:"gp5",type:"translate_pt_en",
+        en:"We need the supplier invoices by Friday to process the payments before the event.",
+        pt:"Precisamos das notas fiscais dos fornecedores até sexta-feira para processar os pagamentos antes do evento.",
+        answer:"we need the supplier invoices by friday to process the payments before the event",
+        words:[{w:"invoices",cls:"noun",tr:"notas fiscais"},{w:"process",cls:"verb",tr:"processar"}]},
+    ]
+  });
+})();
+
+// ── EVENTOS: FORMATURAS (Graduation Ceremonies) ────────────────────────────
+(function(){
+  const seg=VICTOR_DATA.segments.find(s=>s.id==="eventos"); if(!seg) return;
+
+  seg.phases[0].missions.push({
+    id:"grad_vocab_f1", name:"🎓 Formaturas — Vocabulário", icon:"🎓",
+    description:"Termos essenciais para cerimoniais de formatura", xpTotal:70,
+    phrases:[
+      {id:"grv1",type:"memory_match",en:"Graduation terms",pt:"Termos de formatura",
+        pairs:[{a:"graduate",b:"formando(a)"},{a:"cap",b:"capelo"},{a:"gown",b:"beca"},{a:"diploma",b:"diploma"},{a:"procession",b:"procissão"},{a:"vows / oath",b:"juramento"}],words:[]},
+      {id:"grv2",type:"multiple_choice",en:"'Commencement' in a US university context means: 🎓",pt:"'Commencement' no contexto de universidade americana significa:",
+        options:["Graduation ceremony / colação de grau 🎓","Início das aulas","Período de provas","Cerimônia de boas-vindas"],correct:0,
+        words:[{w:"commencement",cls:"noun",tr:"colação de grau"}]},
+      {id:"grv3",type:"multiple_choice",en:"'Gown' at a graduation ceremony refers to: 👘",pt:"'Gown' em uma formatura se refere a:",
+        options:["The academic robe (beca) worn by graduates 👘","Any formal dress","The graduation cap","The diploma cover"],correct:0,
+        words:[{w:"gown",cls:"noun",tr:"beca/toga"}]},
+      {id:"grv4",type:"multiple_choice",en:"'The recessional' at a graduation is: 🚶",pt:"'The recessional' em uma formatura é:",
+        options:["The graduates' exit march after the ceremony 🚶","The opening procession","The diploma handout","The speech by the dean"],correct:0,
+        words:[{w:"recessional",cls:"noun",tr:"marcha de saída"}]},
+      {id:"grv5",type:"translate_pt_en",
+        en:"Congratulations on your graduation!",
+        pt:"Parabéns pela sua formatura!",
+        answer:"congratulations on your graduation",
+        words:[{w:"congratulations",cls:"expr",tr:"parabéns"},{w:"graduation",cls:"noun",tr:"formatura"}]},
+    ]
+  });
+
+  seg.phases[1].missions.push({
+    id:"grad_coord_f2", name:"📋 Formaturas — Coordenação", icon:"📋",
+    description:"Logística e frases para coordenadores de formatura", xpTotal:80,
+    phrases:[
+      {id:"grc1",type:"pronunciation",
+        en:"Where should we line up for the procession? The graduates must wear their caps and gowns for the entire ceremony.",
+        pt:"Onde devemos nos enfileirar para a procissão? Os formandos devem usar capelo e beca durante toda a cerimônia.",
+        words:[{w:"line up",cls:"verb",tr:"enfileirar"},{w:"procession",cls:"noun",tr:"procissão"},{w:"caps and gowns",cls:"noun",tr:"capelo e beca"}]},
+      {id:"grc2",type:"match_columns",en:"Graduation logistics",pt:"Logística de formatura",
+        pairs:[{a:"MC",b:"mestre de cerimônias"},{a:"rehearsal",b:"ensaio"},{a:"reserved seating",b:"assentos reservados"},{a:"roll call",b:"chamada nominal"}],words:[]},
+      {id:"grc3",type:"fill_blank",
+        en:"We'll call each graduate to the ___ by name — please listen carefully. 🎓",
+        pt:"Chamaremos cada formando ao palco pelo nome — por favor, ouça com atenção.",
+        answer:"stage",words:[{w:"stage",cls:"noun",tr:"palco"}]},
+      {id:"grc4",type:"translate_pt_en",
+        en:"The rehearsal is tomorrow at 3 p.m. in the auditorium.",
+        pt:"O ensaio é amanhã às 15h no auditório.",
+        answer:"the rehearsal is tomorrow at 3 p.m. in the auditorium",
+        words:[{w:"rehearsal",cls:"noun",tr:"ensaio"},{w:"auditorium",cls:"noun",tr:"auditório"}]},
+      {id:"grc5",type:"pronunciation",
+        en:"Please stay seated until the recessional starts. Do not leave before the faculty has exited.",
+        pt:"Por favor, fique sentado até que a procissão de saída comece. Não saia antes que a mesa diretora tenha se retirado.",
+        words:[{w:"recessional",cls:"noun",tr:"marcha de saída"},{w:"faculty",cls:"noun",tr:"mesa diretora/corpo docente"}]},
+    ]
+  });
+
+  seg.phases[2].missions.push({
+    id:"grad_pro_f3", name:"🎓 Formaturas — Comunicação Profissional", icon:"🎓",
+    description:"Inglês avançado para cerimônias de formatura", xpTotal:90,
+    phrases:[
+      {id:"grp1",type:"pronunciation",
+        en:"On behalf of the faculty, we congratulate all graduates on this remarkable achievement. The future is yours.",
+        pt:"Em nome do corpo docente, parabenizamos todos os formandos por esta conquista notável. O futuro é de vocês.",
+        words:[{w:"on behalf of",cls:"expr",tr:"em nome de"},{w:"remarkable",cls:"adj",tr:"notável"},{w:"achievement",cls:"noun",tr:"conquista"}]},
+      {id:"grp2",type:"translate_pt_en",
+        en:"Family photos will be taken after the ceremony, near the stage entrance.",
+        pt:"As fotos de família serão tiradas após a cerimônia, perto da entrada do palco.",
+        answer:"family photos will be taken after the ceremony near the stage entrance",
+        words:[{w:"ceremony",cls:"noun",tr:"cerimônia"},{w:"stage entrance",cls:"noun",tr:"entrada do palco"}]},
+      {id:"grp3",type:"word_order",
+        en:"Please return your rented gown at the counter after the ceremony.",
+        pt:"Por favor, devolva a beca alugada no balcão após a cerimônia.",
+        scrambled:["Please","return","your","rented","gown","at","the","counter","after","the","ceremony."],
+        answer:"Please return your rented gown at the counter after the ceremony.",
+        words:[{w:"rented",cls:"adj",tr:"alugada"},{w:"gown",cls:"noun",tr:"beca"}]},
+      {id:"grp4",type:"multiple_choice",
+        en:"A parent asks: 'Where do we pick up cap and gown?' The best staff response is: 👘",
+        pt:"Um familiar pergunta: 'Where do we pick up cap and gown?' A melhor resposta da equipe é:",
+        options:[
+          "At the registration desk in the lobby — bring your student ID between 1 and 2 p.m. 🪪",
+          "We don't know, ask someone else.",
+          "We ran out of gowns, sorry.",
+          "Pick it up after the ceremony."
+        ],correct:0,
+        words:[{w:"registration desk",cls:"noun",tr:"mesa de credenciamento"},{w:"student ID",cls:"noun",tr:"carteira de estudante"}]},
+      {id:"grp5",type:"translate_pt_en",
+        en:"The ceremony will last approximately one hour — please make sure everyone is seated by 9:45.",
+        pt:"A cerimônia durará aproximadamente uma hora — por favor, garanta que todos estejam sentados até às 9h45.",
+        answer:"the ceremony will last approximately one hour please make sure everyone is seated by 9:45",
+        words:[{w:"approximately",cls:"adv",tr:"aproximadamente"},{w:"seated",cls:"adj",tr:"sentados"}]},
+    ]
+  });
+})();
+
+// ── EVENTOS: SHOWS & CONCERTOS ─────────────────────────────────────────────
+(function(){
+  const seg=VICTOR_DATA.segments.find(s=>s.id==="eventos"); if(!seg) return;
+
+  seg.phases[0].missions.push({
+    id:"show_vocab_f1", name:"🎸 Shows & Concertos — Vocabulário", icon:"🎸",
+    description:"Termos essenciais para shows e eventos musicais", xpTotal:70,
+    phrases:[
+      {id:"sv1",type:"memory_match",en:"Concert terms",pt:"Termos de concerto",
+        pairs:[{a:"stage",b:"palco"},{a:"soundcheck",b:"teste de som"},{a:"setlist",b:"lista de músicas"},{a:"backstage",b:"bastidores"},{a:"dressing room",b:"camarim"},{a:"crowd barrier",b:"barreira de segurança"}],words:[]},
+      {id:"sv2",type:"multiple_choice",en:"'General admission' (GA) at a concert means: 🎫",pt:"'General admission' (GA) em um show significa:",
+        options:["Standing area — no assigned seat 🎫","VIP seating with table","Backstage access","Seat in the first row"],correct:0,
+        words:[{w:"general admission",cls:"noun",tr:"pista / área sem assento fixo"}]},
+      {id:"sv3",type:"multiple_choice",en:"'FOH' at a live show stands for: 🎚️",pt:"'FOH' em um show ao vivo significa:",
+        options:["Front of House — the sound booth facing the stage 🎚️","Front On Hold","First Order Host","Fog and Haze"],correct:0,
+        words:[{w:"FOH",cls:"abbrev",tr:"cabine de som na frente do palco"}]},
+      {id:"sv4",type:"multiple_choice",en:"'Stage' vs 'stadium' — which is correct? 🏟️",pt:"'Stage' vs 'stadium' — qual é o correto?",
+        options:["Stage = palco; stadium = estádio 🏟️","Stage = estádio; stadium = palco","They mean the same thing","Stage = arena"],correct:0,
+        words:[{w:"stage",cls:"noun",tr:"palco"},{w:"stadium",cls:"noun",tr:"estádio"}]},
+      {id:"sv5",type:"translate_pt_en",
+        en:"The doors open at 7 p.m.; the show starts at 8.",
+        pt:"As portas abrem às 19h; o show começa às 20h.",
+        answer:"the doors open at 7 p.m. the show starts at 8",
+        words:[{w:"doors open",cls:"expr",tr:"portões abrem"}]},
+    ]
+  });
+
+  seg.phases[1].missions.push({
+    id:"show_coord_f2", name:"🎤 Shows — Coordenação Técnica", icon:"🎤",
+    description:"Frases de coordenação para shows e eventos musicais", xpTotal:80,
+    phrases:[
+      {id:"sc1",type:"pronunciation",
+        en:"The soundcheck will start at 3 p.m. — can you be ready? How many dressing rooms do you need?",
+        pt:"O teste de som começa às 15h — você consegue estar pronto? Quantos camarins você precisa?",
+        words:[{w:"soundcheck",cls:"noun",tr:"teste de som"},{w:"dressing rooms",cls:"noun",tr:"camarins"}]},
+      {id:"sc2",type:"match_columns",en:"Concert tech",pt:"Técnica de shows",
+        pairs:[{a:"PA system",b:"sistema de som principal"},{a:"wireless mic",b:"microfone sem fio"},{a:"lighting tech",b:"técnico de luz"},{a:"tour manager",b:"gerente de turnê"}],words:[]},
+      {id:"sc3",type:"fill_blank",
+        en:"Could you lower the ___ in the main mix? The vocals are getting lost. 🎚️",
+        pt:"Você poderia diminuir o baixo no mix principal? Os vocais estão sumindo.",
+        answer:"bass",words:[{w:"bass",cls:"noun",tr:"frequências de baixo"}]},
+      {id:"sc4",type:"translate_pt_en",
+        en:"The setlist needs to be confirmed with the production manager before soundcheck.",
+        pt:"A lista de músicas precisa ser confirmada com o produtor antes do teste de som.",
+        answer:"the setlist needs to be confirmed with the production manager before soundcheck",
+        words:[{w:"setlist",cls:"noun",tr:"lista de músicas"},{w:"production manager",cls:"noun",tr:"diretor de produção"}]},
+      {id:"sc5",type:"pronunciation",
+        en:"The artist needs a quiet zone for vocal warm-ups — please keep the backstage area clear.",
+        pt:"O artista precisa de uma área silenciosa para o aquecimento vocal — por favor, mantenha os bastidores desocupados.",
+        words:[{w:"vocal warm-ups",cls:"noun",tr:"aquecimento vocal"},{w:"backstage",cls:"noun",tr:"bastidores"}]},
+    ]
+  });
+
+  seg.phases[2].missions.push({
+    id:"show_pro_f3", name:"🎸 Shows — Comunicação Profissional", icon:"🎸",
+    description:"Inglês avançado para produção e segurança em shows", xpTotal:90,
+    phrases:[
+      {id:"sp1",type:"pronunciation",
+        en:"Please report any suspicious activity to security immediately and keep all emergency exits clear at all times.",
+        pt:"Por favor, reporte qualquer atividade suspeita à segurança imediatamente e mantenha todas as saídas de emergência desobstruídas.",
+        words:[{w:"suspicious",cls:"adj",tr:"suspeita"},{w:"emergency exits",cls:"noun",tr:"saídas de emergência"}]},
+      {id:"sp2",type:"translate_pt_en",
+        en:"We lost power on stage — do we have a backup generator? We need it now.",
+        pt:"Perdemos energia no palco — temos um gerador de backup? Precisamos agora.",
+        answer:"we lost power on stage do we have a backup generator we need it now",
+        words:[{w:"backup generator",cls:"noun",tr:"gerador de backup"},{w:"power",cls:"noun",tr:"energia"}]},
+      {id:"sp3",type:"word_order",
+        en:"Please do not use flash photography during the performance.",
+        pt:"Por favor, não use flash durante a apresentação.",
+        scrambled:["Please","do","not","use","flash","photography","during","the","performance."],
+        answer:"Please do not use flash photography during the performance.",
+        words:[{w:"flash photography",cls:"noun",tr:"fotografia com flash"},{w:"performance",cls:"noun",tr:"apresentação"}]},
+      {id:"sp4",type:"multiple_choice",
+        en:"Sound engineer says: 'The vocals are too low in the main mix.' The coordinator replies: 🎚️",
+        pt:"O técnico de som diz: 'Os vocais estão baixos demais no mix principal.' O coordenador responde:",
+        options:[
+          "Please raise the vocal fader — let's test again and keep an eye on it during the show. 🎤",
+          "That's fine, leave it.",
+          "Turn off the PA system.",
+          "We don't control the sound."
+        ],correct:0,
+        words:[{w:"vocal fader",cls:"noun",tr:"controle de volume dos vocais"},{w:"raise",cls:"verb",tr:"aumentar"}]},
+      {id:"sp5",type:"translate_pt_en",
+        en:"Please wait behind the barrier until the crowd control team signals it is safe to move forward.",
+        pt:"Por favor, aguarde atrás da barreira até que a equipe de controle de multidão sinalize que é seguro avançar.",
+        answer:"please wait behind the barrier until the crowd control team signals it is safe to move forward",
+        words:[{w:"barrier",cls:"noun",tr:"barreira"},{w:"crowd control",cls:"noun",tr:"controle de multidão"}]},
+    ]
+  });
+})();
+
+// ── EVENTOS: FEIRAS & CONGRESSOS (Trade Fairs / Conferences) ───────────────
+(function(){
+  const seg=VICTOR_DATA.segments.find(s=>s.id==="eventos"); if(!seg) return;
+
+  seg.phases[0].missions.push({
+    id:"fair_vocab_f1", name:"🏛️ Feiras & Congressos — Vocabulário", icon:"🏛️",
+    description:"Termos essenciais para feiras e congressos profissionais", xpTotal:70,
+    phrases:[
+      {id:"fv1",type:"memory_match",en:"Trade fair terms",pt:"Termos de feira e congresso",
+        pairs:[{a:"booth",b:"estande"},{a:"keynote",b:"palestra principal"},{a:"exhibitor",b:"expositor"},{a:"attendee",b:"participante/visitante"},{a:"giveaway",b:"brinde"},{a:"breakout session",b:"sessão paralela"}],words:[]},
+      {id:"fv2",type:"multiple_choice",en:"In American English, an exhibitor's space is called: 🏪",pt:"Em inglês americano, o espaço do expositor é chamado de:",
+        options:["Booth 🏪","Stand","Exhibit room","Display zone"],correct:0,
+        words:[{w:"booth",cls:"noun",tr:"estande (inglês americano)"}]},
+      {id:"fv3",type:"multiple_choice",en:"'I will agenda a meeting with you' is wrong. The correct phrase is: 📅",pt:"'I will agenda a meeting with you' está errado. A frase correta é:",
+        options:["I will schedule a meeting with you 📅","I will agenda you","I will calendar a meeting","I will diary a meeting"],correct:0,
+        words:[{w:"schedule",cls:"verb",tr:"agendar"}]},
+      {id:"fv4",type:"multiple_choice",en:"In sales, the word 'lead' is pronounced: 🗣️",pt:"Em vendas, a palavra 'lead' é pronunciada:",
+        options:["/liːd/ — rhymes with 'need' 🗣️","/lɛd/ — rhymes with 'bed'","The same as 'led'","Like the metal 'lead'"],correct:0,
+        words:[{w:"lead",cls:"noun",tr:"contato/potencial cliente"}]},
+      {id:"fv5",type:"translate_pt_en",
+        en:"Welcome to our booth. Would you like a brochure or a live product demo?",
+        pt:"Bem-vindo ao nosso estande. Você gostaria de um folheto ou uma demonstração ao vivo do produto?",
+        answer:"welcome to our booth would you like a brochure or a live product demo",
+        words:[{w:"booth",cls:"noun",tr:"estande"},{w:"brochure",cls:"noun",tr:"folheto"},{w:"demo",cls:"noun",tr:"demonstração"}]},
+    ]
+  });
+
+  seg.phases[1].missions.push({
+    id:"fair_coord_f2", name:"📋 Feiras & Congressos — Coordenação", icon:"📋",
+    description:"Logística e frases de coordenação para feiras e eventos", xpTotal:80,
+    phrases:[
+      {id:"fc1",type:"pronunciation",
+        en:"The conference starts at 9 a.m.; please arrive 30 minutes early. Load-in for exhibitors starts at 6 a.m.",
+        pt:"O congresso começa às 9h; por favor, chegue 30 minutos antes. A montagem para expositores começa às 6h.",
+        words:[{w:"load-in",cls:"noun",tr:"montagem/carga"},{w:"exhibitors",cls:"noun",tr:"expositores"}]},
+      {id:"fc2",type:"match_columns",en:"Conference tech & logistics",pt:"Tecnologia e logística de congresso",
+        pairs:[{a:"loading dock",b:"docas de carga"},{a:"lapel mic",b:"microfone de lapela"},{a:"simultaneous interpretation",b:"tradução simultânea"},{a:"early registration",b:"inscrição antecipada"}],words:[]},
+      {id:"fc3",type:"fill_blank",
+        en:"Please scan your ___ at the kiosk to register your attendance. 🪪",
+        pt:"Por favor, passe seu crachá no quiosque para registrar sua presença.",
+        answer:"badge",words:[{w:"badge",cls:"noun",tr:"crachá"}]},
+      {id:"fc4",type:"translate_pt_en",
+        en:"Our presentation will be in Room B at 2 p.m. — please arrive early for a good seat.",
+        pt:"Nossa apresentação será na Sala B às 14h — chegue cedo para pegar um bom lugar.",
+        answer:"our presentation will be in room b at 2 p.m. please arrive early for a good seat",
+        words:[{w:"presentation",cls:"noun",tr:"apresentação"},{w:"arrive early",cls:"expr",tr:"chegar cedo"}]},
+      {id:"fc5",type:"pronunciation",
+        en:"Can I scan your badge to save your contact? I'll send you a follow-up email with our product catalog.",
+        pt:"Posso passar seu crachá para salvar seu contato? Enviarei um e-mail de acompanhamento com nosso catálogo.",
+        words:[{w:"follow-up",cls:"adj",tr:"de acompanhamento"},{w:"catalog",cls:"noun",tr:"catálogo"}]},
+    ]
+  });
+
+  seg.phases[2].missions.push({
+    id:"fair_pro_f3", name:"🏛️ Feiras & Congressos — Comunicação Profissional", icon:"🏛️",
+    description:"Inglês avançado para feiras, congressos e eventos B2B", xpTotal:90,
+    phrases:[
+      {id:"fp1",type:"pronunciation",
+        en:"Thank you for stopping by our booth. I'll send you our product catalog and pricing by email this afternoon.",
+        pt:"Obrigado por visitar nosso estande. Enviarei nosso catálogo e preços por e-mail ainda hoje à tarde.",
+        words:[{w:"stopping by",cls:"expr",tr:"visitar/passar pelo"},{w:"pricing",cls:"noun",tr:"tabela de preços"}]},
+      {id:"fp2",type:"translate_pt_en",
+        en:"The keynote speaker will present for 45 minutes, followed by a Q&A session.",
+        pt:"O palestrante principal apresentará por 45 minutos, seguido de uma sessão de perguntas e respostas.",
+        answer:"the keynote speaker will present for 45 minutes followed by a q&a session",
+        words:[{w:"keynote speaker",cls:"noun",tr:"palestrante principal"},{w:"Q&A",cls:"abbrev",tr:"perguntas e respostas"}]},
+      {id:"fp3",type:"word_order",
+        en:"Could you fill out this feedback form before you leave?",
+        pt:"Você poderia preencher este formulário de avaliação antes de sair?",
+        scrambled:["Could","you","fill","out","this","feedback","form","before","you","leave?"],
+        answer:"Could you fill out this feedback form before you leave?",
+        words:[{w:"fill out",cls:"verb",tr:"preencher"},{w:"feedback form",cls:"noun",tr:"formulário de avaliação"}]},
+      {id:"fp4",type:"multiple_choice",
+        en:"An AV tech says: 'Your slides need an HDMI adapter — do you have one?' The speaker replies: 💻",
+        pt:"O técnico de AV diz: 'Seus slides precisam de adaptador HDMI — você tem um?' O palestrante responde:",
+        options:[
+          "I only have USB-C — can you provide an HDMI adapter from the AV desk? 🔌",
+          "I don't know what HDMI is.",
+          "I don't need slides.",
+          "The projector is broken, not my problem."
+        ],correct:0,
+        words:[{w:"USB-C",cls:"noun",tr:"conector USB-C"},{w:"HDMI adapter",cls:"noun",tr:"adaptador HDMI"}]},
+      {id:"fp5",type:"translate_pt_en",
+        en:"If you need technical support during the presentation, please visit the AV desk near the main stage.",
+        pt:"Se precisar de suporte técnico durante a apresentação, por favor visite o suporte de AV perto do palco principal.",
+        answer:"if you need technical support during the presentation please visit the av desk near the main stage",
+        words:[{w:"technical support",cls:"noun",tr:"suporte técnico"},{w:"AV desk",cls:"noun",tr:"suporte de audiovisual"}]},
+    ]
+  });
+})();
+
+// ── CORPORATIVO: PREPARE & PRESENT (f4) ───────────────────────────────────
+(function(){
+  const seg=VICTOR_DATA.segments.find(s=>s.id==="corporativo"); if(!seg) return;
+  const f4=seg.phases.find(p=>p.id==="f4"); if(!f4) return;
+  f4.name="Fase 4 🎙️";
+  f4.subtitle="B1–B2 — Entrevistas & Apresentações";
+
+  // ── Mission 1: Interview Prep ──
+  f4.missions.push({
+    id:"interview_corp", name:"🎙️ Entrevista — Prepare-se", icon:"🎙️",
+    description:"Pratique as respostas mais importantes de uma entrevista em inglês", xpTotal:100,
+    phrases:[
+      {id:"iv1",type:"pronunciation",
+        en:"I am a professional with five years of experience in project management and communication with stakeholders.",
+        pt:"Sou um profissional com cinco anos de experiência em gestão de projetos e comunicação com stakeholders.",
+        tip:"'Tell me about yourself' — comece com experiência, depois mencione habilidades.",
+        words:[{w:"stakeholders",cls:"noun",tr:"partes interessadas"},{w:"project management",cls:"noun",tr:"gestão de projetos"}]},
+      {id:"iv2",type:"translate_pt_en",
+        en:"In five years, I want to lead strategic projects and help grow the department's budget.",
+        pt:"Em cinco anos, quero liderar projetos estratégicos e ajudar a expandir o orçamento do departamento.",
+        answer:"in five years i want to lead strategic projects and help grow the department's budget",
+        tip:"'Where do you see yourself in 5 years?' — mostre ambição e alinhamento com a empresa.",
+        words:[{w:"strategic",cls:"adj",tr:"estratégico"},{w:"budget",cls:"noun",tr:"orçamento"}]},
+      {id:"iv3",type:"word_order",
+        en:"I organized a meeting to align expectations and presented a clear proposal.",
+        pt:"Organizei uma reunião para alinhar expectativas e apresentei uma proposta clara.",
+        scrambled:["I","organized","a","meeting","to","align","expectations","and","presented","a","clear","proposal."],
+        answer:"I organized a meeting to align expectations and presented a clear proposal.",
+        tip:"'Tell me about a challenge' — use STAR: Situação, Tarefa, Ação, Resultado.",
+        words:[{w:"align",cls:"verb",tr:"alinhar"},{w:"proposal",cls:"noun",tr:"proposta"}]},
+      {id:"iv4",type:"fill_blank",
+        en:"My greatest strength is meeting ___ without compromising the quality of my work. 💪",
+        pt:"Minha maior força é cumprir prazos sem comprometer a qualidade do meu trabalho.",
+        answer:"deadlines",
+        tip:"'What are your strengths?' — seja específico e dê um exemplo real.",
+        words:[{w:"deadlines",cls:"noun",tr:"prazos"}]},
+      {id:"iv5",type:"multiple_choice",
+        en:"Interviewer: 'How do you prioritize your workload?' — The most professional answer is: 📋",
+        pt:"Entrevistador: 'Como você prioriza seu trabalho?' — A resposta mais profissional é:",
+        options:[
+          "I use a detailed agenda, set priorities based on deadlines, and communicate progress transparently. ✅",
+          "I do whatever my manager tells me to do.",
+          "I work on whatever seems most interesting first.",
+          "I try my best and hope for the best."
+        ],correct:0,
+        words:[{w:"agenda",cls:"noun",tr:"agenda/pauta"},{w:"deadlines",cls:"noun",tr:"prazos"},{w:"transparently",cls:"adv",tr:"com transparência"}]},
+    ]
+  });
+
+  // ── Mission 2: Presentation Coach — Abertura ──
+  f4.missions.push({
+    id:"pres_open_corp", name:"📊 Apresentação — Abertura", icon:"📊",
+    description:"Abra sua apresentação com confiança e clareza", xpTotal:80,
+    phrases:[
+      {id:"po1",type:"pronunciation",
+        en:"Good morning everyone. Today I will present our proposal for the next quarter. I will structure my talk into four main parts.",
+        pt:"Bom dia a todos. Hoje vou apresentar nossa proposta para o próximo trimestre. Vou estruturar minha fala em quatro partes principais.",
+        tip:"Sempre comece anunciando a estrutura — os ouvintes ficam mais atentos.",
+        words:[{w:"proposal",cls:"noun",tr:"proposta"},{w:"quarter",cls:"noun",tr:"trimestre"}]},
+      {id:"po2",type:"translate_pt_en",
+        en:"The goal of this presentation is to review our KPIs and discuss process improvements.",
+        pt:"O objetivo desta apresentação é revisar nossos KPIs e discutir melhorias no processo.",
+        answer:"the goal of this presentation is to review our kpis and discuss process improvements",
+        words:[{w:"KPIs",cls:"abbrev",tr:"indicadores de desempenho"},{w:"process improvements",cls:"noun",tr:"melhorias no processo"}]},
+      {id:"po3",type:"fill_blank",
+        en:"Please feel free to ask ___ at the end — I'll leave time for discussion. 🙋",
+        pt:"Sinta-se à vontade para fazer perguntas no final — deixarei tempo para discussão.",
+        answer:"questions",
+        words:[{w:"discussion",cls:"noun",tr:"discussão"}]},
+      {id:"po4",type:"word_order",
+        en:"I will keep this presentation to fifteen minutes and then open for questions.",
+        pt:"Vou manter esta apresentação em quinze minutos e depois abrir para perguntas.",
+        scrambled:["I","will","keep","this","presentation","to","fifteen","minutes","and","then","open","for","questions."],
+        answer:"I will keep this presentation to fifteen minutes and then open for questions.",
+        words:[{w:"open for questions",cls:"expr",tr:"abrir para perguntas"}]},
+    ]
+  });
+
+  // ── Mission 3: Presentation Coach — Desenvolvimento & Encerramento ──
+  f4.missions.push({
+    id:"pres_body_corp", name:"📈 Apresentação — Dados & Conclusão", icon:"📈",
+    description:"Apresente dados, proponha soluções e feche com impacto", xpTotal:90,
+    phrases:[
+      {id:"pb1",type:"pronunciation",
+        en:"Last quarter we faced challenges related to budget constraints and stakeholder alignment. Three main issues were identified.",
+        pt:"No último trimestre enfrentamos desafios relacionados a restrições de orçamento e alinhamento com stakeholders. Três problemas principais foram identificados.",
+        tip:"Contextualize antes de propor a solução — isso cria urgência.",
+        words:[{w:"budget constraints",cls:"noun",tr:"restrições de orçamento"},{w:"alignment",cls:"noun",tr:"alinhamento"}]},
+      {id:"pb2",type:"translate_pt_en",
+        en:"Our proposal is to implement a new weekly follow-up system to monitor KPIs in real time.",
+        pt:"Nossa proposta é implementar um novo sistema de acompanhamento semanal para monitorar KPIs em tempo real.",
+        answer:"our proposal is to implement a new weekly follow-up system to monitor kpis in real time",
+        words:[{w:"follow-up",cls:"noun",tr:"acompanhamento"},{w:"monitor",cls:"verb",tr:"monitorar"}]},
+      {id:"pb3",type:"fill_blank",
+        en:"As you can see from this ___, revenue increased by fifteen percent this quarter. 📊",
+        pt:"Como podem ver neste gráfico, a receita aumentou 15% neste trimestre.",
+        answer:"chart",
+        tip:"Use 'As you can see from this chart/slide/data...' para guiar a atenção.",
+        words:[{w:"chart",cls:"noun",tr:"gráfico"},{w:"revenue",cls:"noun",tr:"receita"}]},
+      {id:"pb4",type:"pronunciation",
+        en:"In summary, our solution will reduce costs and improve results. The next step is to approve the proposal by end of this week.",
+        pt:"Em resumo, nossa solução reduzirá custos e melhorará os resultados. O próximo passo é aprovar a proposta até o final desta semana.",
+        tip:"Sempre finalize com um 'next step' claro — isso fecha a apresentação com ação.",
+        words:[{w:"approve",cls:"verb",tr:"aprovar"},{w:"next step",cls:"noun",tr:"próximo passo"}]},
+      {id:"pb5",type:"translate_pt_en",
+        en:"Thank you for your feedback. I will send a follow-up email after the meeting with all the action items.",
+        pt:"Obrigado pelo feedback de todos. Enviarei um e-mail de acompanhamento após a reunião com todas as ações definidas.",
+        answer:"thank you for your feedback i will send a follow-up email after the meeting with all the action items",
+        words:[{w:"action items",cls:"noun",tr:"tarefas/ações definidas"},{w:"follow-up",cls:"noun",tr:"acompanhamento"}]},
+    ]
+  });
+})();
+
+// ── CORPORATIVO f4: VOCABULÁRIO AVANÇADO — Perplexity Content ─────────────
+(function(){
+  const seg=VICTOR_DATA.segments.find(s=>s.id==="corporativo"); if(!seg) return;
+  const f4=seg.phases.find(p=>p.id==="f4"); if(!f4) return;
+
+  // ── Mission 4: Action Verbs ──
+  f4.missions.push({
+    id:"action_verbs_corp", name:"💪 Verbos de Impacto", icon:"💪",
+    description:"Action verbs para CV, entrevistas e e-mails profissionais", xpTotal:90,
+    phrases:[
+      {id:"av1",type:"memory_match",en:"Action Verbs — CV & Interviews",pt:"Verbos de impacto",
+        pairs:[{a:"managed",b:"gerenciei"},{a:"delivered",b:"entreguei"},{a:"implemented",b:"implementei"},
+               {a:"achieved",b:"alcancei"},{a:"streamlined",b:"otimizei"},{a:"negotiated",b:"negociei"}],words:[]},
+      {id:"av2",type:"match_columns",en:"More Action Verbs",pt:"Mais verbos de ação",
+        pairs:[{a:"led",b:"liderei"},{a:"coordinated",b:"coordenei"},{a:"launched",b:"lancei"},{a:"expanded",b:"expandi"}],words:[]},
+      {id:"av3",type:"fill_blank",
+        en:"I ___ a cross-functional team of eight people across three departments.",
+        pt:"Eu liderei uma equipe multifuncional de oito pessoas em tres departamentos.",
+        answer:"led",
+        words:[{w:"led",cls:"verb",tr:"liderei"},{w:"cross-functional",cls:"adj",tr:"multifuncional"}]},
+      {id:"av4",type:"fill_blank",
+        en:"We ___ the onboarding process and reduced training time by 40%.",
+        pt:"Otimizamos o processo de integracao e reduzimos o tempo de treinamento em 40%.",
+        answer:"streamlined",
+        words:[{w:"streamlined",cls:"verb",tr:"otimizamos"},{w:"onboarding",cls:"noun",tr:"integracao"}]},
+      {id:"av5",type:"translate_pt_en",
+        en:"I implemented a new reporting system that improved team visibility.",
+        pt:"Implementei um novo sistema de relatorios que melhorou a visibilidade da equipe.",
+        answer:"i implemented a new reporting system that improved team visibility",
+        words:[{w:"implemented",cls:"verb",tr:"implementei"},{w:"visibility",cls:"noun",tr:"visibilidade"}]},
+    ]
+  });
+
+  // ── Mission 5: STAR Method ──
+  f4.missions.push({
+    id:"star_corp", name:"⭐ Método STAR", icon:"⭐",
+    description:"Estruture suas respostas com Situacao, Tarefa, Acao e Resultado", xpTotal:100,
+    phrases:[
+      {id:"st1",type:"match_columns",en:"STAR Method Components",pt:"Componentes do Metodo STAR",
+        pairs:[{a:"Situation",b:"contexto/cenario"},{a:"Task",b:"sua responsabilidade"},
+               {a:"Action",b:"o que voce fez"},{a:"Result",b:"o impacto alcancado"}],words:[]},
+      {id:"st2",type:"fill_blank",
+        en:"The ___ was that our team was losing clients due to slow response times.",
+        pt:"A situacao era que nossa equipe estava perdendo clientes por tempos de resposta lentos.",
+        answer:"situation",
+        tip:"STAR: sempre comece contextualizando a situacao.",
+        words:[{w:"situation",cls:"noun",tr:"situacao"}]},
+      {id:"st3",type:"fill_blank",
+        en:"My ___ was to analyze the bottlenecks and design a faster workflow.",
+        pt:"Minha tarefa era analisar os gargalos e desenvolver um fluxo de trabalho mais agil.",
+        answer:"task",
+        words:[{w:"task",cls:"noun",tr:"tarefa"},{w:"bottlenecks",cls:"noun",tr:"gargalos"}]},
+      {id:"st4",type:"word_order",
+        en:"I took action by mapping the process and creating a priority system.",
+        pt:"Tomei a iniciativa mapeando o processo e criando um sistema de prioridades.",
+        scrambled:["I","took","action","by","mapping","the","process","and","creating","a","priority","system."],
+        answer:"I took action by mapping the process and creating a priority system.",
+        words:[{w:"mapping",cls:"verb",tr:"mapeando"},{w:"priority system",cls:"noun",tr:"sistema de prioridades"}]},
+      {id:"st5",type:"pronunciation",
+        en:"The result was a 35% improvement in client satisfaction scores within two months.",
+        pt:"O resultado foi uma melhoria de 35% na satisfacao do cliente em dois meses.",
+        tip:"Sempre termine o STAR com numeros — torna a resposta mais convincente.",
+        words:[{w:"improvement",cls:"noun",tr:"melhoria"},{w:"client satisfaction",cls:"noun",tr:"satisfacao do cliente"}]},
+    ]
+  });
+
+  // ── Mission 6: Professional Adjectives ──
+  f4.missions.push({
+    id:"prof_adj_corp", name:"🏅 Adjetivos Profissionais", icon:"🏅",
+    description:"Descreva-se com vocabulario de alto impacto em ingles", xpTotal:80,
+    phrases:[
+      {id:"pa1",type:"memory_match",en:"Professional Self-Description",pt:"Autodescrição profissional",
+        pairs:[{a:"proactive",b:"proativo(a)"},{a:"detail-oriented",b:"atento aos detalhes"},
+               {a:"adaptable",b:"adaptavel"},{a:"reliable",b:"confiavel"},
+               {a:"assertive",b:"assertivo(a)"},{a:"resilient",b:"resiliente"}],words:[]},
+      {id:"pa2",type:"multiple_choice",
+        en:"Which adjective describes someone who plans ahead and acts without being told?",
+        pt:"Qual adjetivo descreve alguem que planeja com antecedencia e age sem ser mandado?",
+        options:["Proactive","Resilient","Assertive","Collaborative"],correct:0,
+        words:[{w:"proactive",cls:"adj",tr:"proativo(a)"}]},
+      {id:"pa3",type:"multiple_choice",
+        en:"'Results-driven' describes someone who:",
+        pt:"'Results-driven' descreve alguem que:",
+        options:["Focuses on achieving measurable outcomes","Works long hours every day","Only does what is required","Avoids difficult decisions"],correct:0,
+        words:[{w:"results-driven",cls:"adj",tr:"orientado a resultados"}]},
+      {id:"pa4",type:"translate_pt_en",
+        en:"I am proactive, detail-oriented, and results-driven.",
+        pt:"Eu sou proativo, atento aos detalhes e orientado a resultados.",
+        answer:"i am proactive detail-oriented and results-driven",
+        words:[{w:"proactive",cls:"adj",tr:"proativo"},{w:"detail-oriented",cls:"adj",tr:"atento aos detalhes"},{w:"results-driven",cls:"adj",tr:"orientado a resultados"}]},
+    ]
+  });
+
+  // ── Mission 7: Signposting ──
+  f4.missions.push({
+    id:"signpost_corp", name:"🗺️ Sinalização — Apresentações", icon:"🗺️",
+    description:"Conecte as partes da sua apresentacao com fluidez", xpTotal:90,
+    phrases:[
+      {id:"sp1",type:"memory_match",en:"Signposting Phrases",pt:"Frases de sinalizacao",
+        pairs:[{a:"Moving on to...",b:"Passando para..."},{a:"To summarize...",b:"Para resumir..."},
+               {a:"In conclusion...",b:"Em conclusao..."},{a:"Building on that...",b:"Com base nisso..."},
+               {a:"Let me now turn to...",b:"Agora vou falar sobre..."},{a:"Before I move on...",b:"Antes de prosseguir..."}],words:[]},
+      {id:"sp2",type:"fill_blank",
+        en:"___ our Q3 results, I'd like to highlight a positive trend in client retention.",
+        pt:"Passando para os resultados do 3T, gostaria de destacar uma tendencia positiva de retencao de clientes.",
+        answer:"Moving on to",
+        words:[{w:"Moving on to",cls:"expr",tr:"Passando para"},{w:"client retention",cls:"noun",tr:"retencao de clientes"}]},
+      {id:"sp3",type:"fill_blank",
+        en:"___, the key action items are: implement the new system, review the budget, and set up a weekly check-in.",
+        pt:"Para resumir, as principais acoes sao: implementar o novo sistema, revisar o orcamento e definir um check-in semanal.",
+        answer:"To summarize",
+        words:[{w:"To summarize",cls:"expr",tr:"Para resumir"},{w:"action items",cls:"noun",tr:"acoes definidas"}]},
+      {id:"sp4",type:"match_columns",en:"Signposting Functions",pt:"Funcoes de sinalizacao",
+        pairs:[{a:"This brings us to...",b:"transicao de secao"},{a:"I'd like to draw your attention to...",b:"destacar informacao"},
+               {a:"To wrap up...",b:"encerrar a fala"},{a:"So far we've seen...",b:"recapitular o que foi dito"}],words:[]},
+      {id:"sp5",type:"word_order",
+        en:"I'd like to draw your attention to the increase in operational costs.",
+        pt:"Gostaria de chamar atencao para o aumento nos custos operacionais.",
+        scrambled:["I'd","like","to","draw","your","attention","to","the","increase","in","operational","costs."],
+        answer:"I'd like to draw your attention to the increase in operational costs.",
+        words:[{w:"draw your attention",cls:"expr",tr:"chamar atencao"},{w:"operational costs",cls:"noun",tr:"custos operacionais"}]},
+    ]
+  });
+
+  // ── Mission 8: Data & Q&A ──
+  f4.missions.push({
+    id:"data_qa_corp", name:"📊 Dados & Q&A", icon:"📊",
+    description:"Apresente dados com confianca e responda perguntas com clareza", xpTotal:90,
+    phrases:[
+      {id:"dq1",type:"pronunciation",
+        en:"As you can see from this chart, our revenue increased by 18% compared to last quarter.",
+        pt:"Como podem ver neste grafico, nossa receita aumentou 18% em comparacao ao trimestre passado.",
+        tip:"Aponte para o dado antes de interpreta-lo.",
+        words:[{w:"revenue",cls:"noun",tr:"receita"},{w:"compared to",cls:"expr",tr:"em comparacao a"}]},
+      {id:"dq2",type:"fill_blank",
+        en:"The numbers ___ a 25% reduction in processing time since we launched the new system.",
+        pt:"Os numeros indicam uma reducao de 25% no tempo de processamento desde que lancamos o novo sistema.",
+        answer:"indicate",
+        words:[{w:"indicate",cls:"verb",tr:"indicam"},{w:"processing time",cls:"noun",tr:"tempo de processamento"}]},
+      {id:"dq3",type:"match_columns",en:"Emphasis and Data Phrases",pt:"Frases de enfase e dados",
+        pairs:[{a:"It's important to note that...",b:"E importante notar que..."},
+               {a:"The key point is...",b:"O ponto chave e..."},
+               {a:"I want to emphasize that...",b:"Quero enfatizar que..."},
+               {a:"What stands out is...",b:"O que se destaca e..."}],words:[]},
+      {id:"dq4",type:"pronunciation",
+        en:"Thank you for that question. I'd be happy to clarify — the data refers specifically to the Santos operations unit.",
+        pt:"Obrigado pela pergunta. Terei prazer em esclarecer — os dados referem-se especificamente a unidade de operacoes de Santos.",
+        tip:"Para Q&A: sempre agradeca a pergunta antes de responder.",
+        words:[{w:"clarify",cls:"verb",tr:"esclarecer"},{w:"refers to",cls:"expr",tr:"refere-se a"}]},
+      {id:"dq5",type:"translate_pt_en",
+        en:"To put it another way, our costs went down while output went up.",
+        pt:"Em outras palavras, nossos custos diminuiram enquanto a producao aumentou.",
+        answer:"to put it another way our costs went down while output went up",
+        tip:"'To put it another way...' e uma expressao sofisticada para reformular.",
+        words:[{w:"to put it another way",cls:"expr",tr:"em outras palavras"},{w:"output",cls:"noun",tr:"producao/resultado"}]},
+    ]
+  });
+})();
+
+// ── PREPARE & PRESENT: TOPICOS EXTRAS ─────────────────────────────────────
+VICTOR_DATA.prepareTopics.push(
+  { id:"pp6", level:"B2", icon:"🧗", title:"Interview: Handling Difficult Questions",
+    ptTitle:"Entrevista: Respondendo perguntas dificeis", category:"interview",
+    prompt:"Write 5-6 sentences answering TWO of these tough interview questions:\n1. 'What is your greatest weakness?'\n2. 'Tell me about a time you failed.'\n3. 'Why are you leaving your current job?'",
+    ptPrompt:"Escreva 5-6 frases respondendo DUAS dessas perguntas dificeis:\n1. 'Qual e sua maior fraqueza?'\n2. 'Fale sobre uma vez que voce falhou.'\n3. 'Por que voce esta saindo do emprego atual?'",
+    example:"One area I am actively working on is public speaking. I sometimes feel nervous presenting to large groups, so I have been taking every opportunity to lead meetings and practice. Last year, I presented our Q2 results to senior management for the first time. It was challenging, but I received positive feedback and have continued to improve. I believe turning a weakness into a development goal shows self-awareness and commitment.",
+    tips:["Never say 'I have no weaknesses'","Frame weaknesses as areas of growth","For failure: focus on what you LEARNED","Use: 'One area I am working on is...'","Keep it positive and solution-focused"] },
+
+  { id:"pp7", level:"B2", icon:"🗺️", title:"Presentation: Transitions & Signposting",
+    ptTitle:"Apresentacao: Transicoes e sinalizacao", category:"presentation",
+    prompt:"Write a short presentation section (7-9 sentences) on a work topic of your choice. Use at least 4 signposting phrases to guide the audience: transition between points, highlight data, and summarize before closing.",
+    ptPrompt:"Escreva uma secao de apresentacao (7-9 frases) sobre um tema de trabalho. Use pelo menos 4 frases de sinalizacao para guiar o publico: transite entre os pontos, destaque dados e resuma antes de encerrar.",
+    example:"Let me start by reviewing what we achieved in Q3. First of all, our team exceeded the sales target by 12%. Moving on to the challenges we faced — our main obstacle was the delay in product delivery. I'd like to draw your attention to this chart, which shows the impact on client satisfaction. Building on that, we propose a new supplier evaluation process. To summarize, we hit our target despite the challenges, and we have a clear action plan. In conclusion, I am confident we can reach 15% growth next quarter.",
+    tips:["Use: 'Moving on to...', 'Building on that...', 'To summarize...'","Transition before changing topics — never jump abruptly","Reference visuals: 'As you can see from this chart...'","Signal the end: 'To wrap up...', 'In conclusion...'","Speak signposting phrases slowly — the audience needs time to follow"] },
+
+  { id:"pp8", level:"B2", icon:"🙋", title:"Presentation: Handling Q&A",
+    ptTitle:"Apresentacao: Respondendo perguntas ao vivo", category:"presentation",
+    prompt:"Write 5-6 sentences handling a tough Q&A scenario: someone asks a question you weren't expecting. Show how you acknowledge the question, respond confidently, and redirect if necessary.",
+    ptPrompt:"Escreva 5-6 frases lidando com um Q&A dificil: alguem faz uma pergunta inesperada. Mostre como voce reconhece a pergunta, responde com confianca e redireciona se necessario.",
+    example:"Thank you for that question — it is an important one. I want to make sure I give you an accurate answer, so let me confirm the exact figures and get back to you directly after the meeting. What I can tell you now is that the trend has been consistently positive over the last three quarters. To put it another way, the direction is clear even if I don't have the exact number in front of me. Does that answer part of your question, or would you like me to follow up with more detail?",
+    tips:["Always acknowledge: 'Thank you for that question...'","If unsure: 'I'd like to confirm that and get back to you'","Never guess or invent data","Redirect professionally: 'That falls slightly outside today scope, but...'","End with a check: 'Does that answer your question?'"] }
+);
