@@ -184,7 +184,40 @@ input[type="checkbox"], input[type="radio"], select, label,
 .diag-result-sub{font-size:14px;color:var(--ink-soft);margin-bottom:16px}
 
 /* ══ DASHBOARD ══ */
-#view-dashboard{flex-direction:column;align-items:center;padding:28px 20px 80px}
+#view-dashboard{flex-direction:column;align-items:center;padding:28px 20px 100px}
+
+/* ── Dashboard tab panels ── */
+.dash-panel{display:none}
+.dash-panel.active{display:block}
+
+/* ── Bottom Tab Bar ── */
+.dash-tabbar{
+  position:fixed !important; left:50%; bottom:14px;
+  transform:translateX(-50%);
+  width:calc(100% - 24px); max-width:456px;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:2px;
+  background:linear-gradient(160deg,var(--s2),var(--s));
+  border:1px solid var(--rim2);
+  border-radius:999px;
+  padding:6px;
+  box-shadow:0 8px 28px rgba(0,0,0,0.45);
+  z-index:60;
+}
+.dtb-btn{
+  flex:1;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:2px;
+  padding:8px 4px;
+  background:transparent; border:none; border-radius:999px;
+  color:var(--ink-muted);
+  font-family:var(--font); cursor:pointer;
+  transition:var(--t);
+}
+.dtb-btn .dtb-icon{font-size:18px; line-height:1}
+.dtb-btn .dtb-label{font-size:10px; font-weight:700; letter-spacing:0.2px}
+.dtb-btn.active{background:var(--p-dim); color:var(--p-light)}
+.dtb-btn:active{transform:scale(0.94)}
 .dashboard-inner{width:100%;max-width:480px}
 .dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
 .dash-logo{display:flex;align-items:center;gap:10px}
@@ -5660,7 +5693,7 @@ body.dark-mode img[src="Logo_lampada.png"],
 /* ══ ADMIN FLOAT BUTTON ════════════════════════════════ */
 .admin-float-btn {
   position: fixed;
-  bottom: 80px; left: 16px;
+  bottom: 152px; left: 16px;
   width: 48px; height: 48px;
   background: linear-gradient(135deg, #2a1060, #5b21b6);
   border: 2px solid rgba(201,147,58,0.4);
@@ -6655,7 +6688,7 @@ body.light-mode .gloss-speak-btn{background:rgba(0,0,0,.06);border-color:rgba(0,
 /* ── Reload button — fixed ABOVE contact float ── */
 .btn-reload {
   position: fixed !important;
-  bottom: 84px !important; right: 16px !important;
+  bottom: 156px !important; right: 16px !important;
   top: auto !important;
   width: 46px !important; height: 46px !important;
   background: rgba(124,58,237,0.25) !important;
@@ -6671,15 +6704,15 @@ body.light-mode .gloss-speak-btn{background:rgba(0,0,0,.06);border-color:rgba(0,
 }
 .btn-reload:hover { background: var(--p) !important; transform: rotate(180deg) !important; color: #fff !important; }
 
-/* ── Contact float button — stays at bottom ── */
+/* ── Contact float button — stays above tab bar ── */
 .contact-float {
-  bottom: 20px !important; right: 16px !important;
+  bottom: 92px !important; right: 16px !important;
   z-index: 40 !important;
 }
 
 /* ── Contact float menu — moves up above reload button ── */
 .contact-float-menu {
-  bottom: 148px !important; right: 16px !important;
+  bottom: 220px !important; right: 16px !important;
   z-index: 45 !important;
 }
 

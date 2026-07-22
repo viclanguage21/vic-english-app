@@ -640,7 +640,17 @@ function updateStreakFireDisplay(){
 }
 
 // ── GREETING ──────────────────────────────────────────────────────────────────
-const GREETINGS = ["Hello","Hi","Hey","Hi there","What's up","How's it going","How are you","Good to see you","Welcome back","Great to have you here"];
+// Cada saudação leva sua pontuação certa: perguntas levam "?", nunca "!"
+const GREETINGS = [
+  {text:"Hello",           mark:"!"},
+  {text:"Hi",              mark:"!"},
+  {text:"Hey",             mark:"!"},
+  {text:"Welcome back",    mark:"!"},
+  {text:"Good to see you", mark:"!"},
+  {text:"What's up",       mark:"?"},
+  {text:"How's it going",  mark:"?"},
+  {text:"How are you",     mark:"?"},
+];
 
 function buildGreeting(name){
   const h=new Date().getHours();
@@ -660,7 +670,7 @@ function buildGreeting(name){
   const el=id=>document.getElementById(id);
   const greet=GREETINGS[Math.floor(Math.random()*GREETINGS.length)];
   // Saudação sempre em inglês
-  if(el("greeting-hi"))  el("greeting-hi").textContent=`${greet}, ${name}! 👋`;
+  if(el("greeting-hi"))  el("greeting-hi").textContent=`${greet.text}, ${name}${greet.mark} 👋`;
   if(el("greeting-time-en")) el("greeting-time-en").textContent=`${timeEN} — ${motEN}`;
   // Linha de baixo = tradução no idioma selecionado (se não for EN)
   const ptLine = el("greeting-time-pt");
@@ -6179,6 +6189,17 @@ function applyBrand(){
   }
 }
 
+// ── DASHBOARD TAB BAR ────────────────────────────────────────────────────────
+function switchDashTab(tab){
+  document.querySelectorAll(".dash-panel[data-panel]").forEach(p=>{
+    p.classList.toggle("active", p.dataset.panel===tab);
+  });
+  document.querySelectorAll(".dtb-btn").forEach(b=>{
+    b.classList.toggle("active", b.dataset.tab===tab);
+  });
+  document.getElementById("view-dashboard")?.scrollTo({top:0,behavior:"smooth"});
+}
+
 function init(){
   _domReady = true;
 
@@ -6413,6 +6434,16 @@ function init(){
 
   // profile
   document.getElementById("btn-open-profile")?.addEventListener("click",openProfile);
+
+  // dashboard bottom tab bar
+  document.querySelectorAll(".dtb-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      vibrate(15);
+      const tab=btn.dataset.tab;
+      if(tab==="perfil"){ openProfile(); return; }
+      switchDashTab(tab);
+    });
+  });
   document.getElementById("btn-back-profile")?.addEventListener("click",backToDashboard);
   document.getElementById("btn-edit-avatar")?.addEventListener("click",openAvatarPicker);
   document.getElementById("btn-close-avatar-picker")?.addEventListener("click",()=>document.getElementById("avatar-picker-modal").style.display="none");

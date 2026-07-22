@@ -655,6 +655,8 @@
       </div>
     </div>
 
+    <div class="dash-panel active" data-panel="home">
+
     <div class="greeting-card">
       <div class="greeting-hi" id="greeting-hi"></div>
       <div class="greeting-time-wrap">
@@ -672,6 +674,10 @@
     <div class="curiosity-ticker">
       <div class="curiosity-text" id="curiosity-ticker-text"></div>
     </div>
+
+    </div><!-- /panel:home -->
+
+    <div class="dash-panel" data-panel="progresso">
 
     <div class="xp-track">
       <div class="xp-track-header">
@@ -720,6 +726,10 @@
       </div>
     </button>
 
+    </div><!-- /panel:progresso -->
+
+    <div class="dash-panel active" data-panel="home">
+
     <!-- Optional diagnosis invite -->
     <div class="diag-invite-banner" id="diag-invite-banner" style="display:none">
       <div class="diag-invite-left">
@@ -764,6 +774,10 @@
       </div>
     </div>
 
+    </div><!-- /panel:home -->
+
+    <div class="dash-panel" data-panel="acesso">
+
     <!-- quick access -->
     <div class="section-label" id="dash-quick-label" data-i18n="quick_access">⚡ Acesso Rápido</div>
     <div class="quick-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%">
@@ -772,6 +786,10 @@
       <button class="quick-btn" id="btn-goto-truefalse">✅ V ou F</button>
       <button class="quick-btn" id="btn-goto-dialogue">💬 Diálogo</button>
     </div>
+
+    </div><!-- /panel:acesso -->
+
+    <div class="dash-panel" data-panel="recursos">
 
     <div class="section-label" style="margin-top:20px" id="dash-segments-label" data-i18n="segments">Segmentos</div>
     <div class="segments-grid" id="segments-grid"></div>
@@ -813,6 +831,10 @@
       </div>
     </div>
 
+    </div><!-- /panel:recursos -->
+
+    <div class="dash-panel active" data-panel="home">
+
     <!-- Feedback widget — discreto, só estrelas -->
     <div class="feedback-strip feedback-strip-minimal" id="feedback-strip">
       <div class="feedback-strip-title">Curtindo o app? ⭐</div>
@@ -836,6 +858,8 @@
       </a>
       <button class="about-btn" id="btn-about-us">ℹ️ Quem somos</button>
     </div>
+
+    </div><!-- /panel:home -->
 
     <!-- About modal -->
     <div class="about-modal" id="about-modal" style="display:none">
@@ -886,6 +910,25 @@
       <button class="cfm-btn cfm-share" id="cfm-share-btn">📤 Compartilhar App</button>
     </div>
     <a href="https://www.viclanguage.com.br" target="_blank" class="vic-site-link">viclanguage.com.br →</a>
+
+    <!-- Bottom Tab Bar -->
+    <nav class="dash-tabbar" id="dash-tabbar">
+      <button class="dtb-btn active" data-tab="home" id="dtb-home">
+        <span class="dtb-icon">🏠</span><span class="dtb-label">Home</span>
+      </button>
+      <button class="dtb-btn" data-tab="recursos" id="dtb-recursos">
+        <span class="dtb-icon">📚</span><span class="dtb-label">Recursos</span>
+      </button>
+      <button class="dtb-btn" data-tab="progresso" id="dtb-progresso">
+        <span class="dtb-icon">📈</span><span class="dtb-label">Progresso</span>
+      </button>
+      <button class="dtb-btn" data-tab="acesso" id="dtb-acesso">
+        <span class="dtb-icon">⚡</span><span class="dtb-label">Rápido</span>
+      </button>
+      <button class="dtb-btn" data-tab="perfil" id="dtb-perfil">
+        <span class="dtb-icon">👤</span><span class="dtb-label">Perfil</span>
+      </button>
+    </nav>
   </div>
 </div>
 
