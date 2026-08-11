@@ -186,9 +186,16 @@ input[type="checkbox"], input[type="radio"], select, label,
 /* ══ DASHBOARD ══ */
 #view-dashboard{flex-direction:column;align-items:center;padding:28px 20px 100px}
 
-/* ── Dashboard tab panels ── */
+/* ── Dashboard tab panels — transição rápida ao trocar de aba, no mesmo estilo das views (viewEnter) ── */
 .dash-panel{display:none}
-.dash-panel.active{display:block}
+@keyframes dashPanelEnter {
+  from { opacity:0; transform:translateY(14px) scale(0.97); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+.dash-panel.active{
+  display:block;
+  animation: dashPanelEnter 0.22s cubic-bezier(0.22,1,0.36,1);
+}
 
 /* ── Bottom Tab Bar ── */
 .dash-tabbar{
@@ -8132,17 +8139,29 @@ a.settings-big-btn:active {
   box-shadow: 0 4px 14px rgba(0,0,0,0.25) !important;
   transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease !important;
 }
-.quick-btn:hover  { transform: translateY(-3px) !important; }
+.quick-btn:hover  { transform: translateY(-3px) !important; filter: brightness(1.08) !important; }
 .quick-btn:active { transform: translateY(0) scale(0.96) !important; }
 
-.quick-grid .quick-btn:nth-child(1) { background: linear-gradient(145deg, rgba(99,102,241,0.22), rgba(99,102,241,0.06)) !important; border-color: rgba(99,102,241,0.45) !important; }
-.quick-grid .quick-btn:nth-child(1):hover { box-shadow: 0 8px 24px rgba(99,102,241,0.35) !important; border-color: rgba(129,140,248,0.75) !important; }
+/* Texto/emoji sempre brancos e legíveis, não importa o modo — as cores fortes abaixo garantem contraste */
+.quick-grid .quick-btn { color: #fff !important; text-shadow: 0 1px 4px rgba(0,0,0,0.35) !important; }
 
-.quick-grid .quick-btn:nth-child(2) { background: linear-gradient(145deg, rgba(236,72,153,0.22), rgba(236,72,153,0.06)) !important; border-color: rgba(236,72,153,0.45) !important; }
-.quick-grid .quick-btn:nth-child(2):hover { box-shadow: 0 8px 24px rgba(236,72,153,0.35) !important; border-color: rgba(244,114,182,0.75) !important; }
+.quick-grid .quick-btn:nth-child(1) { background: linear-gradient(135deg, #818cf8, #4338ca) !important; border-color: rgba(255,255,255,0.28) !important; }
+.quick-grid .quick-btn:nth-child(1):hover { box-shadow: 0 8px 24px rgba(99,102,241,0.5) !important; border-color: rgba(255,255,255,0.5) !important; }
 
-.quick-grid .quick-btn:nth-child(3) { background: linear-gradient(145deg, rgba(34,197,94,0.22), rgba(34,197,94,0.06)) !important; border-color: rgba(34,197,94,0.45) !important; }
-.quick-grid .quick-btn:nth-child(3):hover { box-shadow: 0 8px 24px rgba(34,197,94,0.35) !important; border-color: rgba(74,222,128,0.75) !important; }
+.quick-grid .quick-btn:nth-child(2) { background: linear-gradient(135deg, #f472b6, #be185d) !important; border-color: rgba(255,255,255,0.28) !important; }
+.quick-grid .quick-btn:nth-child(2):hover { box-shadow: 0 8px 24px rgba(236,72,153,0.5) !important; border-color: rgba(255,255,255,0.5) !important; }
 
-.quick-grid .quick-btn:nth-child(4) { background: linear-gradient(145deg, rgba(249,115,22,0.22), rgba(249,115,22,0.06)) !important; border-color: rgba(249,115,22,0.45) !important; }
-.quick-grid .quick-btn:nth-child(4):hover { box-shadow: 0 8px 24px rgba(249,115,22,0.35) !important; border-color: rgba(251,146,60,0.75) !important; }
+.quick-grid .quick-btn:nth-child(3) { background: linear-gradient(135deg, #4ade80, #15803d) !important; border-color: rgba(255,255,255,0.28) !important; }
+.quick-grid .quick-btn:nth-child(3):hover { box-shadow: 0 8px 24px rgba(34,197,94,0.5) !important; border-color: rgba(255,255,255,0.5) !important; }
+
+.quick-grid .quick-btn:nth-child(4) { background: linear-gradient(135deg, #fb923c, #c2410c) !important; border-color: rgba(255,255,255,0.28) !important; }
+.quick-grid .quick-btn:nth-child(4):hover { box-shadow: 0 8px 24px rgba(249,115,22,0.5) !important; border-color: rgba(255,255,255,0.5) !important; }
+
+/* Charme no toque — um "bounce" ao clicar */
+@keyframes qbPop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(0.88); }
+  65%  { transform: scale(1.07); }
+  100% { transform: scale(1); }
+}
+.quick-btn.qb-pop { animation: qbPop 0.4s cubic-bezier(.34,1.56,.64,1); }

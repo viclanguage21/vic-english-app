@@ -6871,6 +6871,16 @@ function init(){
   document.getElementById("btn-goto-truefalse")?.addEventListener("click",openTrueFalse);
   document.getElementById("btn-goto-dialogue")?.addEventListener("click",openDialogue);
 
+  // Acesso rápido — charme de "bounce" ao tocar
+  document.querySelectorAll(".quick-grid .quick-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      btn.classList.remove("qb-pop");
+      void btn.offsetWidth; // força reflow p/ reiniciar a animação em cliques seguidos
+      btn.classList.add("qb-pop");
+    });
+    btn.addEventListener("animationend",()=>btn.classList.remove("qb-pop"));
+  });
+
   // true/false
   document.getElementById("btn-back-truefalse")?.addEventListener("click",backToDashboard);
   document.getElementById("btn-back-tf-board")?.addEventListener("click",openTrueFalse);
