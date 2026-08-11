@@ -2215,10 +2215,12 @@ function toggleDashSection(colId, arrowId, openDisplay){
 function toggleSegments(){
   const col=document.getElementById("segments-collapsible");
   const arrow=document.getElementById("segments-toggle-arrow");
+  const label=document.getElementById("segments-more-label-text");
   if(!col) return;
   const open=col.style.display==="none";
   col.style.display=open?"block":"none";
-  if(arrow) arrow.style.transform=open?"rotate(0deg)":"rotate(180deg)";
+  if(arrow) arrow.style.transform=open?"rotate(180deg)":"rotate(0deg)";
+  if(label) label.textContent=open?"Ver menos":"Ver todos os segmentos";
 }
 
 function toggleXpStats(){
@@ -2230,18 +2232,68 @@ function toggleXpStats(){
   if(arrow) arrow.style.transform=open?"rotate(180deg)":"rotate(0deg)";
 }
 
+const MAX_PINNED_SEGMENTS = 4;
+
+function getPinnedSegmentIds(regularSegs){
+  const saved = userData?.pinnedSegments;
+  if(Array.isArray(saved) && saved.length){
+    // mantém só ids que ainda existem/estão disponíveis pro usuário, na ordem salva
+    const valid = saved.filter(id => regularSegs.some(s=>s.id===id));
+    if(valid.length) return valid.slice(0, MAX_PINNED_SEGMENTS);
+  }
+  // padrão: os 4 primeiros, até o usuário escolher os dele
+  return regularSegs.slice(0, MAX_PINNED_SEGMENTS).map(s=>s.id);
+}
+
+function toggleSegmentPin(segId){
+  const brandSegs = window.BRAND?.segments;
+  const regularSegs = VICTOR_DATA.segments.filter(s=>!s.isGrammarCore && !s.hidden && (!brandSegs || brandSegs.includes(s.id)));
+  let pinned = getPinnedSegmentIds(regularSegs);
+  if(pinned.includes(segId)){
+    pinned = pinned.filter(id => id!==segId);
+  } else {
+    if(pinned.length >= MAX_PINNED_SEGMENTS){
+      showXpToast(`📌 Máximo de ${MAX_PINNED_SEGMENTS} segmentos fixos`);
+      return;
+    }
+    pinned = [...pinned, segId];
+  }
+  userData.pinnedSegments = pinned;
+  if(currentUser) saveProgressSafe(currentUser.uid, {pinnedSegments: pinned});
+  renderSegments();
+}
+
 function renderSegments(){
-  const c=document.getElementById("segments-grid"); if(!c) return; c.innerHTML="";
+  const pinnedGrid=document.getElementById("segments-pinned-grid");
+  const restGrid=document.getElementById("segments-grid");
+  if(!pinnedGrid||!restGrid) return;
+  pinnedGrid.innerHTML=""; restGrid.innerHTML="";
   const grammarSeg=VICTOR_DATA.segments.find(s=>s.isGrammarCore);
   const brandSegs = window.BRAND?.segments;
   const regularSegs=VICTOR_DATA.segments.filter(s=>!s.isGrammarCore && !s.hidden && (!brandSegs || brandSegs.includes(s.id)));
-  regularSegs.forEach(seg=>{
+
+  const pinnedIds = getPinnedSegmentIds(regularSegs);
+  const pinnedSegs = pinnedIds.map(id => regularSegs.find(s=>s.id===id)).filter(Boolean);
+  const restSegs = regularSegs.filter(s => !pinnedIds.includes(s.id));
+
+  const buildCard = (seg, isPinned) => {
     const div=document.createElement("div");
     div.className=`segment-card ${seg.available?"available":"locked"}`;
-    div.innerHTML=`<span class="seg-icon">${seg.icon}</span><span class="seg-name">${segName(seg.id)}</span>${seg.comingSoon?'<span class="seg-badge">Em breve</span>':""}`;
+    div.innerHTML=`<button class="seg-pin-btn ${isPinned?"pinned":""}" title="${isPinned?"Desafixar":"Fixar aqui em cima"}">📌</button><span class="seg-icon">${seg.icon}</span><span class="seg-name">${segName(seg.id)}</span>${seg.comingSoon?'<span class="seg-badge">Em breve</span>':""}`;
     if(seg.available) div.addEventListener("click",()=>openSegmentPhases(seg.id));
-    c.appendChild(div);
-  });
+    div.querySelector(".seg-pin-btn").addEventListener("click",(e)=>{ e.stopPropagation(); vibrate(15); toggleSegmentPin(seg.id); });
+    return div;
+  };
+
+  pinnedSegs.forEach(seg => pinnedGrid.appendChild(buildCard(seg, true)));
+  restSegs.forEach(seg => restGrid.appendChild(buildCard(seg, false)));
+
+  // Esconde "ver todos" se não sobrar nenhum segmento fora dos fixados
+  const moreLabel=document.getElementById("dash-segments-more-label");
+  const collapsible=document.getElementById("segments-collapsible");
+  if(moreLabel) moreLabel.style.display = restSegs.length ? "flex" : "none";
+  if(!restSegs.length && collapsible) collapsible.style.display="none";
+
   if(grammarSeg){
     const gc=document.getElementById("grammar-core-banner");
     if(gc){gc.style.display="flex";gc.onclick=()=>openSegmentPhases(grammarSeg.id);}

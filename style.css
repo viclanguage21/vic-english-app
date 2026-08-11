@@ -8180,3 +8180,27 @@ a.settings-big-btn:active {
   100% { transform: scale(1); }
 }
 .quick-btn.qb-pop { animation: qbPop 0.4s cubic-bezier(.34,1.56,.64,1); }
+
+/* ══ SEGMENTOS FIXOS — pin de até 4 favoritos no topo ══════════════ */
+.segments-hint{
+  font-size: 11px; color: var(--ink-muted); margin: -4px 0 10px; line-height: 1.4;
+}
+.seg-pin-btn{
+  position: absolute; top: 6px; left: 6px;
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 50%;
+  font-size: 12px; line-height: 1;
+  opacity: 0.55; filter: grayscale(1);
+  cursor: pointer; transition: var(--t);
+  z-index: 2;
+}
+.seg-pin-btn:hover{ opacity: 0.9; transform: scale(1.1); }
+.seg-pin-btn.pinned{
+  background: var(--p-dim); border-color: var(--p-bright);
+  opacity: 1; filter: none;
+}
+.seg-pin-btn:active{ transform: scale(0.9); }
+
+.section-label-toggle{ justify-content: space-between; }

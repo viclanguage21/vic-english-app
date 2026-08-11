@@ -842,11 +842,15 @@
 
     <div class="dash-panel" data-panel="recursos">
 
-    <div class="section-label section-label-toggle" style="margin-top:20px" onclick="toggleSegments()" id="dash-segments-label">
-      <span data-i18n="segments">Segmentos</span>
+    <div class="section-label" style="margin-top:20px" id="dash-segments-label" data-i18n="segments">Segmentos</div>
+    <div class="segments-hint" id="segments-pin-hint">📌 Toque no alfinete pra fixar até 4 aqui em cima</div>
+    <div class="segments-grid" id="segments-pinned-grid"></div>
+
+    <div class="section-label section-label-toggle" style="margin-top:14px" onclick="toggleSegments()" id="dash-segments-more-label">
+      <span id="segments-more-label-text">Ver todos os segmentos</span>
       <span class="section-toggle-arrow" id="segments-toggle-arrow" style="font-size:12px;color:rgba(255,255,255,0.4);transition:transform .25s ease;">▼</span>
     </div>
-    <div id="segments-collapsible">
+    <div id="segments-collapsible" style="display:none">
       <div class="segments-grid" id="segments-grid"></div>
     </div>
 
