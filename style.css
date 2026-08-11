@@ -8127,18 +8127,28 @@ a.settings-big-btn:active {
   margin-bottom: 8px;
 }
 
-/* ══ ACESSO RÁPIDO — cards coloridos, mais atraentes ═══════════════ */
+/* ══ ACESSO RÁPIDO — quadrados grandes, coloridos, mais atraentes ══ */
 .quick-grid { gap: 12px !important; }
 .quick-btn {
-  padding: 20px 10px !important;
-  border-radius: 18px !important;
-  font-size: 15px !important;
+  aspect-ratio: 1 / 1 !important;
+  height: auto !important;
+  min-height: unset !important;
+  padding: 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  border-radius: 22px !important;
+  font-size: 14px !important;
   font-weight: 800 !important;
   letter-spacing: 0.2px !important;
   border-width: 1.5px !important;
   box-shadow: 0 4px 14px rgba(0,0,0,0.25) !important;
   transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease !important;
 }
+.quick-btn .qb-icon { font-size: 40px !important; line-height: 1 !important; }
+.quick-btn .qb-label { font-size: 13px !important; font-weight: 800 !important; text-transform: uppercase; letter-spacing: 0.4px; }
 .quick-btn:hover  { transform: translateY(-3px) !important; filter: brightness(1.08) !important; }
 .quick-btn:active { transform: translateY(0) scale(0.96) !important; }
 

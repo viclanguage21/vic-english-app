@@ -240,12 +240,14 @@ function renderDashboardTexts() {
   const wTitle = document.querySelector(".writing-core-banner .gc-title");
   if(wTitle) wTitle.textContent = t("writing_title");
 
-  // Quick access game buttons
+  // Quick access game buttons — só o rótulo muda (ícone é fixo, separado)
   const qa = id => document.getElementById(id);
-  if(qa("btn-goto-flashcards")) qa("btn-goto-flashcards").textContent = t("qa_flashcards");
-  if(qa("btn-goto-memory"))     qa("btn-goto-memory").textContent     = t("qa_memory");
-  if(qa("btn-goto-truefalse"))  qa("btn-goto-truefalse").textContent  = t("qa_truefalse");
-  if(qa("btn-goto-dialogue"))   qa("btn-goto-dialogue").textContent   = t("qa_dialogue");
+  const qbLabel = id => qa(id)?.querySelector(".qb-label");
+  const stripEmoji = s => s.replace(/^\S+\s*/, "");
+  if(qbLabel("btn-goto-flashcards")) qbLabel("btn-goto-flashcards").textContent = stripEmoji(t("qa_flashcards"));
+  if(qbLabel("btn-goto-memory"))     qbLabel("btn-goto-memory").textContent     = stripEmoji(t("qa_memory"));
+  if(qbLabel("btn-goto-truefalse"))  qbLabel("btn-goto-truefalse").textContent  = stripEmoji(t("qa_truefalse"));
+  if(qbLabel("btn-goto-dialogue"))   qbLabel("btn-goto-dialogue").textContent   = stripEmoji(t("qa_dialogue"));
 
   // Diagnosis step 2 title
   const diagStep2Title = document.querySelector("#diag-step-2 .diag-step-title");
@@ -330,11 +332,11 @@ function renderDashboardTexts() {
   // Botão anon
   const btnAnon = document.getElementById("btn-anon");
   if(btnAnon) btnAnon.textContent = t("login_anon");
-  // Quick access buttons
-  if(qa("btn-goto-flashcards")) qa("btn-goto-flashcards").textContent = t("qa_flashcards");
-  if(qa("btn-goto-memory"))     qa("btn-goto-memory").textContent     = t("qa_memory");
-  if(qa("btn-goto-truefalse"))  qa("btn-goto-truefalse").textContent  = t("qa_truefalse");
-  if(qa("btn-goto-dialogue"))   qa("btn-goto-dialogue").textContent   = t("qa_dialogue");
+  // Quick access buttons — só o rótulo muda (ícone é fixo, separado)
+  if(qbLabel("btn-goto-flashcards")) qbLabel("btn-goto-flashcards").textContent = stripEmoji(t("qa_flashcards"));
+  if(qbLabel("btn-goto-memory"))     qbLabel("btn-goto-memory").textContent     = stripEmoji(t("qa_memory"));
+  if(qbLabel("btn-goto-truefalse"))  qbLabel("btn-goto-truefalse").textContent  = stripEmoji(t("qa_truefalse"));
+  if(qbLabel("btn-goto-dialogue"))   qbLabel("btn-goto-dialogue").textContent   = stripEmoji(t("qa_dialogue"));
 
   // V/F buttons (dentro do jogo)
   if(qa("tf-true"))  qa("tf-true").innerHTML  = "✅ " + (_lang==="pt"?"Verdadeiro":_lang==="es"?"Verdadero":_lang==="de"?"Wahr":_lang==="it"?"Vero":"True");
