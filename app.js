@@ -166,7 +166,7 @@ function renderDashboardTexts() {
   const el = id => document.getElementById(id);
   // Labels principais
   if (el("dash-daily-title"))    el("dash-daily-title").textContent    = t("daily_missions");
-  if (el("dash-segments-label")) el("dash-segments-label").textContent = t("segments");
+  if (el("dash-segments-label")) { const s = el("dash-segments-label").querySelector('[data-i18n="segments"]'); if(s) s.textContent = t("segments"); }
   if (el("dash-quick-label"))    el("dash-quick-label").textContent    = t("quick_access");
   if (el("btn-start-now"))       el("btn-start-now").textContent       = t("start_now");
   if (el("btn-upgrade-dash"))    el("btn-upgrade-dash").textContent    = t("subscribe");
