@@ -197,6 +197,11 @@ input[type="checkbox"], input[type="radio"], select, label,
   animation: dashPanelEnter 0.22s cubic-bezier(0.22,1,0.36,1);
 }
 
+/* Reaproveitada para a view do Perfil, pra transição ficar igual à das abas */
+.view-fast-enter{
+  animation: dashPanelEnter 0.22s cubic-bezier(0.22,1,0.36,1) !important;
+}
+
 /* ── Bottom Tab Bar ── */
 .dash-tabbar{
   position:fixed !important; left:50%; bottom:14px;

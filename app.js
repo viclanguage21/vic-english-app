@@ -538,6 +538,20 @@ function showView(id){
   const current=document.querySelector(".view.active");
   if(current===next) return;
 
+  // Perfil é acessado só pela barra de abas — usa a mesma transição rápida (fade+escala,
+  // CSS puro via dashPanelEnter) das outras 4 abas, em vez do slide horizontal padrão.
+  const isProfileHop = (id==="view-profile") || (current?.id==="view-profile" && id==="view-dashboard");
+  if(isProfileHop){
+    current?.classList.remove("active");
+    next.classList.remove("view-fast-enter");
+    void next.offsetWidth; // reinicia a animação em trocas seguidas
+    next.classList.add("active","view-fast-enter");
+    next.addEventListener("animationend",()=>next.classList.remove("view-fast-enter"),{once:true});
+    _lastView=current?.id||null;
+    window.scrollTo(0,0);
+    return;
+  }
+
   // Determine direction
   const views=["view-onboarding","view-auth","view-dashboard","view-phases","view-missions-list","view-mission","view-complete","view-flashcards","view-memory-free","view-truefalse","view-dialogue","view-writing","view-profile","view-upgrade","view-admin","view-diagnosis","view-level-test"];
 // view-leaderboard foi substituída por bottom sheet — não usa showView()
