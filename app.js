@@ -434,8 +434,8 @@ function renderDashboardTexts() {
       el.textContent = t("notif_per_day");
   });
 
-  // Site oficial
-  document.querySelectorAll(".settings-big-btn, a").forEach(el => {
+  // Site oficial (ignora os cards de redes sociais — eles têm sua própria estrutura ícone+nome+handle)
+  document.querySelectorAll(".settings-big-btn, a:not(.social-link-btn)").forEach(el => {
     if(el.textContent.includes("Site Oficial")||el.textContent.includes("Official Site")||el.textContent.includes("Offizielle"))
       el.textContent = t("official_site");
   });
