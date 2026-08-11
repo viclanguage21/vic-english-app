@@ -6508,14 +6508,15 @@ function applyBrand(){
 
 // ── DASHBOARD TAB BAR — barra global, disponível em qualquer página ──────────
 function switchDashTab(tab){
+  // Marca o botão certo como ativo na barra, não importa o destino
+  document.querySelectorAll(".dtb-btn").forEach(b=>{
+    b.classList.toggle("active", b.dataset.tab===tab);
+  });
   if(tab === "perfil"){ openProfile(); return; }
   const dash = document.getElementById("view-dashboard");
   if(dash && !dash.classList.contains("active")) showView("view-dashboard");
   document.querySelectorAll(".dash-panel[data-panel]").forEach(p=>{
     p.classList.toggle("active", p.dataset.panel===tab);
-  });
-  document.querySelectorAll(".dtb-btn").forEach(b=>{
-    b.classList.toggle("active", b.dataset.tab===tab);
   });
   document.getElementById("view-dashboard")?.scrollTo({top:0,behavior:"smooth"});
 }
