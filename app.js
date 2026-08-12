@@ -6573,6 +6573,32 @@ function switchDashTab(tab){
   document.getElementById("view-dashboard")?.scrollTo({top:0,behavior:"smooth"});
 }
 
+// ── SWIPE ENTRE ABAS — arrastar o dedo pros lados troca de aba (Home↔Recursos↔Progresso↔Rápido↔Perfil) ──
+const DASH_TAB_ORDER = ["home","recursos","progresso","acesso","perfil"];
+(function setupDashTabSwipe(){
+  let startX=0, startY=0, tracking=false;
+  const SWIPE_MIN_DIST = 55;
+  document.addEventListener("touchstart", e=>{
+    const activeView = document.querySelector(".view.active")?.id;
+    tracking = (activeView==="view-dashboard" || activeView==="view-profile") && !e.target.closest("[data-no-swipe]");
+    if(!tracking) return;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, {passive:true});
+  document.addEventListener("touchend", e=>{
+    if(!tracking) return;
+    tracking=false;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    if(Math.abs(dx) < SWIPE_MIN_DIST || Math.abs(dx) < Math.abs(dy)*1.3) return;
+    const activeBtn = document.querySelector(".dtb-btn.active");
+    const idx = DASH_TAB_ORDER.indexOf(activeBtn?.dataset.tab || "home");
+    if(idx===-1) return;
+    if(dx < 0 && idx < DASH_TAB_ORDER.length-1){ vibrate(12); switchDashTab(DASH_TAB_ORDER[idx+1]); }
+    else if(dx > 0 && idx > 0){ vibrate(12); switchDashTab(DASH_TAB_ORDER[idx-1]); }
+  }, {passive:true});
+})();
+
 function init(){
   _domReady = true;
 
